@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Chico Do Colchão">
+    <title>@ViewBag.Title</title>
+
+    @Styles.Render("~/Content/css")
+
+    <!-- Bootstrap Core CSS -->
+    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="@Url.Content("~/Content/modern-business.css")" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    @*<link href="@Url.Content("~/font-awesome/css/font-awesome.min.css")" rel="stylesheet">*@
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="@Url.Content("~/Home")">Chico Do Colchão</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="@Url.Content("~/ColchaoIdeal")"><i class="glyphicon glyphicon-ok" style="color: #5cb85c" title="Colchão Ideal"></i></a></li>
+                    <li><a href="@Url.Content("~/OndeComprar")"><i class="glyphicon glyphicon-map-marker" style="color: #c9302c" title="Onde Comprar"></i></a></li>
+                    <li><a href="@Url.Content("~/AtendimentoDelivery")"><i class="glyphicon glyphicon-home" style="color: #286090" title="Atendimento Delivery"></i></a></li>
+                    <li><a href="@Url.Content("~/AgendarVisita")"><i class="glyphicon glyphicon-time" style="color: #ec971f" title="Agendar Visita"></i></a></li>
+                    <li><a href="@Url.Content("~/BaixarApp")"><i class="glyphicon glyphicon-phone" title="Baixar App"></i></a></li>
+                    <li><a href="@Url.Content("~/Contato")"><i class="glyphicon glyphicon-envelope" style="color: #31b0d5" title="Contato"></i></a></li>
+                    <li><a href="@Url.Content("~/Usuario")"><i class="glyphicon glyphicon-user" style="color: #ffff00" title="Usuário"></i></a></li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+    <!-- Header Carousel -->
+    <header id="myCarousel" class="carousel slide">
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+        </ol>
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner">
+            <div class="item active">
+                <div class="fill" style="background-image:url('http://placehold.it/1900x1080&text=Slide One');"></div>
+                <div class="carousel-caption">
+                    <h2>Caption 1</h2>
+                </div>
+            </div>
+            <div class="item">
+                <div class="fill" style="background-image:url('http://placehold.it/1900x1080&text=Slide Two');"></div>
+                <div class="carousel-caption">
+                    <h2>Caption 2</h2>
+                </div>
+            </div>
+            <div class="item">
+                <div class="fill" style="background-image:url('http://placehold.it/1900x1080&text=Slide Three');"></div>
+                <div class="carousel-caption">
+                    <h2>Caption 3</h2>
+                </div>
+            </div>
+        </div>
+        <!-- Controls -->
+        <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+            <span class="icon-prev"></span>
+        </a>
+        <a class="right carousel-control" href="#myCarousel" data-slide="next">
+            <span class="icon-next"></span>
+        </a>
+    </header>
+    <div class="container">
+        @RenderBody()
+    </div>
+    <hr>
+    <footer>
+        <div class="row text-center">
+            <div class="col-lg-12">
+                <p>
+                    <a href="@Url.Content("~/Contato")">
+                        <h4>contato@chicodocolchao.com.br</h4>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </footer>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

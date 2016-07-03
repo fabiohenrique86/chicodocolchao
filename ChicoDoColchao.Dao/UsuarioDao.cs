@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ChicoDoColchao.Dao
+{
+    public class UsuarioDao
+    {
+        public int UsuarioID { get; set; }
+        public int TipoUsuarioID { get; set; }
+        public string Login { get; set; }
+        public string Senha { get; set; }
+        public bool Ativo { get; set; }
+
+        public virtual TipoUsuarioDao TipoUsuarioDao { get; set; }
+    }
+}

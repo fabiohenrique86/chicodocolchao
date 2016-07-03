@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="ef7c14441a214dbcae2d2516ad2a6622" Name="Diagram1" ZoomLevel="55">
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.Cliente" Width="1.5" PointX="6" PointY="21.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.Funcionario" Width="1.5" PointX="3" PointY="8" IsExpanded="true" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.Linha" Width="1.5" PointX="6" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.Loja" Width="1.5" PointX="0.75" PointY="11" IsExpanded="true" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.LojaProduto" Width="1.5" PointX="3" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.Medida" Width="1.5" PointX="6" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.NotaFiscal" Width="1.5" PointX="3" PointY="14.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.NotaFiscalProduto" Width="1.5" PointX="5.25" PointY="15" IsExpanded="true" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.Orcamento" Width="1.5" PointX="5.25" PointY="9.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.OrcamentoProduto" Width="1.5" PointX="10.5" PointY="10.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.Parcela" Width="1.5" PointX="8.25" PointY="15.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.Pedido" Width="1.5" PointX="8.25" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.PedidoProduto" Width="1.5" PointX="13.5" PointY="10.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.PedidoStatus" Width="1.5" PointX="6" PointY="27.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.PedidoTipoPagamento" Width="1.5" PointX="10.5" PointY="6.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.Produto" Width="1.5" PointX="8.25" PointY="3.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.TipoPagamento" Width="1.5" PointX="8.25" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.TipoUsuario" Width="1.5" PointX="10.75" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.Transferencia" Width="1.5" PointX="3" PointY="18.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.TransferenciaProduto" Width="1.5" PointX="5.25" PointY="18.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.Usuario" Width="1.5" PointX="13" PointY="2.25" IsExpanded="true" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_Pedido_Cliente" ManuallyRouted="false" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_Funcionario_Loja" ManuallyRouted="false" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_Orcamento_Funcionario" ManuallyRouted="false" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_Pedido_Funcionario" ManuallyRouted="false" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_Produto_Linha" ManuallyRouted="false" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_LojaProduto_Loja" ManuallyRouted="false" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_NotaFiscal_Loja" ManuallyRouted="false" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_Orcamento_Loja" ManuallyRouted="false" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_Pedido_LojaOrigem" ManuallyRouted="false" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_Pedido_LojaSaida" ManuallyRouted="false" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_Transferencia_LojaDestino" ManuallyRouted="false" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_Transferencia_LojaOrigem" ManuallyRouted="false" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_LojaProduto_Produto" ManuallyRouted="false" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_Produto_Medida" ManuallyRouted="false" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_NotaFiscalProduto_NotaFiscal" ManuallyRouted="false" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_NotaFiscal_Produto" ManuallyRouted="false" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_OrcamentoProduto_Orcamento" ManuallyRouted="false" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_Orcamento_Produto" ManuallyRouted="false" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_PedidoTipoPagamento_Parcela" ManuallyRouted="false" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_Pedido_PedidoStatus" ManuallyRouted="false" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_PedidoProduto_Pedido" ManuallyRouted="false" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_PedidoTipoPagamento_Pedido" ManuallyRouted="false" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_PedidoProduto_Produto" ManuallyRouted="false" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_PedidoTipoPagamento_TipoPagamento" ManuallyRouted="false" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_Transferencia_Produto" ManuallyRouted="false" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_Usuario_TipoUsuario" ManuallyRouted="false" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_TransferenciaProduto_Transferencia" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

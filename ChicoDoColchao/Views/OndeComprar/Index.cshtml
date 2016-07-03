@@ -1,0 +1,39 @@
+﻿
+@{
+    ViewBag.Title = "Onde Comprar";
+}
+
+@section scripts
+{
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=@System.Configuration.ConfigurationManager.AppSettings["ChicoDoColchaoWebApi"]"></script>
+    <script type="text/javascript">
+
+        function initialize() {
+            
+            var map = new google.maps.Map(document.getElementById('map_canvas'), {
+                zoom: 14,
+                center: { lat: -12.9964, lng: -38.4681 }
+            });
+
+            //var mapProp = {
+            //    center: new google.maps.LatLng(51.508742, -0.120850),
+            //    zoom: 10,
+            //    mapTypeId: google.maps.MapTypeId.ROADMAP
+            //};
+            //var map = new google.maps.Map(document.getElementById("map_canvas"), mapProp);
+
+            var markerLoja1 = new google.maps.Marker({
+                position: { lat: -12.9964, lng: -38.4681 },
+                map: map,
+                title: "Av. Antônio Carlos Magalhães, 928 - ACM / Tel: (71) 3221-1556"
+            });
+
+            markerLoja1.setMap(map);
+        }
+
+        google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+}
+
+<h2><i class="glyphicon glyphicon-map-marker" style="color: #c9302c" title="Onde Comprar"></i> Onde Comprar</h2>
+<div id="map_canvas" style="width: 100%; height: 400px"></div>

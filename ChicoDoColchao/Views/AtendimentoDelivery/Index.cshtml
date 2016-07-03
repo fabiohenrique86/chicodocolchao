@@ -1,0 +1,38 @@
+﻿@model ChicoDoColchao.Models.AtendimentoDeliveryModel
+    
+@{
+    ViewBag.Title = "Atendimento Delivery";
+}
+
+<h2><i class="glyphicon glyphicon-home" style="color: #286090" title="Atendimento Delivery"></i> Atendimento Delivery</h2>
+<hr />
+@using (Html.BeginForm("Solicitar", "AtendimentoDelivery", FormMethod.Post, new { id = "AtendimentoDeliveryForm" }))
+{
+    <div class="form-group">
+        @Html.TextBoxFor(x => x.Nome, new { @class = "form-control", @placeholder = "Nome" })
+        @Html.ValidationMessageFor(x => x.Nome)
+    </div>
+    <div class="form-group">
+        @Html.TextBoxFor(x => x.Email, new { @class = "form-control", @placeholder = "E-mail (ex: seuemail@provedor.com.br)" })
+        @Html.ValidationMessageFor(x => x.Email)
+    </div>
+    <div class="form-group">
+        @Html.TextBoxFor(x => x.TelefoneFixo, new { @class = "form-control", @placeholder = "Telefone Fixo (ex: (ddd) número)" })
+        @Html.ValidationMessageFor(x => x.TelefoneFixo)
+    </div>
+    <div class="form-group">
+        @Html.TextBoxFor(x => x.TelefoneCelular, new { @class = "form-control", @placeholder = "Telefone Celular (WhatsApp)" })
+        @Html.ValidationMessageFor(x => x.TelefoneCelular)
+    </div>
+    <div class="form-group">
+        @Html.TextBoxFor(x => x.Endereco, new { @class = "form-control", @placeholder = "Endereço (ex: Rua Barão de Campinas, 180)" })
+        @Html.ValidationMessageFor(x => x.Endereco)
+    </div>
+    <div class="form-group">
+        @Html.TextBoxFor(x => x.Bairro, new { @class = "form-control", @placeholder = "Bairro (ex: Santa Cecília)" })
+        @Html.ValidationMessageFor(x => x.Bairro)
+    </div>
+    <div class="form-group">
+        <button id="btnSolicitar" type="submit" class="btn btn-success">Solicitar</button>
+    </div>
+}
