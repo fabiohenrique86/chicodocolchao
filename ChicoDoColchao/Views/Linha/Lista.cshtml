@@ -1,0 +1,56 @@
+﻿@{
+    ViewBag.Title = "Linha - Lista";
+}
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var tbLinha = $("#tbLinha").DataTable({
+                "ordering": false,
+                "pageLength": 10,
+                "language": {
+                    "lengthMenu": "_MENU_ registros por página",
+                    "zeroRecords": "Sem registros a serem exibidos",
+                    "info": "Página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Sem registros a serem exibidos",
+                    "infoFiltered": "(filtrados de _MAX_ total de registros)",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": { "sNext": "Próximo", "sPrevious": "Anterior", "sFirst": "Primeiro", "sLast": "Último" }
+                },
+                "columns":
+                [
+                    { "data": "Descricao", "className": "text-center" }
+                ]
+            });
+
+            $.getJSON("/Linha/Listar", function (data) {
+                tbLinha.clear();
+                tbLinha.rows.add(data).draw();
+            });
+
+            $("#btnCadastrar").click(function () {
+                window.location.href = "/Linha/Cadastro";
+            });
+
+        });
+    </script>
+}
+<div class="container" style="padding-bottom: 20px;">
+    <h2><i class="glyphicon glyphicon-list" style="color: #0f3456" title="Linhas"></i> Lista de Linhas</h2>
+    <hr />
+    <div class="form-group">
+        <div class="table-responsive">
+            <table id="tbLinha" class="table nowrap">
+                <thead>
+                    <tr>
+                        <td class="text-center" style="width: 100%"><b>Linha</b></td>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <button id="btnCadastrar" type="button" class="btn btn-info">Cadastrar Nova Linha</button>
+</div>

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChicoDoColchao.Dao
 {
@@ -10,29 +7,30 @@ namespace ChicoDoColchao.Dao
     {
         public PedidoDao()
         {
-            this.PedidoProdutoDao = new HashSet<PedidoProdutoDao>();
-            this.PedidoTipoPagamentoDao = new HashSet<PedidoTipoPagamentoDao>();
+            ClienteDao = new HashSet<ClienteDao>();
+            FuncionarioDao = new HashSet<FuncionarioDao>();
+            LojaSaidaDao = new HashSet<LojaDao>();
+            LojaDao = new HashSet<LojaDao>();
+            PedidoProdutoDao = new HashSet<PedidoProdutoDao>();
+            PedidoTipoPagamentoDao = new HashSet<PedidoTipoPagamentoDao>();
+            PedidoStatusDao = new HashSet<PedidoStatusDao>();
+            TipoPagamentoDao = new HashSet<TipoPagamentoDao>();
         }
 
         public int PedidoID { get; set; }
-        public int Numero { get; set; }
-        public int FuncionarioID { get; set; }
-        public int ClienteID { get; set; }
         public System.DateTime DataPedido { get; set; }
         public Nullable<System.DateTime> DataEntrega { get; set; }
-        public int LojaOrigemID { get; set; }
-        public int LojaSaidaID { get; set; }
-        public int PedidoStatusID { get; set; }
         public string Observacao { get; set; }
         public string NomeCarreto { get; set; }
         public Nullable<double> ValorFrete { get; set; }
 
-        public virtual ClienteDao ClienteDao { get; set; }
-        public virtual FuncionarioDao FuncionarioDao { get; set; }
-        public virtual LojaDao LojaOrigemDao { get; set; }
-        public virtual LojaDao LojaSaidaDao { get; set; }
-        public virtual PedidoStatusDao PedidoStatusDao { get; set; }
+        public virtual ICollection<ClienteDao> ClienteDao { get; set; }
+        public virtual ICollection<FuncionarioDao> FuncionarioDao { get; set; }
+        public virtual ICollection<LojaDao> LojaSaidaDao { get; set; }
+        public virtual ICollection<LojaDao> LojaDao { get; set; }
+        public virtual ICollection<PedidoStatusDao> PedidoStatusDao { get; set; }
         public virtual ICollection<PedidoProdutoDao> PedidoProdutoDao { get; set; }
         public virtual ICollection<PedidoTipoPagamentoDao> PedidoTipoPagamentoDao { get; set; }
+        public virtual ICollection<TipoPagamentoDao> TipoPagamentoDao { get; set; }
     }
 }

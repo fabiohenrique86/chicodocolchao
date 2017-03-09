@@ -1,0 +1,56 @@
+﻿@model ChicoDoColchao.Dao.MedidaDao
+
+@{
+    ViewBag.Title = "Medida - Cadastro";
+}
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $("#btnCadastrar").click(function () {
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Medida/Incluir",
+                    data: $("#MedidaForm").serialize(),
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            alert(data.Mensagem);
+                            return;
+                        }
+
+                        $("#MedidaForm")[0].reset();
+
+                        alert(data.Mensagem);
+                    }
+                });
+
+            });
+
+            $("#btnLista").click(function () {
+                window.location.href = "/Medida/Lista";
+            });
+        });
+    </script>
+}
+<div class="container" style="padding-bottom: 20px;">
+    <h2><i class="glyphicon glyphicon-remove" style="color: #0f3456" title="Medida"></i> Cadastro de Medidas</h2>
+    <hr />
+    <form id="MedidaForm" name="MedidaForm">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Descricao, new { @class = "form-control", @placeholder = "Descrição (Ex. 150x180x032, 148x132x052 etc ...)", @maxlength = "20" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <button id="btnCadastrar" type="button" class="btn btn-success">Cadastrar</button>
+            <button id="btnLista" type="button" class="btn btn-info">Lista de Medidas Cadastradas</button>
+        </div>
+    </form>
+</div>

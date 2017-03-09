@@ -1,31 +1,84 @@
-﻿@model ChicoDoColchao.Models.ColchaoIdealModel
+﻿@model ChicoDoColchao.Dao.ColchaoIdealDao
 
 @{
     ViewBag.Title = "Colchão Ideal";
 }
-
-<h2><i class="glyphicon glyphicon-ok" style="color: #5cb85c" title="Colchão Ideal"></i> Colchão Ideal</h2>
-<hr />
-@using (Html.BeginForm("Verificar", "ColchaoIdeal", FormMethod.Post, new { id = "ColchaoIdealForm" }))
+@section scripts
 {
-    <div class="form-group">
-        @Html.DropDownListFor(x => x.TipoId, new SelectList(Model.Tipos, "IdTipo", "DsTipo"), "Tipo", new { @class = "form-control" })
-        @Html.ValidationMessageFor(x => x.TipoId)
-    </div>
-    <div class="form-group">
-        @Html.DropDownListFor(x => x.TamanhoId, new SelectList(Model.Tamanhos, "IdTamanho", "DsTamanho"), "Tamanho", new { @class = "form-control" })
-        @Html.ValidationMessageFor(x => x.TamanhoId)
-    </div>
-    <div class="form-group">
-        @Html.TextBoxFor(x => x.Altura, new { @class = "form-control", @placeholder = "Altura (ex: 1.70cm)" })
-        @Html.ValidationMessageFor(x => x.Altura)
-    </div>
-    <div class="form-group">
-        @Html.TextBoxFor(x => x.Peso, new { @class = "form-control", @placeholder = "Peso (ex: 70kg)" })
-        @Html.ValidationMessageFor(x => x.Peso)
-    </div>
-    <div class="form-group">
-        <button id="btnVerificar" type="submit" class="btn btn-success">Verificar</button>
-    </div>
-}
+    <script type="text/javascript">
 
+        $(document).ready(function () {
+
+            $("#btnVerificar").click(function () {
+
+                var colchaoIdealDao = {};
+
+                colchaoIdealDao.TipoId = $("#TipoId").val();
+                colchaoIdealDao.TamanhoId = $("#TamanhoId").val();
+                colchaoIdealDao.Altura = $("#Altura").val();
+                colchaoIdealDao.Peso = $("#Peso").val();
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/ColchaoIdeal/Verificar",
+                    data: { colchaoIdealDao: colchaoIdealDao },
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            alert(data.Mensagem);
+                            return;
+                        }
+
+                        $("#ColchaoIdealForm")[0].reset();
+
+                        window.location.href = "/ColchaoIdeal/Resultado?m=" + data.Mensagem;
+                    }
+                });
+
+            });
+
+        });
+    </script>
+}
+<div class="container" style="padding-bottom: 20px;">
+    <h2><i class="glyphicon glyphicon-ok" style="color: #5cb85c" title="Colchão Ideal"></i> Colchão Ideal</h2>
+    <hr />
+    <form id="ColchaoIdealForm" name="ColchaoIdealForm">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.DropDownListFor(x => x.TipoId, new SelectList(Model.TipoColchaoDao, "IdTipo", "DsTipo"), "Tipo", new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.DropDownListFor(x => x.TamanhoId, new SelectList(Model.TamanhoColchaoDao, "IdTamanho", "DsTamanho"), "Tamanho", new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Altura, new { @class = "form-control altura", @placeholder = "Altura (ex: 1.70cm)" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Peso, new { @class = "form-control peso", @placeholder = "Peso (ex: 70kg)" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <button id="btnVerificar" type="button" class="btn btn-success">Verificar</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

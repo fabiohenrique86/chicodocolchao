@@ -1,30 +1,83 @@
-﻿@model ChicoDoColchao.Models.ContatoModel
-
+﻿@model ChicoDoColchao.Dao.ContatoDao
 @{
     ViewBag.Title = "Contato";
 }
-
-<h2><i class="glyphicon glyphicon-envelope" style="color: #31b0d5" title="Contato"></i> Contato</h2>
-<hr />
-@using (Html.BeginForm("Enviar", "Contato", FormMethod.Post, new { id = "ContatoForm" }))
+@section scripts
 {
-    <div class="form-group">
-        @Html.TextBoxFor(x => x.Nome, new { @class = "form-control", @placeholder = "Nome" })
-        @Html.ValidationMessageFor(x => x.Nome)
-    </div>
-    <div class="form-group">
-        @Html.TextBoxFor(x => x.Email, new { @class = "form-control", @placeholder = "E-mail (ex: seuemail@provedor.com.br)" })
-        @Html.ValidationMessageFor(x => x.Email)
-    </div>
-    <div class="form-group">
-        @Html.DropDownListFor(x => x.AssuntoId, new SelectList(Model.Assuntos, "IdAssunto", "DsAssunto"), "Assunto", new { @class = "form-control" })
-        @Html.ValidationMessageFor(x => x.AssuntoId)
-    </div>
-    <div class="form-group">
-        @Html.TextAreaFor(x => x.Mensagem, new { @class = "form-control", @placeholder = "Mensagem" })
-        @Html.ValidationMessageFor(x => x.Mensagem)
-    </div>
-    <div class="form-group">
-        <button id="btnEnviarContato" type="submit" class="btn btn-success">Enviar</button>
-    </div>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $("#btnEnviar").click(function () {
+
+                var contatoDao = {};
+
+                contatoDao.Nome = $("#Nome").val();
+                contatoDao.Email = $("#Email").val();
+                contatoDao.AssuntoId = $("#AssuntoId").val();
+                contatoDao.Assunto = $('#AssuntoId').find(":selected").text();
+                contatoDao.Mensagem = $("#Mensagem").val();
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Contato/Enviar",
+                    data: { contatoDao: contatoDao },
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            alert(data.Mensagem);
+                            return;
+                        }
+
+                        $("#ContatoForm")[0].reset();
+                        alert(data.Mensagem);
+                    }
+                });
+
+            });
+
+        });
+    </script>
 }
+<div class="container" style="padding-bottom: 20px;">
+    <h2><i class="glyphicon glyphicon-envelope" style="color: #31b0d5" title="Contato"></i> Contato</h2>
+    <hr />
+    <form id="ContatoForm" name="ContatoForm">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Nome, new { @class = "form-control", @placeholder = "Nome" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Email, new { @class = "form-control", @placeholder = "E-mail (ex: seuemail@provedor.com.br)" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.DropDownListFor(x => x.AssuntoId, new SelectList(Model.AssuntoContatoDao, "IdAssunto", "DsAssunto"), "Assunto", new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.TextAreaFor(x => x.Mensagem, new { @class = "form-control", @placeholder = "Mensagem", @rows = 5 })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <button id="btnEnviar" type="button" class="btn btn-success">Enviar</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

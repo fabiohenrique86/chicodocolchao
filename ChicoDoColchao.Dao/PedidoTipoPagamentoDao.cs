@@ -10,12 +10,11 @@ namespace ChicoDoColchao.Dao
     {
         public int PedidoTipoPagamentoID { get; set; }
         public int PedidoID { get; set; }
-        public int TipoPagamentoID { get; set; }
-        public int ParcelaID { get; set; }
+        //public int TipoPagamentoID { get; set; }
+        //public int ParcelaID { get; set; }
         public double ValorPago { get; set; }
 
         public virtual ParcelaDao ParcelaDao { get; set; }
-        public virtual PedidoDao PedidoDao { get; set; }
         public virtual TipoPagamentoDao TipoPagamentoDao { get; set; }
     }
 }

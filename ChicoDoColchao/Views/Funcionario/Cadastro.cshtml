@@ -1,0 +1,86 @@
+﻿@model ChicoDoColchao.Dao.FuncionarioDao
+
+@{
+    ViewBag.Title = "Funcionário - Cadastro";
+}
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $("#btnCadastrar").click(function () {
+                
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Funcionario/Incluir",
+                    data: $("#FuncionarioForm").serialize(),
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            alert(data.Mensagem);
+                            return;
+                        }
+
+                        $("#FuncionarioForm")[0].reset();
+                        $("#Telefone").val("");
+
+                        alert(data.Mensagem);
+                    }
+                });
+
+            });
+
+            $("#btnLista").click(function () {
+                window.location.href = "/Funcionario/Lista";
+            });
+
+        });
+    </script>
+}
+<div class="container" style="padding-bottom: 20px;">
+    <h2><i class="glyphicon glyphicon-user" style="color: #0f3456" title="Funcionário"></i> Cadastro de Funcionários</h2>
+    <hr />
+    <form id="FuncionarioForm" name="FuncionarioForm">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.DropDownList("LojaDao[0].LojaID", new SelectList(Model.LojaDao, "LojaID", "NomeFantasia"), "Qual loja o funcionário irá trabalhar?", new { @class = "form-control", @id = "LojaDao[0].LojaID" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Numero, new { @class = "form-control", @placeholder = "Número de matrícula do funcionário", @maxlength = "8" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Nome, new { @class = "form-control", @placeholder = "Nome do funcionário", @maxlength = "150" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Email, new { @class = "form-control", @placeholder = "E-mail do funcionário", @maxlength = "150" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Telefone, new { @class = "form-control celular", @placeholder = "Telefone Celular do funcionário" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <button id="btnCadastrar" type="button" class="btn btn-success">Cadastrar</button>
+            <button id="btnLista" type="button" class="btn btn-info">Lista de Funcionários Cadastrados</button>
+        </div>
+    </form>
+</div>

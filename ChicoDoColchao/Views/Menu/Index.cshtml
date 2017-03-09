@@ -1,0 +1,66 @@
+﻿@{
+    ViewBag.Title = "Menu";
+}
+<div class="container" style="padding-bottom: 20px;">
+    <h2><i class="glyphicon glyphicon-cog" style="color: #FFD700" title="Usuário"></i> Menu</h2>
+    <hr />
+    <div class="row">
+        <div class="col-lg-4">
+            <ul class="nav nav-pills nav-stacked">
+                <li><a href="@Url.Action("Cadastro", "Cliente")" target="_self"><i class="glyphicon glyphicon-user" style="cursor: pointer"></i> Cadastrar Cliente</a></li>
+                <li><a href="@Url.Action("Cadastro", "Pedido")" target="_self"><i class="glyphicon glyphicon-ok" style="cursor: pointer"></i> Tirar Pedido</a></li>
+                <li><a href="@Url.Action("Cadastro", "Produto")" target="_self"><i class="glyphicon glyphicon-th" style="cursor: pointer"></i> Cadastrar Produto</a></li>
+                @{
+                    ChicoDoColchao.Dao.UsuarioDao usuarioDao = null;
+
+                    if (Request.Cookies.Get("ChicoDoColchao_Usuario") != null)
+                    {
+                        usuarioDao = Newtonsoft.Json.JsonConvert.DeserializeObject<ChicoDoColchao.Dao.UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value);
+
+                        if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)ChicoDoColchao.Dao.TipoUsuarioDao.ETipoUsuario.Gerencial)
+                        {
+                            <li><a href="@Url.Action("Cadastro", "Loja")" target="_self"><i class="glyphicon glyphicon-home" style="cursor: pointer"></i> Cadastrar Loja</a></li>
+                            <li><a href="@Url.Action("Cadastro", "Funcionario")" target="_self"><i class="glyphicon glyphicon-user" style="cursor: pointer"></i> Cadastrar Funcionário</a></li>
+                            <li><a href="@Url.Action("Cadastro", "Medida")" target="_self"><i class="glyphicon glyphicon-remove" style="cursor: pointer"></i> Cadastrar Medida</a></li>
+                            <li><a href="@Url.Action("Cadastro", "Linha")" target="_self"><i class="glyphicon glyphicon-tags" style="cursor: pointer"></i> Cadastrar Linha</a></li>
+                        }
+                    }
+                }
+            </ul>
+        </div>
+        <div class="col-lg-4">
+            <ul class="nav nav-pills nav-stacked">
+                <li><a href="@Url.Action("Lista", "Cliente")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Clientes</a></li>
+                <li><a href="@Url.Action("Lista", "Pedido")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Pedidos</a></li>
+                <li><a href="@Url.Action("Lista", "Produto")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Produtos</a></li>
+                @{
+                    if (usuarioDao != null)
+                    {
+                        if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)ChicoDoColchao.Dao.TipoUsuarioDao.ETipoUsuario.Gerencial)
+                        {
+                            <li><a href="@Url.Action("Lista", "Loja")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Lojas</a></li>
+                            <li><a href="@Url.Action("Lista", "Funcionario")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Funcionário</a></li>
+                            <li><a href="@Url.Action("Lista", "Medida")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Medidas</a></li>
+                            <li><a href="@Url.Action("Lista", "Linha")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Linhas</a></li>
+                        }
+                    }
+                }
+            </ul>
+        </div>
+        <div class="col-lg-4">
+            <ul class="nav nav-pills nav-stacked">
+                @{
+                    if (usuarioDao != null)
+                    {
+                        if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)ChicoDoColchao.Dao.TipoUsuarioDao.ETipoUsuario.Gerencial)
+                        {
+                            <li><a href="@Url.Action("Transferencia", "Produto")" target="_self"><i class="glyphicon glyphicon-resize-full" style="cursor: pointer"></i> Transferência de Produto entre Lojas</a></li>
+                            <li><a href="@Url.Action("Cadastro", "NotaFiscal")" target="_self"><i class="glyphicon glyphicon-triangle-right" style="cursor: pointer"></i> Entrada de NFe</a></li>
+                            <li><a href="@Url.Action("Index", "MovimentoDeCaixa")" target="_self"><i class="glyphicon glyphicon-usd" style="cursor: pointer"></i> Movimento de Caixa</a></li>
+                        }
+                    }
+                }
+            </ul>
+        </div>
+    </div>
+</div>

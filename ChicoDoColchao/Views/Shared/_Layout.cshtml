@@ -1,35 +1,72 @@
-﻿<!DOCTYPE html>
+﻿@using ChicoDoColchao.Dao;
+@{
+    LojaDao LojaDao = new LojaDao();
+    if (Request.Cookies.Get("ChicoDoColchao_Loja") != null) { LojaDao = Newtonsoft.Json.JsonConvert.DeserializeObject<LojaDao>(Request.Cookies.Get("ChicoDoColchao_Loja").Value); }
+}
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Chico Do Colchão">
     <title>@ViewBag.Title</title>
+    @Styles.Render("~/bundles/css")
+    @RenderSection("styles", required: false)
+    <style type="text/css">
+        .error, .input-validation-error {
+            border-color: #ED5565;
+        }
 
-    @Styles.Render("~/Content/css")
+        .navbar-inverse {
+            background-color: #0f3456;
+            border-color: red;
+        }
 
-    <!-- Bootstrap Core CSS -->
-    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet">
+            .navbar-inverse .navbar-nav > li > a, .navbar-inverse .navbar-brand {
+                color: #ffffff;
+            }
 
-    <!-- Custom CSS -->
-    <link href="@Url.Content("~/Content/modern-business.css")" rel="stylesheet">
+            .navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
+                border-color: red;
+            }
 
-    <!-- Custom Fonts -->
-    @*<link href="@Url.Content("~/font-awesome/css/font-awesome.min.css")" rel="stylesheet">*@
+        .navbar-brand {
+            padding: 0px 15px;
+            height: auto;
+        }
 
+        .carousel-control.left {
+            background-image: none;
+        }
+
+        .carousel-control.right {
+            background-image: none;
+        }
+
+        .carousel-control .glyphicon-chevron-left, .carousel-control .glyphicon-chevron-right, .carousel-control .icon-next, .carousel-control .icon-prev
+        {
+            font-size: 80px;
+            margin-top: -60px;
+        }
+        .carousel-indicators li
+        {
+            border: 1px solid #bbb;
+        }
+        .carousel-indicators .active
+        {
+            background-color: #bbb;
+        }
+    </style>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
 </head>
-<body>
-    <!-- Navigation -->
+<body style="background-color: #2a2a2a">
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
@@ -37,79 +74,376 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="@Url.Content("~/Home")">Chico Do Colchão</a>
+                <a class="navbar-brand" href="@Url.Content("~/Home")"><img src="@Url.Content("~/img/logo-sem-fundo.png")" style="width: 125px" /></a>
             </div>
-            <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="@Url.Content("~/ColchaoIdeal")"><i class="glyphicon glyphicon-ok" style="color: #5cb85c" title="Colchão Ideal"></i></a></li>
-                    <li><a href="@Url.Content("~/OndeComprar")"><i class="glyphicon glyphicon-map-marker" style="color: #c9302c" title="Onde Comprar"></i></a></li>
-                    <li><a href="@Url.Content("~/AtendimentoDelivery")"><i class="glyphicon glyphicon-home" style="color: #286090" title="Atendimento Delivery"></i></a></li>
-                    <li><a href="@Url.Content("~/AgendarVisita")"><i class="glyphicon glyphicon-time" style="color: #ec971f" title="Agendar Visita"></i></a></li>
-                    <li><a href="@Url.Content("~/BaixarApp")"><i class="glyphicon glyphicon-phone" title="Baixar App"></i></a></li>
-                    <li><a href="@Url.Content("~/Contato")"><i class="glyphicon glyphicon-envelope" style="color: #31b0d5" title="Contato"></i></a></li>
-                    <li><a href="@Url.Content("~/Usuario")"><i class="glyphicon glyphicon-user" style="color: #ffff00" title="Usuário"></i></a></li>
+                    <li><a href="@Url.Content("~/ColchaoIdeal")"><i class="glyphicon glyphicon-ok" style="color: #5cb85c" title="Colchão Ideal"></i> Colchão Ideal</a></li>
+                    <li><a href="@Url.Content("~/OndeComprar")"><i class="glyphicon glyphicon-map-marker" style="color: #c9302c" title="Onde Comprar"></i> Onde Comprar</a></li>
+                    <li><a href="@Url.Content("~/AtendimentoDelivery")"><i class="glyphicon glyphicon-home" style="color: #286090" title="Atendimento Delivery"></i> Atendimento Delivery</a></li>
+                    <li><a href="@Url.Content("~/BaixarApp")"><i class="glyphicon glyphicon-phone" title="Baixar App"></i> Baixar App</a></li>
+                    <li><a href="@Url.Content("~/Contato")"><i class="glyphicon glyphicon-envelope" style="color: #31b0d5" title="Contato"></i> Contato</a></li>
+                    @if (Request.Cookies.Get("ChicoDoColchao_Usuario") == null)
+                    {
+                        <li><a href="@Url.Content("~/Usuario/Login")"><i class="glyphicon glyphicon-log-in" style="color: #5cb85c" title="Login"></i> Entrar</a></li>
+                    }
+                    else
+                    {
+                        <li><a href="@Url.Content("~/Menu")"><i class="glyphicon glyphicon-cog" style="color: #FFD700" title="Menu"></i> Menu</a></li>
+                        if (Request.Cookies.Get("ChicoDoColchao_Loja") != null)
+                        {
+                            <li><a id="aMudarLoja" href="#"><i class="glyphicon glyphicon-list" style="color: #ec971f" title="Lojas"></i> Lojas</a></li>
+                        }
+                        <li id="popover-usuario"><a href="#"><i class="glyphicon glyphicon-user" style="color: #777" title="Usuário"></i>&nbsp;<b class="caret"></b></a></li>
+                        <li><a href="@Url.Content("~/Usuario/Sair")"><i class="glyphicon glyphicon-log-out" style="color: #c9302c" title="Sair"></i> Sair</a></li>
+                    }
                 </ul>
             </div>
-            <!-- /.navbar-collapse -->
         </div>
-        <!-- /.container -->
     </nav>
-    <!-- Header Carousel -->
-    <header id="myCarousel" class="carousel slide">
-        <!-- Indicators -->
-        <ol class="carousel-indicators">
-            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-            <li data-target="#myCarousel" data-slide-to="1"></li>
-            <li data-target="#myCarousel" data-slide-to="2"></li>
-        </ol>
-        <!-- Wrapper for slides -->
-        <div class="carousel-inner">
-            <div class="item active">
-                <div class="fill" style="background-image:url('http://placehold.it/1900x1080&text=Slide One');"></div>
-                <div class="carousel-caption">
-                    <h2>Caption 1</h2>
-                </div>
-            </div>
-            <div class="item">
-                <div class="fill" style="background-image:url('http://placehold.it/1900x1080&text=Slide Two');"></div>
-                <div class="carousel-caption">
-                    <h2>Caption 2</h2>
-                </div>
-            </div>
-            <div class="item">
-                <div class="fill" style="background-image:url('http://placehold.it/1900x1080&text=Slide Three');"></div>
-                <div class="carousel-caption">
-                    <h2>Caption 3</h2>
-                </div>
-            </div>
-        </div>
-        <!-- Controls -->
-        <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-            <span class="icon-prev"></span>
-        </a>
-        <a class="right carousel-control" href="#myCarousel" data-slide="next">
-            <span class="icon-next"></span>
-        </a>
-    </header>
-    <div class="container">
-        @RenderBody()
-    </div>
-    <hr>
-    <footer>
-        <div class="row text-center">
-            <div class="col-lg-12">
+    <div id="popover-content-usuario" class="hide">
+        <div class='media' style='width: 250px'>
+            <div class='media-body text-center'>
+                @{
+                    UsuarioDao usuarioDao = null;
+
+                    if (Request.Cookies.Get("ChicoDoColchao_Usuario") != null)
+                    {
+                        usuarioDao = Newtonsoft.Json.JsonConvert.DeserializeObject<UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value);
+                    }
+                }
                 <p>
-                    <a href="@Url.Content("~/Contato")">
-                        <h4>contato@chicodocolchao.com.br</h4>
-                    </a>
+                    @if (usuarioDao != null)
+                    {
+                        @Html.Raw("Usuário: ") @usuarioDao.Login;
+                    }
+                </p>
+                <p>
+                    @if (usuarioDao != null)
+                    {
+                        @Html.Raw("Perfil: ") @usuarioDao.TipoUsuarioDao.Descricao;
+                    }
                 </p>
             </div>
         </div>
-    </footer>
+    </div>    
+    @{
+        if (Request.Cookies.Get("ChicoDoColchao_Usuario") != null)
+        {
+            usuarioDao = Newtonsoft.Json.JsonConvert.DeserializeObject<UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value);
+        }
+
+        var c = Url.RequestContext.RouteData.Values["controller"].ToString();
+        var a = Url.RequestContext.RouteData.Values["action"].ToString();
+
+        // verifica quais tela deve exibir o carousel principal
+        if (
+            (usuarioDao == null && c != "Usuario" && a != "Login")
+            ||
+            (usuarioDao != null &&
+            ((c == "Home" && a == "Index")
+            || (c == "ColchaoIdeal" && a == "Index")
+            || (c == "OndeComprar" && a == "Index")
+            || (c == "AtendimentoDelivery" && a == "Index")
+            || (c == "BaixarApp" && a == "Index")
+            || (c == "Contato" && a == "Index"))
+            ))
+        {
+            <div class="row" style="background-color: #fff; font-size: 16px; padding-top: 10px;">
+                <div class="col-xs-12 col-lg-4"></div>
+                <div class="col-xs-12 col-lg-5">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a style="color: #0f3456" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Camas <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a style="color: #0f3456" href="#">Solteiro</a></li>
+                                <li><a style="color: #0f3456" href="#">Viúva</a></li>
+                                <li><a style="color: #0f3456" href="#">Casal</a></li>
+                                <li><a style="color: #0f3456" href="#">Queen</a></li>
+                                <li><a style="color: #0f3456" href="#">King</a></li>
+                                <li><a style="color: #0f3456" href="#">Super King</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a style="color: #0f3456" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Colchões <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a style="color: #0f3456" href="#">Molas Ensacadas</a></li>
+                                <li><a style="color: #0f3456" href="#">Molas Nanolastic</a></li>
+                                <li><a style="color: #0f3456" href="#">Espuma</a></li>
+                                <li><a style="color: #0f3456" href="#">Ortopédico</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a style="color: #0f3456" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Travesseiros <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a style="color: #0f3456" href="#">Pluma de ganso</a></li>
+                                <li><a style="color: #0f3456" href="#">Viscopur</a></li>
+                                <li><a style="color: #0f3456" href="#">King Premium</a></li>
+                                <li><a style="color: #0f3456" href="#">Pró-Latex</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a style="color: #0f3456" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Acessórios <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a style="color: #0f3456" href="#">Cabeceira</a></li>
+                                <li><a style="color: #0f3456" href="#">Jogo de Lençol</a></li>
+                                <li><a style="color: #0f3456" href="#">Edredom</a></li>
+                                <li><a style="color: #0f3456" href="#">Suavencosto</a></li>
+                                <li><a style="color: #0f3456" href="#">Protetor de Colchão</a></li>
+                                <li><a style="color: #0f3456" href="#">Saia de Colchão</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-xs-12 col-lg-3"></div>
+            </div>
+            <header id="myCarousel" class="carousel slide" style="border-top: 1px solid #ccc; border-bottom: 1px solid #ccc">
+                <ol class="carousel-indicators">
+                    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                    <li data-target="#myCarousel" data-slide-to="1"></li>
+                    <li data-target="#myCarousel" data-slide-to="2"></li>
+                    <li data-target="#myCarousel" data-slide-to="3"></li>
+                    <li data-target="#myCarousel" data-slide-to="4"></li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="item active">
+                        <div class="fill" style="background-image:url('../img/minerale.jpg'); background-size: contain;"></div>
+                        <div class="carousel-caption" style="color: #333">
+                            <h2>Linha Minerale - Reconflex</h2>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="fill" style="background-image:url('../img/salute.jpg'); background-size: contain;"></div>
+                        <div class="carousel-caption" style="color: #333">
+                            <h2>Linha Salute - Reconflex</h2>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="fill" style="background-image:url('../img/silver-care.jpg'); background-size: contain;"></div>
+                        <div class="carousel-caption" style="color: #333">
+                            <h2>Linha Silver Care - Reconflex</h2>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="fill" style="background-image:url('../img/executive.jpg'); background-size: contain;"></div>
+                        <div class="carousel-caption" style="color: #fff">
+                            <h2>Linha Executive - Reconflex</h2>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="fill" style="background-image:url('../img/imperial.png'); background-size: contain;"></div>
+                        <div class="carousel-caption" style="color: #fff">
+                            <h2>Linha Imperial - Reconflex</h2>
+                        </div>
+                    </div>
+                </div>
+                <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                    <span class="icon-prev"></span>
+                </a>
+                <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                    <span class="icon-next"></span>
+                </a>
+            </header>
+        }
+    }
+    <div class="container-full" style="background-color: white">
+        @RenderBody()
+        @Html.Partial("_ModalLoja")
+    </div>
+    @{
+        // verifica quais tela deve exibir o rodapé
+        if
+        (
+            (usuarioDao == null && c != "Usuario" && a != "Login")
+            ||
+            (usuarioDao != null &&
+            ((c == "Home" && a == "Index")
+            || (c == "ColchaoIdeal" && a == "Index")
+            || (c == "OndeComprar" && a == "Index")
+            || (c == "AtendimentoDelivery" && a == "Index")
+            || (c == "BaixarApp" && a == "Index")
+            || (c == "Contato" && a == "Index")))
+        )
+        {
+            <footer style="background-color: #2a2a2a; color: white;">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <h4>Missão</h4>
+                            <p style="font-size: 12px">Dedicar-se cada vez mais para oferecer produtos que possuam conforto e durabilidade aos clientes, garantindo assim valor e sustentabilidade ao negócio.</p>
+                        </div>
+                        <div class="col-lg-4">
+                            <h4>Visão</h4>
+                            <p style="font-size: 12px">Ser a referência em revenda de colchões no estado da Bahia, respeitando a ética profissional e oferecendo aos clientes uma excelência em atendimento.</p>
+                        </div>
+                        <div class="col-lg-4">
+                            <h4>Valores</h4>
+                            <p style="font-size: 12px">Manter de forma transparente e com ética nossos relacionamentos com os clientes e colaboradores, baseado em uma confiança entre as partes.</p>
+                        </div>
+                    </div>
+                    <div class="row text-center">
+                        <h4 style="margin-top: 50px; margin-bottom: 50px;">Acompanhe-nos nas redes sociais</h4>
+                    </div>
+                    <div class="row text-center">
+                        <a href="http://www.facebook.com.br/chicodocolchao" target="_blank"><i class="fa fa-facebook img-circle" style="background-color: #3b5998; color: white; font-size: 40px; padding: 20px 27px 20px 27px;"></i></a>
+                        <a href="http://www.twitter.com/chicodocolchao" target="_blank"><i class="fa fa-twitter img-circle" style="background-color: #428bca; color: white; font-size: 40px; padding: 20px"></i></a>
+                        <a href="http://www.instagram.com.br/chicodocolchao" target="_blank"><i class="fa fa-instagram img-circle" style="background-color: #517fa4; color: white; font-size: 40px; padding: 20px"></i></a>
+                        <a href="http://www.youtube.com.br/chicodocolchao" target="_blank"><i class="fa fa-youtube img-circle" style="background-color: #9d261d; color: white; font-size: 40px; padding: 20px"></i></a>
+                    </div>
+                    <div class="row text-center">
+                        <h4 style="margin-top: 50px; margin-bottom: 50px;">Visite nossas lojas</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 text-center">
+                            <i class="glyphicon glyphicon-map-marker" style="color: #c9302c"></i>&nbsp;Av. Manoel Dias da Silva, 2.364 - Pituba<br />
+                            <i class="glyphicon glyphicon-earphone" style="color: #ec971f"></i>&nbsp;(71) 3248-7569
+                        </div>
+                        <div class="col-lg-4 text-center">
+                            <i class="glyphicon glyphicon-map-marker" style="color: #c9302c"></i>&nbsp;Av. Manoel Dias da Silva, 1.896 - Pituba<br />
+                            <i class="glyphicon glyphicon-earphone" style="color: #ec971f"></i>&nbsp;(71) 3248-2876
+                        </div>
+                        <div class="col-lg-4 text-center">
+                            <i class="glyphicon glyphicon-map-marker" style="color: #c9302c"></i>&nbsp;Shopping Piedade 1º Piso - Centro<br />
+                            <i class="glyphicon glyphicon-earphone" style="color: #ec971f"></i>&nbsp; (71) 3043-8982
+                        </div>
+                    </div>
+                    <div class="row text-center" style="margin-top: 30px;">
+                        <div class="col-lg-12">
+                            Ainda com dúvidas? Entre em <a href="@Url.Content("~/Contato")">contato@chicodocolchao.com.br</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        }
+    }
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
     @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/globalize")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/mask")
+    @Scripts.Render("~/bundles/datatables")
+    @Scripts.Render("~/bundles/moment")
+    @Scripts.Render("~/bundles/blockUI")
     @RenderSection("scripts", required: false)
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            // globalize
+            Globalize.culture('pt-BR');
+
+            // carousel
+            $("#myCarousel").carousel(
+            {
+                interval: 3500 // 5 segundos
+            });
+
+            // popover
+            $('#popover-usuario').popover({ html: true, placement: "bottom", content: function () { return $("#popover-content-usuario").html(); } });
+
+            // validação js número
+            $.validator.methods.number = function (value, element) {
+                return this.optional(element) || !isNaN(Globalize.parseFloat(value));
+            }
+
+            // validação js data
+            $.validator.methods.date = function (value, element) {
+                return this.optional(element) || Globalize.parseDate(value);
+            }
+
+            // datepicker
+            $(".datepicker").datepicker({
+                dateFormat: 'dd/mm/yy',
+                dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                nextText: 'Próximo',
+                prevText: 'Anterior',
+                changeMonth: true,
+                changeYear: true
+            });
+
+            // mask
+            $(".data").mask("00/00/0000");
+            $(".pedido").mask("00000000");
+            $(".produto").mask("000000000");
+            $(".valor").mask("000.000.000,00", { reverse: true });
+            $(".cpf").mask("000.000.000-00");
+            $(".cnpj").mask("00.000.000/0000-00");
+            $(".comissao").mask("000");
+            $(".altura").mask("0.00");
+            $(".peso").mask("000");
+            $(".fixo").mask("(99) 9999-9999");
+            $(".celular").mask("(99) 9999-99999").focusout(function (event) {
+                var target, phone, element;
+                target = (event.currentTarget) ? event.currentTarget : event.srcElement;
+                phone = target.value.replace(/\D/g, '');
+                element = $(target);
+                element.unmask();
+                if (phone.length > 10) {
+                    element.mask("(99) 99999-9999");
+                }
+                else {
+                    element.mask("(99) 9999-99999");
+                }
+            });
+
+            // modal loja
+            var tbLojas = $("#tbLojas").DataTable({
+                "ordering": false,
+                "pageLength": 10,
+                "dom": 't',
+                "language": {
+                    "lengthMenu": "_MENU_ registros por página",
+                    "zeroRecords": "Sem registros a serem exibidos",
+                    "info": "Página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Sem registros a serem exibidos",
+                    "infoFiltered": "(filtrados de _MAX_ total de registros)",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": { "sNext": "Próximo", "sPrevious": "Anterior", "sFirst": "Primeiro", "sLast": "Último" }
+                },
+                "columns":
+                [
+                    {
+                        "data": function (data, type, row) {
+                            var linha = "";
+
+                            if (data["LojaID"] == '@LojaDao.LojaID') {
+                                linha = '<a href="/Loja/Selecionar?LojaID=' + data["LojaID"] + "&NomeFantasia=" + encodeURIComponent(data.NomeFantasia) + "&Cnpj=" + data["Cnpj"] + "&Telefone=" + data["Telefone"] + '">' + data["NomeFantasia"] + '</a> <i class="glyphicon glyphicon-ok"></i>'
+                            }
+                            else {
+                                linha = '<a href="/Loja/Selecionar?LojaID=' + data["LojaID"] + "&NomeFantasia=" + encodeURIComponent(data.NomeFantasia) + "&Cnpj=" + data["Cnpj"] + "&Telefone=" + data["Telefone"] + '">' + data["NomeFantasia"] + '</a>'
+                            }
+
+                            return linha;
+                        },
+                        "className": "text-center"
+                    }
+                ]
+            });
+
+            $("#aMudarLoja").click(function () {
+                $.getJSON("/Loja/Listar", function (data) {
+                    $("#tbLojas").DataTable().clear();
+                    $("#tbLojas").DataTable().rows.add(data).draw();
+                    $('#modalLoja').modal('show');
+                });
+
+            });
+
+        });
+
+        $.ajaxSetup({
+            beforeSend: function () {
+                $.blockUI({ message: '<h4>Aguarde...</h4>' });
+            },
+            complete: function () {
+                $.unblockUI();
+            }
+        });
+    </script>
 </body>
 </html>

@@ -1,38 +1,95 @@
-﻿@model ChicoDoColchao.Models.AtendimentoDeliveryModel
-    
+﻿@model ChicoDoColchao.Dao.AtendimentoDeliveryDao
+
 @{
     ViewBag.Title = "Atendimento Delivery";
 }
-
-<h2><i class="glyphicon glyphicon-home" style="color: #286090" title="Atendimento Delivery"></i> Atendimento Delivery</h2>
-<hr />
-@using (Html.BeginForm("Solicitar", "AtendimentoDelivery", FormMethod.Post, new { id = "AtendimentoDeliveryForm" }))
+@section scripts
 {
-    <div class="form-group">
-        @Html.TextBoxFor(x => x.Nome, new { @class = "form-control", @placeholder = "Nome" })
-        @Html.ValidationMessageFor(x => x.Nome)
-    </div>
-    <div class="form-group">
-        @Html.TextBoxFor(x => x.Email, new { @class = "form-control", @placeholder = "E-mail (ex: seuemail@provedor.com.br)" })
-        @Html.ValidationMessageFor(x => x.Email)
-    </div>
-    <div class="form-group">
-        @Html.TextBoxFor(x => x.TelefoneFixo, new { @class = "form-control", @placeholder = "Telefone Fixo (ex: (ddd) número)" })
-        @Html.ValidationMessageFor(x => x.TelefoneFixo)
-    </div>
-    <div class="form-group">
-        @Html.TextBoxFor(x => x.TelefoneCelular, new { @class = "form-control", @placeholder = "Telefone Celular (WhatsApp)" })
-        @Html.ValidationMessageFor(x => x.TelefoneCelular)
-    </div>
-    <div class="form-group">
-        @Html.TextBoxFor(x => x.Endereco, new { @class = "form-control", @placeholder = "Endereço (ex: Rua Barão de Campinas, 180)" })
-        @Html.ValidationMessageFor(x => x.Endereco)
-    </div>
-    <div class="form-group">
-        @Html.TextBoxFor(x => x.Bairro, new { @class = "form-control", @placeholder = "Bairro (ex: Santa Cecília)" })
-        @Html.ValidationMessageFor(x => x.Bairro)
-    </div>
-    <div class="form-group">
-        <button id="btnSolicitar" type="submit" class="btn btn-success">Solicitar</button>
-    </div>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $("#btnSolicitar").click(function () {
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/AtendimentoDelivery/Solicitar",
+                    data: $("#AtendimentoDeliveryForm").serialize(),
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            alert(data.Mensagem);
+                            return;
+                        }
+
+                        $("#AtendimentoDeliveryForm")[0].reset();
+                        $("#TelefoneFixo").val("");
+                        $("#TelefoneCelular").val("");
+                        alert(data.Mensagem);
+                    }
+                });
+
+            });
+
+        });
+    </script>
 }
+<div class="container" style="padding-bottom: 20px;">
+    <h2><i class="glyphicon glyphicon-home" style="color: #286090" title="Atendimento Delivery"></i> Atendimento Delivery</h2>
+    <hr />
+    <p>Não pode ir à loja? Solicite nosso atendimento delivery.</p>
+    <p>Fazendo esse agendamento por aqui, um dos nossos consultores irá no seu endereço lhe apresentar todos os nossos produtos e formas de pagamento.</p>
+    <p>Então já sabe, se não tem tempo de ir à loja, solicite nosso atendimento delivery.</p>
+    <form id="AtendimentoDeliveryForm" name="AtendimentoDeliveryForm">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Nome, new { @class = "form-control", @placeholder = "Nome", @maxlength = "150" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Email, new { @class = "form-control", @placeholder = "E-mail (ex: seuemail@provedor.com.br)", @maxlength = "150" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.TelefoneFixo, new { @class = "form-control fixo", @placeholder = "Telefone Fixo (ex: (ddd) número)" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.TelefoneCelular, new { @class = "form-control celular", @placeholder = "Telefone Celular (WhatsApp)" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Endereco, new { @class = "form-control", @placeholder = "Endereço (ex: Rua Barão de Campinas, 180)", @maxlength = "200" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Bairro, new { @class = "form-control", @placeholder = "Bairro (ex: Santa Cecília)", @maxlength = "100" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <button id="btnSolicitar" type="button" class="btn btn-success">Solicitar</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,62 @@
+﻿@{
+    ViewBag.Title = "Loja - Lista";
+}
+@section scripts
+{
+    <script type="text/javascript">
+        
+        $(document).ready(function () {
+
+            var tbLoja = $("#tbLoja").DataTable({
+                "ordering": false,
+                "pageLength": 10,
+                "language": {
+                    "lengthMenu": "_MENU_ registros por página",
+                    "zeroRecords": "Sem registros a serem exibidos",
+                    "info": "Página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Sem registros a serem exibidos",
+                    "infoFiltered": "(filtrados de _MAX_ total de registros)",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": { "sNext": "Próximo", "sPrevious": "Anterior", "sFirst": "Primeiro", "sLast": "Último" }
+                },
+                "columns":
+                [
+                    { "data": "Cnpj", "className": "text-center" },
+                    { "data": "RazaoSocial", "className": "text-center" },
+                    { "data": "NomeFantasia", "className": "text-center" },
+                    { "data": "Telefone", "className": "text-center" }
+                ]
+            });
+
+            $.getJSON("/Loja/Listar", function (data) {
+                tbLoja.clear();
+                tbLoja.rows.add(data).draw();
+            });
+
+            $("#btnCadastrar").click(function () {
+                window.location.href = "/Loja/Cadastro";
+            });
+
+        });
+    </script>
+}
+<div class="container" style="padding-bottom: 20px;">
+    <h2><i class="glyphicon glyphicon-list" style="color: #0f3456" title="Loja"></i> Lista de Lojas</h2>
+    <hr />
+    <div class="form-group">
+        <div class="table-responsive">
+            <table id="tbLoja" class="table nowrap">
+                <thead>
+                    <tr>
+                        <td class="text-center" style="width: 20%"><b>CNPJ</b></td>
+                        <td class="text-center" style="width: 35%"><b>Razão Social</b></td>
+                        <td class="text-center" style="width: 35%"><b>Nome Fantasia</b></td>
+                        <td class="text-center" style="width: 10%"><b>Telefone</b></td>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <button id="btnCadastrar" type="button" class="btn btn-info">Cadastrar Nova Loja</button>
+</div>

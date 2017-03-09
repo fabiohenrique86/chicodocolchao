@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Importar XLSX - Resultado";
+}
+<div class="container" style="padding-bottom: 20px;">
+    <h2>Importar XLSX - Resultado</h2>
+    <hr />
+    @if (ViewBag.Erro != null)
+    {
+        if (ViewBag.Erro)
+        {
+            <div>
+                <p>A planilha não foi importada com sucesso.</p>
+                <p>Ocorreram os erros listados abaixo:</p>
+            </div>
+            <ul style="color: red">
+                @foreach (string item in ((string)ViewBag.Mensagem).Split("*".ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
+                {
+                    <li>@item</li>
+                }
+            </ul>            
+        }
+        else
+        {
+            <p style="color: #5cb85c">
+                @ViewBag.Mensagem
+            </p>
+        }
+        <p>
+            <a href="@Url.Action("Lista", "Produto")">Clique aqui</a> e retorne para a página de lista de produtos.
+        </p>
+    }
+</div>

@@ -1,0 +1,45 @@
+﻿@model IEnumerable<ChicoDoColchao.Dao.LojaDao>
+
+@{
+    ViewBag.Title = "Movimento De Caixa";
+}
+
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $("#btnGerar").click(function () {
+
+                var data = $("#Data").val();
+                var lojaId = $("#LojaID option:selected").val();
+
+                window.open("http://www.chicodocolchao.com.br/MovimentoDeCaixa/Gerar?data=" + data + "&lojaId=" + lojaId, "blank");
+                //window.open("http://localhost:57163/MovimentoDeCaixa/Gerar?data=" + data + "&lojaId=" + lojaId, "blank");
+            });
+
+        });
+    </script>
+}
+<div class="container" style="padding-bottom: 20px;">
+    <h2><i class="glyphicon glyphicon-usd" style="color: #0f3456" title="Movimento de Caixa"></i> Movimento de Caixa</h2>
+    <hr />
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="form-group">
+                <input id="Data" name="Data" type="text" class="form-control data datepicker" placeholder="Data" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="form-group">
+                @Html.DropDownListFor(x => x.FirstOrDefault().LojaID, new SelectList(Model, "LojaID", "NomeFantasia"), "Loja", new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <button id="btnGerar" type="button" class="btn btn-info">Gerar</button>
+    </div>
+</div>

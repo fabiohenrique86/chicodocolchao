@@ -77,6 +77,26 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.ReportViewer.Common, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\MicrosoftReportViewerWebForms.11.0.0.0\lib\Microsoft.ReportViewer.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\MicrosoftReportViewerWebForms.11.0.0.0\lib\Microsoft.ReportViewer.ProcessingObjectModel.DLL</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\MicrosoftReportViewerWebForms.11.0.0.0\lib\Microsoft.ReportViewer.WebForms.DLL</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.SqlServer.Types.11.0.2\lib\net20\Microsoft.SqlServer.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ReportViewerForMvc, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ReportViewerForMvc.1.0.1\lib\net45\ReportViewerForMvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -193,53 +213,184 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="chicodocolchaoDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>chicodocolchaoDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\AgendarVisitaController.cs" />
     <Compile Include="Controllers\AtendimentoDeliveryController.cs" />
     <Compile Include="Controllers\BaixarAppController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\MovimentoDeCaixaController.cs" />
+    <Compile Include="Controllers\NotaFiscalController.cs" />
+    <Compile Include="Controllers\MedidaController.cs" />
+    <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\ColchaoIdealController.cs" />
     <Compile Include="Controllers\ContatoController.cs" />
+    <Compile Include="Controllers\LinhaController.cs" />
+    <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\FuncionarioController.cs" />
+    <Compile Include="Controllers\ParcelaController.cs" />
+    <Compile Include="Controllers\TipoPagamentoController.cs" />
     <Compile Include="Controllers\OndeComprarController.cs" />
+    <Compile Include="Controllers\PedidoController.cs" />
+    <Compile Include="Controllers\LojaController.cs" />
+    <Compile Include="Controllers\ProdutoController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
+    <Compile Include="ds_cliente.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ds_cliente.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="ds_movimento_caixa.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ds_movimento_caixa.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="ds_produto.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ds_produto.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="ds_tipo_pagamento.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ds_tipo_pagamento.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="ModelBinder\DoubleModelBinder.cs" />
     <Compile Include="Models\AgendarVisitaModel.cs" />
     <Compile Include="Models\LojaModel.cs" />
     <Compile Include="Models\UsuarioModel.cs" />
-    <Compile Include="Models\TamanhoModel.cs" />
-    <Compile Include="Models\PreferenciaModel.cs" />
     <Compile Include="Models\AssuntoModel.cs" />
-    <Compile Include="Models\AtendimentoDeliveryModel.cs" />
-    <Compile Include="Models\ColchaoIdealModel.cs" />
-    <Compile Include="Models\ContatoModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="..\packages\Microsoft.SqlServer.Types.11.0.2\nativeBinaries\x64\msvcr100.dll">
+      <Link>SqlServerTypes\x64\msvcr100.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\packages\Microsoft.SqlServer.Types.11.0.2\nativeBinaries\x64\SqlServerSpatial110.dll">
+      <Link>SqlServerTypes\x64\SqlServerSpatial110.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\packages\Microsoft.SqlServer.Types.11.0.2\nativeBinaries\x86\msvcr100.dll">
+      <Link>SqlServerTypes\x86\msvcr100.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\packages\Microsoft.SqlServer.Types.11.0.2\nativeBinaries\x86\SqlServerSpatial110.dll">
+      <Link>SqlServerTypes\x86\SqlServerSpatial110.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\bootstrap-3.3.6.min.css" />
+    <Content Include="Content\jquery.dataTables.css" />
+    <Content Include="Content\jquery.ui-1.11.4.css" />
     <Content Include="Content\modern-business.css" />
+    <Content Include="Content\font-awesome.min.css" />
     <Content Include="favicon.ico" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="img\executive.jpg" />
+    <Content Include="img\imperial.png" />
+    <Content Include="img\logo-sem-fundo.png" />
+    <Content Include="img\minerale.jpg" />
+    <Content Include="img\salute.jpg" />
+    <Content Include="img\silver-care.jpg" />
+    <Content Include="Scripts\bootstrap-3.3.6.min.js" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ConnectionStrings.config" />
+    <Content Include="ConnectionStrings.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="App.config" />
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\jquery-1.10.2.js" />
-    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery.blockUI.js" />
+    <Content Include="Scripts\jquery.globalize\cultures\globalize.culture.en-US.js" />
+    <Content Include="Scripts\jquery.globalize\cultures\globalize.culture.pt-BR.js" />
+    <Content Include="Scripts\jquery.globalize\cultures\globalize.cultures.js" />
+    <Content Include="Scripts\jquery.globalize\globalize.js" />
+    <Content Include="Scripts\jquery.ui-1.11.4.js" />
+    <Content Include="Scripts\jquery-1.11.3.min.js" />
+    <Content Include="ds_cliente.xsc">
+      <DependentUpon>ds_cliente.xsd</DependentUpon>
+    </Content>
+    <Content Include="chicodocolchaoDataSet.xsc">
+      <DependentUpon>chicodocolchaoDataSet.xsd</DependentUpon>
+    </Content>
+    <None Include="chicodocolchaoDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>chicodocolchaoDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="chicodocolchaoDataSet.xss">
+      <DependentUpon>chicodocolchaoDataSet.xsd</DependentUpon>
+    </Content>
+    <None Include="ds_cliente.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ds_cliente.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="ds_cliente.xss">
+      <DependentUpon>ds_cliente.xsd</DependentUpon>
+    </Content>
+    <Content Include="ds_tipo_pagamento.xsc">
+      <DependentUpon>ds_tipo_pagamento.xsd</DependentUpon>
+    </Content>
+    <Content Include="ds_produto.xsc">
+      <DependentUpon>ds_produto.xsd</DependentUpon>
+    </Content>
+    <Content Include="ds_movimento_caixa.xsc">
+      <DependentUpon>ds_movimento_caixa.xsd</DependentUpon>
+    </Content>
+    <None Include="ds_movimento_caixa.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ds_movimento_caixa.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="ds_movimento_caixa.xss">
+      <DependentUpon>ds_movimento_caixa.xsd</DependentUpon>
+    </Content>
+    <None Include="ds_produto.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ds_produto.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="ds_produto.xss">
+      <DependentUpon>ds_produto.xsd</DependentUpon>
+    </Content>
+    <None Include="ds_tipo_pagamento.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ds_tipo_pagamento.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="ds_tipo_pagamento.xss">
+      <DependentUpon>ds_tipo_pagamento.xsd</DependentUpon>
+    </Content>
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="Planilhas\cdc-produtos.xlsx" />
+    <None Include="Properties\PublishProfiles\ChicoDoColchao-Release.pubxml" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.dataTables-1.10.12.min.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\mask.js" />
+    <Content Include="Scripts\moment.min_2.11.1.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="SqlServerTypes\readme.htm" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -256,7 +407,32 @@
     <Content Include="Views\OndeComprar\Index.cshtml" />
     <Content Include="Views\ColchaoIdeal\Index.cshtml" />
     <Content Include="Views\BaixarApp\Index.cshtml" />
-    <Content Include="Views\Usuario\Index.cshtml" />
+    <Content Include="Views\Pedido\Cadastro.cshtml" />
+    <Content Include="Views\Cliente\Lista.cshtml" />
+    <Content Include="Views\Cliente\Cadastro.cshtml" />
+    <Content Include="Views\Pedido\Lista.cshtml" />
+    <Content Include="Views\Usuario\Login.cshtml" />
+    <Content Include="Views\Loja\Cadastro.cshtml" />
+    <Content Include="Views\Menu\Index.cshtml" />
+    <Content Include="Views\Loja\Lista.cshtml" />
+    <Content Include="Views\Funcionario\Cadastro.cshtml" />
+    <Content Include="Views\Funcionario\Lista.cshtml" />
+    <Content Include="Views\Linha\Cadastro.cshtml" />
+    <Content Include="Views\Linha\Lista.cshtml" />
+    <Content Include="Views\Produto\Cadastro.cshtml" />
+    <Content Include="Views\Produto\Lista.cshtml" />
+    <Content Include="Views\Medida\Cadastro.cshtml" />
+    <Content Include="Views\Medida\Lista.cshtml" />
+    <Content Include="Views\Produto\Transferencia.cshtml" />
+    <Content Include="Views\NotaFiscal\Cadastro.cshtml" />
+    <Content Include="Views\Shared\_ModalLoja.cshtml" />
+    <Content Include="Views\Loja\Seleciona.cshtml" />
+    <Content Include="Views\MovimentoDeCaixa\Index.cshtml" />
+    <Content Include="Views\ColchaoIdeal\Resultado.cshtml" />
+    <Content Include="Views\Produto\ResultadoImportacao.cshtml" />
+    <Content Include="Smtp.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -266,7 +442,24 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
-    <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ChicoDoColchao.Business\ChicoDoColchao.Business.csproj">
+      <Project>{876463a2-dcc8-4a13-8928-eefa0e3cffe0}</Project>
+      <Name>ChicoDoColchao.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ChicoDoColchao.Dao\ChicoDoColchao.Dao.csproj">
+      <Project>{9ec7e64b-4e9d-4831-a7ca-b44bb5298318}</Project>
+      <Name>ChicoDoColchao.Dao</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\MovimentoDeCaixa.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\PedidoComanda.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

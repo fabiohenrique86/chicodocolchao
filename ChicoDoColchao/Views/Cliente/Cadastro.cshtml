@@ -1,0 +1,153 @@
+﻿@model ChicoDoColchao.Dao.ClienteDao
+
+@{
+    ViewBag.Title = "Cliente - Cadastro";
+}
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var validator = $("#ClienteForm").validate({
+                rules: {
+                    EstadoID: { required: true },
+                    Cidade: { required: true },
+                    Logradouro: { required: true },
+                    Bairro: { required: true },
+                    Numero: { required: true, digits: true }
+                }
+            });
+
+            $("#btnCadastrar").click(function () {
+
+                var clienteDao = {};
+
+                clienteDao.Nome = $("#Nome").val().trim();
+                clienteDao.Email = $("#Email").val().trim();
+                clienteDao.Cpf = $("#Cpf").val().trim();
+                clienteDao.DataNascimento = $("#DataNascimento").val().trim();
+                clienteDao.NomeFantasia = $("#NomeFantasia").val().trim();
+                clienteDao.Cnpj = $("#Cnpj").val().trim();
+                clienteDao.RazaoSocial = $("#RazaoSocial").val().trim();
+                clienteDao.TelefoneResidencial = $("#TelefoneResidencial").val().trim();
+                clienteDao.TelefoneResidencial2 = $("#TelefoneResidencial2").val().trim();
+                clienteDao.TelefoneCelular = $("#TelefoneCelular").val().trim();
+                clienteDao.TelefoneCelular2 = $("#TelefoneCelular2").val().trim();
+                clienteDao.EstadoDao = [];
+                clienteDao.EstadoDao.push({ EstadoID: $("#EstadoID option:selected").val() });
+                clienteDao.Cidade = $("#Cidade").val().trim();
+                clienteDao.Logradouro = $("#Logradouro").val().trim();
+                clienteDao.Bairro = $("#Bairro").val().trim();
+                clienteDao.Numero = $("#Numero").val().trim();
+                clienteDao.Complemento = $("#Complemento").val().trim();
+                clienteDao.PontoReferencia = $("#PontoReferencia").val().trim();
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Cliente/Incluir",
+                    data: { clienteDao: clienteDao },
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            alert(data.Mensagem);
+                            return;
+                        }
+
+                        $("#ClienteForm")[0].reset();
+                        validator.resetForm();
+                        $("#Cpf").val("");
+                        $("#DataNascimento").val("");
+                        $("#TelefoneResidencial").val("");
+                        $("#TelefoneResidencial2").val("");
+                        $("#TelefoneCelular").val("");
+                        $("#TelefoneCelular2").val("");
+
+                        alert(data.Mensagem);
+                    }
+                });
+
+            });
+
+            $("#btnLista").click(function () {
+                window.location.href = "/Cliente/Lista";
+            });
+        });
+    </script>
+}
+<div class="container" style="padding-bottom: 20px;">
+    <h2><i class="glyphicon glyphicon-user" style="color: #0f3456" title="Cliente"></i> Cadastro de Clientes</h2>
+    <hr />
+    @using (Html.BeginForm("Incluir", "Cliente", FormMethod.Post, new { id = "ClienteForm" }))
+    {
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Nome, new { @class = "form-control", @placeholder = "Nome do Cliente", @maxlength = "100" })
+                </div>
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Cpf, new { @class = "form-control cpf", @placeholder = "Cpf do Cliente", @maxlength = "11" })
+                </div>
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.DataNascimento, new { @class = "form-control data datepicker", @placeholder = "Data de Nascimento", @maxlength = "10" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.NomeFantasia, new { @class = "form-control", @placeholder = "Nome Fantasia da Empresa", @maxlength = "100" })
+                </div>
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Cnpj, new { @class = "form-control cnpj", @placeholder = "Cnpj da Empresa", @maxlength = "14" })
+                </div>
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.RazaoSocial, new { @class = "form-control", @placeholder = "Razão Social da Empresa", @maxlength = "100" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Email, new { @class = "form-control", @placeholder = "E-mail do Cliente (Opcional)", @maxlength = "200" })
+                </div>
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.TelefoneResidencial, new { @class = "form-control fixo", @placeholder = "Telefone Residencial/Empresarial (Opcional)" })
+                </div>
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.TelefoneResidencial2, new { @class = "form-control fixo", @placeholder = "Telefone Residencial/Empresarial (Opcional)" })
+                </div>
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.TelefoneCelular, new { @class = "form-control celular", @placeholder = "Telefone Celular (Opcional)" })
+                </div>
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.TelefoneCelular2, new { @class = "form-control celular", @placeholder = "Telefone Celular (Opcional)" })
+                </div>
+                <div class="form-group">
+                    @Html.DropDownListFor(x => x.EstadoDao.FirstOrDefault().EstadoID, new SelectList(Model.EstadoDao, "EstadoID", "Nome"), "Estado", new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Cidade, new { @class = "form-control", @placeholder = "Cidade", @maxlength = "100" })
+                </div>
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Logradouro, new { @class = "form-control", @placeholder = "Logradouro", @maxlength = "100" })
+                </div>
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Bairro, new { @class = "form-control", @placeholder = "Bairro", @maxlength = "75" })
+                </div>
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Numero, new { @class = "form-control", @placeholder = "Número", @maxlength = "7" })
+                </div>
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Complemento, new { @class = "form-control", @placeholder = "Complemento (Opcional)", @maxlength = "100" })
+                </div>
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.PontoReferencia, new { @class = "form-control", @placeholder = "Ponto de Referência (Opcional)", @maxlength = "150" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <button id="btnCadastrar" type="button" class="btn btn-success">Cadastrar</button>
+            <button id="btnLista" type="button" class="btn btn-info">Lista de Clientes Cadastrados</button>
+        </div>
+    }
+</div>

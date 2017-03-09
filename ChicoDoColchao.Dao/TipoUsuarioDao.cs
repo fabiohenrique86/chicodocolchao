@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ChicoDoColchao.Dao
 {
@@ -10,13 +6,19 @@ namespace ChicoDoColchao.Dao
     {
         public TipoUsuarioDao()
         {
-            this.UsuarioDao = new HashSet<UsuarioDao>();
+            UsuarioDao = new HashSet<UsuarioDao>();
         }
 
         public int TipoUsuarioID { get; set; }
         public string Descricao { get; set; }
         public bool Ativo { get; set; }
         
-        public virtual ICollection<UsuarioDao> UsuarioDao { get; set; }
+        public ICollection<UsuarioDao> UsuarioDao { get; set; }
+
+        public enum ETipoUsuario
+        {
+            Gerencial = 1,
+            Vendedor = 2
+        }
     }
 }

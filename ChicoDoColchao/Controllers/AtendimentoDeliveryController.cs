@@ -3,24 +3,45 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using ChicoDoColchao.Models;
+using ChicoDoColchao.Dao;
+using ChicoDoColchao.Business.Exceptions;
+using ChicoDoColchao.Business;
 
 namespace ChicoDoColchao.Controllers
 {
     public class AtendimentoDeliveryController : Controller
     {
-        // GET: AtendimentoDelivery
+        private AtendimentoDeliveryBusiness atendimentoDeliveryBusiness;
+
+        public AtendimentoDeliveryController()
+        {
+            atendimentoDeliveryBusiness = new AtendimentoDeliveryBusiness();
+        }
+
         public ActionResult Index()
         {
-            AtendimentoDeliveryModel atendimentoDeliveryModel = new AtendimentoDeliveryModel();
+            AtendimentoDeliveryDao atendimentoDeliveryDao = new AtendimentoDeliveryDao();
 
-            return View(atendimentoDeliveryModel);
+            return View(atendimentoDeliveryDao);
         }
 
         [HttpPost]
-        public void Solicitar(AtendimentoDeliveryModel atendimentoDeliveryModel)
+        public JsonResult Solicitar(AtendimentoDeliveryDao atendimentoDeliveryDao)
         {
+            try
+            {
+                atendimentoDeliveryBusiness.Solicitar(atendimentoDeliveryDao);
 
+                return Json(new { Sucesso = true, Mensagem = "Solicitação enviada com sucesso" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (BusinessException ex)
+            {
+                return Json(new { Sucesso = false, Mensagem = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Sucesso = false, Mensagem = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }

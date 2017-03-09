@@ -7,7 +7,11 @@ namespace ChicoDoColchao.Models
 {
     public class LojaModel
     {
-        public int IdLoja { get; set; }
-        public string DsLoja { get; set; }
+        public int LojaID { get; set; }
+        public string Cnpj { get; set; }
+        public string NomeFantasia { get; set; }
+        public string RazaoSocial { get; set; }
+        public string Telefone { get; set; }
+        public bool Ativo { get; set; }
     }
 }

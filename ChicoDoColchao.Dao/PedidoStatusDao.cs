@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ChicoDoColchao.Dao
 {
@@ -10,13 +6,21 @@ namespace ChicoDoColchao.Dao
     {
         public PedidoStatusDao()
         {
-            this.PedidoDao = new HashSet<PedidoDao>();
+            PedidoDao = new HashSet<PedidoStatusDao>();
         }
 
         public int PedidoStatusID { get; set; }
         public string Descricao { get; set; }
         public bool Ativo { get; set; }
     
-        public virtual ICollection<PedidoDao> PedidoDao { get; set; }
+        public virtual ICollection<PedidoStatusDao> PedidoDao { get; set; }
+
+        public enum EPedidoStatus
+        {
+            PrevisaoDeEntrega = 1,
+            RetiradoNaLoja = 2,
+            Cancelado = 3,
+            Entregue = 4
+        }
     }
 }

@@ -1,0 +1,56 @@
+﻿@model ChicoDoColchao.Dao.LinhaDao
+
+@{
+    ViewBag.Title = "Linha - Cadastro";
+}
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $("#btnCadastrar").click(function () {
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Linha/Incluir",
+                    data: $("#LinhaForm").serialize(),
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            alert(data.Mensagem);
+                            return;
+                        }
+
+                        $("#LinhaForm")[0].reset();
+
+                        alert(data.Mensagem);
+                    }
+                });
+
+            });
+
+            $("#btnLista").click(function () {
+                window.location.href = "/Linha/Lista";
+            });
+        });
+    </script>
+}
+<div class="container" style="padding-bottom: 20px;">
+    <h2><i class="glyphicon glyphicon-tags" style="color: #0f3456" title="Linha"></i> Cadastro de Linhas</h2>
+    <hr />
+    <form id="LinhaForm" name="LinhaForm">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Descricao, new { @class = "form-control", @placeholder = "Linha (Ex. Ouro, Master, etc ...)", @maxlength = "150" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <button id="btnCadastrar" type="button" class="btn btn-success">Cadastrar</button>
+            <button id="btnLista" type="button" class="btn btn-info">Lista de Linhas Cadastradas</button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,387 @@
+﻿@{
+    ViewBag.Title = "Pedido - Lista";
+}
+@section scripts
+{
+    <script type="text/javascript">
+
+        function modalPedido(pedido) {
+
+            $("#lblPedidoID").text(pedido.PedidoID);
+
+            $("#lblPedidoStatus").text(pedido.PedidoStatusDao[0].Descricao);
+            $("#lblCarreto").text((pedido.NomeCarreto != null ? pedido.NomeCarreto : ""));
+            $("#lblValorFrete").text((pedido.ValorFrete != null ? Globalize.format(pedido.ValorFrete, "n2") : ""));
+            $("#lblObservacao").text((pedido.Observacao != null ? pedido.Observacao : ""));
+
+            $("#tbProduto").DataTable().clear();
+            $("#tbProduto").DataTable().rows.add(pedido.PedidoProdutoDao).draw();
+
+            $("#tbTipoPagamento").DataTable().clear();
+            $("#tbTipoPagamento").DataTable().rows.add(pedido.PedidoTipoPagamentoDao).draw();
+
+            var totalPago = 0;
+
+            $(pedido.PedidoTipoPagamentoDao).each(function (index, pedidoTipoPagamento) {
+                totalPago += pedidoTipoPagamento.ParcelaDao.Numero * pedidoTipoPagamento.ValorPago;
+            });
+
+            $("#lblTotalPedido").text(Globalize.format(totalPago, "n2"));
+
+            $('#modalpedido').modal('show');
+        }
+
+        function cancelarPedido(pedidoId, obj)
+        {            
+            if (confirm("Deseja realmente cancelar pedido " + pedidoId + "?"))
+            {
+                var pedidoDao = {};
+
+                pedidoDao.PedidoID = pedidoId;
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Pedido/Cancelar",
+                    data: { pedidoDao: pedidoDao },
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            alert(data.Mensagem);
+                            return;
+                        }
+
+                        $("#tbPedido").DataTable().row($(obj).parents("tr")).invalidate().data(data.Pedido).draw();
+
+                        alert(data.Mensagem);
+                    }
+                });
+            }
+        }
+
+        function entregarPedido(pedidoId, obj)
+        {
+            if (confirm("Deseja realmente entregar pedido " + pedidoId + "?"))
+            {
+                var pedidoDao = {};
+
+                pedidoDao.PedidoID = pedidoId;
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Pedido/Entregar",
+                    data: { pedidoDao: pedidoDao },
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            alert(data.Mensagem);
+                            return;
+                        }
+
+                        $("#tbPedido").DataTable().row($(obj).parents("tr")).invalidate().data(data.Pedido).draw();
+                        
+                        alert(data.Mensagem);
+                    }
+                });
+            }
+        }
+
+        function enviarComandaPorEmail(pedidoId)
+        {
+            if (confirm("Deseja realmente enviar por e-mail a comanda do pedido " + pedidoId + "?"))
+            {
+                var pedidoDao = {};
+
+                pedidoDao.PedidoID = pedidoId;
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Pedido/EnviarComandaPorEmail",
+                    data: { pedidoDao: pedidoDao },
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            alert(data.Mensagem);
+                            return;
+                        }
+                        
+                        alert(data.Mensagem);
+                    }
+                });
+            }
+        }
+
+        $(document).ready(function () {
+
+            $.getJSON("/Pedido/Listar", function (data) {
+                tbPedido.clear();
+                tbPedido.rows.add(data).draw();
+            });
+
+            var tbPedido = $("#tbPedido").DataTable({
+                "ordering": false,
+                "pageLength": 10,
+                "language": {
+                    "lengthMenu": "_MENU_ registros por página",
+                    "zeroRecords": "Sem registros a serem exibidos",
+                    "info": "Página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Sem registros a serem exibidos",
+                    "infoFiltered": "(filtrados de _MAX_ total de registros)",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": { "sNext": "Próximo", "sPrevious": "Anterior", "sFirst": "Primeiro", "sLast": "Último" }
+                },
+                "rowCallback": function (row, data, index)
+                {
+                    var pedidoStatusId = data.PedidoStatusDao[0].PedidoStatusID;
+                    
+                    if (pedidoStatusId == 1)
+                    {
+                        $('td', row).removeClass('bg-success');
+                        $('td', row).removeClass('bg-danger');
+                        $('td', row).addClass('bg-warning');
+                    }
+                    else if (pedidoStatusId == 2)
+                    {
+                        $('td', row).removeClass('bg-warning');
+                        $('td', row).removeClass('bg-danger');
+                        $('td', row).addClass('bg-success');
+                    }
+                    else if (pedidoStatusId == 3)
+                    {
+                        $('td', row).removeClass('bg-warning');
+                        $('td', row).removeClass('bg-success');
+                        $('td', row).addClass('bg-danger');
+                    }
+                    else if (pedidoStatusId == 4)
+                    {
+                        $('td', row).removeClass('bg-warning');
+                        $('td', row).removeClass('bg-danger');
+                        $('td', row).addClass('bg-success');
+                    }
+                },
+                "columns":
+                [
+                    {
+                        "data": function (data, type, row) {
+                            return "<a href='#' onclick='modalPedido(" + JSON.stringify(data) + ")'>" + data["PedidoID"] + "</a>";
+                        },
+                        "className": "text-center"
+                    },
+                    { "data": "FuncionarioDao[0].Nome", "className": "text-center" },
+                    {
+                        "data": function (data, type, row) {
+                            if (data.ClienteDao[0].Cpf != "") { return data.ClienteDao[0].Nome; } else { return data.ClienteDao[0].NomeFantasia; }
+                        },
+                        "className": "text-center"
+                    },
+                    {
+                        "data": function (data, type, row) {
+                            return moment(data["DataPedido"]).format("DD/MM/YYYY HH:mm");
+                        },
+                        "className": "text-center"
+                    },
+                    {
+                        "data": function (data, type, row) {
+                            if (data["DataEntrega"] != null) { return moment(data["DataEntrega"]).format("DD/MM/YYYY HH:mm"); } else { return "-"; }
+                        },
+                        "className": "text-center"
+                    },
+                    { "data": "LojaSaidaDao[0].NomeFantasia", "className": "text-center" },
+                    {
+                        "data": function (data, type, row)
+                        {
+                            var comanda = "<a href='http://www.chicodocolchao.com.br/Pedido/Comanda?PedidoID=" + data["PedidoID"] + "' target='_blank'><i class='glyphicon glyphicon-print' title='Imprimir Pedido' style='cursor: pointer'></i></a>";
+                            //var comanda = "<a href='http://localhost:57163/Pedido/Comanda?PedidoID=" + data["PedidoID"] + "' target='_blank'><i class='glyphicon glyphicon-print' title='Imprimir Pedido' style='cursor: pointer'></i></a>";
+                            var entrega = "<i class='glyphicon glyphicon-ok' title='Entregar Pedido' style='cursor: pointer' onclick='entregarPedido(" + data["PedidoID"] + ", this)'></i>";
+                            var cancelamento = "<i class='glyphicon glyphicon-remove' title='Cancelar Pedido' style='cursor: pointer' onclick='cancelarPedido(" + data["PedidoID"] + ", this)'></i>";
+                            var comandaPorEmail = "<i class='glyphicon glyphicon-envelope' title='Enviar Comanda Por E-mail' style='cursor: pointer' onclick='enviarComandaPorEmail(" + data["PedidoID"] + ")'></i>";
+
+                            if (data.PedidoStatusDao[0].PedidoStatusID == 1) // Previsão de Entrega
+                            {
+                                return comanda + " " + entrega + " " + cancelamento + " " + comandaPorEmail;
+                            }
+                            else if (data.PedidoStatusDao[0].PedidoStatusID == 2) // Retirado na Loja
+                            {
+                                return comanda + " " + cancelamento + " " + comandaPorEmail;
+                            }
+                            else if (data.PedidoStatusDao[0].PedidoStatusID == 3) // Cancelado
+                            {
+                                return "";
+                            }
+                            else if (data.PedidoStatusDao[0].PedidoStatusID == 4) // Entregue
+                            {
+                                return cancelamento + " " + comandaPorEmail;
+                            }
+                        },
+                        "className": "text-center"
+                    }
+                ]
+            });
+
+            var tbProduto = $("#tbProduto").DataTable({
+                "paging": false,
+                "ordering": false,
+                "info": false,
+                "searching": false,
+                "language": {
+                    "lengthMenu": "Mostrar _MENU_ registros por página",
+                    "zeroRecords": "Sem registros a serem exibidos",
+                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Sem registros a serem exibidos",
+                    "infoFiltered": "(filtrados de _MAX_ total de registros)"
+                },
+                "columns":
+                [
+                    { "data": "ProdutoDao.ProdutoID", "className": "text-center", "visible": false },
+                    { "data": "ProdutoDao.Numero", "className": "text-center" },
+                    { "data": "ProdutoDao.Descricao", "className": "text-center" },
+                    { "data": "ProdutoDao.MedidaDao.Descricao", "className": "text-center" },
+                    { "data": "Quantidade", "className": "text-center" },
+                    { "data": "ProdutoDao.LinhaDao[0].Descricao", "className": "text-center" }
+                ]
+            });
+
+            var tbTipoPagamento = $("#tbTipoPagamento").DataTable({
+                "paging": false,
+                "ordering": false,
+                "info": false,
+                "searching": false,
+                "language": {
+                    "lengthMenu": "Mostrar _MENU_ registros por página",
+                    "zeroRecords": "Sem registros a serem exibidos",
+                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Sem registros a serem exibidos",
+                    "infoFiltered": "(filtrados de _MAX_ total de registros)"
+                },
+                "columns":
+                [
+                    { "data": "TipoPagamentoDao.TipoPagamentoID", "className": "text-center", "visible": false },
+                    { "data": "TipoPagamentoDao.Descricao", "className": "text-center" },
+                    { "data": "ParcelaDao.Numero", "className": "text-center" },
+                    {
+                        "data": function (data, type, row) {
+                            return Globalize.format(data["ValorPago"], "n2");
+                        },
+                        "className": "text-center"
+                    }
+                ]
+            });
+
+            $("#btnCadastrar").click(function () {
+                window.location.href = "/Pedido/Cadastro";
+            });
+
+        });
+    </script>
+}
+<div class="container" style="padding-bottom: 20px;">
+    <h2><i class="glyphicon glyphicon-list" style="color: #0f3456" title="Pedido"></i> Lista de Pedidos</h2>
+    <hr />
+    <div class="form-group">
+        <div class="table-responsive">
+            <table id="tbPedido" class="table nowrap">
+                <thead>
+                    <tr>
+                        <td class="text-center" style="width: 10%"><b>Nº Pedido</b></td>
+                        <td class="text-center" style="width: 20%"><b>Funcionário</b></td>
+                        <td class="text-center" style="width: 25%"><b>Cliente</b></td>
+                        <td class="text-center" style="width: 10%"><b>Data Pedido</b></td>
+                        <td class="text-center" style="width: 10%"><b>Data Entrega</b></td>
+                        <td class="text-center" style="width: 20%"><b>Loja Saída</b></td>
+                        <td class="text-center" style="width: 5%"><b>Ação</b></td>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <button id="btnCadastrar" type="button" class="btn btn-info">Cadastrar Novo Pedido</button>
+    <div class="modal fade" id="modalpedido" tabindex="-1" role="dialog" aria-labelledby="ModalPedido" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Nº Pedido <label id="lblPedidoID"></label></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            Status: <label id="lblPedidoStatus"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            Carreto: <label id="lblCarreto"></label>
+                        </div>
+                        <div class="col-lg-6">
+                            Valor Frete: <label id="lblValorFrete"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            Observação: <label id="lblObservacao"></label>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <p>Produtos:</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="table-responsive">
+                                <table id="tbProduto" class="table nowrap" style="width: 100%">
+                                    <thead>
+                                        <tr>
+                                            <td class="text-center" style="width: 5%"><b>ProdutoID</b></td>
+                                            <td class="text-center" style="width: 15%"><b>Número</b></td>
+                                            <td class="text-center" style="width: 30%"><b>Produto</b></td>
+                                            <td class="text-center" style="width: 20%"><b>Medida</b></td>
+                                            <td class="text-center" style="width: 10%"><b>Quantidade</b></td>
+                                            <td class="text-center" style="width: 20%"><b>Linha</b></td>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <p>Pagamentos:</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="table-responsive">
+                                <table id="tbTipoPagamento" class="table nowrap" style="width: 100%">
+                                    <thead>
+                                        <tr>
+                                            <td class="text-center" style="width: 5%"><b>TipoPagamentoID</b></td>
+                                            <td class="text-center" style="width: 70%"><b>Descrição</b></td>
+                                            <td class="text-center" style="width: 10%"><b>Parcela</b></td>
+                                            <td class="text-center" style="width: 15%"><b>Valor Pago</b></td>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="text-right">
+                                Total Pago: <label id="lblTotalPedido"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

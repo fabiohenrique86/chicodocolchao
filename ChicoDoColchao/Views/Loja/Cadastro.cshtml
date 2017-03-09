@@ -1,0 +1,86 @@
+﻿@model ChicoDoColchao.Dao.LojaDao
+
+@{
+    ViewBag.Title = "Loja - Cadastro";
+}
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            
+            $("#btnCadastrar").click(function () {
+                                                
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Loja/Incluir",
+                    data: { Cnpj: $("#Cnpj").val(), NomeFantasia: $("#NomeFantasia").val(), RazaoSocial: $("#RazaoSocial").val(), Telefone: $("#Telefone").val(), Deposito: $("#Deposito").prop("checked") },
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            alert(data.Mensagem);
+                            return;
+                        }
+
+                        $("#LojaForm")[0].reset();
+                        $("#Cnpj").val("");
+                        $("#Telefone").val("");
+
+                        alert(data.Mensagem);
+                    }
+                });
+
+            });
+
+            $("#btnLista").click(function () {
+                window.location.href = "/Loja/Lista";
+            });
+        });
+    </script>
+}
+<div class="container" style="padding-bottom: 20px;">
+    <h2><i class="glyphicon glyphicon-home" style="color: #0f3456" title="Loja"></i> Cadastro de Lojas</h2>
+    <hr />
+    <form id="LojaForm" name="LojaForm">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Cnpj, new { @class = "form-control cnpj", @placeholder = "Qual o CNPJ da loja?", @maxlength = "14" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.NomeFantasia, new { @class = "form-control", @placeholder = "E o Nome Fantasia?", @maxlength = "150" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.RazaoSocial, new { @class = "form-control", @placeholder = "Possui Razão Social?", @maxlength = "150" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Telefone, new { @class = "form-control fixo", @placeholder = "Telefone Fixo com DDD da loja", @maxlength = "10" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <input id="Deposito" name="Deposito" type="checkbox" /> Loja de depósito?
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <button id="btnCadastrar" type="button" class="btn btn-success">Cadastrar</button>
+            <button id="btnLista" type="button" class="btn btn-info">Lista de Lojas Cadastradas</button>
+        </div>
+    </form>
+</div>

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ChicoDoColchao.Dao
 {
@@ -10,7 +6,7 @@ namespace ChicoDoColchao.Dao
     {
         public TipoPagamentoDao()
         {
-            this.PedidoTipoPagamentoDao = new HashSet<PedidoTipoPagamentoDao>();
+            PedidoTipoPagamentoDao = new HashSet<PedidoTipoPagamentoDao>();
         }
 
         public int TipoPagamentoID { get; set; }
@@ -18,5 +14,12 @@ namespace ChicoDoColchao.Dao
         public bool Ativo { get; set; }
         
         public virtual ICollection<PedidoTipoPagamentoDao> PedidoTipoPagamentoDao { get; set; }
+
+        public enum ETipoPagamento
+        {
+            Dinheiro = 1,
+            CartaoMaster = 2,
+            CartaoVisa = 3
+        }
     }
 }

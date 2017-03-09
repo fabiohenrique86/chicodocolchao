@@ -31,13 +31,17 @@ namespace ChicoDoColchao.Repository
         public string TelefoneCelular { get; set; }
         public string TelefoneResidencial2 { get; set; }
         public string TelefoneCelular2 { get; set; }
+        public int EstadoID { get; set; }
         public string Cidade { get; set; }
-        public string Estado { get; set; }
-        public string Endereco { get; set; }
+        public string Logradouro { get; set; }
+        public short Numero { get; set; }
         public string Bairro { get; set; }
+        public string Complemento { get; set; }
         public string PontoReferencia { get; set; }
         public bool Ativo { get; set; }
+        public string Email { get; set; }
     
+        public virtual Estado Estado { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Pedido> Pedido { get; set; }
     }

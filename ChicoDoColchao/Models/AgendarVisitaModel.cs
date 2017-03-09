@@ -16,10 +16,10 @@ namespace ChicoDoColchao.Models
         public string LojaId { get; set; }
         public IEnumerable<LojaModel> Lojas = new List<LojaModel>
         {
-            new LojaModel { IdLoja = 1, DsLoja = "Loja 1" },
-            new LojaModel { IdLoja = 2, DsLoja = "Loja 2" },
-            new LojaModel { IdLoja = 3, DsLoja = "Loja 3" },
-            new LojaModel { IdLoja = 4, DsLoja = "Loja 4" }
+            new LojaModel { LojaID = 1, NomeFantasia = "Loja 1" },
+            new LojaModel { LojaID = 2, NomeFantasia = "Loja 2" },
+            new LojaModel { LojaID = 3, NomeFantasia = "Loja 3" },
+            new LojaModel { LojaID = 4, NomeFantasia = "Loja 4" }
         };
         
         [Required(ErrorMessage = "Data/Hora obrigatória")]

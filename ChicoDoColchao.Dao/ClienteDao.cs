@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChicoDoColchao.Dao
 {
@@ -10,7 +7,7 @@ namespace ChicoDoColchao.Dao
     {
         public ClienteDao()
         {
-            this.PedidoDao = new HashSet<PedidoDao>();
+            EstadoDao = new HashSet<EstadoDao>();
         }
 
         public int ClienteID { get; set; }
@@ -25,12 +22,13 @@ namespace ChicoDoColchao.Dao
         public string TelefoneResidencial2 { get; set; }
         public string TelefoneCelular2 { get; set; }
         public string Cidade { get; set; }
-        public string Estado { get; set; }
-        public string Endereco { get; set; }
+        public ICollection<EstadoDao> EstadoDao { get; set; }
+        public string Logradouro { get; set; }
         public string Bairro { get; set; }
         public string PontoReferencia { get; set; }
         public bool Ativo { get; set; }
-        
-        public virtual ICollection<PedidoDao> PedidoDao { get; set; }
+        public short? Numero { get; set; }
+        public string Complemento { get; set; }
+        public string Email { get; set; }
     }
 }

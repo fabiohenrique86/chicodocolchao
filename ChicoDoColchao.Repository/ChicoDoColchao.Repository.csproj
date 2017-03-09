@@ -69,10 +69,16 @@
     <Compile Include="Cliente.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Estado.cs">
+      <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Funcionario.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Linha.cs">
+      <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Log.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Loja.cs">
@@ -81,6 +87,7 @@
     <Compile Include="LojaProduto.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="LogRepository.cs" />
     <Compile Include="Medida.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
@@ -90,6 +97,9 @@
     <Compile Include="NotaFiscalProduto.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="NotaFiscalRepository.cs" />
+    <Compile Include="MedidaRepository.cs" />
+    <Compile Include="LinhaRepository.cs" />
     <Compile Include="Orcamento.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
@@ -99,13 +109,15 @@
     <Compile Include="Parcela.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ParcelaProduto.cs">
+      <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Pedido.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
     <Compile Include="PedidoProduto.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="PedidoRepository.cs" />
     <Compile Include="PedidoStatus.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
@@ -115,7 +127,15 @@
     <Compile Include="Produto.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_helpdiagrams_Result.cs">
+      <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysdiagrams.cs">
+      <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="TipoPagamento.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
@@ -131,6 +151,17 @@
     <Compile Include="Usuario.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="UsuarioRepository.cs" />
+    <Compile Include="ClienteRepository.cs" />
+    <Compile Include="EstadoRepository.cs" />
+    <Compile Include="ParcelaRepository.cs" />
+    <Compile Include="TipoPagamentoRepository.cs" />
+    <Compile Include="LojaRepository.cs" />
+    <Compile Include="FuncionarioRepository.cs" />
+    <Compile Include="ProdutoRepository.cs" />
+    <Compile Include="PedidoStatusRepository.cs" />
+    <Compile Include="PedidoRepository.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

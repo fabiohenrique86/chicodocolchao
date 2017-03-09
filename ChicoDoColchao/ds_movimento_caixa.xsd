@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ds_movimento_caixa" targetNamespace="http://tempuri.org/ds_movimento_caixa.xsd" xmlns:mstns="http://tempuri.org/ds_movimento_caixa.xsd" xmlns="http://tempuri.org/ds_movimento_caixa.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Web.config" AppSettingsPropertyName="ChicoDoColchao" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="ChicoDoColchao (Web.config)" ParameterPrefix="@" PropertyReference="AppConfig.System.Configuration.ConfigurationManager.0.ConnectionStrings.ChicoDoColchao.ConnectionString" Provider="System.Data.SqlClient" />
+        </Connections>
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="ds_movimento_caixa" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="True" msprop:Generator_DataSetName="ds_movimento_caixa" msprop:Generator_UserDSName="ds_movimento_caixa">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="ds_movimento_caixa" msprop:Generator_TableClassName="ds_movimento_caixaDataTable" msprop:Generator_TableVarName="tableds_movimento_caixa" msprop:Generator_TablePropName="_ds_movimento_caixa" msprop:Generator_RowDeletingName="ds_movimento_caixaRowDeleting" msprop:Generator_RowChangingName="ds_movimento_caixaRowChanging" msprop:Generator_RowEvHandlerName="ds_movimento_caixaRowChangeEventHandler" msprop:Generator_RowDeletedName="ds_movimento_caixaRowDeleted" msprop:Generator_UserTableName="ds_movimento_caixa" msprop:Generator_RowChangedName="ds_movimento_caixaRowChanged" msprop:Generator_RowEvArgName="ds_movimento_caixaRowChangeEvent" msprop:Generator_RowClassName="ds_movimento_caixaRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="PedidoID" msprop:Generator_ColumnVarNameInTable="columnPedidoID" msprop:Generator_ColumnPropNameInRow="PedidoID" msprop:Generator_ColumnPropNameInTable="PedidoIDColumn" msprop:Generator_UserColumnName="PedidoID" type="xs:string" minOccurs="0" />
+              <xs:element name="Sug" msprop:Generator_ColumnVarNameInTable="columnSug" msprop:Generator_ColumnPropNameInRow="Sug" msprop:Generator_ColumnPropNameInTable="SugColumn" msprop:Generator_UserColumnName="Sug" type="xs:string" minOccurs="0" />
+              <xs:element name="Valor" msprop:Generator_ColumnVarNameInTable="columnValor" msprop:Generator_ColumnPropNameInRow="Valor" msprop:Generator_ColumnPropNameInTable="ValorColumn" msprop:Generator_UserColumnName="Valor" type="xs:string" minOccurs="0" />
+              <xs:element name="Forma" msprop:Generator_ColumnVarNameInTable="columnForma" msprop:Generator_ColumnPropNameInRow="Forma" msprop:Generator_ColumnPropNameInTable="FormaColumn" msprop:Generator_UserColumnName="Forma" type="xs:string" minOccurs="0" />
+              <xs:element name="Prazo" msprop:Generator_ColumnVarNameInTable="columnPrazo" msprop:Generator_ColumnPropNameInRow="Prazo" msprop:Generator_ColumnPropNameInTable="PrazoColumn" msprop:Generator_UserColumnName="Prazo" type="xs:string" minOccurs="0" />
+              <xs:element name="Comercializacao" msprop:Generator_ColumnVarNameInTable="columnComercializacao" msprop:Generator_ColumnPropNameInRow="Comercializacao" msprop:Generator_ColumnPropNameInTable="ComercializacaoColumn" msprop:Generator_UserColumnName="Comercializacao" type="xs:string" minOccurs="0" />
+              <xs:element name="Observacao" msprop:Generator_ColumnVarNameInTable="columnObservacao" msprop:Generator_ColumnPropNameInRow="Observacao" msprop:Generator_ColumnPropNameInTable="ObservacaoColumn" msprop:Generator_UserColumnName="Observacao" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

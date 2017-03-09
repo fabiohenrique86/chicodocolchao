@@ -1,0 +1,13 @@
+﻿@{
+    ViewBag.Title = "Colchão Ideal";
+}
+<div class="container" style="padding-bottom: 20px;">
+    <h2><i class="glyphicon glyphicon-ok" style="color: #5cb85c" title="Colchão Ideal"></i> Colchão Ideal - Resultado</h2>
+    <hr />
+    <form id="ColchaoIdealForm" name="ColchaoIdealForm">
+        <p>
+            Certo. De acordo com os seus dados, seu colchão ideal é: <b>@ViewBag.Resultado</b>.
+        </p>
+        <p>Que tal dá uma olhada nos nossos <a href="@Url.Action("Index", "Home")">produtos</a> e melhorar o seu sono?</p>
+    </form>
+</div>

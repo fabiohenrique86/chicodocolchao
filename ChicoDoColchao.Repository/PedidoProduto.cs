@@ -19,7 +19,6 @@ namespace ChicoDoColchao.Repository
         public int ProdutoID { get; set; }
         public short Quantidade { get; set; }
         public string Medida { get; set; }
-        public double Preco { get; set; }
     
         public virtual Pedido Pedido { get; set; }
         public virtual Produto Produto { get; set; }

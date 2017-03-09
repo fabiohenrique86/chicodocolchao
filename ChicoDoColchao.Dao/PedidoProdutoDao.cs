@@ -15,7 +15,7 @@ namespace ChicoDoColchao.Dao
         public string Medida { get; set; }
         public double Preco { get; set; }
 
-        public virtual PedidoDao PedidoDao { get; set; }
+        public virtual PedidoStatusDao PedidoDao { get; set; }
         public virtual ProdutoDao ProdutoDao { get; set; }
     }
 }

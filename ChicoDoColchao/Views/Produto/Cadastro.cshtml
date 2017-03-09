@@ -1,0 +1,233 @@
+﻿@model ChicoDoColchao.Dao.ProdutoDao
+
+@{
+    ViewBag.Title = "Produto - Cadastro";
+}
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $("#txtMedida").autocomplete({
+                minLength: 3,
+                source: function (request, response) {
+                    $.getJSON("/Medida/Listar", { Descricao: request.term }, function (data, status, xhr) {
+
+                        if (data == null || data.length <= 0) {
+                            data.push({ MedidaID: 0, Descricao: "Medida não cadastrada" });
+                        }
+
+                        response($.map(data, function (medida) {
+                            return { label: medida.Descricao, value: medida.MedidaID }
+                        }));
+                    });
+                },
+                select: function (event, ui) {
+
+                    // apaga a pesquisa selecionada
+                    if (ui.item.label == "Medida não cadastrada") {
+                        ui.item.label = "";
+                        ui.item.value = "";
+                        return;
+                    }
+
+                    $("#MedidaID").val(ui.item.value);
+
+                    ui.item.label = ui.item.label;
+                    ui.item.value = ui.item.label;
+                }
+            });
+
+            $("#btnCadastrar").click(function () {
+
+                var produtoDao = {};
+                produtoDao.MedidaDao = {};
+
+                produtoDao.Numero = $("#Numero").val();
+                produtoDao.Descricao = $("#Descricao").val();
+                produtoDao.LinhaDao = [];
+                produtoDao.LinhaDao.push({ LinhaID: $("#LinhaID option:selected").val() });
+                produtoDao.MedidaDao.MedidaID = $("#MedidaID").val();
+                produtoDao.ComissaoFuncionario = $("#ComissaoFuncionario").val();
+                produtoDao.ComissaoFranqueado = $("#ComissaoFranqueado").val();
+                produtoDao.parcelaProdutoDao = [];
+                if ($("#PrecoAVista").val() != "") { produtoDao.parcelaProdutoDao.push({ ParcelaID: 1, Preco: $("#PrecoAVista").val(), AVista: 1 }); }
+                if ($("#Preco1").val() != "") { produtoDao.parcelaProdutoDao.push({ ParcelaID: 1, Preco: $("#Preco1").val() }); }
+                if ($("#Preco2").val() != "") { produtoDao.parcelaProdutoDao.push({ ParcelaID: 2, Preco: $("#Preco2").val() }); }
+                if ($("#Preco3").val() != "") { produtoDao.parcelaProdutoDao.push({ ParcelaID: 3, Preco: $("#Preco3").val() }); }
+                if ($("#Preco4").val() != "") { produtoDao.parcelaProdutoDao.push({ ParcelaID: 4, Preco: $("#Preco4").val() }); }
+                if ($("#Preco5").val() != "") { produtoDao.parcelaProdutoDao.push({ ParcelaID: 5, Preco: $("#Preco5").val() }); }
+                if ($("#Preco6").val() != "") { produtoDao.parcelaProdutoDao.push({ ParcelaID: 6, Preco: $("#Preco6").val() }); }
+                if ($("#Preco7").val() != "") { produtoDao.parcelaProdutoDao.push({ ParcelaID: 7, Preco: $("#Preco7").val() }); }
+                if ($("#Preco8").val() != "") { produtoDao.parcelaProdutoDao.push({ ParcelaID: 8, Preco: $("#Preco8").val() }); }
+                if ($("#Preco9").val() != "") { produtoDao.parcelaProdutoDao.push({ ParcelaID: 9, Preco: $("#Preco9").val() }); }
+                if ($("#Preco10").val() != "") { produtoDao.parcelaProdutoDao.push({ ParcelaID: 10, Preco: $("#Preco10").val() }); }
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Produto/Incluir",
+                    data: produtoDao,
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            alert(data.Mensagem);
+                            return;
+                        }
+
+                        $("#ProdutoForm")[0].reset();
+                        $("#MedidaID").val("");
+                        $("#ComissaoFuncionario").val("");
+                        $("#ComissaoFranqueado").val("");
+                        $("#PrecoAVista").val("");
+                        $("#Preco1").val("");
+                        $("#Preco2").val("");
+                        $("#Preco3").val("");
+                        $("#Preco4").val("");
+                        $("#Preco5").val("");
+                        $("#Preco6").val("");
+                        $("#Preco7").val("");
+                        $("#Preco8").val("");
+                        $("#Preco9").val("");
+                        $("#Preco10").val("");
+
+                        alert(data.Mensagem);
+                    }
+                });
+
+            });
+
+            $("#btnLista").click(function () {
+                window.location.href = "/Produto/Lista";
+            });
+        });
+    </script>
+}
+<div class="container" style="padding-bottom: 20px;">
+    <h2><i class="glyphicon glyphicon-th" style="color: #0f3456" title="Produto"></i> Cadastro de Produtos</h2>
+    <hr />
+    <form id="ProdutoForm" name="ProdutoForm">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Numero, new { @class = "form-control produto", @placeholder = "Número do produto", @maxlength = "15" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Descricao, new { @class = "form-control", @placeholder = "Descrição do produto", @maxlength = "300" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.DropDownListFor(x => x.LinhaDao.FirstOrDefault().LinhaID, new SelectList(Model.LinhaDao, "LinhaID", "Descricao"), "Qual a linha do produto?", new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <input id="txtMedida" name="txtMedida" type="text" class="form-control" placeholder="Medida do produto (Mínimo de 3 letras)" />
+                    <input id="MedidaID" name="MedidaID" type="hidden" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.ComissaoFuncionario, new { @class = "form-control comissao", @placeholder = "% Rentabilidade funcionário (opcional)", @maxlength = "3" })
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.ComissaoFranqueado, new { @class = "form-control comissao", @placeholder = "% Rentabilidade lojista (opcional)", @maxlength = "3" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <input type="text" id="PrecoAVista" name="PrecoAVista" class="form-control valor" placeholder="Preço (À vista)" maxlength="15" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <input type="text" id="Preco1" name="Preco1" class="form-control valor" placeholder="Preço 1x" maxlength="15" />
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <input type="text" id="Preco2" name="Preco2" class="form-control valor" placeholder="Preço 2x" maxlength="15" />
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <input type="text" id="Preco3" name="Preco3" class="form-control valor" placeholder="Preço 3x" maxlength="15" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <input type="text" id="Preco4" name="Preco4" class="form-control valor" placeholder="Preço 4x" maxlength="15" />
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <input type="text" id="Preco5" name="Preco5" class="form-control valor" placeholder="Preço 5x" maxlength="15" />
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <input type="text" id="Preco6" name="Preco6" class="form-control valor" placeholder="Preço 6x" maxlength="15" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <input type="text" id="Preco7" name="Preco7" class="form-control valor" placeholder="Preço 7x" maxlength="15" />
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <input type="text" id="Preco8" name="Preco8" class="form-control valor" placeholder="Preço 8x" maxlength="15" />
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <input type="text" id="Preco9" name="Preco9" class="form-control valor" placeholder="Preço 9x" maxlength="15" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <input type="text" id="Preco10" name="Preco10" class="form-control valor" placeholder="Preço 10x" maxlength="15" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <button id="btnCadastrar" type="button" class="btn btn-success">Cadastrar</button>
+            <button id="btnLista" type="button" class="btn btn-info">Lista de Produtos Cadastrados</button>
+        </div>
+    </form>
+    <form id="ProdutoFormCSV" name="ProdutoFormCSV" method="post" action="Importar" enctype="multipart/form-data">
+        <div class="form-group">
+            <input name="arquivo" type="file" />
+        </div>
+        <div class="form-group">
+            <button id="btnCadastrarCSV" type="submit" class="btn btn-success">Importar Planilha XLSX</button>
+        </div>
+        <div class="row">
+            Para fazer o download da planilha XLSX de exemplo, <a href="http://www.chicodocolchao.com.br/Planilhas/cdc-produtos.xlsx" target="_blank">clique aqui</a>.
+        </div>
+    </form>
+</div>

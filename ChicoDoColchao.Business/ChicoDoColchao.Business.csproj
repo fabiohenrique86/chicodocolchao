@@ -30,8 +30,30 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ClosedXML, Version=0.85.0.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>ClosedXML\ClosedXML.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>ClosedXML\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\MicrosoftReportViewerWebForms.11.0.0.0\lib\Microsoft.ReportViewer.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\MicrosoftReportViewerWebForms.11.0.0.0\lib\Microsoft.ReportViewer.ProcessingObjectModel.DLL</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\MicrosoftReportViewerWebForms.11.0.0.0\lib\Microsoft.ReportViewer.WebForms.DLL</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,9 +62,39 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AtendimentoDeliveryBusiness.cs" />
+    <Compile Include="ContatoBusiness.cs" />
+    <Compile Include="ColchaoIdealBusiness.cs" />
+    <Compile Include="EmailBusiness.cs" />
+    <Compile Include="LogBusiness.cs" />
     <Compile Include="Exceptions\BusinessException.cs" />
+    <Compile Include="ClienteBusiness.cs" />
+    <Compile Include="EstadoBusiness.cs" />
+    <Compile Include="NotaFiscalBusiness.cs" />
+    <Compile Include="MedidaBusiness.cs" />
+    <Compile Include="LinhaBusiness.cs" />
+    <Compile Include="Tradutors\LogTradutor.cs" />
+    <Compile Include="Tradutors\NotaFiscalTradutor.cs" />
+    <Compile Include="Tradutors\MedidaTradutor.cs" />
+    <Compile Include="Tradutors\LinhaTradutor.cs" />
+    <Compile Include="Tradutors\UsuarioTradutor.cs" />
+    <Compile Include="UsuarioBusiness.cs" />
+    <Compile Include="ParcelaBusiness.cs" />
+    <Compile Include="TipoPagamentoBusiness.cs" />
+    <Compile Include="LojaBusiness.cs" />
+    <Compile Include="FuncionarioBusiness.cs" />
+    <Compile Include="ProdutoBusiness.cs" />
+    <Compile Include="PedidoStatusBusiness.cs" />
     <Compile Include="PedidoBusiness.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tradutors\ClienteTradutor.cs" />
+    <Compile Include="Tradutors\ParcelaTradutor.cs" />
+    <Compile Include="Tradutors\EstadoTradutor.cs" />
+    <Compile Include="Tradutors\TipoPagamentoTradutor.cs" />
+    <Compile Include="Tradutors\LojaTradutor.cs" />
+    <Compile Include="Tradutors\FuncionarioTradutor.cs" />
+    <Compile Include="Tradutors\ProdutoTradutor.cs" />
+    <Compile Include="Tradutors\PedidoStatusTradutor.cs" />
     <Compile Include="Tradutors\PedidoTradutor.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -55,7 +107,15 @@
       <Name>ChicoDoColchao.Repository</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="ClosedXML\ClosedXML.dll" />
+    <Content Include="ClosedXML\ClosedXML.pdb" />
+    <Content Include="ClosedXML\ClosedXML.xml" />
+    <Content Include="ClosedXML\DocumentFormat.OpenXml.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

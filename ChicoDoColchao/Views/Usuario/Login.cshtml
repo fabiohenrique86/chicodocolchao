@@ -1,0 +1,62 @@
+﻿@model ChicoDoColchao.Dao.UsuarioDao
+
+@{
+    ViewBag.Title = "Usuário - Login";
+}
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $("#btnEntrar").click(function () {
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Usuario/Entrar",
+                    data: $("#UsuarioLoginForm").serialize(),
+                    success: function (data) {
+                        
+                        if (!data.Sucesso) {
+                            console.info(data.Erro);
+                            alert(data.Mensagem);
+                            return;
+                        }
+
+                        window.location.href = "/Menu/Index";
+                    }
+                });
+            });
+        });
+    </script>
+}
+<div class="container" style="padding-bottom: 20px;">
+    <h2><i class="glyphicon glyphicon-log-in" style="color: #5cb85c" title="Usuário"></i> Entrar</h2>
+    <hr />
+    <form id="UsuarioLoginForm" name="UsuarioLoginForm">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Login, new { @class = "form-control", @placeholder = "Login", @maxlength = "30" })
+                    @Html.ValidationMessageFor(x => x.Login)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Senha, new { @class = "form-control", @type = "password", @placeholder = "Senha", @maxlength = "30" })
+                    @Html.ValidationMessageFor(x => x.Senha)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <button id="btnEntrar" type="button" class="btn btn-success">Entrar</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

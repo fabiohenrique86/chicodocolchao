@@ -1,0 +1,153 @@
+﻿@{
+    ViewBag.Title = "Cliente - Lista";
+}
+@section scripts
+{
+    <script type="text/javascript">
+
+        function modalCliente(cliente) {
+
+            $("#lblCliente").text(cliente.Cpf != null ? cliente.Cpf : cliente.Cnpj);
+
+            $("#lblTelefoneResidencial").text((cliente.TelefoneResidencial == null ? "" : cliente.TelefoneResidencial));
+            $("#lblTelefoneResidencial2").text((cliente.TelefoneResidencial2 == null ? "" : cliente.TelefoneResidencial2));
+            $("#lblTelefoneCelular").text((cliente.TelefoneCelular == null ? "" : cliente.TelefoneCelular));
+            $("#lblTelefoneCelular2").text((cliente.TelefoneCelular2 == null ? "" : cliente.TelefoneCelular2));
+            $("#lblLogradouro").text((cliente.Logradouro == null ? "" : cliente.Logradouro));
+            $("#lblComplemento").text((cliente.Complemento == null ? "" : cliente.Complemento));
+            $("#lblPontoReferencia").text((cliente.PontoReferencia == null ? "" : cliente.PontoReferencia));
+            $("#lblNumero").text((cliente.Numero == null ? "" : cliente.Numero));
+            $("#lblBairro").text((cliente.Bairro == null ? "" : cliente.Bairro));
+
+            $('#modalcliente').modal('show');
+        }
+
+        $(document).ready(function () {
+
+            var tbCliente = $("#tbCliente").DataTable({
+                "ordering": false,
+                "pageLength": 10,
+                "language": {
+                    "lengthMenu": "_MENU_ registros por página",
+                    "zeroRecords": "Sem registros a serem exibidos",
+                    "info": "Página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Sem registros a serem exibidos",
+                    "infoFiltered": "(filtrados de _MAX_ total de registros)",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": { "sNext": "Próximo", "sPrevious": "Anterior", "sFirst": "Primeiro", "sLast": "Último" }
+                },
+                "columns":
+                [
+                    {
+                        "data": function (data, type, row) {
+                            return "<a href='#' onclick='modalCliente(" + JSON.stringify(data) + ")'>" + (data["Cpf"] != null ? data["Cpf"] : data["Cnpj"]) + "</a>";
+                        },
+                        "className": "text-center"
+                    },
+                    {
+                        "data": function (data, type, row) {
+                            if (data["Nome"] != null) { return data["Nome"]; } else { return data["NomeFantasia"]; }
+                        },
+                        "className": "text-center"
+                    },
+                    { "data": "RazaoSocial", "className": "text-center" },
+                    {
+                        "data": function (data, type, row) {
+                            if (data["DataNascimento"] != null) { return moment(data["DataNascimento"]).format("DD/MM/YYYY"); } else { return ""; }
+                        },
+                        "className": "text-center"
+                    },
+                    { "data": "EstadoDao[0].Nome", "className": "text-center" },
+                    { "data": "Cidade", "className": "text-center" }
+                ]
+            });
+
+            $.getJSON("/Cliente/Listar", function (data) {
+                tbCliente.clear();
+                tbCliente.rows.add(data).draw();
+            });
+
+            $("#btnCadastrar").click(function () {
+                window.location.href = "/Cliente/Cadastro";
+            });
+
+        });
+    </script>
+}
+<div class="container" style="padding-bottom: 20px;">
+    <h2><i class="glyphicon glyphicon-list" style="color: #0f3456" title="Cliente"></i> Lista de Clientes</h2>
+    <hr />
+    <div class="table-responsive">
+        <table id="tbCliente" class="table nowrap">
+            <thead>
+                <tr>
+                    <td class="text-center" style="width: 20%"><b>CPF/CNPJ</b></td>
+                    <td class="text-center" style="width: 20%"><b>Nome/Nome Fantasia</b></td>
+                    <td class="text-center" style="width: 20%"><b>Razão Social</b></td>
+                    <td class="text-center" style="width: 10%"><b>Data Nascimento</b></td>
+                    <td class="text-center" style="width: 15%"><b>Estado</b></td>
+                    <td class="text-center" style="width: 15%"><b>Cidade</b></td>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <button id="btnCadastrar" type="button" class="btn btn-info">Cadastrar Novo Cliente</button>
+    <div class="modal fade" id="modalcliente" tabindex="-1" role="dialog" aria-labelledby="ModalCliente" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Cliente <label id="lblCliente"></label></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            Telefone Residencial: <label id="lblTelefoneResidencial"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            Telefone Residencial2: <label id="lblTelefoneResidencial2"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            Telefone Celular: <label id="lblTelefoneCelular"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            Telefone Celular2: <label id="lblTelefoneCelular2"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            Logradouro: <label id="lblLogradouro"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            Número: <label id="lblNumero"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            Complemento: <label id="lblComplemento"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            Bairro: <label id="lblBairro"></label>
+                        </div>
+                    </div>                    
+                    <div class="row">
+                        <div class="col-lg-12">
+                            Ponto Referência: <label id="lblPontoReferencia"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ChicoDoColchao.Dao
 {
@@ -10,12 +6,12 @@ namespace ChicoDoColchao.Dao
     {
         public LojaDao()
         {
-            this.FuncionarioDao = new HashSet<FuncionarioDao>();
-            this.LojaProdutoDao = new HashSet<LojaProdutoDao>();
-            this.NotaFiscalDao = new HashSet<NotaFiscalDao>();
-            this.OrcamentoDao = new HashSet<OrcamentoDao>();
-            this.PedidoDao = new HashSet<PedidoDao>();
-            this.TransferenciaDao = new HashSet<TransferenciaDao>();
+            FuncionarioDao = new HashSet<FuncionarioDao>();
+            LojaProdutoDao = new HashSet<LojaProdutoDao>();
+            NotaFiscalDao = new HashSet<NotaFiscalDao>();
+            OrcamentoDao = new HashSet<OrcamentoDao>();
+            PedidoDao = new HashSet<PedidoStatusDao>();
+            TransferenciaDao = new HashSet<TransferenciaDao>();
         }
 
         public int LojaID { get; set; }
@@ -24,12 +20,13 @@ namespace ChicoDoColchao.Dao
         public string RazaoSocial { get; set; }
         public string Telefone { get; set; }
         public bool Ativo { get; set; }
-        
+        public bool Deposito { get; set; }
+
         public virtual ICollection<FuncionarioDao> FuncionarioDao { get; set; }
         public virtual ICollection<LojaProdutoDao> LojaProdutoDao { get; set; }
         public virtual ICollection<NotaFiscalDao> NotaFiscalDao { get; set; }
         public virtual ICollection<OrcamentoDao> OrcamentoDao { get; set; }
-        public virtual ICollection<PedidoDao> PedidoDao { get; set; }
+        public virtual ICollection<PedidoStatusDao> PedidoDao { get; set; }
         public virtual ICollection<TransferenciaDao> TransferenciaDao { get; set; }
     }
 }

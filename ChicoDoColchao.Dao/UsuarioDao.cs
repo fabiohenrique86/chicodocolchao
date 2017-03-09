@@ -8,6 +8,11 @@ namespace ChicoDoColchao.Dao
 {
     public class UsuarioDao
     {
+        public UsuarioDao()
+        {
+            TipoUsuarioDao = new TipoUsuarioDao();
+        }
+
         public int UsuarioID { get; set; }
         public int TipoUsuarioID { get; set; }
         public string Login { get; set; }

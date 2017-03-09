@@ -20,6 +20,7 @@ namespace ChicoDoColchao.Repository
             this.LojaProduto = new HashSet<LojaProduto>();
             this.NotaFiscalProduto = new HashSet<NotaFiscalProduto>();
             this.OrcamentoProduto = new HashSet<OrcamentoProduto>();
+            this.ParcelaProduto = new HashSet<ParcelaProduto>();
             this.PedidoProduto = new HashSet<PedidoProduto>();
             this.TransferenciaProduto = new HashSet<TransferenciaProduto>();
         }
@@ -41,6 +42,8 @@ namespace ChicoDoColchao.Repository
         public virtual ICollection<NotaFiscalProduto> NotaFiscalProduto { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrcamentoProduto> OrcamentoProduto { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ParcelaProduto> ParcelaProduto { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PedidoProduto> PedidoProduto { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
