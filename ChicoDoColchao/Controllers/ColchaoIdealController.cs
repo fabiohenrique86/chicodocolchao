@@ -34,7 +34,7 @@ namespace ChicoDoColchao.Controllers
         {
             try
             {
-                var mensagem = colchaoIdealBusiness.Verificar(colchaoIdealDao);
+                var mensagem = colchaoIdealBusiness.Verificar(colchaoIdealDao); 
 
                 return Json(new { Sucesso = true, Mensagem = mensagem }, JsonRequestBehavior.AllowGet);
             }
