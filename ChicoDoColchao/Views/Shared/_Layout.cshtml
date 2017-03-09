@@ -13,49 +13,16 @@
     @Styles.Render("~/bundles/css")
     @RenderSection("styles", required: false)
     <style type="text/css">
-        .error, .input-validation-error {
-            border-color: #ED5565;
-        }
-
-        .navbar-inverse {
-            background-color: #0f3456;
-            border-color: red;
-        }
-
-            .navbar-inverse .navbar-nav > li > a, .navbar-inverse .navbar-brand {
-                color: #ffffff;
-            }
-
-            .navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
-                border-color: red;
-            }
-
-        .navbar-brand {
-            padding: 0px 15px;
-            height: auto;
-        }
-
-        .carousel-control.left {
-            background-image: none;
-        }
-
-        .carousel-control.right {
-            background-image: none;
-        }
-
-        .carousel-control .glyphicon-chevron-left, .carousel-control .glyphicon-chevron-right, .carousel-control .icon-next, .carousel-control .icon-prev
-        {
-            font-size: 80px;
-            margin-top: -60px;
-        }
-        .carousel-indicators li
-        {
-            border: 1px solid #bbb;
-        }
-        .carousel-indicators .active
-        {
-            background-color: #bbb;
-        }
+        .error, .input-validation-error { border-color: #ED5565; }
+        .navbar-inverse { background-color: #0f3456; border-color: red; }
+        .navbar-inverse .navbar-nav > li > a, .navbar-inverse .navbar-brand { color: #ffffff; }
+        .navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form { border-color: red; }
+        .navbar-brand { padding: 0px 15px; height: auto; }
+        .carousel-control.left { background-image: none; }
+        .carousel-control.right { background-image: none; }
+        .carousel-control .glyphicon-chevron-left, .carousel-control .glyphicon-chevron-right, .carousel-control .icon-next, .carousel-control .icon-prev { font-size: 80px; margin-top: -60px; }
+        .carousel-indicators li { border: 1px solid #bbb; }
+        .carousel-indicators .active { background-color: #bbb; }
     </style>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -126,7 +93,7 @@
                 </p>
             </div>
         </div>
-    </div>    
+    </div>
     @{
         if (Request.Cookies.Get("ChicoDoColchao_Usuario") != null)
         {
