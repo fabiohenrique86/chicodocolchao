@@ -12,17 +12,17 @@ namespace ChicoDoColchao.Controllers
     public class ProdutoController : BaseController
     {
         private ProdutoBusiness produtoBusiness;
-        private LinhaBusiness linhaBusiness;
+        private CategoriaBusiness categoriaBusiness;
         private LojaBusiness lojaBusiness;
 
         public ProdutoController()
         {
             produtoBusiness = new ProdutoBusiness();
-            linhaBusiness = new LinhaBusiness();
+            categoriaBusiness = new CategoriaBusiness();
             lojaBusiness = new LojaBusiness();
         }
 
-        public ActionResult Cadastro()
+        public ActionResult Cadastro(HttpPostedFileBase arquivo = null)
         {
             string tela = "";
             if (!SessaoAtivaEPerfilValidado(out tela))
@@ -33,8 +33,40 @@ namespace ChicoDoColchao.Controllers
 
             ProdutoDao produtoDao = new ProdutoDao();
 
-            produtoDao.LinhaDao = linhaBusiness.Listar(new LinhaDao());
+            produtoDao.CategoriaDao = categoriaBusiness.Listar(new CategoriaDao());
 
+            if (arquivo == null)
+            {
+                produtoDao.Erro = false;
+                produtoDao.Mensagem = string.Empty;
+                return View("Cadastro", produtoDao);
+            }
+
+            if (arquivo.InputStream.Length <= 0)
+            {
+                produtoDao.Erro = true;
+                produtoDao.Mensagem = "Arquivo XLSX é obrigatório";
+                return View("Cadastro", produtoDao);
+            }
+
+            if (arquivo.ContentType != "application/octet-stream")
+            {
+                produtoDao.Erro = true;
+                produtoDao.Mensagem = "Arquivo não tem extensão XLSX";
+                return View("Cadastro", produtoDao);
+            }
+
+            List<string> retorno = produtoBusiness.Importar(arquivo.InputStream);
+
+            if (retorno != null && retorno.Count() > 0)
+            {
+                produtoDao.Erro = true;
+                produtoDao.Mensagem = string.Join("*", retorno);
+                return View("Cadastro", produtoDao);
+            }
+
+            produtoDao.Erro = false;
+            produtoDao.Mensagem = "Planilha XLSX importada com sucesso";
             return View(produtoDao);
         }
 
@@ -86,6 +118,27 @@ namespace ChicoDoColchao.Controllers
         }
 
         [HttpPost]
+        public JsonResult Excluir(ProdutoDao produtoDao)
+        {
+            try
+            {
+                produtoBusiness.Excluir(produtoDao);
+
+                var produtos = produtoBusiness.Listar(new ProdutoDao() { Ativo = true });
+
+                return Json(new { Sucesso = true, Mensagem = "Produto excluído com sucesso!", Produtos = produtos }, JsonRequestBehavior.AllowGet);
+            }
+            catch (BusinessException ex)
+            {
+                return Json(new { Sucesso = false, Mensagem = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Produto não excluído. Tente novamente." }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
         public JsonResult Transferir(int? lojaOrigemId, int? lojaDestinoId, List<ProdutoDao> produtosDao)
         {
             try
@@ -108,6 +161,7 @@ namespace ChicoDoColchao.Controllers
         {
             try
             {
+                produtoDao.Ativo = true;
                 var produtos = produtoBusiness.Listar(produtoDao);
 
                 return new JsonResult { Data = produtos, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -122,20 +176,20 @@ namespace ChicoDoColchao.Controllers
         {
             try
             {
-                ProdutoDao produtoDao = new ProdutoDao();
+                ProdutoDao produtoDao = new ProdutoDao() { Ativo = true };
 
                 long numero = 0;
                 long.TryParse(string.Join("", System.Text.RegularExpressions.Regex.Split(term, @"[^\d]")), out numero);
 
                 string descricao = new string(term.Where(x => !char.IsDigit(x)).ToArray());
 
-                if (numero > 0)
+                if (numero > 0 && string.IsNullOrEmpty(descricao))
                 {
                     produtoDao.Numero = numero;
                 }
-                else if (!string.IsNullOrEmpty(descricao))
+                else
                 {
-                    produtoDao.Descricao = descricao.Trim();
+                    produtoDao.Descricao = term.Trim();
                 }
 
                 var produtos = produtoBusiness.Listar(produtoDao);
@@ -146,69 +200,6 @@ namespace ChicoDoColchao.Controllers
             {
                 throw ex;
             }
-        }
-
-        public JsonResult ListarPreco(List<ProdutoDao> produtosDao)
-        {
-            try
-            {
-                var produtos = new List<ProdutoDao>();
-
-                foreach (var produto in produtosDao)
-                {
-                    produtos.Add(produtoBusiness.Listar(produto).FirstOrDefault());
-                }
-
-                return new JsonResult { Data = produtos, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        [HttpPost]
-        public ActionResult Importar(HttpPostedFileBase arquivo)
-        {
-            try
-            {
-                ProdutoDao produtoDao = new ProdutoDao();
-                                
-                if (arquivo == null || arquivo.InputStream.Length <= 0)
-                {
-                    return RedirectToAction("ResultadoImportacao", new { e = true, m = "Arquivo XLSX é obrigatório" });
-                }
-
-                if (arquivo.ContentType != "application/octet-stream")
-                {
-                    return RedirectToAction("ResultadoImportacao", new { e = true, m = "Arquivo não tem extensão XLSX" });
-                }
-
-                List<string> retorno = produtoBusiness.Importar(arquivo.InputStream);
-
-                if (retorno != null && retorno.Count() > 0)
-                {
-                    return RedirectToAction("ResultadoImportacao", new { e = true, m = string.Join("*", retorno) });
-                }
-
-                return RedirectToAction("ResultadoImportacao", new { e = false, m = "Planilha importada com sucesso" });
-            }
-            catch (BusinessException ex)
-            {
-                return RedirectToAction("ResultadoImportacao", new { e = true, m = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return RedirectToAction("ResultadoImportacao", new { e = true, m = "Ocorreu um erro na importação da planilha. Tente novamente" });
-            }
-        }
-
-        public ActionResult ResultadoImportacao(bool e, string m)
-        {
-            ViewBag.Erro = e;
-            ViewBag.Mensagem = m;
-
-            return View();
         }
     }
 }

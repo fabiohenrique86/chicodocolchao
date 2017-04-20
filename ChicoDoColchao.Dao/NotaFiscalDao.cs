@@ -17,6 +17,8 @@ namespace ChicoDoColchao.Dao
         public Nullable<int> PedidoMaeID { get; set; }
         public bool Ativo { get; set; }
         public HashSet<System.IO.Stream> Arquivo { get; set; }
+        public bool Erro { get; set; }
+        public string Mensagem { get; set; }
 
         public LojaDao LojaDao { get; set; }
         public ICollection<NotaFiscalProdutoDao> NotaFiscalProdutoDao { get; set; }

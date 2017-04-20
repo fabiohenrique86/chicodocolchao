@@ -49,7 +49,7 @@
     <Compile Include="FuncionarioDao.cs" />
     <Compile Include="EmailDao.cs" />
     <Compile Include="LogDao.cs" />
-    <Compile Include="LinhaDao.cs" />
+    <Compile Include="CategoriaDao.cs" />
     <Compile Include="LojaDao.cs" />
     <Compile Include="LojaProdutoDao.cs" />
     <Compile Include="MedidaDao.cs" />
@@ -58,7 +58,6 @@
     <Compile Include="OrcamentoDao.cs" />
     <Compile Include="OrcamentoProdutoDao.cs" />
     <Compile Include="ParcelaDao.cs" />
-    <Compile Include="ParcelaProdutoDao.cs" />
     <Compile Include="PedidoDao.cs" />
     <Compile Include="PedidoProdutoDao.cs" />
     <Compile Include="PedidoStatusDao.cs" />

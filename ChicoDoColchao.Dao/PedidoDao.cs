@@ -23,6 +23,7 @@ namespace ChicoDoColchao.Dao
         public string Observacao { get; set; }
         public string NomeCarreto { get; set; }
         public Nullable<double> ValorFrete { get; set; }
+        public double Desconto { get; set; }
 
         public virtual ICollection<ClienteDao> ClienteDao { get; set; }
         public virtual ICollection<FuncionarioDao> FuncionarioDao { get; set; }

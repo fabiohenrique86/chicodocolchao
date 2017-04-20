@@ -12,15 +12,15 @@ namespace ChicoDoColchao.Repository
     using System;
     using System.Collections.Generic;
     
-    public partial class Linha
+    public partial class Categoria
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Linha()
+        public Categoria()
         {
             this.Produto = new HashSet<Produto>();
         }
     
-        public int LinhaID { get; set; }
+        public int CategoriaID { get; set; }
         public string Descricao { get; set; }
         public bool Ativo { get; set; }
     

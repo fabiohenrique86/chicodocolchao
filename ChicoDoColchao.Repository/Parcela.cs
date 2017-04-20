@@ -17,7 +17,6 @@ namespace ChicoDoColchao.Repository
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Parcela()
         {
-            this.ParcelaProduto = new HashSet<ParcelaProduto>();
             this.PedidoTipoPagamento = new HashSet<PedidoTipoPagamento>();
         }
     
@@ -25,8 +24,6 @@ namespace ChicoDoColchao.Repository
         public int Numero { get; set; }
         public bool Ativo { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ParcelaProduto> ParcelaProduto { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PedidoTipoPagamento> PedidoTipoPagamento { get; set; }
     }

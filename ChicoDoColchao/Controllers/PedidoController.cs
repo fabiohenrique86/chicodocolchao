@@ -5,7 +5,6 @@ using System.Web.Mvc;
 using ChicoDoColchao.Business;
 using ChicoDoColchao.Dao;
 using ChicoDoColchao.Business.Exceptions;
-using Microsoft.Reporting.WebForms;
 using Newtonsoft.Json;
 
 namespace ChicoDoColchao.Controllers
@@ -79,6 +78,18 @@ namespace ChicoDoColchao.Controllers
             return View();
         }
 
+        public ActionResult CalendarioDeEntrega()
+        {
+            string tela = "";
+            if (!SessaoAtivaEPerfilValidado(out tela))
+            {
+                Response.Redirect(tela, true);
+                return null;
+            }
+
+            return View();
+        }
+
         [HttpPost]
         public JsonResult Incluir(PedidoDao pedidoDao)
         {
@@ -124,6 +135,25 @@ namespace ChicoDoColchao.Controllers
             catch (Exception ex)
             {
                 return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Pedido não cancelado. Tente novamente." }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult Atualizar(PedidoDao pedidoDao)
+        {
+            try
+            {
+                pedidoBusiness.Atualizar(pedidoDao);
+                
+                return Json(new { Sucesso = true, Mensagem = "Pedido alterado com sucesso!" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (BusinessException ex)
+            {
+                return Json(new { Sucesso = false, Mensagem = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Pedido não alterado. Tente novamente." }, JsonRequestBehavior.AllowGet);
             }
         }
 

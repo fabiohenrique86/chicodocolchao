@@ -69,13 +69,14 @@ namespace ChicoDoColchao.Controllers
             viewer.ProcessingMode = ProcessingMode.Local;
             viewer.LocalReport.ReportPath = Server.MapPath("~/bin/Reports/MovimentoDeCaixa.rdlc");
 
-            double dinheiro = 0, cartaoVisa = 0, cartaoMaster = 0;
+            double dinheiro = 0, cartaoVisa = 0, cartaoMaster = 0, cheque = 0, totalRecebido = 0;
             foreach (var item in pedidosDao)
             {
-                //dinheiro += item.PedidoTipoPagamentoDao.Where(x => x.TipoPagamentoDao.Descricao.ToLower() == "dinheiro").Sum(x => x.ValorPago);
                 dinheiro += item.PedidoTipoPagamentoDao.Where(x => x.TipoPagamentoDao.TipoPagamentoID == TipoPagamentoDao.ETipoPagamento.Dinheiro.GetHashCode()).Sum(x => x.ValorPago);
                 cartaoVisa += item.PedidoTipoPagamentoDao.Where(x => x.TipoPagamentoDao.TipoPagamentoID == TipoPagamentoDao.ETipoPagamento.CartaoVisa.GetHashCode()).Sum(x => x.ValorPago);
                 cartaoMaster += item.PedidoTipoPagamentoDao.Where(x => x.TipoPagamentoDao.TipoPagamentoID == TipoPagamentoDao.ETipoPagamento.CartaoMaster.GetHashCode()).Sum(x => x.ValorPago);
+                cheque += item.PedidoTipoPagamentoDao.Where(x => x.TipoPagamentoDao.TipoPagamentoID == TipoPagamentoDao.ETipoPagamento.Cheque.GetHashCode()).Sum(x => x.ValorPago);
+                totalRecebido += dinheiro + cartaoVisa + cartaoMaster + cheque;
             }
 
             // parâmetros
@@ -85,6 +86,8 @@ namespace ChicoDoColchao.Controllers
             parametros.Add(new ReportParameter("Dinheiro", dinheiro.ToString()));
             parametros.Add(new ReportParameter("CartaoVisa", cartaoVisa.ToString()));
             parametros.Add(new ReportParameter("CartaoMaster", cartaoMaster.ToString()));
+            parametros.Add(new ReportParameter("Cheque", cheque.ToString()));
+            parametros.Add(new ReportParameter("TotalRecebido", totalRecebido.ToString()));
 
             viewer.LocalReport.SetParameters(parametros);
 
@@ -95,11 +98,9 @@ namespace ChicoDoColchao.Controllers
                 pedidos.Add(new
                 {
                     PedidoID = item.PedidoID,
-                    Sug = "",
                     Valor = item.PedidoTipoPagamentoDao.Sum(x => x.ValorPago),
                     Forma = string.Join(",", item.PedidoTipoPagamentoDao.Select(x => x.TipoPagamentoDao.Descricao)),
                     Prazo = string.Join(",", item.PedidoTipoPagamentoDao.Select(x => x.ParcelaDao.Numero)),
-                    Comercializacao = "",
                     Observacao = item.Observacao
                 });
             }

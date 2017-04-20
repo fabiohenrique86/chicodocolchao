@@ -32,6 +32,7 @@ namespace ChicoDoColchao.Repository
         public Nullable<double> ValorFrete { get; set; }
         public int ClienteID { get; set; }
         public int LojaID { get; set; }
+        public double Desconto { get; set; }
     
         public virtual Cliente Cliente { get; set; }
         public virtual Funcionario Funcionario { get; set; }

@@ -14,28 +14,16 @@ namespace ChicoDoColchao.Business.Tradutors
 
             produto.ProdutoID = produtoDao.ProdutoID;
             produto.Numero = produtoDao.Numero.HasValue ? produtoDao.Numero.Value : 0;
-            if (produtoDao.LinhaDao != null && produtoDao.LinhaDao.Count() > 0)
+            if (produtoDao.CategoriaDao != null && produtoDao.CategoriaDao.Count() > 0)
             {
-                produto.LinhaID = produtoDao.LinhaDao.FirstOrDefault().LinhaID;
+                produto.CategoriaID = produtoDao.CategoriaDao.FirstOrDefault().CategoriaID;
             }
             produto.Descricao = produtoDao.Descricao;
             produto.MedidaID = produtoDao.MedidaDao.MedidaID;
             produto.ComissaoFuncionario = produtoDao.ComissaoFuncionario.HasValue ? produtoDao.ComissaoFuncionario.Value : Convert.ToInt16(0);
             produto.ComissaoFranqueado = produtoDao.ComissaoFranqueado.HasValue ? produtoDao.ComissaoFranqueado.Value : Convert.ToInt16(0);
             produto.Ativo = produtoDao.Ativo;
-
-            foreach (var parcelaProdutoDao in produtoDao.ParcelaProdutoDao)
-            {
-                ParcelaProduto parcelaProduto = new ParcelaProduto();
-
-                parcelaProduto.ParcelaProdutoID = parcelaProdutoDao.ParcelaProdutoID;
-                parcelaProduto.ParcelaID = parcelaProdutoDao.ParcelaID;
-                parcelaProduto.ProdutoID = parcelaProdutoDao.ProdutoID;
-                parcelaProduto.Preco = parcelaProdutoDao.Preco;
-                parcelaProduto.AVista = parcelaProdutoDao.AVista;
-
-                produto.ParcelaProduto.Add(parcelaProduto);
-            }
+            produto.Preco = produtoDao.Preco;
 
             foreach (var lojaProdutoDao in produtoDao.LojaProdutoDao)
             {
@@ -58,26 +46,14 @@ namespace ChicoDoColchao.Business.Tradutors
 
             produtoDao.ProdutoID = produto.ProdutoID;
             produtoDao.Numero = produto.Numero;
-            produtoDao.LinhaDao.Add(new LinhaDao() { LinhaID = produto.Linha.LinhaID, Descricao = produto.Linha.Descricao });
+            produtoDao.CategoriaDao.Add(new CategoriaDao() { CategoriaID = produto.Categoria.CategoriaID, Descricao = produto.Categoria.Descricao });
             produtoDao.Descricao = produto.Descricao;
             produtoDao.MedidaDao.MedidaID = produto.Medida.MedidaID;
             produtoDao.MedidaDao.Descricao = produto.Medida.Descricao;
             produtoDao.ComissaoFuncionario = produto.ComissaoFuncionario;
             produtoDao.ComissaoFranqueado = produto.ComissaoFranqueado;
             produtoDao.Ativo = produto.Ativo;
-
-            foreach (var parcelaProduto in produto.ParcelaProduto.OrderBy(x => x.Parcela.Numero))
-            {
-                ParcelaProdutoDao parcelaProdutoDao = new ParcelaProdutoDao();
-
-                parcelaProdutoDao.ParcelaProdutoID = parcelaProduto.ParcelaProdutoID;
-                parcelaProdutoDao.ParcelaID = parcelaProduto.ParcelaID;
-                parcelaProdutoDao.ProdutoID = parcelaProduto.ProdutoID;
-                parcelaProdutoDao.Preco = parcelaProduto.Preco;
-                parcelaProdutoDao.AVista = parcelaProduto.AVista;
-
-                produtoDao.ParcelaProdutoDao.Add(parcelaProdutoDao);
-            }
+            produtoDao.Preco = produto.Preco;
 
             foreach (var lojaProduto in produto.LojaProduto.Where(x => x.Ativo).OrderBy(x => x.Loja.NomeFantasia))
             {

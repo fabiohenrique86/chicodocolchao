@@ -19,18 +19,17 @@ namespace ChicoDoColchao.Repository
             produto.Ativo = true;
 
             chicoDoColchaoEntities.Entry(produto).State = EntityState.Added;
-                        
-            if (produto.LojaProduto != null)
+
+            // caso produto exista na loja, atualiza a quantidade da loja
+            // caso contrário, cadastra-o
+            if (produto.LojaProduto != null && produto.LojaProduto.Count() > 0)
             {
                 var lp = produto.LojaProduto.FirstOrDefault();
                 var lojaProduto = chicoDoColchaoEntities.LojaProduto.FirstOrDefault(x => x.LojaID == lp.LojaID && x.Produto.Numero == produto.Numero && x.Ativo == true);
-                // caso produto exista na loja, atualiza a quantidade da loja
-                // caso contrário, cadastra-o
+                
                 if (lojaProduto == null)
                 {
-                    //var l = new LojaProduto() { ProdutoID = produto.ProdutoID, LojaID = lp.LojaID, Quantidade = lp.Quantidade, Ativo = true };
                     chicoDoColchaoEntities.Entry(produto.LojaProduto.FirstOrDefault()).State = EntityState.Added;
-                    
                 }
                 else
                 {
@@ -48,8 +47,19 @@ namespace ChicoDoColchao.Repository
                     chicoDoColchaoEntities.Entry(lojaProduto).State = EntityState.Added;
                 }
             }
-            
+
             chicoDoColchaoEntities.SaveChanges();
+        }
+
+        public void Excluir(Produto produto)
+        {
+            var p = chicoDoColchaoEntities.Produto.Where(x => x.ProdutoID == produto.ProdutoID).FirstOrDefault();
+            if (p != null)
+            {
+                p.Ativo = false;
+                chicoDoColchaoEntities.Entry(p).State = EntityState.Modified;
+                chicoDoColchaoEntities.SaveChanges();
+            }
         }
 
         public void Transferir(int lojaOrigemId, int lojaDestinoId, int produtoId, int quantidade)
@@ -65,13 +75,17 @@ namespace ChicoDoColchao.Repository
             chicoDoColchaoEntities.SaveChanges();
         }
 
-        public int Atualizar(int lojaDestinoId, long numero, int quantidade)
+        public bool Atualizar(int lojaDestinoId, long numero, int quantidade)
         {
-            int retorno = 0;
+            bool retorno = false;
 
             // adiciona a quantidade da loja de destino
             var lojaProdutoDestino = chicoDoColchaoEntities.LojaProduto.SingleOrDefault(x => x.Produto.Numero == numero && x.LojaID == lojaDestinoId && x.Ativo == true);
-            if (lojaProdutoDestino != null) { lojaProdutoDestino.Quantidade = Convert.ToInt16(lojaProdutoDestino.Quantidade + quantidade); retorno++; }
+            if (lojaProdutoDestino != null) { lojaProdutoDestino.Quantidade = Convert.ToInt16(lojaProdutoDestino.Quantidade + quantidade); retorno = true; }
+
+            // atualiza o produto para ativo = true
+            var produto = chicoDoColchaoEntities.Produto.Where(x => x.Numero == numero).FirstOrDefault();
+            if (produto != null) { produto.Ativo = true; }
 
             chicoDoColchaoEntities.SaveChanges();
 
@@ -107,7 +121,10 @@ namespace ChicoDoColchao.Repository
                 query = query.Where(x => x.LojaProduto.Any(w => w.LojaID == lojaDestinoId));
             }
 
-            query = query.Where(x => x.Ativo == true);
+            if (produto.Ativo)
+            {
+                query = query.Where(x => x.Ativo == produto.Ativo);
+            }
 
             return query.OrderBy(x => x.Descricao).ToList();
         }

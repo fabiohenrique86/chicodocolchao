@@ -44,6 +44,7 @@ namespace ChicoDoColchao.Business.Tradutors
             pedido.NomeCarreto = pedidoDao.NomeCarreto;
             pedido.ValorFrete = pedidoDao.ValorFrete;
             pedido.Observacao = pedidoDao.Observacao;
+            pedido.Desconto = pedidoDao.Desconto;
 
             if (pedidoDao.PedidoStatusDao.FirstOrDefault() != null)
             {
@@ -71,6 +72,7 @@ namespace ChicoDoColchao.Business.Tradutors
                 pedidoTipoPagamento.TipoPagamentoID = pedidoTipoPagamentoDao.TipoPagamentoDao.TipoPagamentoID;
                 pedidoTipoPagamento.ParcelaID = pedidoTipoPagamentoDao.ParcelaDao.ParcelaID;
                 pedidoTipoPagamento.ValorPago = pedidoTipoPagamentoDao.ValorPago;
+                pedidoTipoPagamento.CV = pedidoTipoPagamentoDao.CV;
 
                 pedido.PedidoTipoPagamento.Add(pedidoTipoPagamento);
             }
@@ -108,6 +110,7 @@ namespace ChicoDoColchao.Business.Tradutors
             pedidoDao.DataEntrega = pedido.DataEntrega;
             pedidoDao.DataPedido = pedido.DataPedido;
             pedidoDao.ValorFrete = pedido.ValorFrete;
+            pedidoDao.Desconto = pedido.Desconto;
             pedidoDao.FuncionarioDao.Add(new FuncionarioDao()
             {
                 FuncionarioID = pedido.Funcionario.FuncionarioID,
@@ -159,9 +162,9 @@ namespace ChicoDoColchao.Business.Tradutors
                         MedidaID = pedidoProduto.Produto.Medida.MedidaID,
                         Descricao = string.IsNullOrEmpty(pedidoProduto.Medida) ? pedidoProduto.Produto.Medida.Descricao : pedidoProduto.Medida
                     },
-                    LinhaDao = new List<LinhaDao>()
+                    CategoriaDao = new List<CategoriaDao>()
                     {
-                        new LinhaDao() { LinhaID = pedidoProduto.Produto.Linha.LinhaID, Descricao = pedidoProduto.Produto.Linha.Descricao }
+                        new CategoriaDao() { CategoriaID = pedidoProduto.Produto.Categoria.CategoriaID, Descricao = pedidoProduto.Produto.Categoria.Descricao }
                     }
                 };
 
@@ -184,6 +187,7 @@ namespace ChicoDoColchao.Business.Tradutors
                     Numero = pedidoTipoPagamento.Parcela.Numero
                 };
                 pedidoTipoPagamentoDao.ValorPago = pedidoTipoPagamento.ValorPago;
+                pedidoTipoPagamentoDao.CV = pedidoTipoPagamento.CV;
 
                 pedidoDao.PedidoTipoPagamentoDao.Add(pedidoTipoPagamentoDao);
             }

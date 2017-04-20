@@ -1,10 +1,12 @@
-﻿@{
+﻿@model ChicoDoColchao.Dao.NotaFiscalDao
+
+@{
     ViewBag.Title = "NFe - Entrada";
 }
 <div class="container" style="padding-bottom: 20px;">
     <h2><i class="glyphicon glyphicon-triangle-right" style="color: #0f3456" title="Nota Fiscal"></i> Entrada de NFe</h2>
     <hr />
-    <form id="NotaFiscalForm" name="NotaFiscalForm" method="post" action="ImportarXML" enctype="multipart/form-data">
+    <form id="NotaFiscalForm" name="NotaFiscalForm" method="post" action="Cadastro" enctype="multipart/form-data">
         <p>
             Lembre-se, <b style="color: red">TODAS</b> as notas fiscais importadas irão para o estoque da loja do <b>DEPÓSITO</b>.
         </p>
@@ -17,21 +19,23 @@
         <div class="form-group">
             <button id="btnImportar" type="submit" class="btn btn-success">Importar</button>
         </div>
-        @if (ViewBag.Erro != null)
+        @if (!string.IsNullOrEmpty(Model.Mensagem))
         {
-            if (ViewBag.Erro)
+            if (Model.Erro)
             {
-                <p style="color: red">
-                    @ViewBag.Mensagem
-                </p>
+                <ul style="color: red">
+                    @foreach (string item in ((string)Model.Mensagem).Split("*".ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        <li>@item</li>
+                    }
+                </ul>
             }
             else
             {
                 <p style="color: #5cb85c">
-                    @ViewBag.Mensagem
+                    @Model.Mensagem
                 </p>
             }
         }
-
     </form>
 </div>

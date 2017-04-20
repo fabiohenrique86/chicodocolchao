@@ -1,0 +1,81 @@
+﻿@{
+    ViewBag.Title = "Pedido - Calendário de Entrega";
+}
+@section styles
+{
+    <style type="text/css">
+        .fc-event, .fc-event-dot { background-color: #fcf8e3; color: #337ab7 }
+        .fc-list-item-title a { color: #337ab7; }
+        .fc-event:hover { color: #337ab7; }
+    </style>
+}
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var events = [];
+            $.getJSON("/Pedido/Listar", { 'PedidoStatusDao[0].PedidoStatusID': '@ChicoDoColchao.Dao.PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega.GetHashCode()' },
+            function (data) {
+                $(data).each(function (index, pedido) {
+                    events.push({
+                        id: pedido.PedidoID,
+                        title: "Pedido " + pedido.PedidoID,
+                        start: moment(pedido.DataEntrega).format("YYYY-MM-DD"),
+                        url: 'http://www.chicodocolchao.com.br/Pedido/Comanda?PedidoID=' + pedido.PedidoID
+                    });
+                });
+
+                $("#calendar").fullCalendar({
+                    header: { left: 'prev,next today', center: 'title', right: 'month,agendaWeek,agendaDay,listMonth' },
+                    //defaultView: 'listWeek', // set the default initial view
+                    locale: 'pt-br', // set the locale to a specific language
+                    buttonIcons: true, // show the prev/next text
+                    weekNumbers: false, // show the week numbers
+                    editable: true, // allow edit events
+                    eventLimit: true, // allow "more" link when too many events
+                    navLinks: false, // can click day/week names to navigate views
+                    events: events,
+                    eventClick: function (event) {
+                        if (event.url) {
+                            window.open(event.url, "_blank");
+                            return false;
+                        }
+                    },
+                    eventDrop: function (event, delta, revertFunc) {
+                        if (confirm("Deseja alterar a data de entrega do " + event.title + " para " + event.start.format("DD/MM/YYYY") + "?")) {
+
+                            var pedidoDao = { PedidoID: event.id, DataEntrega: event.start.format("DD-MM-YYYY") };
+                            
+                            $.ajax({
+                                dataType: "json",
+                                type: "POST",
+                                url: "/Pedido/Atualizar/",
+                                data: { pedidoDao: pedidoDao },
+                                success: function (data) {
+                                    if (!data.Sucesso) {
+                                        revertFunc();
+                                        alert(data.Mensagem);
+                                        return;
+                                    }
+                                }
+                            });
+                        }
+                        else {
+                            revertFunc();
+                        }
+                    }
+                });
+            });
+
+        });
+    </script>
+}
+<div class="container" style="padding-bottom: 20px;">
+    <h2><i class="glyphicon glyphicon-calendar" style="color: #0f3456" title="Calendário de Entrega"></i> Calendário de Entrega</h2>
+    <hr />
+    <div class="form-group">
+        <div id="calendar"></div>
+    </div>
+</div>

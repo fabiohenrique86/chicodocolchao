@@ -19,7 +19,8 @@ namespace ChicoDoColchao.Dao
         {
             Dinheiro = 1,
             CartaoMaster = 2,
-            CartaoVisa = 3
+            CartaoVisa = 3,
+            Cheque = 4
         }
     }
 }

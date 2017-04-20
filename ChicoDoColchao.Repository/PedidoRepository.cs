@@ -73,13 +73,26 @@ namespace ChicoDoColchao.Repository
                 }
             }
 
+            if (pedido.PedidoStatus != null && pedido.PedidoStatus.PedidoStatusID > 0)
+            {
+                query = query.Where(x => x.PedidoStatusID == pedido.PedidoStatus.PedidoStatusID);
+            }
+            
             return query.OrderByDescending(x => x.PedidoID).ToList();
         }
 
         public void Atualizar(Pedido pedido)
         {
-            chicoDoColchaoEntities.Entry(pedido).State = EntityState.Modified;
-            chicoDoColchaoEntities.SaveChanges();
+            var p = chicoDoColchaoEntities.Pedido.Where(x => x.PedidoID == pedido.PedidoID).FirstOrDefault();
+            if (p != null)
+            {
+                p.DataEntrega = pedido.DataEntrega;
+                chicoDoColchaoEntities.Entry(p).State = EntityState.Modified;
+                chicoDoColchaoEntities.SaveChanges();
+            }
+
+            //chicoDoColchaoEntities.Entry(pedido).State = EntityState.Modified;
+            //chicoDoColchaoEntities.SaveChanges();
         }
 
         public void Cancelar(Pedido pedido)
@@ -98,7 +111,7 @@ namespace ChicoDoColchao.Repository
             }
 
             // seta o status do pedido para cancelado
-            pedido.PedidoStatusID = 3;
+            //pedido.PedidoStatusID = pedido.PedidoStatus.PedidoStatusID;
 
             chicoDoColchaoEntities.SaveChanges();
         }
@@ -119,7 +132,7 @@ namespace ChicoDoColchao.Repository
             }
 
             // seta o status do pedido para entregue
-            pedido.PedidoStatusID = 4;
+            //pedido.PedidoStatusID = pedido.PedidoStatus.PedidoStatusID;
 
             chicoDoColchaoEntities.SaveChanges();
         }

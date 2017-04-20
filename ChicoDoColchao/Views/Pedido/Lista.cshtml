@@ -12,6 +12,7 @@
             $("#lblPedidoStatus").text(pedido.PedidoStatusDao[0].Descricao);
             $("#lblCarreto").text((pedido.NomeCarreto != null ? pedido.NomeCarreto : ""));
             $("#lblValorFrete").text((pedido.ValorFrete != null ? Globalize.format(pedido.ValorFrete, "n2") : ""));
+            $("#lblTotalDesconto").text((pedido.Desconto != null ? Globalize.format(pedido.Desconto, "n2") : ""));
             $("#lblObservacao").text((pedido.Observacao != null ? pedido.Observacao : ""));
 
             $("#tbProduto").DataTable().clear();
@@ -112,7 +113,7 @@
                 });
             }
         }
-
+        
         $(document).ready(function () {
 
             $.getJSON("/Pedido/Listar", function (data) {
@@ -184,7 +185,7 @@
                     },
                     {
                         "data": function (data, type, row) {
-                            if (data["DataEntrega"] != null) { return moment(data["DataEntrega"]).format("DD/MM/YYYY HH:mm"); } else { return "-"; }
+                            if (data["DataEntrega"] != null) { return moment(data["DataEntrega"]).format("DD/MM/YYYY"); } else { return "-"; }
                         },
                         "className": "text-center"
                     },
@@ -192,27 +193,28 @@
                     {
                         "data": function (data, type, row)
                         {
-                            var comanda = "<a href='http://www.chicodocolchao.com.br/Pedido/Comanda?PedidoID=" + data["PedidoID"] + "' target='_blank'><i class='glyphicon glyphicon-print' title='Imprimir Pedido' style='cursor: pointer'></i></a>";
+                            var comanda = "<a href='http://www.chicodocolchao.com.br/Pedido/Comanda?PedidoID=" + data["PedidoID"] + "' target='_blank'><i class='glyphicon glyphicon-print' title='Imprimir Pedido' style='cursor: pointer; color: #333'></i></a>";
                             //var comanda = "<a href='http://localhost:57163/Pedido/Comanda?PedidoID=" + data["PedidoID"] + "' target='_blank'><i class='glyphicon glyphicon-print' title='Imprimir Pedido' style='cursor: pointer'></i></a>";
                             var entrega = "<i class='glyphicon glyphicon-ok' title='Entregar Pedido' style='cursor: pointer' onclick='entregarPedido(" + data["PedidoID"] + ", this)'></i>";
                             var cancelamento = "<i class='glyphicon glyphicon-remove' title='Cancelar Pedido' style='cursor: pointer' onclick='cancelarPedido(" + data["PedidoID"] + ", this)'></i>";
                             var comandaPorEmail = "<i class='glyphicon glyphicon-envelope' title='Enviar Comanda Por E-mail' style='cursor: pointer' onclick='enviarComandaPorEmail(" + data["PedidoID"] + ")'></i>";
+                            var desconto = data["Desconto"] > 0 ? "<i class='glyphicon glyphicon-usd' title='Desconto Autorizado'></i>" : "";
 
                             if (data.PedidoStatusDao[0].PedidoStatusID == 1) // Previsão de Entrega
                             {
-                                return comanda + " " + entrega + " " + cancelamento + " " + comandaPorEmail;
+                                return comanda + " " + entrega + " " + cancelamento + " " + comandaPorEmail + desconto;
                             }
                             else if (data.PedidoStatusDao[0].PedidoStatusID == 2) // Retirado na Loja
                             {
-                                return comanda + " " + cancelamento + " " + comandaPorEmail;
+                                return comanda + " " + cancelamento + " " + comandaPorEmail + desconto;
                             }
                             else if (data.PedidoStatusDao[0].PedidoStatusID == 3) // Cancelado
                             {
-                                return "";
+                                return "" + desconto;
                             }
                             else if (data.PedidoStatusDao[0].PedidoStatusID == 4) // Entregue
                             {
-                                return cancelamento + " " + comandaPorEmail;
+                                return cancelamento + " " + comandaPorEmail + desconto;
                             }
                         },
                         "className": "text-center"
@@ -239,7 +241,7 @@
                     { "data": "ProdutoDao.Descricao", "className": "text-center" },
                     { "data": "ProdutoDao.MedidaDao.Descricao", "className": "text-center" },
                     { "data": "Quantidade", "className": "text-center" },
-                    { "data": "ProdutoDao.LinhaDao[0].Descricao", "className": "text-center" }
+                    { "data": "ProdutoDao.CategoriaDao[0].Descricao", "className": "text-center" }
                 ]
             });
 
@@ -303,12 +305,15 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Nº Pedido <label id="lblPedidoID"></label></h4>
+                    <h4 class="modal-title" id="myModalLabel">Pedido <label id="lblPedidoID"></label></h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-lg-12">
+                        <div class="col-lg-6">
                             Status: <label id="lblPedidoStatus"></label>
+                        </div>
+                        <div class="col-lg-6">
+                            Desconto: <label id="lblTotalDesconto"></label>
                         </div>
                     </div>
                     <div class="row">
@@ -341,7 +346,7 @@
                                             <td class="text-center" style="width: 30%"><b>Produto</b></td>
                                             <td class="text-center" style="width: 20%"><b>Medida</b></td>
                                             <td class="text-center" style="width: 10%"><b>Quantidade</b></td>
-                                            <td class="text-center" style="width: 20%"><b>Linha</b></td>
+                                            <td class="text-center" style="width: 20%"><b>Categoria</b></td>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>

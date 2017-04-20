@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using ChicoDoColchao.Business;
 using ChicoDoColchao.Dao;
@@ -9,13 +7,13 @@ using ChicoDoColchao.Business.Exceptions;
 
 namespace ChicoDoColchao.Controllers
 {
-    public class LinhaController : BaseController
+    public class CategoriaController : BaseController
     {
-        private LinhaBusiness linhaBusiness;
+        private CategoriaBusiness categoriaBusiness;
 
-        public LinhaController()
+        public CategoriaController()
         {
-            linhaBusiness = new LinhaBusiness();
+            categoriaBusiness = new CategoriaBusiness();
         }
 
         public ActionResult Cadastro()
@@ -43,13 +41,13 @@ namespace ChicoDoColchao.Controllers
         }
 
         [HttpPost]
-        public JsonResult Incluir(LinhaDao linhaDao)
+        public JsonResult Incluir(CategoriaDao categoriaDao)
         {
             try
             {
-                linhaBusiness.Incluir(linhaDao);
+                categoriaBusiness.Incluir(categoriaDao);
 
-                return Json(new { Sucesso = true, Mensagem = "Linha cadastrada com sucesso!" }, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = true, Mensagem = "Categoria cadastrada com sucesso!" }, JsonRequestBehavior.AllowGet);
             }
             catch (BusinessException ex)
             {
@@ -57,27 +55,27 @@ namespace ChicoDoColchao.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Linha não cadastrada. Tente novamente." }, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Categoria não cadastrada. Tente novamente." }, JsonRequestBehavior.AllowGet);
             }
         }
 
-        public JsonResult Listar(LinhaDao linhaDao)
+        public JsonResult Listar(CategoriaDao categoriaDao)
         {
-            List<LinhaDao> linhas = new List<LinhaDao>();
+            List<CategoriaDao> categorias = new List<CategoriaDao>();
 
             try
             {
-                linhas = linhaBusiness.Listar(linhaDao);
+                categorias = categoriaBusiness.Listar(categoriaDao);
 
-                return Json(linhas, JsonRequestBehavior.AllowGet);
+                return Json(categorias, JsonRequestBehavior.AllowGet);
             }
             catch (BusinessException ex)
             {
-                return Json(linhas, JsonRequestBehavior.AllowGet);
+                return Json(categorias, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                return Json(linhas, JsonRequestBehavior.AllowGet);
+                return Json(categorias, JsonRequestBehavior.AllowGet);
             }
         }
     }

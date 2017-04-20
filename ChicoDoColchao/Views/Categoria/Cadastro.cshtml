@@ -1,7 +1,7 @@
-﻿@model ChicoDoColchao.Dao.LinhaDao
+﻿@model ChicoDoColchao.Dao.CategoriaDao
 
 @{
-    ViewBag.Title = "Linha - Cadastro";
+    ViewBag.Title = "Categoria - Cadastro";
 }
 @section scripts
 {
@@ -14,8 +14,8 @@
                 $.ajax({
                     dataType: "json",
                     type: "POST",
-                    url: "/Linha/Incluir",
-                    data: $("#LinhaForm").serialize(),
+                    url: "/Categoria/Incluir",
+                    data: $("#CategoriaForm").serialize(),
                     success: function (data) {
 
                         if (!data.Sucesso) {
@@ -23,7 +23,7 @@
                             return;
                         }
 
-                        $("#LinhaForm")[0].reset();
+                        $("#CategoriaForm")[0].reset();
 
                         alert(data.Mensagem);
                     }
@@ -32,25 +32,25 @@
             });
 
             $("#btnLista").click(function () {
-                window.location.href = "/Linha/Lista";
+                window.location.href = "/Categoria/Lista";
             });
         });
     </script>
 }
 <div class="container" style="padding-bottom: 20px;">
-    <h2><i class="glyphicon glyphicon-tags" style="color: #0f3456" title="Linha"></i> Cadastro de Linhas</h2>
+    <h2><i class="glyphicon glyphicon-tags" style="color: #0f3456" title="Categoria"></i> Cadastro de Categorias</h2>
     <hr />
-    <form id="LinhaForm" name="LinhaForm">
+    <form id="CategoriaForm" name="CategoriaForm">
         <div class="row">
             <div class="col-lg-6">
                 <div class="form-group">
-                    @Html.TextBoxFor(x => x.Descricao, new { @class = "form-control", @placeholder = "Linha (Ex. Ouro, Master, etc ...)", @maxlength = "150" })
+                    @Html.TextBoxFor(x => x.Descricao, new { @class = "form-control", @placeholder = "Categoria (Ex. Ouro, Master, etc ...)", @maxlength = "150" })
                 </div>
             </div>
         </div>
         <div class="form-group">
             <button id="btnCadastrar" type="button" class="btn btn-success">Cadastrar</button>
-            <button id="btnLista" type="button" class="btn btn-info">Lista de Linhas Cadastradas</button>
+            <button id="btnLista" type="button" class="btn btn-info">Lista de Categorias Cadastradas</button>
         </div>
     </form>
 </div>

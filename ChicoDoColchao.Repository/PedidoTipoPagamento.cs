@@ -19,6 +19,7 @@ namespace ChicoDoColchao.Repository
         public int TipoPagamentoID { get; set; }
         public int ParcelaID { get; set; }
         public double ValorPago { get; set; }
+        public Nullable<long> CV { get; set; }
     
         public virtual Parcela Parcela { get; set; }
         public virtual Pedido Pedido { get; set; }

@@ -17,7 +17,7 @@ namespace ChicoDoColchao.Controllers
             notaFiscalBusiness = new NotaFiscalBusiness();
         }
 
-        public ActionResult Cadastro(bool e = false, string m = "")
+        public ActionResult Cadastro(List<HttpPostedFileBase> arquivos = null)
         {
             string tela = "";
             if (!SessaoAtivaEPerfilValidado(out tela))
@@ -26,25 +26,17 @@ namespace ChicoDoColchao.Controllers
                 return null;
             }
 
-            if (!string.IsNullOrEmpty(m))
-            {
-                ViewBag.Erro = e;
-                ViewBag.Mensagem = m;
-            }
-
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult ImportarXML(List<HttpPostedFileBase> arquivos)
-        {
             int qtdNFeImportada = 0;
+            List<string> mensagem = new List<string>();
+            NotaFiscalDao nfDao = new NotaFiscalDao();
 
             try
             {
                 if (arquivos == null)
                 {
-                    return RedirectToAction("Cadastro", new { e = true, m = "É necessário selecionar os arquivos de NF-e para importar" });
+                    nfDao.Erro = false;
+                    nfDao.Mensagem = string.Empty;
+                    return View("Cadastro", nfDao);
                 }
 
                 bool ok = true;
@@ -58,7 +50,9 @@ namespace ChicoDoColchao.Controllers
 
                 if (!ok)
                 {
-                    return RedirectToAction("Cadastro", new { e = true, m = "É necessário selecionar os arquivos de NF-e para importar" });
+                    nfDao.Erro = true;
+                    nfDao.Mensagem = "É necessário selecionar os arquivos de NF-e para importar";
+                    return View("Cadastro", nfDao);
                 }
 
                 NotaFiscalDao notaFiscalDao = new NotaFiscalDao();
@@ -70,19 +64,32 @@ namespace ChicoDoColchao.Controllers
 
                 if (notaFiscalDao.Arquivo != null && notaFiscalDao.Arquivo.Count > 0)
                 {
-                    qtdNFeImportada = notaFiscalBusiness.ImportarXML(notaFiscalDao);
+                    notaFiscalBusiness.ImportarXML(notaFiscalDao, out mensagem, out qtdNFeImportada);
                 }
 
-                return RedirectToAction("Cadastro", new { e = false, m = string.Format("{0} NFes importadas com sucesso. {1} ocorreram algum tipo de erro e não foram importadas", qtdNFeImportada, notaFiscalDao.Arquivo.Count - qtdNFeImportada) });
+                if (mensagem != null && mensagem.Count > 0)
+                {
+                    nfDao.Erro = true;
+                    nfDao.Mensagem = string.Join("*", mensagem);
+                    return View("Cadastro", nfDao);
+                }
+
+                nfDao.Erro = false;
+                nfDao.Mensagem = string.Format("{0} XMLS importados com sucesso", qtdNFeImportada);
+                return View("Cadastro", nfDao);
             }
             catch (BusinessException ex)
             {
-                return RedirectToAction("Cadastro", new { e = true, m = ex.Message });
+                nfDao.Erro = false;
+                nfDao.Mensagem = ex.Message;
+                return View("Cadastro", nfDao);
             }
             catch (Exception ex)
             {
-                return RedirectToAction("Cadastro", new { e = true, m = "Ocoreu algum erro ao importar as NFes. Tente novamente" });
+                nfDao.Erro = false;
+                nfDao.Mensagem = "Ocoreu um erro ao importar as NFes. Tente novamente";
+                return View("Cadastro", nfDao);
             }
-        }
+        }        
     }
 }

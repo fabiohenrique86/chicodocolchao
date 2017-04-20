@@ -176,31 +176,31 @@
                     <div class="item active">
                         <div class="fill" style="background-image:url('../img/minerale.jpg'); background-size: contain;"></div>
                         <div class="carousel-caption" style="color: #333">
-                            <h2>Linha Minerale - Reconflex</h2>
+                            <h2>Categoria Minerale - Reconflex</h2>
                         </div>
                     </div>
                     <div class="item">
                         <div class="fill" style="background-image:url('../img/salute.jpg'); background-size: contain;"></div>
                         <div class="carousel-caption" style="color: #333">
-                            <h2>Linha Salute - Reconflex</h2>
+                            <h2>Categoria Salute - Reconflex</h2>
                         </div>
                     </div>
                     <div class="item">
                         <div class="fill" style="background-image:url('../img/silver-care.jpg'); background-size: contain;"></div>
                         <div class="carousel-caption" style="color: #333">
-                            <h2>Linha Silver Care - Reconflex</h2>
+                            <h2>Categoria Silver Care - Reconflex</h2>
                         </div>
                     </div>
                     <div class="item">
                         <div class="fill" style="background-image:url('../img/executive.jpg'); background-size: contain;"></div>
                         <div class="carousel-caption" style="color: #fff">
-                            <h2>Linha Executive - Reconflex</h2>
+                            <h2>Categoria Executive - Reconflex</h2>
                         </div>
                     </div>
                     <div class="item">
                         <div class="fill" style="background-image:url('../img/imperial.png'); background-size: contain;"></div>
                         <div class="carousel-caption" style="color: #fff">
-                            <h2>Linha Imperial - Reconflex</h2>
+                            <h2>Categoria Imperial - Reconflex</h2>
                         </div>
                     </div>
                 </div>
@@ -292,7 +292,7 @@
     @Scripts.Render("~/bundles/datatables")
     @Scripts.Render("~/bundles/moment")
     @Scripts.Render("~/bundles/blockUI")
-    @RenderSection("scripts", required: false)
+    @Scripts.Render("~/bundles/fullcalendar")    
     <script type="text/javascript">
 
         $(document).ready(function () {
@@ -344,6 +344,7 @@
             $(".altura").mask("0.00");
             $(".peso").mask("000");
             $(".fixo").mask("(99) 9999-9999");
+            $(".cv").mask("9999999999");
             $(".celular").mask("(99) 9999-99999").focusout(function (event) {
                 var target, phone, element;
                 target = (event.currentTarget) ? event.currentTarget : event.srcElement;
@@ -377,14 +378,12 @@
                     {
                         "data": function (data, type, row) {
                             var linha = "";
-
                             if (data["LojaID"] == '@LojaDao.LojaID') {
                                 linha = '<a href="/Loja/Selecionar?LojaID=' + data["LojaID"] + "&NomeFantasia=" + encodeURIComponent(data.NomeFantasia) + "&Cnpj=" + data["Cnpj"] + "&Telefone=" + data["Telefone"] + '">' + data["NomeFantasia"] + '</a> <i class="glyphicon glyphicon-ok"></i>'
                             }
                             else {
                                 linha = '<a href="/Loja/Selecionar?LojaID=' + data["LojaID"] + "&NomeFantasia=" + encodeURIComponent(data.NomeFantasia) + "&Cnpj=" + data["Cnpj"] + "&Telefone=" + data["Telefone"] + '">' + data["NomeFantasia"] + '</a>'
                             }
-
                             return linha;
                         },
                         "className": "text-center"
@@ -398,19 +397,15 @@
                     $("#tbLojas").DataTable().rows.add(data).draw();
                     $('#modalLoja').modal('show');
                 });
-
             });
 
         });
 
         $.ajaxSetup({
-            beforeSend: function () {
-                $.blockUI({ message: '<h4>Aguarde...</h4>' });
-            },
-            complete: function () {
-                $.unblockUI();
-            }
+            beforeSend: function () { $.blockUI({ message: '<h4>Aguarde...</h4>' }); },
+            complete: function () { $.unblockUI(); }
         });
     </script>
+    @RenderSection("scripts", required: false)
 </body>
 </html>

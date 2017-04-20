@@ -37,6 +37,7 @@ namespace ChicoDoColchao.Controllers
             {
                 var cookieName = "ChicoDoColchao_Usuario";
                 HttpCookie httpCookie = Request.Cookies[cookieName] ?? new HttpCookie(cookieName);
+                usuarioDao.Senha = string.Empty;
                 httpCookie.Value = JsonConvert.SerializeObject(usuarioDao);
                 httpCookie.Expires = DateTime.Now.AddDays(1);
                 Response.Cookies.Add(httpCookie);

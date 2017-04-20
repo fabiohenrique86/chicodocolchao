@@ -13,10 +13,6 @@
 @section styles
 {
     <style type="text/css">
-        #lblPreco0, #lblPreco1, #lblPreco2, #lblPreco3, #lblPreco4, #lblPreco5, #lblPreco6, #lblPreco7, #lblPreco8, #lblPreco9, #lblPreco10 {
-            font-weight: normal;
-        }
-
         .modal-body {
             padding: 0px 15px 15px 15px;
         }
@@ -28,60 +24,51 @@
 
         function modalPreco(produto) {
 
+            $("#lblNumeroProduto").text(produto.Numero);
+
             $("#tbLojaProduto").DataTable().clear();
             $("#tbLojaProduto").DataTable().rows.add(produto.LojaProdutoDao).draw();
 
-            $("#lblPreco0").text("");
-            $("#lblPreco1").text("");
-            $("#lblPreco2").text("");
-            $("#lblPreco3").text("");
-            $("#lblPreco4").text("");
-            $("#lblPreco5").text("");
-            $("#lblPreco6").text("");
-            $("#lblPreco7").text("");
-            $("#lblPreco8").text("");
-            $("#lblPreco9").text("");
-            $("#lblPreco10").text("");
-
-            $("#lblNumeroProduto").text(produto.Numero);
-
-            $(produto.ParcelaProdutoDao).each(function (index, parcelaProdutoDao) {
-                if (parcelaProdutoDao.AVista) {
-                    $("#lblPreco0").text("R$ " + Globalize.format(parcelaProdutoDao.Preco, "n2"))
-                }
-                else if (parcelaProdutoDao.ParcelaID == 1) {
-                    $("#lblPreco1").text("R$ " + Globalize.format(parcelaProdutoDao.Preco, "n2"))
-                }
-                else if (parcelaProdutoDao.ParcelaID == 2) {
-                    $("#lblPreco2").text("R$ " + Globalize.format(parcelaProdutoDao.Preco, "n2"))
-                }
-                else if (parcelaProdutoDao.ParcelaID == 3) {
-                    $("#lblPreco3").text("R$ " + Globalize.format(parcelaProdutoDao.Preco, "n2"))
-                }
-                else if (parcelaProdutoDao.ParcelaID == 4) {
-                    $("#lblPreco4").text("R$ " + Globalize.format(parcelaProdutoDao.Preco, "n2"))
-                }
-                else if (parcelaProdutoDao.ParcelaID == 5) {
-                    $("#lblPreco5").text("R$ " + Globalize.format(parcelaProdutoDao.Preco, "n2"))
-                }
-                else if (parcelaProdutoDao.ParcelaID == 6) {
-                    $("#lblPreco6").text("R$ " + Globalize.format(parcelaProdutoDao.Preco, "n2"))
-                }
-                else if (parcelaProdutoDao.ParcelaID == 7) {
-                    $("#lblPreco7").text("R$ " + Globalize.format(parcelaProdutoDao.Preco, "n2"))
-                }
-                else if (parcelaProdutoDao.ParcelaID == 8) {
-                    $("#lblPreco8").text("R$ " + Globalize.format(parcelaProdutoDao.Preco, "n2"))
-                }
-                else if (parcelaProdutoDao.ParcelaID == 9) {
-                    $("#lblPreco9").text("R$ " + Globalize.format(parcelaProdutoDao.Preco, "n2"))
-                }
-                else if (parcelaProdutoDao.ParcelaID == 10) {
-                    $("#lblPreco10").text("R$ " + Globalize.format(parcelaProdutoDao.Preco, "n2"))
-                }
-            });
+            var produtoPrecos =
+            [
+                { Descricao: "Atacado", Preco: Globalize.format(produto.Preco * 2.2, "n2") },
+                { Descricao: "À Vista", Preco: Globalize.format(produto.Preco * 2.4, "n2") },
+                { Descricao: "Até 10x", Preco: Globalize.format(produto.Preco * 2.5, "n2") },
+                { Descricao: "Preço", Preco: Globalize.format(produto.Preco * 3, "n2") },
+            ];
+            $("#tbProdutoPreco").DataTable().clear();
+            $("#tbProdutoPreco").DataTable().rows.add(produtoPrecos).draw();
 
             $('#modalpreco').modal('show');
+        }
+
+        function excluirProduto(produtoId, numero) {
+            if (confirm("Deseja realmente excluir produto " + numero + "?")) {
+                var produtoDao = {};
+
+                produtoDao.ProdutoID = produtoId;
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Produto/Excluir",
+                    data: { produtoDao: produtoDao },
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            alert(data.Mensagem);
+                            return;
+                        }
+
+                        // recarrega o grid
+                        $("#tbProduto").DataTable().clear();
+                        $("#tbProduto").DataTable().rows.add(data.Produtos).draw();
+
+                        // exibe mensagem de sucesso
+                        alert(data.Mensagem);
+                    }
+                });
+            }
         }
 
         $(document).ready(function () {
@@ -107,7 +94,7 @@
                         "className": "text-center"
                     },
                     { "data": "Descricao", "className": "text-center" },
-                    { "data": "LinhaDao[0].Descricao", "className": "text-center" },
+                    { "data": "CategoriaDao[0].Descricao", "className": "text-center" },
                     { "data": "MedidaDao.Descricao", "className": "text-center" },
                     {
                         "data": function (data, type, row) {
@@ -117,11 +104,18 @@
                         "visible": '@usuarioDao.TipoUsuarioDao.TipoUsuarioID' == '@TipoUsuarioDao.ETipoUsuario.Gerencial.GetHashCode()' ? true : false
                     },
                     {
-                       "data": function (data, type, row) {
-                           return data["ComissaoFranqueado"] + "%";
-                       },
-                       "className": "text-center",
-                       "visible": '@usuarioDao.TipoUsuarioDao.TipoUsuarioID' == '@TipoUsuarioDao.ETipoUsuario.Gerencial.GetHashCode()' ? true : false
+                        "data": function (data, type, row) {
+                            return data["ComissaoFranqueado"] + "%";
+                        },
+                        "className": "text-center",
+                        "visible": '@usuarioDao.TipoUsuarioDao.TipoUsuarioID' == '@TipoUsuarioDao.ETipoUsuario.Gerencial.GetHashCode()' ? true : false
+                    },
+                    {
+                        "data": function (data, type, row) {
+                            var excluir = "<i class='glyphicon glyphicon-remove' title='Excluir Produto' style='cursor: pointer' onclick='excluirProduto(" + data["ProdutoID"] + "," + data["Numero"] + ")'></i>";
+                            return excluir;
+                        },
+                        "className": "text-center"
                     }
                 ]
             });
@@ -147,6 +141,27 @@
                 ]
             });
 
+            var tbProdutoPreco = $("#tbProdutoPreco").DataTable({
+                "paging": false,
+                "ordering": false,
+                "info": false,
+                "searching": false,
+                "language": {
+                    "lengthMenu": "_MENU_ registros por página",
+                    "zeroRecords": "Sem registros a serem exibidos",
+                    "info": "Página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Sem registros a serem exibidos",
+                    "infoFiltered": "(filtrados de _MAX_ total de registros)",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": { "sNext": "Próximo", "sPrevious": "Anterior", "sFirst": "Primeiro", "sLast": "Último" }
+                },
+                "columns":
+                [
+                    { "data": "Descricao", "className": "text-center" },
+                    { "data": "Preco", "className": "text-center" }
+                ]
+            });
+
             $.getJSON("/Produto/Listar", function (data) {
                 tbProduto.clear();
                 tbProduto.rows.add(data).draw();
@@ -167,12 +182,13 @@
             <table id="tbProduto" class="table nowrap">
                 <thead>
                     <tr>
-                        <td class="text-center" style="width: 20%"><b>Número</b></td>
+                        <td class="text-center" style="width: 15%"><b>Número</b></td>
                         <td class="text-center" style="width: 30%"><b>Descrição</b></td>
-                        <td class="text-center" style="width: 20%"><b>Linha</b></td>
+                        <td class="text-center" style="width: 15%"><b>Categoria</b></td>
                         <td class="text-center" style="width: 10%"><b>Medida</b></td>
                         <td class="text-center" style="width: 10%"><b>Rentabilidade Funcionário</b></td>
                         <td class="text-center" style="width: 10%"><b>Rentabilidade Lojista</b></td>
+                        <td class="text-center" style="width: 10%"><b>Ação</b></td>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -192,60 +208,22 @@
                     <table id="tbLojaProduto" class="table nowrap" style="width: 100%">
                         <thead>
                             <tr>
-                                <td class="text-center" style="width: 90%"><b>Loja</b></td>
-                                <td class="text-center" style="width: 10%"><b>Quantidade</b></td>
+                                <td class="text-center" style="width: 80%"><b>Loja</b></td>
+                                <td class="text-center" style="width: 20%"><b>Quantidade</b></td>
                             </tr>
                         </thead>
                         <tbody></tbody>
                     </table>
                     <h4>Preços</h4>
-                    <div class="row">
-                        <div class="col-lg-6 text-center">
-                            À vista: <label id="lblPreco0"></label>
-                        </div>
-                        <div class="col-lg-6 text-center">
-                            5x: <label id="lblPreco5"></label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6 text-center">
-                            1x: <label id="lblPreco1"></label>
-                        </div>
-                        <div class="col-lg-6 text-center">
-                            6x: <label id="lblPreco6"></label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6 text-center">
-                            2x: <label id="lblPreco2"></label>
-                        </div>
-                        <div class="col-lg-6 text-center">
-                            7x: <label id="lblPreco7"></label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6 text-center">
-                            3x: <label id="lblPreco3"></label>
-                        </div>
-                        <div class="col-lg-6 text-center">
-                            8x: <label id="lblPreco8"></label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6 text-center">
-                            4x: <label id="lblPreco4"></label>
-                        </div>
-                        <div class="col-lg-6 text-center">
-                            9x: <label id="lblPreco9"></label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6 text-center">
-                        </div>
-                        <div class="col-lg-6 text-center">
-                            10x: <label id="lblPreco10"></label>
-                        </div>
-                    </div>
+                    <table id="tbProdutoPreco" class="table nowrap" style="width: 100%">
+                        <thead>
+                            <tr>
+                                <td class="text-center" style="width: 80%"><b>Descrição</b></td>
+                                <td class="text-center" style="width: 20%"><b>Preço</b></td>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
                 </div>
             </div>
         </div>

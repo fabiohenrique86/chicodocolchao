@@ -17,6 +17,7 @@ namespace ChicoDoColchao.Business
         ProdutoBusiness produtoBusiness;
         EmailBusiness emailBusiness;
         LogRepository logRepository;
+        PedidoTipoPagamentoRepository pedidoTipoPagamentoRepository;
 
         public PedidoBusiness()
         {
@@ -24,6 +25,7 @@ namespace ChicoDoColchao.Business
             produtoBusiness = new ProdutoBusiness();
             emailBusiness = new EmailBusiness();
             logRepository = new LogRepository();
+            pedidoTipoPagamentoRepository = new PedidoTipoPagamentoRepository();
         }
 
         private void ValidarIncluir(PedidoDao pedidoDao)
@@ -85,9 +87,11 @@ namespace ChicoDoColchao.Business
             }
 
             // verifica se o total do pedido é igual ao total pago
-            var valorPedido = Math.Round(pedidoDao.PedidoProdutoDao.Sum(x => x.Preco * x.Quantidade), 2);
-            var valorPago = Math.Round(pedidoDao.PedidoTipoPagamentoDao.Sum(x => x.ValorPago * x.ParcelaDao.ParcelaID), 2);
-            if (valorPedido != valorPago)
+            var totalPedido = Math.Round(pedidoDao.PedidoProdutoDao.Sum(x => x.Preco * x.Quantidade), 2);
+            var totalPago = Math.Round(pedidoDao.PedidoTipoPagamentoDao.Sum(x => x.ValorPago * x.ParcelaDao.ParcelaID), 2);
+            var totalDesconto = Math.Round(pedidoDao.Desconto, 2);
+
+            if (Math.Round(totalPedido - totalDesconto, 2) != totalPago)
             {
                 throw new BusinessException("Total do pedido deve ser igual ao total pago");
             }
@@ -95,29 +99,21 @@ namespace ChicoDoColchao.Business
             // verifica se o produto existe na loja de saída
             foreach (var pedidoProduto in pedidoDao.PedidoProdutoDao)
             {
-                var produto = produtoBusiness.Listar(new ProdutoDao() { ProdutoID = pedidoProduto.ProdutoID }, lojaDestinoId: lojaSaidaDao.LojaID).FirstOrDefault();
+                var produto = produtoBusiness.Listar(new ProdutoDao() { ProdutoID = pedidoProduto.ProdutoID, Ativo = true }, lojaDestinoId: lojaSaidaDao.LojaID).FirstOrDefault();
                 if (produto == null)
                 {
-                    throw new BusinessException(string.Format("Produto '{0}' não cadastrado na Loja '{1}'", pedidoProduto.ProdutoDao.Descricao, lojaSaidaDao.NomeFantasia));
+                    throw new BusinessException(string.Format("Produto {0} não cadastrado na Loja {1}", pedidoProduto.ProdutoDao.Descricao, lojaSaidaDao.NomeFantasia));
                 }
             }
-        }
 
-        private void ValidarAtualizar(PedidoDao pedidoDao)
-        {
-            if (pedidoDao == null)
+            // verifica se o cv informado já existe
+            foreach (var pedidoTipoPagamentoDao in pedidoDao.PedidoTipoPagamentoDao.Where(x => x.CV > 0))
             {
-                throw new BusinessException("Pedido é obrigatório");
-            }
-
-            if (pedidoDao.PedidoID <= 0)
-            {
-                throw new BusinessException("PedidoID é obrigatório");
-            }
-
-            if (pedidoRepository.Listar(new Pedido() { PedidoID = pedidoDao.PedidoID }).FirstOrDefault() == null)
-            {
-                throw new BusinessException(string.Format("Pedido {0} não encontrado", pedidoDao.PedidoID));
+                var ptp = pedidoTipoPagamentoRepository.Listar(new PedidoTipoPagamento() { CV = pedidoTipoPagamentoDao.CV });
+                if (ptp != null && ptp.Count() > 0)
+                {
+                    throw new BusinessException(string.Format("CV {0} já cadastrado", pedidoTipoPagamentoDao.CV));
+                }
             }
         }
 
@@ -164,8 +160,39 @@ namespace ChicoDoColchao.Business
             {
                 throw new BusinessException(string.Format("Pedido {0} não encontrado", pedidoDao.PedidoID));
             }
+        }
 
-            pedido.DataEntrega = pedidoDao.DataEntrega;
+        private void ValidarAtualizar(PedidoDao pedidoDao)
+        {
+            if (pedidoDao == null)
+            {
+                throw new BusinessException("Pedido é obrigatório");
+            }
+
+            if (pedidoDao.PedidoID <= 0)
+            {
+                throw new BusinessException("PedidoID é obrigatório");
+            }
+
+            var pedido = pedidoRepository.Listar(new Pedido() { PedidoID = pedidoDao.PedidoID }).FirstOrDefault();
+
+            if (pedido == null)
+            {
+                throw new BusinessException(string.Format("Pedido {0} não encontrado", pedidoDao.PedidoID));
+            }
+
+            if (pedidoDao.DataEntrega != null || pedidoDao.DataEntrega != DateTime.MinValue)
+            {
+                if (pedidoDao.DataEntrega.GetValueOrDefault().Date < DateTime.Now.Date)
+                {
+                    throw new BusinessException("Data de entrega deve ser maior ou igual a data de hoje");
+                }
+
+                if (pedidoDao.DataEntrega.GetValueOrDefault().Date < pedido.DataPedido.Date)
+                {
+                    throw new BusinessException("Data de entrega deve ser maior ou igual a data do pedido");
+                }
+            }
         }
 
         public List<PedidoDao> Listar(PedidoDao pedidoDao)
@@ -201,12 +228,12 @@ namespace ChicoDoColchao.Business
                 {
                     return pedidoId;
                 }
-                
+
                 // se houver e-mail do cliente, envia a comanda por email
                 if (pedidoDao.ClienteDao.FirstOrDefault() != null && !string.IsNullOrEmpty(pedidoDao.ClienteDao.FirstOrDefault().Email))
                 {
                     EnviarComandaPorEmail(pedidoDao);
-                }                
+                }
 
                 return pedidoId;
             }
@@ -225,46 +252,33 @@ namespace ChicoDoColchao.Business
 
         public void EnviarComandaPorEmail(PedidoDao pedidoDao)
         {
-            var cliente = pedidoDao.ClienteDao.FirstOrDefault();
-
-            var mensagem = string.Format("Olá {0}.<br /><br />", cliente.Nome);
-            mensagem += string.Format("Seu pedido {0} foi recebido com sucesso!<br /><br />", pedidoDao.PedidoID);
-            mensagem += "Em anexo, segue todos os detalhes do seu pedido.<br /><br />";
-            mensagem += "A Chico do Colchão agradece a preferência!";
-
-            var bytes = Comanda(pedidoDao);
-            Stream stream = new MemoryStream(bytes);
-
-            EmailDao emailDao = new EmailDao();
-
-            emailDao.Titulo = "Chico do Colchão";
-            emailDao.Assunto = string.Format("Seu Pedido {0}", pedidoDao.PedidoID);
-            emailDao.Remetente = "contato@chicodocolchao.com.br";
-            emailDao.Destinatario = cliente.Email;
-            emailDao.Mensagem = mensagem;
-            emailDao.Anexo.Add(new Attachment(stream, string.Format("Pedido {0}", pedidoDao.PedidoID), "application/pdf"));
-
-            emailBusiness.Enviar(emailDao);
-        }
-
-        public void Atualizar(PedidoDao pedidoDao)
-        {
             try
             {
-                ValidarAtualizar(pedidoDao);
+                var cliente = pedidoDao.ClienteDao.FirstOrDefault();
 
-                pedidoRepository.Atualizar(pedidoDao.ToBd());
-            }
-            catch (BusinessException ex)
-            {
-                throw ex;
+                var mensagem = string.Format("Olá {0}.<br /><br />", cliente.Nome);
+                mensagem += string.Format("Seu pedido {0} foi recebido com sucesso!<br /><br />", pedidoDao.PedidoID);
+                mensagem += "Em anexo, segue todos os detalhes do seu pedido.<br /><br />";
+                mensagem += "A Chico do Colchão agradece a preferência!";
+
+                var bytes = Comanda(pedidoDao);
+                Stream stream = new MemoryStream(bytes);
+
+                EmailDao emailDao = new EmailDao();
+
+                emailDao.Titulo = "Chico do Colchão";
+                emailDao.Assunto = string.Format("Seu Pedido {0}", pedidoDao.PedidoID);
+                emailDao.Remetente = "contato@chicodocolchao.com.br";
+                emailDao.Destinatario = cliente.Email;
+                emailDao.Mensagem = mensagem;
+                emailDao.Anexo.Add(new Attachment(stream, string.Format("Pedido {0}", pedidoDao.PedidoID), "application/pdf"));
+
+                emailBusiness.Enviar(emailDao);
             }
             catch (Exception ex)
             {
                 // inclui o log do erro
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
-
-                throw ex;
             }
         }
 
@@ -275,6 +289,8 @@ namespace ChicoDoColchao.Business
                 Pedido pedido;
 
                 ValidarCancelar(pedidoDao, out pedido);
+
+                pedido.PedidoStatusID = (int)PedidoStatusDao.EPedidoStatus.Cancelado;
 
                 pedidoRepository.Cancelar(pedido);
             }
@@ -299,7 +315,31 @@ namespace ChicoDoColchao.Business
 
                 ValidarEntregar(pedidoDao, out pedido);
 
+                pedido.DataEntrega = pedidoDao.DataEntrega;
+                pedido.PedidoStatusID = (int)PedidoStatusDao.EPedidoStatus.Entregue;
+
                 pedidoRepository.Entregar(pedido);
+            }
+            catch (BusinessException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                // inclui o log do erro
+                logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
+
+                throw ex;
+            }
+        }
+
+        public void Atualizar(PedidoDao pedidoDao)
+        {
+            try
+            {
+                ValidarAtualizar(pedidoDao);
+
+                pedidoRepository.Atualizar(pedidoDao.ToBd());
             }
             catch (BusinessException ex)
             {
@@ -328,9 +368,8 @@ namespace ChicoDoColchao.Business
             string filenameExtension;
 
             var viewer = new ReportViewer();
-            
+
             viewer.ProcessingMode = ProcessingMode.Local;
-            //viewer.LocalReport.ReportPath = Server.MapPath("~/bin/Reports/PedidoComanda.rdlc");
             viewer.LocalReport.ReportPath = AppDomain.CurrentDomain.BaseDirectory + "/bin/Reports/PedidoComanda.rdlc";
 
             // parâmetros
@@ -340,6 +379,13 @@ namespace ChicoDoColchao.Business
             parametros.Add(new ReportParameter("RazaoSocial", pedidoDao.LojaDao.FirstOrDefault().RazaoSocial));
             parametros.Add(new ReportParameter("Cnpj", pedidoDao.LojaDao.FirstOrDefault().Cnpj));
             parametros.Add(new ReportParameter("Telefone", pedidoDao.LojaDao.FirstOrDefault().Telefone));
+            parametros.Add(new ReportParameter("Desconto", pedidoDao.Desconto.ToString()));
+            parametros.Add(new ReportParameter("Funcionario", pedidoDao.FuncionarioDao.FirstOrDefault().Nome));
+            parametros.Add(new ReportParameter("DataPedido", pedidoDao.DataPedido.ToString("dd/MM/yyyy")));
+            parametros.Add(new ReportParameter("DataEntrega", pedidoDao.DataEntrega.GetValueOrDefault() == DateTime.MinValue ? "" : pedidoDao.DataEntrega.GetValueOrDefault().ToString("dd/MM/yyyy")));
+            parametros.Add(new ReportParameter("Endereco", pedidoDao.ClienteDao.FirstOrDefault().Logradouro + " " + pedidoDao.ClienteDao.FirstOrDefault().Numero + " " + pedidoDao.ClienteDao.FirstOrDefault().Bairro + " " + pedidoDao.ClienteDao.FirstOrDefault().Cidade + " - " + pedidoDao.ClienteDao.FirstOrDefault().EstadoDao.FirstOrDefault().Nome));
+            parametros.Add(new ReportParameter("Complemento", pedidoDao.ClienteDao.FirstOrDefault().Complemento));
+            parametros.Add(new ReportParameter("PontoReferencia", pedidoDao.ClienteDao.FirstOrDefault().PontoReferencia));
 
             viewer.LocalReport.SetParameters(parametros);
 
@@ -375,7 +421,7 @@ namespace ChicoDoColchao.Business
 
             // produto
             List<dynamic> pedidoProdutoDao = new List<dynamic>();
-            foreach (var item in pedidoDao.PedidoProdutoDao) { pedidoProdutoDao.Add(new { Descricao = item.ProdutoDao.Descricao, Medida = item.ProdutoDao.MedidaDao.Descricao, Quantidade = item.Quantidade }); }
+            foreach (var item in pedidoDao.PedidoProdutoDao) { pedidoProdutoDao.Add(new { Numero = item.ProdutoDao.Numero, Descricao = item.ProdutoDao.Descricao, Medida = item.ProdutoDao.MedidaDao.Descricao, Quantidade = item.Quantidade }); }
             viewer.LocalReport.DataSources.Add(new ReportDataSource("ds_produto", pedidoProdutoDao));
 
             // tipo pagamento

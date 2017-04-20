@@ -9,42 +9,42 @@ using ChicoDoColchao.Business.Tradutors;
 
 namespace ChicoDoColchao.Business
 {
-    public class LinhaBusiness
+    public class CategoriaBusiness
     {
-        LinhaRepository linhaRepository;
+        CategoriaRepository categoriaRepository;
         LogRepository logRepository;
 
-        public LinhaBusiness()
+        public CategoriaBusiness()
         {
-            linhaRepository = new LinhaRepository();
+            categoriaRepository = new CategoriaRepository();
             logRepository = new LogRepository();
         }
 
-        private void ValidarIncluir(LinhaDao linhaDao)
+        private void ValidarIncluir(CategoriaDao categoriaDao)
         {
-            if (linhaDao == null)
+            if (categoriaDao == null)
             {
-                throw new BusinessException("Linha é obrigatório");
+                throw new BusinessException("Categoria é obrigatório");
             }
 
-            if (string.IsNullOrEmpty(linhaDao.Descricao))
+            if (string.IsNullOrEmpty(categoriaDao.Descricao))
             {
                 throw new BusinessException("Descrição é obrigatório");
             }
                         
-            if (linhaRepository.Listar(new Linha() { Descricao = linhaDao.Descricao }).FirstOrDefault() != null)
+            if (categoriaRepository.Listar(new Categoria() { Descricao = categoriaDao.Descricao }).FirstOrDefault() != null)
             {
-                throw new BusinessException("Linha (Descrição) já cadastrada");
+                throw new BusinessException("Categoria (Descrição) já cadastrada");
             }
         }
 
-        public int Incluir(LinhaDao linhaDao)
+        public int Incluir(CategoriaDao categoriaDao)
         {
             try
             {
-                ValidarIncluir(linhaDao);
+                ValidarIncluir(categoriaDao);
 
-                return linhaRepository.Incluir(linhaDao.ToBd());
+                return categoriaRepository.Incluir(categoriaDao.ToBd());
             }
             catch (BusinessException ex)
             {
@@ -59,11 +59,11 @@ namespace ChicoDoColchao.Business
             }
         }
 
-        public List<LinhaDao> Listar(LinhaDao linhaDao)
+        public List<CategoriaDao> Listar(CategoriaDao categoriaDao)
         {
             try
             {
-                return linhaRepository.Listar(linhaDao.ToBd()).Select(x => x.ToApp()).ToList();
+                return categoriaRepository.Listar(categoriaDao.ToBd()).Select(x => x.ToApp()).ToList();
             }
             catch (BusinessException ex)
             {

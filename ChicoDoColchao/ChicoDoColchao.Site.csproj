@@ -228,7 +228,7 @@
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\ColchaoIdealController.cs" />
     <Compile Include="Controllers\ContatoController.cs" />
-    <Compile Include="Controllers\LinhaController.cs" />
+    <Compile Include="Controllers\CategoriaController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\FuncionarioController.cs" />
@@ -265,8 +265,6 @@
     <Compile Include="ModelBinder\DoubleModelBinder.cs" />
     <Compile Include="Models\AgendarVisitaModel.cs" />
     <Compile Include="Models\LojaModel.cs" />
-    <Compile Include="Models\UsuarioModel.cs" />
-    <Compile Include="Models\AssuntoModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="Startup.cs" />
@@ -289,6 +287,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\bootstrap-3.3.6.min.css" />
+    <Content Include="Content\fullcalendar.min.css" />
+    <Content Include="Content\fullcalendar.print.min.css" />
     <Content Include="Content\jquery.dataTables.css" />
     <Content Include="Content\jquery.ui-1.11.4.css" />
     <Content Include="Content\modern-business.css" />
@@ -311,6 +311,8 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="App.config" />
+    <Content Include="Scripts\fullcalendar-locale-all.js" />
+    <Content Include="Scripts\fullcalendar.min.js" />
     <Content Include="Scripts\jquery.blockUI.js" />
     <Content Include="Scripts\jquery.globalize\cultures\globalize.culture.en-US.js" />
     <Content Include="Scripts\jquery.globalize\cultures\globalize.culture.pt-BR.js" />
@@ -417,8 +419,8 @@
     <Content Include="Views\Loja\Lista.cshtml" />
     <Content Include="Views\Funcionario\Cadastro.cshtml" />
     <Content Include="Views\Funcionario\Lista.cshtml" />
-    <Content Include="Views\Linha\Cadastro.cshtml" />
-    <Content Include="Views\Linha\Lista.cshtml" />
+    <Content Include="Views\Categoria\Cadastro.cshtml" />
+    <Content Include="Views\Categoria\Lista.cshtml" />
     <Content Include="Views\Produto\Cadastro.cshtml" />
     <Content Include="Views\Produto\Lista.cshtml" />
     <Content Include="Views\Medida\Cadastro.cshtml" />
@@ -429,10 +431,10 @@
     <Content Include="Views\Loja\Seleciona.cshtml" />
     <Content Include="Views\MovimentoDeCaixa\Index.cshtml" />
     <Content Include="Views\ColchaoIdeal\Resultado.cshtml" />
-    <Content Include="Views\Produto\ResultadoImportacao.cshtml" />
     <Content Include="Smtp.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Views\Pedido\CalendarioDeEntrega.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

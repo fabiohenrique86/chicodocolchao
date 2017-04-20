@@ -30,7 +30,6 @@ namespace ChicoDoColchao.Repository
         public virtual DbSet<Cliente> Cliente { get; set; }
         public virtual DbSet<Estado> Estado { get; set; }
         public virtual DbSet<Funcionario> Funcionario { get; set; }
-        public virtual DbSet<Linha> Linha { get; set; }
         public virtual DbSet<Loja> Loja { get; set; }
         public virtual DbSet<LojaProduto> LojaProduto { get; set; }
         public virtual DbSet<Medida> Medida { get; set; }
@@ -39,7 +38,6 @@ namespace ChicoDoColchao.Repository
         public virtual DbSet<Orcamento> Orcamento { get; set; }
         public virtual DbSet<OrcamentoProduto> OrcamentoProduto { get; set; }
         public virtual DbSet<Parcela> Parcela { get; set; }
-        public virtual DbSet<ParcelaProduto> ParcelaProduto { get; set; }
         public virtual DbSet<Pedido> Pedido { get; set; }
         public virtual DbSet<PedidoProduto> PedidoProduto { get; set; }
         public virtual DbSet<PedidoStatus> PedidoStatus { get; set; }
@@ -52,6 +50,7 @@ namespace ChicoDoColchao.Repository
         public virtual DbSet<TransferenciaProduto> TransferenciaProduto { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
         public virtual DbSet<Log> Log { get; set; }
+        public virtual DbSet<Categoria> Categoria { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

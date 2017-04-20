@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Linha - Lista";
+    ViewBag.Title = "Categoria - Lista";
 }
 @section scripts
 {
@@ -7,7 +7,7 @@
 
         $(document).ready(function () {
 
-            var tbLinha = $("#tbLinha").DataTable({
+            var tbCategoria = $("#tbCategoria").DataTable({
                 "ordering": false,
                 "pageLength": 10,
                 "language": {
@@ -25,32 +25,32 @@
                 ]
             });
 
-            $.getJSON("/Linha/Listar", function (data) {
-                tbLinha.clear();
-                tbLinha.rows.add(data).draw();
+            $.getJSON("/Categoria/Listar", function (data) {
+                tbCategoria.clear();
+                tbCategoria.rows.add(data).draw();
             });
 
             $("#btnCadastrar").click(function () {
-                window.location.href = "/Linha/Cadastro";
+                window.location.href = "/Categoria/Cadastro";
             });
 
         });
     </script>
 }
 <div class="container" style="padding-bottom: 20px;">
-    <h2><i class="glyphicon glyphicon-list" style="color: #0f3456" title="Linhas"></i> Lista de Linhas</h2>
+    <h2><i class="glyphicon glyphicon-list" style="color: #0f3456" title="Categorias"></i> Lista de Categorias</h2>
     <hr />
     <div class="form-group">
         <div class="table-responsive">
-            <table id="tbLinha" class="table nowrap">
+            <table id="tbCategoria" class="table nowrap">
                 <thead>
                     <tr>
-                        <td class="text-center" style="width: 100%"><b>Linha</b></td>
+                        <td class="text-center" style="width: 100%"><b>Categoria</b></td>
                     </tr>
                 </thead>
                 <tbody></tbody>
             </table>
         </div>
     </div>
-    <button id="btnCadastrar" type="button" class="btn btn-info">Cadastrar Nova Linha</button>
+    <button id="btnCadastrar" type="button" class="btn btn-info">Cadastrar Nova Categoria</button>
 </div>

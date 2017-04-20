@@ -72,11 +72,11 @@
     <Compile Include="EstadoBusiness.cs" />
     <Compile Include="NotaFiscalBusiness.cs" />
     <Compile Include="MedidaBusiness.cs" />
-    <Compile Include="LinhaBusiness.cs" />
+    <Compile Include="CategoriaBusiness.cs" />
     <Compile Include="Tradutors\LogTradutor.cs" />
     <Compile Include="Tradutors\NotaFiscalTradutor.cs" />
     <Compile Include="Tradutors\MedidaTradutor.cs" />
-    <Compile Include="Tradutors\LinhaTradutor.cs" />
+    <Compile Include="Tradutors\CategoriaTradutor.cs" />
     <Compile Include="Tradutors\UsuarioTradutor.cs" />
     <Compile Include="UsuarioBusiness.cs" />
     <Compile Include="ParcelaBusiness.cs" />
