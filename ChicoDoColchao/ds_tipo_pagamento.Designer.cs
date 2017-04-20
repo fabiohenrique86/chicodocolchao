@@ -285,6 +285,8 @@ namespace ChicoDoColchao {
             
             private global::System.Data.DataColumn columnValorPago;
             
+            private global::System.Data.DataColumn columnCV;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public ds_tipo_pagamentoDataTable() {
@@ -344,6 +346,14 @@ namespace ChicoDoColchao {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn CVColumn {
+                get {
+                    return this.columnCV;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -379,12 +389,13 @@ namespace ChicoDoColchao {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ds_tipo_pagamentoRow Addds_tipo_pagamentoRow(string Descricao, string Numero, string ValorPago) {
+            public ds_tipo_pagamentoRow Addds_tipo_pagamentoRow(string Descricao, string Numero, string ValorPago, string CV) {
                 ds_tipo_pagamentoRow rowds_tipo_pagamentoRow = ((ds_tipo_pagamentoRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         Descricao,
                         Numero,
-                        ValorPago};
+                        ValorPago,
+                        CV};
                 rowds_tipo_pagamentoRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowds_tipo_pagamentoRow);
                 return rowds_tipo_pagamentoRow;
@@ -410,6 +421,7 @@ namespace ChicoDoColchao {
                 this.columnDescricao = base.Columns["Descricao"];
                 this.columnNumero = base.Columns["Numero"];
                 this.columnValorPago = base.Columns["ValorPago"];
+                this.columnCV = base.Columns["CV"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -421,6 +433,8 @@ namespace ChicoDoColchao {
                 base.Columns.Add(this.columnNumero);
                 this.columnValorPago = new global::System.Data.DataColumn("ValorPago", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnValorPago);
+                this.columnCV = new global::System.Data.DataColumn("CV", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCV);
                 this.ExtendedProperties.Add("Generator_TablePropName", "_ds_tipo_pagamento");
                 this.ExtendedProperties.Add("Generator_UserTableName", "ds_tipo_pagamento");
             }
@@ -613,6 +627,22 @@ namespace ChicoDoColchao {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string CV {
+                get {
+                    try {
+                        return ((string)(this[this.tableds_tipo_pagamento.CVColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'CV\' in table \'ds_tipo_pagamento\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableds_tipo_pagamento.CVColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsDescricaoNull() {
                 return this.IsNull(this.tableds_tipo_pagamento.DescricaoColumn);
             }
@@ -645,6 +675,18 @@ namespace ChicoDoColchao {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetValorPagoNull() {
                 this[this.tableds_tipo_pagamento.ValorPagoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsCVNull() {
+                return this.IsNull(this.tableds_tipo_pagamento.CVColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetCVNull() {
+                this[this.tableds_tipo_pagamento.CVColumn] = global::System.Convert.DBNull;
             }
         }
         

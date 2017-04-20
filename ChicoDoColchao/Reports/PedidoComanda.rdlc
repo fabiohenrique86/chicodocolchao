@@ -704,10 +704,10 @@
               <Width>13.70014cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.79986cm</Width>
+              <Width>2.51764cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.5cm</Width>
+              <Width>2.78222cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -869,7 +869,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Descricao.Value</Value>
+                              <Value>=Fields!Descricao.Value &amp; IIf(Fields!CV.Value &gt; 0, " (CV: " &amp; Fields!CV.Value &amp; ")", "")</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -1010,7 +1010,6 @@
                             <TextRun>
                               <Value>=FormatCurrency(Sum(Fields!ValorPago.Value*Fields!Numero.Value), 2)</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
@@ -1085,10 +1084,10 @@
               <Width>11.20014cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.79986cm</Width>
+              <Width>2.51764cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.5cm</Width>
+              <Width>2.78222cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1466,9 +1465,9 @@
         </Paragraphs>
         <rd:DefaultName>Textbox45</rd:DefaultName>
         <Top>9.67343cm</Top>
-        <Left>16.5cm</Left>
+        <Left>16.21778cm</Left>
         <Height>0.6cm</Height>
-        <Width>2.5cm</Width>
+        <Width>2.78222cm</Width>
         <ZIndex>3</ZIndex>
         <Style>
           <Border>
@@ -1500,7 +1499,7 @@
         <rd:DefaultName>Textbox45</rd:DefaultName>
         <Top>9.67343cm</Top>
         <Height>0.6cm</Height>
-        <Width>16.5cm</Width>
+        <Width>16.21778cm</Width>
         <ZIndex>4</ZIndex>
         <Style>
           <Border>
@@ -1520,7 +1519,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Funcionário</Value>
+                <Value>Consultor</Value>
                 <Style>
                   <FontSize>9pt</FontSize>
                   <FontWeight>Bold</FontWeight>
@@ -1907,7 +1906,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox45</rd:DefaultName>
         <Top>13.87343cm</Top>
-        <Height>1.39375cm</Height>
+        <Height>1.89572cm</Height>
         <Width>19cm</Width>
         <ZIndex>16</ZIndex>
         <Style>
@@ -1955,7 +1954,7 @@
         </Style>
       </Textbox>
     </ReportItems>
-    <Height>6.02777in</Height>
+    <Height>6.22916in</Height>
     <Style />
   </Body>
   <Width>19cm</Width>
@@ -2282,6 +2281,10 @@
         </Field>
         <Field Name="ValorPago">
           <DataField>ValorPago</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CV">
+          <DataField>CV</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>

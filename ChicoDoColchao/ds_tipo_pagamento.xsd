@@ -14,12 +14,13 @@
   <xs:element name="ds_tipo_pagamento" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="True" msprop:Generator_DataSetName="ds_tipo_pagamento" msprop:Generator_UserDSName="ds_tipo_pagamento">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="ds_tipo_pagamento" msprop:Generator_TableClassName="ds_tipo_pagamentoDataTable" msprop:Generator_TableVarName="tableds_tipo_pagamento" msprop:Generator_TablePropName="_ds_tipo_pagamento" msprop:Generator_RowDeletingName="ds_tipo_pagamentoRowDeleting" msprop:Generator_RowChangingName="ds_tipo_pagamentoRowChanging" msprop:Generator_RowEvHandlerName="ds_tipo_pagamentoRowChangeEventHandler" msprop:Generator_RowDeletedName="ds_tipo_pagamentoRowDeleted" msprop:Generator_UserTableName="ds_tipo_pagamento" msprop:Generator_RowChangedName="ds_tipo_pagamentoRowChanged" msprop:Generator_RowEvArgName="ds_tipo_pagamentoRowChangeEvent" msprop:Generator_RowClassName="ds_tipo_pagamentoRow">
+        <xs:element name="ds_tipo_pagamento" msprop:Generator_TableClassName="ds_tipo_pagamentoDataTable" msprop:Generator_TableVarName="tableds_tipo_pagamento" msprop:Generator_RowChangedName="ds_tipo_pagamentoRowChanged" msprop:Generator_TablePropName="_ds_tipo_pagamento" msprop:Generator_RowDeletingName="ds_tipo_pagamentoRowDeleting" msprop:Generator_RowChangingName="ds_tipo_pagamentoRowChanging" msprop:Generator_RowEvHandlerName="ds_tipo_pagamentoRowChangeEventHandler" msprop:Generator_RowDeletedName="ds_tipo_pagamentoRowDeleted" msprop:Generator_RowClassName="ds_tipo_pagamentoRow" msprop:Generator_UserTableName="ds_tipo_pagamento" msprop:Generator_RowEvArgName="ds_tipo_pagamentoRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="Descricao" msprop:Generator_ColumnVarNameInTable="columnDescricao" msprop:Generator_ColumnPropNameInRow="Descricao" msprop:Generator_ColumnPropNameInTable="DescricaoColumn" msprop:Generator_UserColumnName="Descricao" type="xs:string" minOccurs="0" />
               <xs:element name="Numero" msprop:Generator_ColumnVarNameInTable="columnNumero" msprop:Generator_ColumnPropNameInRow="Numero" msprop:Generator_ColumnPropNameInTable="NumeroColumn" msprop:Generator_UserColumnName="Numero" type="xs:string" minOccurs="0" />
               <xs:element name="ValorPago" msprop:Generator_ColumnVarNameInTable="columnValorPago" msprop:Generator_ColumnPropNameInRow="ValorPago" msprop:Generator_ColumnPropNameInTable="ValorPagoColumn" msprop:Generator_UserColumnName="ValorPago" type="xs:string" minOccurs="0" />
+              <xs:element name="CV" msprop:Generator_ColumnVarNameInTable="columnCV" msprop:Generator_ColumnPropNameInRow="CV" msprop:Generator_ColumnPropNameInTable="CVColumn" msprop:Generator_UserColumnName="CV" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

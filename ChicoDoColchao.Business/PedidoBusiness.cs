@@ -389,7 +389,7 @@ namespace ChicoDoColchao.Business
 
             viewer.LocalReport.SetParameters(parametros);
 
-            // pedido
+            // cliente
             List<dynamic> clienteDao = new List<dynamic>();
             foreach (var item in pedidoDao.ClienteDao)
             {
@@ -426,7 +426,7 @@ namespace ChicoDoColchao.Business
 
             // tipo pagamento
             List<dynamic> pedidoTipoPagamentoDao = new List<dynamic>();
-            foreach (var item in pedidoDao.PedidoTipoPagamentoDao) { pedidoTipoPagamentoDao.Add(new { Descricao = item.TipoPagamentoDao.Descricao, Numero = item.ParcelaDao.Numero, ValorPago = item.ValorPago }); }
+            foreach (var item in pedidoDao.PedidoTipoPagamentoDao) { pedidoTipoPagamentoDao.Add(new { Descricao = item.TipoPagamentoDao.Descricao, Numero = item.ParcelaDao.Numero, ValorPago = item.ValorPago, CV = item.CV }); }
             viewer.LocalReport.DataSources.Add(new ReportDataSource("ds_tipo_pagamento", pedidoTipoPagamentoDao));
 
             viewer.LocalReport.Refresh();
