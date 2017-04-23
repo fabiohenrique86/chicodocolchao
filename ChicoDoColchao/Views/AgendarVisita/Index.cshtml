@@ -1,27 +1,91 @@
-﻿@model ChicoDoColchao.Models.AgendarVisitaModel
-
+﻿@model List<ChicoDoColchao.Dao.LojaDao>
 @{
     ViewBag.Title = "Agendar Visita";
+}
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $("#btnAgendar").click(function () {
+
+                var lojaDao = {};
+
+                lojaDao.LojaID = parseInt($("#LojaID").val());
+                lojaDao.NomeFantasia = $("#LojaID option:selected").text();
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/AgendarVisita/Agendar",
+                    data: { lojaDao: lojaDao, nome: $("#Nome").val(), email: $("#Email").val(),  data: $("#Data").val(), periodo: $("#Periodo").val() },
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            alert(data.Mensagem);
+                            return;
+                        }
+
+                        $("#AgendarVisitaForm")[0].reset();
+
+                        alert(data.Mensagem);
+                    }
+                });
+
+            });
+        });
+    </script>
 }
 <div class="container" style="padding-bottom: 20px;">
     <h2><i class="glyphicon glyphicon-time" style="color: #ec971f" title="Agendar Visita"></i> Agendar Visita</h2>
     <hr />
-    @using (Html.BeginForm("Agendar", "AgendarVisita", FormMethod.Post, new { id = "AgendarVisitaForm" }))
-    {
-        <div class="form-group">
-            @Html.TextBoxFor(x => x.Nome, new { @class = "form-control", @placeholder = "Nome" })
-            @Html.ValidationMessageFor(x => x.Nome)
+    <p>Só pode ir à loja naquele seu horário? Fique tranquilo.</p>
+    <p>Podemos agendar uma visita para você em qualquer uma de nossas lojas.</p>
+    <p>Solicite aqui uma visita no seu melhor horário e aproveite!</p>
+    <form id="AgendarVisitaForm" name="AgendarVisitaForm">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <input id="Nome" name="Nome" type="text" class="form-control" placeholder="Qual o seu nome?" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <input id="Email" name="Email" type="text" class="form-control" placeholder="E o seu e-mail?" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.DropDownListFor(x => x.FirstOrDefault().LojaID, new SelectList(Model, "LojaID", "NomeFantasia"), "Em qual loja você quer ser atendido?", new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <input id="Data" name="Data" type="text" class="form-control data datepicker" placeholder="Qual a melhor data pra você ser atendido?" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <select id="Periodo" name="Periodo" class="form-control">
+                        <option value="">Manhã, Tarde ou Noite?</option>
+                        <option value="Manhã">Manhã</option>
+                        <option value="Tarde">Tarde</option>
+                        <option value="Noite">Noite</option>
+                    </select>
+                </div>
+            </div>
         </div>
         <div class="form-group">
-            @Html.DropDownListFor(x => x.LojaId, new SelectList(Model.Lojas, "LojaID", "NomeFantasia"), "Loja", new { @class = "form-control" })
-            @Html.ValidationMessageFor(x => x.LojaId)
+            <button id="btnAgendar" type="button" class="btn btn-success">Agendar</button>
         </div>
-        <div class="form-group">
-            @Html.TextBoxFor(x => x.DataHora, new { @class = "form-control", @placeholder = "Data/Hora" })
-            @Html.ValidationMessageFor(x => x.DataHora)
-        </div>
-        <div class="form-group">
-            <button id="btnAgendar" type="submit" class="btn btn-success">Agendar</button>
-        </div>
-    }
+    </form>
 </div>

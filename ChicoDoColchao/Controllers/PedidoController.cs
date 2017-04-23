@@ -28,17 +28,17 @@ namespace ChicoDoColchao.Controllers
 
         public ActionResult Cadastro()
         {
-            string tela = "";
-            if (!SessaoAtivaEPerfilValidado(out tela))
-            {
-                Response.Redirect(tela, true);
-                return null;
-            }
-
             PedidoDao pedidoDao = new PedidoDao();
 
             try
             {
+                string tela = "";
+                if (!SessaoAtivaEPerfilValidado(out tela))
+                {
+                    Response.Redirect(tela, true);
+                    return null;
+                }
+
                 // lista somente os status "Previsão de entrega" e "Retirado na Loja"
                 pedidoDao.PedidoStatusDao = pedidoStatusBusiness.Listar(new PedidoStatusDao()).Where(x => x.PedidoStatusID == (int)PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega || x.PedidoStatusID == (int)PedidoStatusDao.EPedidoStatus.RetiradoNaLoja).ToList();
 
@@ -144,7 +144,7 @@ namespace ChicoDoColchao.Controllers
             try
             {
                 pedidoBusiness.Atualizar(pedidoDao);
-                
+
                 return Json(new { Sucesso = true, Mensagem = "Pedido alterado com sucesso!" }, JsonRequestBehavior.AllowGet);
             }
             catch (BusinessException ex)
@@ -193,7 +193,7 @@ namespace ChicoDoColchao.Controllers
                 }
 
                 pedidoBusiness.EnviarComandaPorEmail(pedido);
-                
+
                 return Json(new { Sucesso = true, Mensagem = string.Format("Comanda enviada para o email {0} com sucesso!", pedido.ClienteDao.FirstOrDefault().Email) }, JsonRequestBehavior.AllowGet);
             }
             catch (BusinessException ex)
@@ -241,14 +241,14 @@ namespace ChicoDoColchao.Controllers
                 Response.Redirect(tela, true);
                 return null;
             }
-            
+
             var pedidoDao = pedidoBusiness.Listar(new PedidoDao() { PedidoID = pedidoId }).FirstOrDefault();
 
             if (pedidoDao == null)
             {
                 return Content(string.Format("Pedido {0} não encontrado", pedidoId));
             }
-                        
+
             var bytes = pedidoBusiness.Comanda(pedidoDao);
 
             return new FileContentResult(bytes, "application/pdf");
