@@ -1,7 +1,7 @@
 ﻿@model ChicoDoColchao.Dao.FuncionarioDao
 
 @{
-    ViewBag.Title = "Funcionário - Cadastro";
+    ViewBag.Title = "Consultor - Cadastro";
 }
 @section scripts
 {
@@ -40,47 +40,47 @@
     </script>
 }
 <div class="container" style="padding-bottom: 20px;">
-    <h2><i class="glyphicon glyphicon-user" style="color: #0f3456" title="Funcionário"></i> Cadastro de Funcionários</h2>
+    <h2><i class="glyphicon glyphicon-user" style="color: #0f3456" title="Funcionário"></i> Cadastro de Consultores</h2>
     <hr />
     <form id="FuncionarioForm" name="FuncionarioForm">
         <div class="row">
             <div class="col-lg-6">
                 <div class="form-group">
-                    @Html.DropDownList("LojaDao[0].LojaID", new SelectList(Model.LojaDao, "LojaID", "NomeFantasia"), "Qual loja o funcionário irá trabalhar?", new { @class = "form-control", @id = "LojaDao[0].LojaID" })
+                    @Html.DropDownList("LojaDao[0].LojaID", new SelectList(Model.LojaDao, "LojaID", "NomeFantasia"), "Qual loja o consultor irá trabalhar?", new { @class = "form-control", @id = "LojaDao[0].LojaID" })
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-6">
                 <div class="form-group">
-                    @Html.TextBoxFor(x => x.Numero, new { @class = "form-control", @placeholder = "Número de matrícula do funcionário", @maxlength = "8" })
+                    @Html.TextBoxFor(x => x.Numero, new { @class = "form-control", @placeholder = "Número de matrícula do consultor", @maxlength = "8" })
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-6">
                 <div class="form-group">
-                    @Html.TextBoxFor(x => x.Nome, new { @class = "form-control", @placeholder = "Nome do funcionário", @maxlength = "150" })
+                    @Html.TextBoxFor(x => x.Nome, new { @class = "form-control", @placeholder = "Nome do consultor", @maxlength = "150" })
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-6">
                 <div class="form-group">
-                    @Html.TextBoxFor(x => x.Email, new { @class = "form-control", @placeholder = "E-mail do funcionário", @maxlength = "150" })
+                    @Html.TextBoxFor(x => x.Email, new { @class = "form-control", @placeholder = "E-mail do consultor", @maxlength = "150" })
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-6">
                 <div class="form-group">
-                    @Html.TextBoxFor(x => x.Telefone, new { @class = "form-control celular", @placeholder = "Telefone Celular do funcionário" })
+                    @Html.TextBoxFor(x => x.Telefone, new { @class = "form-control celular", @placeholder = "Telefone Celular do consultor" })
                 </div>
             </div>
         </div>
         <div class="form-group">
             <button id="btnCadastrar" type="button" class="btn btn-success">Cadastrar</button>
-            <button id="btnLista" type="button" class="btn btn-info">Lista de Funcionários Cadastrados</button>
+            <button id="btnLista" type="button" class="btn btn-info">Lista de Consultores Cadastrados</button>
         </div>
     </form>
 </div>

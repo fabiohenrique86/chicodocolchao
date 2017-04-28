@@ -98,7 +98,7 @@ namespace ChicoDoColchao.Controllers
                 if (Request.Cookies.Get("ChicoDoColchao_Usuario") != null)
                 {
                     tela = "~/Menu/Index";
-                    
+
                     var usuarioDao = JsonConvert.DeserializeObject<UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value);
                     var controller = Request.RequestContext.RouteData.Values["controller"].ToString();
                     var action = Request.RequestContext.RouteData.Values["action"].ToString();
@@ -108,22 +108,101 @@ namespace ChicoDoColchao.Controllers
                         return true;
                     }
 
+                    // verifica se alguma loja está selecionada. Se não, não deve permitir o acesso
                     if (Request.Cookies.Get("ChicoDoColchao_Loja") == null)
                     {
                         tela = "~/Loja/Seleciona";
                         return false;
                     }
 
+                    // verifica se está na tela de menu
                     if (controller == "Menu" && action == "Index")
                     {
                         return true;
                     }
 
-                    if (controller == "Pedido" || controller == "Cliente" || controller == "Produto")
+                    if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)TipoUsuarioDao.ETipoUsuario.Vendedor)
                     {
-                        if (action == "Cadastro" || action == "Lista" || action == "Comanda")
+                        if (controller == "Pedido")
+                        {
+                            if (action == "Cadastro" || action == "Lista" || action == "Comanda")
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                        else if (controller == "Cliente")
+                        {
+                            if (action == "Cadastro" || action == "Lista")
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                        else if (controller == "Produto")
+                        {
+                            if (action == "Lista")
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                        else if (controller == "MovimentoDeCaixa")
                         {
                             return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    else if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)TipoUsuarioDao.ETipoUsuario.Deposito)
+                    {
+                        if (controller == "Pedido")
+                        {
+                            if (action == "Lista" || action == "Comanda" || action == "CalendarioDeEntrega")
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                        else if (controller == "Cliente")
+                        {
+                            if (action == "Lista")
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                        else if (controller == "Produto")
+                        {
+                            if (action == "Lista")
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            return false;
                         }
                     }
 

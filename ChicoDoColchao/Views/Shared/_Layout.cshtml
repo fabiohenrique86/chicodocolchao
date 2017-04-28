@@ -14,8 +14,8 @@
     @RenderSection("styles", required: false)
     <style type="text/css">
         .error, .input-validation-error { border-color: #ED5565; }
-        .navbar-inverse { background-color: #0f3456; border-color: red; }
-        .navbar-inverse .navbar-nav > li > a, .navbar-inverse .navbar-brand { color: #ffffff; }
+        .navbar-inverse { background-color: #fff; border-color: red; }
+        .navbar-inverse .navbar-nav > li > a, .navbar-inverse .navbar-brand { color: #0f3456; }
         .navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form { border-color: red; }
         .navbar-brand { padding: 0px 15px; height: auto; }
         .carousel-control.left { background-image: none; }
@@ -23,6 +23,7 @@
         .carousel-control .glyphicon-chevron-left, .carousel-control .glyphicon-chevron-right, .carousel-control .icon-next, .carousel-control .icon-prev { font-size: 80px; margin-top: -60px; }
         .carousel-indicators li { border: 1px solid #bbb; }
         .carousel-indicators .active { background-color: #bbb; }
+        .navbar-inverse .navbar-nav > li > a:hover { color: #0f3456; }
     </style>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -78,19 +79,18 @@
                     {
                         usuarioDao = Newtonsoft.Json.JsonConvert.DeserializeObject<UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value);
                     }
+
+                    if (usuarioDao != null)
+                    {
+                        <p>@Html.Raw("Usuário: " + usuarioDao.Login.ToUpper())</p>
+                        <p>@Html.Raw("Perfil: " + usuarioDao.TipoUsuarioDao.Descricao.ToUpper())</p>
+                    }
+                    else
+                    {
+                        <p></p>
+                        <p></p>
+                    }
                 }
-                <p>
-                    @if (usuarioDao != null)
-                    {
-                        @Html.Raw("Usuário: ") @usuarioDao.Login;
-                    }
-                </p>
-                <p>
-                    @if (usuarioDao != null)
-                    {
-                        @Html.Raw("Perfil: ") @usuarioDao.TipoUsuarioDao.Descricao;
-                    }
-                </p>
             </div>
         </div>
     </div>
@@ -169,29 +169,29 @@
                     <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
                     <li data-target="#myCarousel" data-slide-to="1"></li>
                     <li data-target="#myCarousel" data-slide-to="2"></li>
-                    <li data-target="#myCarousel" data-slide-to="3"></li>
-                    <li data-target="#myCarousel" data-slide-to="4"></li>
+                    @*<li data-target="#myCarousel" data-slide-to="3"></li>
+                    <li data-target="#myCarousel" data-slide-to="4"></li>*@
                 </ol>
                 <div class="carousel-inner">
                     <div class="item active">
-                        <div class="fill" style="background-image:url('../img/minerale.jpg'); background-size: contain;"></div>
-                        <div class="carousel-caption" style="color: #333">
+                        <div class="fill" style="background-image:url('../img/dream.jpg'); background-size: contain;"></div>
+                        @*<div class="carousel-caption" style="color: #333">
                             <h2>Categoria Minerale - Reconflex</h2>
-                        </div>
+                        </div>*@
                     </div>
                     <div class="item">
-                        <div class="fill" style="background-image:url('../img/salute.jpg'); background-size: contain;"></div>
-                        <div class="carousel-caption" style="color: #333">
+                        <div class="fill" style="background-image:url('../img/dux.jpg'); background-size: contain;"></div>
+                        @*<div class="carousel-caption" style="color: #333">
                             <h2>Categoria Salute - Reconflex</h2>
-                        </div>
+                        </div>*@
                     </div>
                     <div class="item">
-                        <div class="fill" style="background-image:url('../img/silver-care.jpg'); background-size: contain;"></div>
-                        <div class="carousel-caption" style="color: #333">
+                        <div class="fill" style="background-image:url('../img/luxury.jpg'); background-size: contain;"></div>
+                        @*<div class="carousel-caption" style="color: #333">
                             <h2>Categoria Silver Care - Reconflex</h2>
-                        </div>
+                        </div>*@
                     </div>
-                    <div class="item">
+                    @*<div class="item">
                         <div class="fill" style="background-image:url('../img/executive.jpg'); background-size: contain;"></div>
                         <div class="carousel-caption" style="color: #fff">
                             <h2>Categoria Executive - Reconflex</h2>
@@ -202,7 +202,7 @@
                         <div class="carousel-caption" style="color: #fff">
                             <h2>Categoria Imperial - Reconflex</h2>
                         </div>
-                    </div>
+                    </div>*@
                 </div>
                 <a class="left carousel-control" href="#myCarousel" data-slide="prev">
                     <span class="icon-prev"></span>

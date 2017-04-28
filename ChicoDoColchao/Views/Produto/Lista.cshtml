@@ -97,6 +97,17 @@
                     { "data": "CategoriaDao[0].Descricao", "className": "text-center" },
                     { "data": "MedidaDao.Descricao", "className": "text-center" },
                     {
+                        "data": function (data, type, row)
+                        {
+                            var quantidadeEstoque = 0;
+                            $(data.LojaProdutoDao).each(function (i, e) {                               
+                                quantidadeEstoque += e.Quantidade;
+                            });
+                            return quantidadeEstoque;
+                        },
+                        "className": "text-center"
+                    },
+                    @*{
                         "data": function (data, type, row) {
                             return data["ComissaoFuncionario"] + "%";
                         },
@@ -109,7 +120,7 @@
                         },
                         "className": "text-center",
                         "visible": '@usuarioDao.TipoUsuarioDao.TipoUsuarioID' == '@TipoUsuarioDao.ETipoUsuario.Gerencial.GetHashCode()' ? true : false
-                    },
+                    },*@
                     {
                         "data": function (data, type, row) {
                             var excluir = "<i class='glyphicon glyphicon-remove' title='Excluir Produto' style='cursor: pointer' onclick='excluirProduto(" + data["ProdutoID"] + "," + data["Numero"] + ")'></i>";
@@ -186,8 +197,7 @@
                         <td class="text-center" style="width: 30%"><b>Descrição</b></td>
                         <td class="text-center" style="width: 15%"><b>Categoria</b></td>
                         <td class="text-center" style="width: 10%"><b>Medida</b></td>
-                        <td class="text-center" style="width: 10%"><b>Rentabilidade Funcionário</b></td>
-                        <td class="text-center" style="width: 10%"><b>Rentabilidade Lojista</b></td>
+                        <td class="text-center" style="width: 10%"><b>Qtd Total Estoque</b></td>
                         <td class="text-center" style="width: 10%"><b>Ação</b></td>
                     </tr>
                 </thead>
@@ -196,36 +206,5 @@
         </div>
     </div>
     <button id="btnCadastrar" type="button" class="btn btn-info">Cadastrar Novo Produto</button>
-    <div class="modal fade" id="modalpreco" tabindex="-1" role="dialog" aria-labelledby="ModalPreco" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Nº Produto <label id="lblNumeroProduto"></label></h4>
-                </div>
-                <div class="modal-body">
-                    <h4>Estoque</h4>
-                    <table id="tbLojaProduto" class="table nowrap" style="width: 100%">
-                        <thead>
-                            <tr>
-                                <td class="text-center" style="width: 80%"><b>Loja</b></td>
-                                <td class="text-center" style="width: 20%"><b>Quantidade</b></td>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                    <h4>Preços</h4>
-                    <table id="tbProdutoPreco" class="table nowrap" style="width: 100%">
-                        <thead>
-                            <tr>
-                                <td class="text-center" style="width: 80%"><b>Descrição</b></td>
-                                <td class="text-center" style="width: 20%"><b>Preço</b></td>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
+    @Html.Partial("_ModalProdutoPreco")
 </div>

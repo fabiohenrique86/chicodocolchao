@@ -18,7 +18,8 @@ namespace ChicoDoColchao.Dao
         public enum ETipoUsuario
         {
             Gerencial = 1,
-            Vendedor = 2
+            Vendedor = 2,
+            Deposito = 3
         }
     }
 }

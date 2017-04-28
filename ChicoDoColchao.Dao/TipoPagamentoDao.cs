@@ -20,7 +20,11 @@ namespace ChicoDoColchao.Dao
             Dinheiro = 1,
             CartaoMaster = 2,
             CartaoVisa = 3,
-            Cheque = 4
+            Cheque = 4,
+            CartaoElo = 5,
+            CartaoHiper = 6,
+            CartaoAmericanExpress = 7,
+            Crediario = 8
         }
     }
 }

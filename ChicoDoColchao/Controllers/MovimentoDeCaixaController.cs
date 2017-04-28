@@ -69,15 +69,20 @@ namespace ChicoDoColchao.Controllers
             viewer.ProcessingMode = ProcessingMode.Local;
             viewer.LocalReport.ReportPath = Server.MapPath("~/bin/Reports/MovimentoDeCaixa.rdlc");
 
-            double dinheiro = 0, cartaoVisa = 0, cartaoMaster = 0, cheque = 0, totalRecebido = 0;
+            double dinheiro = 0, cartaoVisa = 0, cartaoMaster = 0, cheque = 0, cartaoElo = 0, cartaoHiper = 0, cartaoAmericanExpress = 0, crediario = 0, totalRecebido = 0;
             foreach (var item in pedidosDao)
             {
                 dinheiro += item.PedidoTipoPagamentoDao.Where(x => x.TipoPagamentoDao.TipoPagamentoID == TipoPagamentoDao.ETipoPagamento.Dinheiro.GetHashCode()).Sum(x => x.ValorPago);
                 cartaoVisa += item.PedidoTipoPagamentoDao.Where(x => x.TipoPagamentoDao.TipoPagamentoID == TipoPagamentoDao.ETipoPagamento.CartaoVisa.GetHashCode()).Sum(x => x.ValorPago);
                 cartaoMaster += item.PedidoTipoPagamentoDao.Where(x => x.TipoPagamentoDao.TipoPagamentoID == TipoPagamentoDao.ETipoPagamento.CartaoMaster.GetHashCode()).Sum(x => x.ValorPago);
                 cheque += item.PedidoTipoPagamentoDao.Where(x => x.TipoPagamentoDao.TipoPagamentoID == TipoPagamentoDao.ETipoPagamento.Cheque.GetHashCode()).Sum(x => x.ValorPago);
-                totalRecebido += dinheiro + cartaoVisa + cartaoMaster + cheque;
+                cartaoElo += item.PedidoTipoPagamentoDao.Where(x => x.TipoPagamentoDao.TipoPagamentoID == TipoPagamentoDao.ETipoPagamento.CartaoElo.GetHashCode()).Sum(x => x.ValorPago);
+                cartaoHiper += item.PedidoTipoPagamentoDao.Where(x => x.TipoPagamentoDao.TipoPagamentoID == TipoPagamentoDao.ETipoPagamento.CartaoHiper.GetHashCode()).Sum(x => x.ValorPago);
+                cartaoAmericanExpress += item.PedidoTipoPagamentoDao.Where(x => x.TipoPagamentoDao.TipoPagamentoID == TipoPagamentoDao.ETipoPagamento.CartaoAmericanExpress.GetHashCode()).Sum(x => x.ValorPago);
+                crediario += item.PedidoTipoPagamentoDao.Where(x => x.TipoPagamentoDao.TipoPagamentoID == TipoPagamentoDao.ETipoPagamento.Crediario.GetHashCode()).Sum(x => x.ValorPago);
             }
+
+            totalRecebido = dinheiro + cartaoVisa + cartaoMaster + cheque + cartaoElo + cartaoHiper + cartaoAmericanExpress + crediario;
 
             // parâmetros
             List <ReportParameter> parametros = new List<ReportParameter>();
@@ -88,6 +93,10 @@ namespace ChicoDoColchao.Controllers
             parametros.Add(new ReportParameter("CartaoMaster", cartaoMaster.ToString()));
             parametros.Add(new ReportParameter("Cheque", cheque.ToString()));
             parametros.Add(new ReportParameter("TotalRecebido", totalRecebido.ToString()));
+            parametros.Add(new ReportParameter("CartaoElo", cartaoElo.ToString()));
+            parametros.Add(new ReportParameter("CartaoHiper", cartaoHiper.ToString()));
+            parametros.Add(new ReportParameter("CartaoAmericanExpress", cartaoAmericanExpress.ToString()));
+            parametros.Add(new ReportParameter("Crediario", crediario.ToString()));
 
             viewer.LocalReport.SetParameters(parametros);
 

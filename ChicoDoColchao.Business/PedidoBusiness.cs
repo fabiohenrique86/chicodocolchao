@@ -386,6 +386,7 @@ namespace ChicoDoColchao.Business
             parametros.Add(new ReportParameter("Endereco", pedidoDao.ClienteDao.FirstOrDefault().Logradouro + " " + pedidoDao.ClienteDao.FirstOrDefault().Numero + " " + pedidoDao.ClienteDao.FirstOrDefault().Bairro + " " + pedidoDao.ClienteDao.FirstOrDefault().Cidade + " - " + pedidoDao.ClienteDao.FirstOrDefault().EstadoDao.FirstOrDefault().Nome));
             parametros.Add(new ReportParameter("Complemento", pedidoDao.ClienteDao.FirstOrDefault().Complemento));
             parametros.Add(new ReportParameter("PontoReferencia", pedidoDao.ClienteDao.FirstOrDefault().PontoReferencia));
+            parametros.Add(new ReportParameter("ValorFrete", pedidoDao.ValorFrete.GetValueOrDefault().ToString())); 
 
             viewer.LocalReport.SetParameters(parametros);
 
