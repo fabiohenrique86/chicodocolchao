@@ -3,12 +3,12 @@
 @{
     ViewBag.Title = "Produto - Lista";
 
-    UsuarioDao usuarioDao = null;
+    //UsuarioDao usuarioDao = null;
 
-    if (Request.Cookies.Get("ChicoDoColchao_Usuario") != null)
-    {
-        usuarioDao = Newtonsoft.Json.JsonConvert.DeserializeObject<UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value);
-    }
+    //if (Request.Cookies.Get("ChicoDoColchao_Usuario") != null)
+    //{
+    //    usuarioDao = Newtonsoft.Json.JsonConvert.DeserializeObject<UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value);
+    //}
 }
 @section styles
 {
@@ -31,10 +31,10 @@
 
             var produtoPrecos =
             [
-                { Descricao: "Atacado", Preco: Globalize.format(produto.Preco * 2.2, "n2") },
-                { Descricao: "À Vista", Preco: Globalize.format(produto.Preco * 2.4, "n2") },
-                { Descricao: "Até 10x", Preco: Globalize.format(produto.Preco * 2.5, "n2") },
-                { Descricao: "Preço", Preco: Globalize.format(produto.Preco * 3, "n2") },
+                { ProdutoID: produto.ProdutoID, Descricao: "Atacado", Preco: Globalize.format(produto.Preco * 2.2, "n2") },
+                { ProdutoID: produto.ProdutoID, Descricao: "À Vista", Preco: Globalize.format(produto.Preco * 2.4, "n2") },
+                { ProdutoID: produto.ProdutoID, Descricao: "Até 10x", Preco: Globalize.format(produto.Preco * 2.5, "n2") },
+                { ProdutoID: produto.ProdutoID, Descricao: "Preço", Preco: Globalize.format(produto.Preco * 3, "n2") },
             ];
             $("#tbProdutoPreco").DataTable().clear();
             $("#tbProdutoPreco").DataTable().rows.add(produtoPrecos).draw();
@@ -168,6 +168,7 @@
                 },
                 "columns":
                 [
+                    { "data": "ProdutoID", "visible": false },
                     { "data": "Descricao", "className": "text-center" },
                     { "data": "Preco", "className": "text-center" }
                 ]
