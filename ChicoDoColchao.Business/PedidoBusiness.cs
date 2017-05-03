@@ -88,7 +88,7 @@ namespace ChicoDoColchao.Business
 
             // verifica se o total do pedido é igual ao total pago
             var totalPedido = Math.Round(pedidoDao.PedidoProdutoDao.Sum(x => x.Preco * x.Quantidade), 2);
-            var totalPago = Math.Round(pedidoDao.PedidoTipoPagamentoDao.Sum(x => x.ValorPago * x.ParcelaDao.ParcelaID), 2);
+            var totalPago = Math.Round(pedidoDao.PedidoTipoPagamentoDao.Sum(x => x.ValorPago), 2);
             var totalDesconto = Math.Round(pedidoDao.Desconto, 2);
 
             if (Math.Round(totalPedido - totalDesconto, 2) != totalPago)
