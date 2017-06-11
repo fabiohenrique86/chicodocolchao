@@ -34,6 +34,7 @@ namespace ChicoDoColchao.Controllers
             ProdutoDao produtoDao = new ProdutoDao();
 
             produtoDao.CategoriaDao = categoriaBusiness.Listar(new CategoriaDao());
+            produtoDao.LojaDao = lojaBusiness.Listar(new LojaDao());
 
             if (arquivo == null)
             {
@@ -91,9 +92,7 @@ namespace ChicoDoColchao.Controllers
                 return null;
             }
 
-            List<LojaDao> lojaDao = new List<LojaDao>();
-
-            lojaDao = lojaBusiness.Listar(new LojaDao());
+            var lojaDao = lojaBusiness.Listar(new LojaDao());
 
             return View(lojaDao);
         }
@@ -114,6 +113,25 @@ namespace ChicoDoColchao.Controllers
             catch (Exception ex)
             {
                 return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Produto não cadastrado. Tente novamente." }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult Atualizar(ProdutoDao produtoDao)
+        {
+            try
+            {
+                produtoBusiness.Atualizar(produtoDao);
+
+                return Json(new { Sucesso = true, Mensagem = "Produto atualizado com sucesso!" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (BusinessException ex)
+            {
+                return Json(new { Sucesso = false, Mensagem = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Produto não atualizado. Tente novamente." }, JsonRequestBehavior.AllowGet);
             }
         }
 

@@ -52,7 +52,7 @@
                 produtoDao.ComissaoFuncionario = $("#ComissaoFuncionario").val();
                 produtoDao.ComissaoFranqueado = $("#ComissaoFranqueado").val();
                 produtoDao.Preco = $("#Preco").val();
-                
+
                 $.ajax({
                     dataType: "json",
                     type: "POST",
@@ -70,6 +70,49 @@
                         $("#Numero").val("");
                         $("#ComissaoFuncionario").val("");
                         $("#ComissaoFranqueado").val("");
+                        $("#Quantidade").val("");
+                        $("#Preco").val("");
+
+                        alert(data.Mensagem);
+                    }
+                });
+
+            });
+
+            $("#btnAtualizar").click(function () {
+
+                var produtoDao = {};
+                produtoDao.MedidaDao = {};
+
+                produtoDao.Numero = $("#Numero").val();
+                produtoDao.Descricao = $("#Descricao").val();
+                produtoDao.CategoriaDao = [];
+                produtoDao.CategoriaDao.push({ CategoriaID: $("#CategoriaID option:selected").val() });
+                produtoDao.MedidaDao.MedidaID = $("#MedidaID").val();
+                produtoDao.ComissaoFuncionario = $("#ComissaoFuncionario").val();
+                produtoDao.ComissaoFranqueado = $("#ComissaoFranqueado").val();
+                produtoDao.LojaProdutoDao = [];
+                produtoDao.LojaProdutoDao.push({ LojaID: $("#LojaID option:selected").val(), Quantidade: $("#Quantidade").val() });
+                produtoDao.Preco = $("#Preco").val();
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Produto/Atualizar",
+                    data: produtoDao,
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            alert(data.Mensagem);
+                            return;
+                        }
+
+                        $("#ProdutoForm")[0].reset();
+                        $("#MedidaID").val("");
+                        $("#Numero").val("");
+                        $("#ComissaoFuncionario").val("");
+                        $("#ComissaoFranqueado").val("");
+                        $("#Quantidade").val("");
                         $("#Preco").val("");
 
                         alert(data.Mensagem);
@@ -130,14 +173,27 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-2">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.DropDownListFor(x => x.LojaDao.FirstOrDefault().LojaID, new SelectList(Model.LojaDao, "LojaID", "NomeFantasia"), "Loja do produto", new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <input type="text" id="Quantidade" name="Quantidade" class="form-control quantidade" placeholder="Quantidade" maxlength="3" />
+                </div>
+            </div>
+            <div class="col-lg-3">
                 <div class="form-group">
                     <input type="text" id="Preco" name="Preco" class="form-control valor" placeholder="Preço de Compra" maxlength="15" />
                 </div>
             </div>
-        </div>        
+        </div>
         <div class="form-group">
             <button id="btnCadastrar" type="button" class="btn btn-success">Cadastrar</button>
+            <button id="btnAtualizar" type="button" class="btn btn-warning">Atualizar</button>
             <button id="btnLista" type="button" class="btn btn-info">Lista de Produtos Cadastrados</button>
         </div>
     </form>

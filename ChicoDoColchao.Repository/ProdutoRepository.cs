@@ -26,7 +26,7 @@ namespace ChicoDoColchao.Repository
             {
                 var lp = produto.LojaProduto.FirstOrDefault();
                 var lojaProduto = chicoDoColchaoEntities.LojaProduto.FirstOrDefault(x => x.LojaID == lp.LojaID && x.Produto.Numero == produto.Numero && x.Ativo == true);
-                
+
                 if (lojaProduto == null)
                 {
                     chicoDoColchaoEntities.Entry(produto.LojaProduto.FirstOrDefault()).State = EntityState.Added;
@@ -51,9 +51,37 @@ namespace ChicoDoColchao.Repository
             chicoDoColchaoEntities.SaveChanges();
         }
 
+        public void Atualizar(Produto produto)
+        {
+            var p = chicoDoColchaoEntities.Produto.SingleOrDefault(x => x.Numero == produto.Numero);
+
+            if (!string.IsNullOrEmpty(produto.Descricao)) { p.Descricao = produto.Descricao.Trim(); }
+            if (produto.CategoriaID > 0) { p.CategoriaID = produto.CategoriaID; }
+            if (produto.MedidaID > 0) { p.MedidaID = produto.MedidaID; }
+            if (produto.ComissaoFuncionario > 0) { p.ComissaoFuncionario = produto.ComissaoFuncionario; }
+            if (produto.ComissaoFranqueado > 0) { p.ComissaoFranqueado = produto.ComissaoFranqueado; }
+            if (produto.Preco > 0) { p.Preco = produto.Preco; }
+
+            chicoDoColchaoEntities.Entry(p).State = EntityState.Modified;
+
+            foreach (var lojaProduto in produto.LojaProduto)
+            {
+                var lp = chicoDoColchaoEntities.LojaProduto.FirstOrDefault(x => x.LojaID == lojaProduto.LojaID && x.Produto.Numero == produto.Numero && x.Ativo == true);
+
+                if (lp != null)
+                {
+                    lp.Quantidade += lojaProduto.Quantidade;
+                    chicoDoColchaoEntities.Entry(lp).State = EntityState.Modified;
+                }
+            }
+
+            chicoDoColchaoEntities.SaveChanges();
+        }
+
         public void Excluir(Produto produto)
         {
-            var p = chicoDoColchaoEntities.Produto.Where(x => x.ProdutoID == produto.ProdutoID).FirstOrDefault();
+            var p = chicoDoColchaoEntities.Produto.FirstOrDefault(x => x.ProdutoID == produto.ProdutoID);
+
             if (p != null)
             {
                 p.Ativo = false;

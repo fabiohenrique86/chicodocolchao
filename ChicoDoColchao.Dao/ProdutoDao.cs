@@ -9,6 +9,7 @@ namespace ChicoDoColchao.Dao
         {
             CategoriaDao = new HashSet<CategoriaDao>();
             LojaProdutoDao = new HashSet<LojaProdutoDao>();
+            LojaDao = new HashSet<LojaDao>();
             MedidaDao = new MedidaDao();
             NotaFiscalProdutoDao = new HashSet<NotaFiscalProdutoDao>();
             OrcamentoProdutoDao = new HashSet<OrcamentoProdutoDao>();
@@ -29,6 +30,7 @@ namespace ChicoDoColchao.Dao
 
         public virtual ICollection<CategoriaDao> CategoriaDao { get; set; }
         public virtual ICollection<LojaProdutoDao> LojaProdutoDao { get; set; }
+        public virtual ICollection<LojaDao> LojaDao { get; set; }
         public virtual MedidaDao MedidaDao { get; set; }
         public virtual ICollection<NotaFiscalProdutoDao> NotaFiscalProdutoDao { get; set; }
         public virtual ICollection<OrcamentoProdutoDao> OrcamentoProdutoDao { get; set; }

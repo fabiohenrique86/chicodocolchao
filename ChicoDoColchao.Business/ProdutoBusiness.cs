@@ -82,6 +82,44 @@ namespace ChicoDoColchao.Business
             }
         }
 
+        private void ValidarAtualizar(ProdutoDao produtoDao)
+        {
+            if (produtoDao == null)
+            {
+                throw new BusinessException("Produto é obrigatório");
+            }
+
+            if (produtoDao.Numero <= 0)
+            {
+                throw new BusinessException("Número é obrigatório");
+            }
+
+            if (produtoDao.LojaProdutoDao == null || produtoDao.LojaProdutoDao.Count() <= 0)
+            {
+                throw new BusinessException("Loja é obrigatório");
+            }
+            else
+            {
+                foreach (var lojaProdutoDao in produtoDao.LojaProdutoDao)
+                {
+                    if (lojaProdutoDao.Quantidade != 0)
+                    {
+                        if (produtoDao.LojaProdutoDao.Any(x => x.LojaID <= 0))
+                        {
+                            throw new BusinessException("Loja é obrigatório");
+                        }
+
+                        var produtoLoja = produtoRepository.Listar(new Produto() { Numero = produtoDao.Numero.GetValueOrDefault(), Ativo = true }, produtoDao.LojaProdutoDao.FirstOrDefault().LojaID, 0).FirstOrDefault();
+
+                        if (produtoLoja == null)
+                        {
+                            throw new BusinessException("Produto não cadastrado na loja");
+                        }
+                    }
+                }
+            }
+        }
+
         private void ValidarTransferir(int lojaOrigemId, int lojaDestinoId, List<ProdutoDao> produtosDao)
         {
             if (produtosDao == null)
@@ -147,6 +185,27 @@ namespace ChicoDoColchao.Business
                 ValidarIncluir(produtoDao);
 
                 produtoRepository.Incluir(produtoDao.ToBd());
+            }
+            catch (BusinessException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                // inclui o log do erro
+                logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
+
+                throw ex;
+            }
+        }
+
+        public void Atualizar(ProdutoDao produtoDao)
+        {
+            try
+            {
+                ValidarAtualizar(produtoDao);
+
+                produtoRepository.Atualizar(produtoDao.ToBd());
             }
             catch (BusinessException ex)
             {
