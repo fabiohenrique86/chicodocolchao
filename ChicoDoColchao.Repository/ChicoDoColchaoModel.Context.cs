@@ -27,9 +27,11 @@ namespace ChicoDoColchao.Repository
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Categoria> Categoria { get; set; }
         public virtual DbSet<Cliente> Cliente { get; set; }
         public virtual DbSet<Estado> Estado { get; set; }
         public virtual DbSet<Funcionario> Funcionario { get; set; }
+        public virtual DbSet<Log> Log { get; set; }
         public virtual DbSet<Loja> Loja { get; set; }
         public virtual DbSet<LojaProduto> LojaProduto { get; set; }
         public virtual DbSet<Medida> Medida { get; set; }
@@ -49,8 +51,6 @@ namespace ChicoDoColchao.Repository
         public virtual DbSet<Transferencia> Transferencia { get; set; }
         public virtual DbSet<TransferenciaProduto> TransferenciaProduto { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
-        public virtual DbSet<Log> Log { get; set; }
-        public virtual DbSet<Categoria> Categoria { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

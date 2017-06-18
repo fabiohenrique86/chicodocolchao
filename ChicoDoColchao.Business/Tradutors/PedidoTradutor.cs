@@ -16,29 +16,35 @@ namespace ChicoDoColchao.Business.Tradutors
 
             if (pedidoDao.ClienteDao.FirstOrDefault() != null)
             {
-                pedido.Cliente = new Cliente() { ClienteID = pedidoDao.ClienteDao.FirstOrDefault().ClienteID };
                 pedido.ClienteID = pedidoDao.ClienteDao.FirstOrDefault().ClienteID;
             }
 
-            pedido.DataEntrega = pedidoDao.DataEntrega;
             pedido.DataPedido = pedidoDao.DataPedido;
+            pedido.DataCancelamento = pedidoDao.DataCancelamento;
 
             if (pedidoDao.FuncionarioDao.FirstOrDefault() != null)
             {
-                pedido.Funcionario = new Funcionario() { FuncionarioID = pedidoDao.FuncionarioDao.FirstOrDefault().FuncionarioID };
                 pedido.FuncionarioID = pedidoDao.FuncionarioDao.FirstOrDefault().FuncionarioID;
             }
 
             if (pedidoDao.LojaDao.FirstOrDefault() != null)
             {
-                pedido.Loja1 = new Loja() { LojaID = pedidoDao.LojaDao.FirstOrDefault().LojaID };
                 pedido.LojaID = pedidoDao.LojaDao.FirstOrDefault().LojaID;
             }
 
             if (pedidoDao.LojaSaidaDao.FirstOrDefault() != null)
             {
-                pedido.Loja = new Loja() { LojaID = pedidoDao.LojaSaidaDao.FirstOrDefault().LojaID };
                 pedido.LojaSaidaID = pedidoDao.LojaSaidaDao.FirstOrDefault().LojaID;
+            }
+
+            if (pedidoDao.UsuarioPedidoDao != null && pedidoDao.UsuarioPedidoDao.UsuarioID > 0)
+            {
+                pedido.UsuarioPedidoID = pedidoDao.UsuarioPedidoDao.UsuarioID;
+            }
+            
+            if (pedidoDao.UsuarioCancelamentoDao != null && pedidoDao.UsuarioCancelamentoDao.UsuarioID > 0)
+            {
+                pedido.UsuarioCancelamentoID = pedidoDao.UsuarioCancelamentoDao.UsuarioID;
             }
 
             pedido.NomeCarreto = pedidoDao.NomeCarreto;
@@ -48,7 +54,6 @@ namespace ChicoDoColchao.Business.Tradutors
 
             if (pedidoDao.PedidoStatusDao.FirstOrDefault() != null)
             {
-                pedido.PedidoStatus = new PedidoStatus() { PedidoStatusID = pedidoDao.PedidoStatusDao.FirstOrDefault().PedidoStatusID };
                 pedido.PedidoStatusID = pedidoDao.PedidoStatusDao.FirstOrDefault().PedidoStatusID;
             }
 
@@ -60,6 +65,16 @@ namespace ChicoDoColchao.Business.Tradutors
                 pedidoProduto.ProdutoID = pedidoProdutoDao.ProdutoID;
                 pedidoProduto.Quantidade = pedidoProdutoDao.Quantidade;
                 pedidoProduto.Medida = pedidoProdutoDao.Medida;
+                pedidoProduto.DataEntrega = pedidoProdutoDao.DataEntrega;
+                if (pedidoProdutoDao.UsuarioEntregaDao != null && pedidoProdutoDao.UsuarioEntregaDao.UsuarioID > 0)
+                {
+                    pedidoProduto.UsuarioEntregaID = pedidoProdutoDao.UsuarioEntregaDao.UsuarioID;
+                }
+                pedidoProduto.DataBaixa = pedidoProdutoDao.DataBaixa;
+                if (pedidoProdutoDao.UsuarioBaixaDao != null && pedidoProdutoDao.UsuarioBaixaDao.UsuarioID > 0)
+                {
+                    pedidoProduto.UsuarioBaixaID = pedidoProdutoDao.UsuarioBaixaDao.UsuarioID;
+                }
 
                 pedido.PedidoProduto.Add(pedidoProduto);
             }
@@ -107,10 +122,21 @@ namespace ChicoDoColchao.Business.Tradutors
                 Complemento = pedido.Cliente.Complemento,
                 Bairro = pedido.Cliente.Bairro
             });
-            pedidoDao.DataEntrega = pedido.DataEntrega;
             pedidoDao.DataPedido = pedido.DataPedido;
+            pedidoDao.DataCancelamento = pedido.DataCancelamento;
             pedidoDao.ValorFrete = pedido.ValorFrete;
             pedidoDao.Desconto = pedido.Desconto;
+            
+            if (pedido.UsuarioPedido != null)
+            {
+                pedidoDao.UsuarioPedidoDao = new UsuarioDao() { UsuarioID = pedido.UsuarioPedido.UsuarioID, Login = pedido.UsuarioPedido.Login };
+            }
+            
+            if (pedido.UsuarioCancelamento != null)
+            {
+                pedidoDao.UsuarioCancelamentoDao = new UsuarioDao() { UsuarioID = pedido.UsuarioCancelamento.UsuarioID, Login = pedido.UsuarioCancelamento.Login };
+            }
+
             pedidoDao.FuncionarioDao.Add(new FuncionarioDao()
             {
                 FuncionarioID = pedido.Funcionario.FuncionarioID,
@@ -119,24 +145,28 @@ namespace ChicoDoColchao.Business.Tradutors
                 Email = pedido.Funcionario.Email,
                 Telefone = string.IsNullOrEmpty(pedido.Funcionario.Telefone) ? string.Empty : pedido.Funcionario.Telefone.Length > 10 ? Convert.ToInt64(pedido.Funcionario.Telefone).ToString("(##) #####-####") : Convert.ToInt64(pedido.Funcionario.Telefone).ToString("(##) ####-####"),
             });
+
             pedidoDao.LojaDao.Add(new LojaDao()
             {
-                LojaID = pedido.Loja1.LojaID,
-                Cnpj = string.IsNullOrEmpty(pedido.Loja1.Cnpj) ? string.Empty : Convert.ToInt64(pedido.Loja1.Cnpj).ToString(@"##\.###\.###\/####\-##"),
-                NomeFantasia = pedido.Loja1.NomeFantasia,
-                RazaoSocial = pedido.Loja1.RazaoSocial,
-                Telefone = string.IsNullOrEmpty(pedido.Loja1.Telefone) ? string.Empty : pedido.Loja1.Telefone.Length > 10 ? Convert.ToInt64(pedido.Loja1.Telefone).ToString("(##) #####-####") : Convert.ToInt64(pedido.Loja1.Telefone).ToString("(##) ####-####"),
+                LojaID = pedido.LojaOrigem.LojaID,
+                Cnpj = string.IsNullOrEmpty(pedido.LojaOrigem.Cnpj) ? string.Empty : Convert.ToInt64(pedido.LojaOrigem.Cnpj).ToString(@"##\.###\.###\/####\-##"),
+                NomeFantasia = pedido.LojaOrigem.NomeFantasia,
+                RazaoSocial = pedido.LojaOrigem.RazaoSocial,
+                Telefone = string.IsNullOrEmpty(pedido.LojaOrigem.Telefone) ? string.Empty : pedido.LojaOrigem.Telefone.Length > 10 ? Convert.ToInt64(pedido.LojaOrigem.Telefone).ToString("(##) #####-####") : Convert.ToInt64(pedido.LojaOrigem.Telefone).ToString("(##) ####-####"),
             });
+
             pedidoDao.LojaSaidaDao.Add(new LojaDao()
             {
-                LojaID = pedido.Loja.LojaID,
-                Cnpj = string.IsNullOrEmpty(pedido.Loja.Cnpj) ? string.Empty : Convert.ToInt64(pedido.Loja.Cnpj).ToString(@"##\.###\.###\/####\-##"),
-                NomeFantasia = pedido.Loja.NomeFantasia,
-                RazaoSocial = pedido.Loja.RazaoSocial,
-                Telefone = string.IsNullOrEmpty(pedido.Loja.Telefone) ? string.Empty : pedido.Loja.Telefone.Length > 10 ? Convert.ToInt64(pedido.Loja.Telefone).ToString("(##) #####-####") : Convert.ToInt64(pedido.Loja.Telefone).ToString("(##) ####-####"),
+                LojaID = pedido.LojaSaida.LojaID,
+                Cnpj = string.IsNullOrEmpty(pedido.LojaSaida.Cnpj) ? string.Empty : Convert.ToInt64(pedido.LojaSaida.Cnpj).ToString(@"##\.###\.###\/####\-##"),
+                NomeFantasia = pedido.LojaSaida.NomeFantasia,
+                RazaoSocial = pedido.LojaSaida.RazaoSocial,
+                Telefone = string.IsNullOrEmpty(pedido.LojaSaida.Telefone) ? string.Empty : pedido.LojaSaida.Telefone.Length > 10 ? Convert.ToInt64(pedido.LojaSaida.Telefone).ToString("(##) #####-####") : Convert.ToInt64(pedido.LojaSaida.Telefone).ToString("(##) ####-####"),
             });
+
             pedidoDao.NomeCarreto = pedido.NomeCarreto;
             pedidoDao.Observacao = pedido.Observacao;
+
             pedidoDao.PedidoStatusDao.Add(new PedidoStatusDao()
             {
                 PedidoStatusID = pedido.PedidoStatus.PedidoStatusID,
@@ -151,6 +181,18 @@ namespace ChicoDoColchao.Business.Tradutors
                 pedidoProdutoDao.ProdutoID = pedidoProduto.ProdutoID;
                 pedidoProdutoDao.Quantidade = pedidoProduto.Quantidade;
                 pedidoProdutoDao.Medida = pedidoProduto.Medida;
+                pedidoProdutoDao.DataEntrega = pedidoProduto.DataEntrega;
+                pedidoProdutoDao.DataBaixa = pedidoProduto.DataBaixa;
+
+                if (pedidoProduto.UsuarioEntrega != null)
+                {
+                    pedidoProdutoDao.UsuarioEntregaDao = new UsuarioDao() { UsuarioID = pedidoProduto.UsuarioEntrega.UsuarioID, Login = pedidoProduto.UsuarioEntrega.Login };
+                }
+
+                if (pedidoProduto.UsuarioBaixa != null)
+                {
+                    pedidoProdutoDao.UsuarioBaixaDao = new UsuarioDao() { UsuarioID = pedidoProduto.UsuarioBaixa.UsuarioID, Login = pedidoProduto.UsuarioBaixa.Login };
+                }
 
                 pedidoProdutoDao.ProdutoDao = new ProdutoDao()
                 {

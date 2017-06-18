@@ -90,18 +90,34 @@ namespace ChicoDoColchao.Controllers
             return View();
         }
 
+        public ActionResult Comanda(int pedidoId)
+        {
+            string tela = "";
+            if (!SessaoAtivaEPerfilValidado(out tela))
+            {
+                Response.Redirect(tela, true);
+                return null;
+            }
+
+            var pedidoDao = pedidoBusiness.Listar(new PedidoDao() { PedidoID = pedidoId }).FirstOrDefault();
+
+            if (pedidoDao == null)
+            {
+                return Content(string.Format("Pedido {0} não encontrado", pedidoId));
+            }
+
+            var bytes = pedidoBusiness.Comanda(pedidoDao);
+
+            return new FileContentResult(bytes, "application/pdf");
+        }
+
         [HttpPost]
         public JsonResult Incluir(PedidoDao pedidoDao)
         {
             try
             {
-                // seta os pedidos por loja selecionada [Loja.LojaID]
-                if (Request.Cookies.Get("ChicoDoColchao_Loja") != null)
-                {
-                    var loja = JsonConvert.DeserializeObject<LojaDao>(Request.Cookies.Get("ChicoDoColchao_Loja").Value);
-                    if (loja != null) { pedidoDao.LojaDao.Clear(); pedidoDao.LojaDao.Add(new LojaDao() { LojaID = loja.LojaID, NomeFantasia = loja.NomeFantasia }); }
-                }
-
+                pedidoDao.DataPedido = DateTime.Now;
+                                
                 int pedidoID = pedidoBusiness.Incluir(pedidoDao);
 
                 return Json(new { Sucesso = true, Mensagem = string.Format("Pedido {0} cadastrado com sucesso!", pedidoID) }, JsonRequestBehavior.AllowGet);
@@ -121,10 +137,12 @@ namespace ChicoDoColchao.Controllers
         {
             try
             {
+                pedidoDao.DataCancelamento = DateTime.Now;
+
                 pedidoBusiness.Cancelar(pedidoDao);
 
                 // obtém somente o pedido cancelado
-                var pedido = pedidoBusiness.Listar(pedidoDao).FirstOrDefault();
+                var pedido = pedidoBusiness.Listar(new PedidoDao() { PedidoID = pedidoDao.PedidoID }).FirstOrDefault();
 
                 return Json(new { Sucesso = true, Mensagem = "Pedido cancelado com sucesso!", Pedido = pedido }, JsonRequestBehavior.AllowGet);
             }
@@ -145,7 +163,10 @@ namespace ChicoDoColchao.Controllers
             {
                 pedidoBusiness.Atualizar(pedidoDao);
 
-                return Json(new { Sucesso = true, Mensagem = "Pedido alterado com sucesso!" }, JsonRequestBehavior.AllowGet);
+                // obtém somente o pedido dado baixa
+                var pedido = pedidoBusiness.Listar(new PedidoDao() { PedidoID = pedidoDao.PedidoID }).FirstOrDefault();
+
+                return Json(new { Sucesso = true, Mensagem = "Pedido alterado com sucesso!", Pedido = pedido }, JsonRequestBehavior.AllowGet);
             }
             catch (BusinessException ex)
             {
@@ -158,17 +179,19 @@ namespace ChicoDoColchao.Controllers
         }
 
         [HttpPost]
-        public JsonResult Entregar(PedidoDao pedidoDao)
+        public JsonResult DarBaixa(PedidoDao pedidoDao)
         {
             try
             {
-                pedidoDao.DataEntrega = DateTime.Now;
-                pedidoBusiness.Entregar(pedidoDao);
+                var dtBaixa = DateTime.Now;
+                pedidoDao.PedidoProdutoDao.ToList().ForEach(x => x.DataBaixa = dtBaixa);
+                                
+                pedidoBusiness.DarBaixa(pedidoDao);
 
-                // obtém somente o pedido entregue
-                var pedido = pedidoBusiness.Listar(pedidoDao).FirstOrDefault();
+                // obtém somente o pedido dado baixa
+                var pedido = pedidoBusiness.Listar(new PedidoDao() { PedidoID = pedidoDao.PedidoID }).FirstOrDefault();
 
-                return Json(new { Sucesso = true, Mensagem = "Pedido entregue com sucesso!", Pedido = pedido }, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = true, Mensagem = "Produto baixado com sucesso!", Pedido = pedido }, JsonRequestBehavior.AllowGet);
             }
             catch (BusinessException ex)
             {
@@ -176,7 +199,7 @@ namespace ChicoDoColchao.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Pedido não entregue. Tente novamente." }, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Produto não baixado. Tente novamente." }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -231,27 +254,6 @@ namespace ChicoDoColchao.Controllers
             {
                 return Json(pedidos, JsonRequestBehavior.AllowGet);
             }
-        }
-
-        public ActionResult Comanda(int pedidoId)
-        {
-            string tela = "";
-            if (!SessaoAtivaEPerfilValidado(out tela))
-            {
-                Response.Redirect(tela, true);
-                return null;
-            }
-
-            var pedidoDao = pedidoBusiness.Listar(new PedidoDao() { PedidoID = pedidoId }).FirstOrDefault();
-
-            if (pedidoDao == null)
-            {
-                return Content(string.Format("Pedido {0} não encontrado", pedidoId));
-            }
-
-            var bytes = pedidoBusiness.Comanda(pedidoDao);
-
-            return new FileContentResult(bytes, "application/pdf");
         }
     }
 }

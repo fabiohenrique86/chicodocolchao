@@ -26,14 +26,15 @@ namespace ChicoDoColchao.Repository
     
         public int ProdutoID { get; set; }
         public long Numero { get; set; }
+        public int CategoriaID { get; set; }
         public string Descricao { get; set; }
         public int MedidaID { get; set; }
         public short ComissaoFuncionario { get; set; }
         public short ComissaoFranqueado { get; set; }
         public bool Ativo { get; set; }
         public double Preco { get; set; }
-        public int CategoriaID { get; set; }
     
+        public virtual Categoria Categoria { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<LojaProduto> LojaProduto { get; set; }
         public virtual Medida Medida { get; set; }
@@ -45,6 +46,5 @@ namespace ChicoDoColchao.Repository
         public virtual ICollection<PedidoProduto> PedidoProduto { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TransferenciaProduto> TransferenciaProduto { get; set; }
-        public virtual Categoria Categoria { get; set; }
     }
 }

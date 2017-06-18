@@ -14,12 +14,29 @@ namespace ChicoDoColchao.Repository
     
     public partial class Usuario
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Usuario()
+        {
+            this.Pedido = new HashSet<Pedido>();
+            this.Pedido1 = new HashSet<Pedido>();
+            this.PedidoProduto = new HashSet<PedidoProduto>();
+            this.PedidoProduto1 = new HashSet<PedidoProduto>();
+        }
+    
         public int UsuarioID { get; set; }
-        public int TipoUsuarioID { get; set; }
         public string Login { get; set; }
         public string Senha { get; set; }
         public bool Ativo { get; set; }
+        public int TipoUsuarioID { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Pedido> Pedido { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Pedido> Pedido1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PedidoProduto> PedidoProduto { get; set; }
         public virtual TipoUsuario TipoUsuario { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PedidoProduto> PedidoProduto1 { get; set; }
     }
 }

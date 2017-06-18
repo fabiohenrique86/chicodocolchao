@@ -15,11 +15,13 @@ namespace ChicoDoColchao.Dao
             PedidoTipoPagamentoDao = new HashSet<PedidoTipoPagamentoDao>();
             PedidoStatusDao = new HashSet<PedidoStatusDao>();
             TipoPagamentoDao = new HashSet<TipoPagamentoDao>();
+            UsuarioPedidoDao = new UsuarioDao();
+            UsuarioCancelamentoDao = new UsuarioDao();
         }
 
         public int PedidoID { get; set; }
         public System.DateTime DataPedido { get; set; }
-        public Nullable<System.DateTime> DataEntrega { get; set; }
+        public Nullable<System.DateTime> DataCancelamento { get; set; }
         public string Observacao { get; set; }
         public string NomeCarreto { get; set; }
         public Nullable<double> ValorFrete { get; set; }
@@ -33,5 +35,7 @@ namespace ChicoDoColchao.Dao
         public virtual ICollection<PedidoProdutoDao> PedidoProdutoDao { get; set; }
         public virtual ICollection<PedidoTipoPagamentoDao> PedidoTipoPagamentoDao { get; set; }
         public virtual ICollection<TipoPagamentoDao> TipoPagamentoDao { get; set; }
+        public virtual UsuarioDao UsuarioPedidoDao { get; set; }
+        public virtual UsuarioDao UsuarioCancelamentoDao { get; set; }
     }
 }

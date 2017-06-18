@@ -287,6 +287,8 @@ namespace ChicoDoColchao {
             
             private global::System.Data.DataColumn columnNumero;
             
+            private global::System.Data.DataColumn columnDataEntrega;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public ds_produtoDataTable() {
@@ -354,6 +356,14 @@ namespace ChicoDoColchao {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn DataEntregaColumn {
+                get {
+                    return this.columnDataEntrega;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -389,13 +399,14 @@ namespace ChicoDoColchao {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ds_produtoRow Addds_produtoRow(string Descricao, string Medida, string Quantidade, string Numero) {
+            public ds_produtoRow Addds_produtoRow(string Descricao, string Medida, string Quantidade, string Numero, string DataEntrega) {
                 ds_produtoRow rowds_produtoRow = ((ds_produtoRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         Descricao,
                         Medida,
                         Quantidade,
-                        Numero};
+                        Numero,
+                        DataEntrega};
                 rowds_produtoRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowds_produtoRow);
                 return rowds_produtoRow;
@@ -422,6 +433,7 @@ namespace ChicoDoColchao {
                 this.columnMedida = base.Columns["Medida"];
                 this.columnQuantidade = base.Columns["Quantidade"];
                 this.columnNumero = base.Columns["Numero"];
+                this.columnDataEntrega = base.Columns["DataEntrega"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -435,6 +447,8 @@ namespace ChicoDoColchao {
                 base.Columns.Add(this.columnQuantidade);
                 this.columnNumero = new global::System.Data.DataColumn("Numero", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnNumero);
+                this.columnDataEntrega = new global::System.Data.DataColumn("DataEntrega", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnDataEntrega);
                 this.ExtendedProperties.Add("Generator_TablePropName", "_ds_produto");
                 this.ExtendedProperties.Add("Generator_UserTableName", "ds_produto");
             }
@@ -643,6 +657,22 @@ namespace ChicoDoColchao {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string DataEntrega {
+                get {
+                    try {
+                        return ((string)(this[this.tableds_produto.DataEntregaColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'DataEntrega\' in table \'ds_produto\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableds_produto.DataEntregaColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsDescricaoNull() {
                 return this.IsNull(this.tableds_produto.DescricaoColumn);
             }
@@ -687,6 +717,18 @@ namespace ChicoDoColchao {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetNumeroNull() {
                 this[this.tableds_produto.NumeroColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsDataEntregaNull() {
+                return this.IsNull(this.tableds_produto.DataEntregaColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetDataEntregaNull() {
+                this[this.tableds_produto.DataEntregaColumn] = global::System.Convert.DBNull;
             }
         }
         

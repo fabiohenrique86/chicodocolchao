@@ -1,7 +1,22 @@
-﻿@model ChicoDoColchao.Dao.PedidoDao
+﻿@using ChicoDoColchao.Dao;
+@using Newtonsoft.Json;
+
+@model ChicoDoColchao.Dao.PedidoDao
 
 @{
     ViewBag.Title = "Pedido - Tirar";
+
+    UsuarioDao usuarioDao = null;
+    if (Request.Cookies.Get("ChicoDoColchao_Usuario") != null)
+    {
+        usuarioDao = JsonConvert.DeserializeObject<UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value);
+    }
+
+    LojaDao lojaDao = new LojaDao();
+    if (Request.Cookies.Get("ChicoDoColchao_Loja") != null)
+    {
+        lojaDao = JsonConvert.DeserializeObject<LojaDao>(Request.Cookies.Get("ChicoDoColchao_Loja").Value);
+    }
 }
 @section styles
 {
@@ -77,14 +92,6 @@
             $(".valorPago").each(function (index, element) {
                 var valorPago = Globalize.parseFloat($(element).val());
                 if (isNaN(valorPago)) { valorPago = 0; }
-                //var tr = $(element).parents("tr");
-                //var parcela = 1;
-                // se houver parcela, obtém a quantidade de parcelas
-                //if ($(tr).children().eq(1).children().val() != undefined) {
-                //    parcela = Globalize.parseInt($(tr).children().eq(1).children().val());
-                //}
-                //if (isNaN(parcela)) { parcela = 1; }
-                //totalPago += parcela * valorPago;
                 totalPago += valorPago;
             });
 
@@ -158,16 +165,16 @@
 
             $("#PedidoStatusID").change(function () {
                 var pedidoStatusId = $(this).val();
-                if (pedidoStatusId == '@ChicoDoColchao.Dao.PedidoStatusDao.EPedidoStatus.RetiradoNaLoja.GetHashCode()') {
-                    $("#DataEntrega").attr("disabled", "disabled");
-                    $("#DataEntrega").val("");
+                if (pedidoStatusId == '@PedidoStatusDao.EPedidoStatus.RetiradoNaLoja.GetHashCode()') {
+                    $(".dataEntrega").attr("disabled", "disabled");
+                    $(".dataEntrega").val("");
                     //$("#NomeCarreto").attr("disabled", "disabled");
                     //$("#NomeCarreto").val("");
                     $("#ValorFrete").attr("disabled", "disabled");
                     $("#ValorFrete").val("");
                 }
                 else {
-                    $("#DataEntrega").removeAttr("disabled");
+                    $(".dataEntrega").removeAttr("disabled");
                     //$("#NomeCarreto").removeAttr("disabled");
                     $("#ValorFrete").removeAttr("disabled");
                 }
@@ -199,16 +206,16 @@
 
                     var cv = false;
 
-                    if (tipoPagamentoID == '@ChicoDoColchao.Dao.TipoPagamentoDao.ETipoPagamento.Dinheiro.GetHashCode()') {
+                    if (tipoPagamentoID == '@TipoPagamentoDao.ETipoPagamento.Dinheiro.GetHashCode()') {
                         parcela = "";
                     }
                     else if
                     (
-                        (tipoPagamentoID == '@ChicoDoColchao.Dao.TipoPagamentoDao.ETipoPagamento.CartaoAmericanExpress.GetHashCode()') ||
-                        (tipoPagamentoID == '@ChicoDoColchao.Dao.TipoPagamentoDao.ETipoPagamento.CartaoElo.GetHashCode()') ||
-                        (tipoPagamentoID == '@ChicoDoColchao.Dao.TipoPagamentoDao.ETipoPagamento.CartaoHiper.GetHashCode()') ||
-                        (tipoPagamentoID == '@ChicoDoColchao.Dao.TipoPagamentoDao.ETipoPagamento.CartaoMaster.GetHashCode()') ||
-                        (tipoPagamentoID == '@ChicoDoColchao.Dao.TipoPagamentoDao.ETipoPagamento.CartaoVisa.GetHashCode()')
+                        (tipoPagamentoID == '@TipoPagamentoDao.ETipoPagamento.CartaoAmericanExpress.GetHashCode()') ||
+                        (tipoPagamentoID == '@TipoPagamentoDao.ETipoPagamento.CartaoElo.GetHashCode()') ||
+                        (tipoPagamentoID == '@TipoPagamentoDao.ETipoPagamento.CartaoHiper.GetHashCode()') ||
+                        (tipoPagamentoID == '@TipoPagamentoDao.ETipoPagamento.CartaoMaster.GetHashCode()') ||
+                        (tipoPagamentoID == '@TipoPagamentoDao.ETipoPagamento.CartaoVisa.GetHashCode()')
                     )
                     {
                         cv = true;
@@ -307,6 +314,12 @@
                     p.MedidaDao.Descricao = produto[2].trim();
                     p.Preco = parseFloat(produto[3].trim().replace(".", "").replace(",", ".")) / 3;
 
+                    var dataEntrega = "<input type='text' class='form-control data datepicker dataEntrega' min='0' value='' />";
+                    if ($("#PedidoStatusID").val() == '@PedidoStatusDao.EPedidoStatus.RetiradoNaLoja.GetHashCode()')
+                    {
+                        dataEntrega = "<input type='text' class='form-control data datepicker dataEntrega' min='0' value='' disabled='disabled' />";
+                    }
+
                     // adiciona o produto ao pedido
                     tbProduto.rows.add([
                     {
@@ -316,10 +329,23 @@
                         "MedidaDao": { "Descricao": p.MedidaDao.Descricao },
                         "Quantidade": "<input type='text' class='form-control quantidade' min='0' onblur='calcularTotalPedido()' value='1' />",
                         "Preco": "<span class='preco' data-preco='4'>" + Globalize.format(p.Preco * 3, "n2") + "</span>",
+                        "DataEntrega": dataEntrega,
                         "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir Produto' style='cursor: pointer'></i>"
                     }]).draw();
 
                     $(".quantidade").mask('000');
+                    $(".dataEntrega").datepicker({
+                        dateFormat: 'dd/mm/yy',
+                        dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                        dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                        dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                        monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                        monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                        nextText: 'Próximo',
+                        prevText: 'Anterior',
+                        changeMonth: true,
+                        changeYear: true
+                    });
 
                     // atualiza o total do pedido
                     calcularTotalPedido();
@@ -354,6 +380,7 @@
                     { "data": "MedidaDao.Descricao", "className": "text-center" },
                     { "data": "Quantidade", "className": "text-center" },
                     { "data": "Preco", "className": "text-center" },
+                    { "data": "DataEntrega", "className": "text-center" },
                     { "data": "Acao", "className": "text-center" }
                 ]
             });
@@ -472,38 +499,52 @@
             $("#btnCadastrar").click(function () {
 
                 var pedidoDao = {};
-                var produtos = [];
-                var pagamentos = [];
+                var pedidoProdutoDao = [];
+                var pedidoTipoPagamento = [];
 
                 pedidoDao.FuncionarioDao = [];
                 pedidoDao.FuncionarioDao.push({ FuncionarioID: $("#FuncionarioID option:selected").val() });
                 pedidoDao.ClienteDao = [];
                 pedidoDao.ClienteDao.push({ ClienteID: $("#ClienteID").val() });
+
                 pedidoDao.LojaDao = [];
-                pedidoDao.LojaDao.push({ LojaID: $("#LojaOrigemID option:selected").val() });
+                if (@lojaDao.LojaID > 0)
+                {
+                    pedidoDao.LojaDao.push({ LojaID: '@lojaDao.LojaID', NomeFantasia: '@lojaDao.NomeFantasia' });
+                }
+                else
+                {
+                    pedidoDao.LojaDao.push({ LojaID: $("#LojaOrigemID option:selected").val() });
+                }
+
                 pedidoDao.LojaSaidaDao = [];
                 pedidoDao.LojaSaidaDao.push({ LojaID: $("#LojaID option:selected").val(), NomeFantasia: $("#LojaID").find(":selected").text() });
                 pedidoDao.PedidoStatusDao = [];
                 pedidoDao.PedidoStatusDao.push({ PedidoStatusID: $("#PedidoStatusID option:selected").val() });
-                pedidoDao.DataEntrega = $("#DataEntrega").val();
                 //pedidoDao.NomeCarreto = $("#NomeCarreto").val();
                 pedidoDao.ValorFrete = $("#ValorFrete").val().trim() != "" ? $("#ValorFrete").val() : 0;
                 pedidoDao.Observacao = $("#Observacao").val();
                 pedidoDao.Desconto = $("#lblTotalDesconto").text();
+                pedidoDao.UsuarioPedidoDao = { UsuarioID: '@usuarioDao.UsuarioID' };
 
                 // produtos
                 tbProduto.rows().every(function (rowIdx, tableLoop, rowLoop) {
                     var data = this.data();
-                    produtos.push
+
+                    var dtEntrega = $($($(".dataEntrega")[rowIdx]).parents("tr").children().eq(5)).children().val();
+
+                    pedidoProdutoDao.push
                     ({
                         "ProdutoID": data.ProdutoID,
                         "ProdutoDao.Descricao": data.Descricao,
                         "Quantidade": Globalize.parseInt($($($(".quantidade")[rowIdx]).parents("tr").children().eq(3)).children().val()),
-                        "Preco": $($($(".preco")[rowIdx]).parents("tr").children().eq(4)).text()
+                        "Preco": $($($(".preco")[rowIdx]).parents("tr").children().eq(4)).text(),
+                        "DataEntrega": dtEntrega,
+                        "UsuarioEntregaDao.UsuarioID": dtEntrega == '' ? 0 : '@usuarioDao.UsuarioID'
                     });
                 });
 
-                pedidoDao.PedidoProdutoDao = produtos;
+                pedidoDao.PedidoProdutoDao = pedidoProdutoDao;
 
                 // pagamentos
                 tbTipoPagamento.rows().every(function (rowIdx, tableLoop, rowLoop) {
@@ -514,12 +555,12 @@
                     var cv = null;
 
                     // se não for dinheiro, obtém a parcela e cv
-                    if (data.TipoPagamentoID != '@ChicoDoColchao.Dao.TipoPagamentoDao.ETipoPagamento.Dinheiro.GetHashCode()') {
+                    if (data.TipoPagamentoID != '@TipoPagamentoDao.ETipoPagamento.Dinheiro.GetHashCode()') {
                         parcelaId = parseInt($($($(".valorPago")[rowIdx]).parents("tr").children().eq(1)).children().val());
                         cv = $($($(".valorPago")[rowIdx]).parents("tr").children().eq(2)).children().val();
                     }
 
-                    pagamentos.push
+                    pedidoTipoPagamento.push
                     ({
                         "TipoPagamentoDao.TipoPagamentoID": data.TipoPagamentoID,
                         "ParcelaDao.ParcelaID": parcelaId,
@@ -528,7 +569,7 @@
                     });
                 });
 
-                pedidoDao.PedidoTipoPagamentoDao = pagamentos;
+                pedidoDao.PedidoTipoPagamentoDao = pedidoTipoPagamento;
 
                 $.ajax({
                     dataType: "json",
@@ -545,13 +586,12 @@
                         $("#PedidoForm")[0].reset();
                         tbProduto.clear().draw();
                         tbTipoPagamento.clear().draw();
-                        $("#DataEntrega").val("");
                         $("#ValorFrete").val("");
                         $("#lblTotalPedido").html("0,00");
                         $("#lblTotalPago").html("0,00");
                         $("#lblTotalDesconto").html("0,00");
                         $("#ClienteID").val("");
-                        $("#DataEntrega").removeAttr("disabled");
+                        //$("#DataEntrega").removeAttr("disabled");
                         //$("#NomeCarreto").removeAttr("disabled");
                         $("#ValorFrete").removeAttr("disabled");
 
@@ -584,7 +624,7 @@
                     </div>
                 </div>
                 @{
-                    if (Request.Cookies.Get("ChicoDoColchao_Loja") == null)
+                    if (lojaDao.LojaID <= 0)
                     {
                         <div class="form-group">
                             @Html.DropDownListFor(x => x.LojaDao.FirstOrDefault().LojaID, new SelectList(Model.LojaDao, "LojaID", "NomeFantasia"), "Loja de origem dos produtos", new { @class = "form-control", @id = "LojaOrigemID" })
@@ -596,9 +636,6 @@
                 </div>
                 <div class="form-group">
                     @Html.DropDownListFor(x => x.PedidoStatusDao.FirstOrDefault().PedidoStatusID, new SelectList(Model.PedidoStatusDao, "PedidoStatusID", "Descricao"), "Status do pedido", new { @class = "form-control" })
-                </div>
-                <div class="form-group">
-                    @Html.TextBoxFor(x => x.DataEntrega, new { @class = "form-control data datepicker", @placeholder = "Data da entrega (Opcional)" })
                 </div>
                 @*<div class="form-group">
                         @Html.TextBoxFor(x => x.NomeCarreto, new { @class = "form-control", @placeholder = "Nome do carreto (Opcional)", @maxlength = "100" })
@@ -615,10 +652,11 @@
                         <thead>
                             <tr>
                                 <td class="text-center" style="width: 10%"><b>Número</b></td>
-                                <td class="text-left" style="width: 50%"><b>Descrição</b></td>
-                                <td class="text-center" style="width: 15%"><b>Medida</b></td>
+                                <td class="text-left" style="width: 35%"><b>Descrição</b></td>
+                                <td class="text-center" style="width: 10%"><b>Medida</b></td>
                                 <td class="text-center" style="width: 10%"><b>Qtd</b></td>
                                 <td class="text-center" style="width: 10%"><b>Preço</b></td>
+                                <td class="text-center" style="width: 20%"><b>Data Entrega</b></td>
                                 <td class="text-center" style="width: 5%"><b>Ação</b></td>
                             </tr>
                         </thead>

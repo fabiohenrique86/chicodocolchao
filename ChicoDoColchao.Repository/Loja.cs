@@ -22,9 +22,9 @@ namespace ChicoDoColchao.Repository
             this.NotaFiscal = new HashSet<NotaFiscal>();
             this.Orcamento = new HashSet<Orcamento>();
             this.Pedido = new HashSet<Pedido>();
+            this.Pedido1 = new HashSet<Pedido>();
             this.Transferencia = new HashSet<Transferencia>();
             this.Transferencia1 = new HashSet<Transferencia>();
-            this.Pedido1 = new HashSet<Pedido>();
         }
     
         public int LojaID { get; set; }
@@ -46,10 +46,10 @@ namespace ChicoDoColchao.Repository
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Pedido> Pedido { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Pedido> Pedido1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Transferencia> Transferencia { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Transferencia> Transferencia1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Pedido> Pedido1 { get; set; }
     }
 }

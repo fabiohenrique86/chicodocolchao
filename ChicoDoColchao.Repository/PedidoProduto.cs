@@ -19,8 +19,14 @@ namespace ChicoDoColchao.Repository
         public int ProdutoID { get; set; }
         public short Quantidade { get; set; }
         public string Medida { get; set; }
+        public Nullable<System.DateTime> DataEntrega { get; set; }
+        public Nullable<int> UsuarioEntregaID { get; set; }
+        public Nullable<System.DateTime> DataBaixa { get; set; }
+        public Nullable<int> UsuarioBaixaID { get; set; }
     
         public virtual Pedido Pedido { get; set; }
         public virtual Produto Produto { get; set; }
+        public virtual Usuario UsuarioEntrega { get; set; }
+        public virtual Usuario UsuarioBaixa { get; set; }
     }
 }

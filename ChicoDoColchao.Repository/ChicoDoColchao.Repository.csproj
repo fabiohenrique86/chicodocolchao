@@ -81,13 +81,13 @@
     <Compile Include="Log.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="LogRepository.cs" />
     <Compile Include="Loja.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
     <Compile Include="LojaProduto.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="LogRepository.cs" />
     <Compile Include="Medida.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
@@ -118,10 +118,10 @@
     <Compile Include="PedidoStatus.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="PedidoTipoPagamentoRepository.cs" />
     <Compile Include="PedidoTipoPagamento.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="PedidoTipoPagamentoRepository.cs" />
     <Compile Include="Produto.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>

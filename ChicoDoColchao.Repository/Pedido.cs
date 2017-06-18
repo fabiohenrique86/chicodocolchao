@@ -24,7 +24,6 @@ namespace ChicoDoColchao.Repository
         public int PedidoID { get; set; }
         public int FuncionarioID { get; set; }
         public System.DateTime DataPedido { get; set; }
-        public Nullable<System.DateTime> DataEntrega { get; set; }
         public int LojaSaidaID { get; set; }
         public int PedidoStatusID { get; set; }
         public string Observacao { get; set; }
@@ -33,15 +32,20 @@ namespace ChicoDoColchao.Repository
         public int ClienteID { get; set; }
         public int LojaID { get; set; }
         public double Desconto { get; set; }
+        public Nullable<System.DateTime> DataCancelamento { get; set; }
+        public Nullable<int> UsuarioPedidoID { get; set; }
+        public Nullable<int> UsuarioCancelamentoID { get; set; }
     
         public virtual Cliente Cliente { get; set; }
         public virtual Funcionario Funcionario { get; set; }
-        public virtual Loja Loja { get; set; }
+        public virtual Loja LojaOrigem { get; set; }
+        public virtual Loja LojaSaida { get; set; }
         public virtual PedidoStatus PedidoStatus { get; set; }
+        public virtual Usuario UsuarioCancelamento { get; set; }
+        public virtual Usuario UsuarioPedido { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PedidoProduto> PedidoProduto { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PedidoTipoPagamento> PedidoTipoPagamento { get; set; }
-        public virtual Loja Loja1 { get; set; }
     }
 }

@@ -1,13 +1,39 @@
-﻿@{
+﻿@using ChicoDoColchao.Dao;
+@using Newtonsoft.Json;
+
+@{
     ViewBag.Title = "Pedido - Lista";
+
+    UsuarioDao usuarioDao = null;
+    if (Request.Cookies.Get("ChicoDoColchao_Usuario") != null)
+    {
+        usuarioDao = JsonConvert.DeserializeObject<UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value);
+    }
 }
 @section scripts
 {
     <script type="text/javascript">
 
+        function modalAlterarDataEntrega(pedidoProduto) {
+
+            $("#lblProdutoID").text(pedidoProduto.ProdutoID);
+            $("#lblNumero").text(pedidoProduto.ProdutoDao.Numero);
+            if (pedidoProduto.DataEntrega == null)
+            {
+                $("#txtDataEntregaAntiga").val("Sem Data Programada");
+            }
+            else
+            {
+                $("#txtDataEntregaAntiga").val(moment(pedidoProduto.DataEntrega).format("DD/MM/YYYY"));
+            }
+
+            $('#modalAlterarDataEntrega').modal('show');
+        }
+
         function modalPedido(pedido) {
 
             $("#lblPedidoID").text(pedido.PedidoID);
+            $("#lblPedidoStatusID").text(pedido.PedidoStatusDao[0].PedidoStatusID);
 
             $("#lblPedidoStatus").text(pedido.PedidoStatusDao[0].Descricao);
             $("#lblCarreto").text((pedido.NomeCarreto != null ? pedido.NomeCarreto : ""));
@@ -21,24 +47,26 @@
             $("#tbTipoPagamento").DataTable().clear();
             $("#tbTipoPagamento").DataTable().rows.add(pedido.PedidoTipoPagamentoDao).draw();
 
-            var totalPago = 0;
-
+            var totalPedido = 0;
             $(pedido.PedidoTipoPagamentoDao).each(function (index, pedidoTipoPagamento) {
-                totalPago += pedidoTipoPagamento.ParcelaDao.Numero * pedidoTipoPagamento.ValorPago;
+                totalPedido += pedidoTipoPagamento.ValorPago;
             });
 
-            $("#lblTotalPedido").text(Globalize.format(totalPago, "n2"));
+            $("#lblTotalPedido").text(Globalize.format(totalPedido, "n2"));
 
             $('#modalpedido').modal('show');
         }
 
         function cancelarPedido(pedidoId, obj)
-        {            
+        {
             if (confirm("Deseja realmente cancelar pedido " + pedidoId + "?"))
             {
                 var pedidoDao = {};
 
                 pedidoDao.PedidoID = pedidoId;
+                pedidoDao.UsuarioCancelamentoDao = { UsuarioID: '@usuarioDao.UsuarioID' };
+                pedidoDao.PedidoStatusDao = [];
+                pedidoDao.PedidoStatusDao.push({ PedidoStatusID: '@PedidoStatusDao.EPedidoStatus.Cancelado.GetHashCode()' });
 
                 $.ajax({
                     dataType: "json",
@@ -60,18 +88,30 @@
             }
         }
 
-        function entregarPedido(pedidoId, obj)
+        function darBaixaProduto(pedidoProduto)
         {
-            if (confirm("Deseja realmente entregar pedido " + pedidoId + "?"))
+            if (confirm("Deseja realmente dar baixa do produto " + pedidoProduto.ProdutoDao.Numero + "?"))
             {
                 var pedidoDao = {};
 
-                pedidoDao.PedidoID = pedidoId;
+                pedidoDao.PedidoID = pedidoProduto.PedidoID;
+                pedidoDao.PedidoProdutoDao = [];
+                pedidoDao.PedidoProdutoDao.push({ "PedidoID": pedidoProduto.PedidoID, "ProdutoID": pedidoProduto.ProdutoDao.ProdutoID, "Quantidade": pedidoProduto.Quantidade, "UsuarioBaixaDao.UsuarioID": '@usuarioDao.UsuarioID' });
+                pedidoDao.PedidoStatusDao = [];
+                pedidoDao.PedidoStatusDao.push({ PedidoStatusID: '@PedidoStatusDao.EPedidoStatus.Entregue.GetHashCode()' });
+
+                var lojaSaidaId = 0;
+                $("#tbPedido").DataTable().rows().every(function (rowIdx, tableLoop, rowLoop) {
+                    var data = this.data();
+                    if (data.PedidoID == pedidoDao.PedidoID) { lojaSaidaId = data.LojaSaidaDao[0].LojaID; }
+                });
+                pedidoDao.LojaSaidaDao = [];
+                pedidoDao.LojaSaidaDao.push({ LojaID: lojaSaidaId });
 
                 $.ajax({
                     dataType: "json",
                     type: "POST",
-                    url: "/Pedido/Entregar",
+                    url: "/Pedido/DarBaixa",
                     data: { pedidoDao: pedidoDao },
                     success: function (data) {
 
@@ -80,18 +120,26 @@
                             return;
                         }
 
-                        $("#tbPedido").DataTable().row($(obj).parents("tr")).invalidate().data(data.Pedido).draw();
-                        
+                        $("#tbProduto").DataTable().clear();
+                        $("#tbProduto").DataTable().rows.add(data.Pedido.PedidoProdutoDao).draw();
+
+                        var idxPedido;
+                        $("#tbPedido").DataTable().rows().every(function (rowIdx, tableLoop, rowLoop) {
+                            var json = this.data();
+                            if (json.PedidoID == data.Pedido.PedidoID) {
+                                idxPedido = rowIdx;
+                            }
+                        });
+                        $("#tbPedido").DataTable().row(idxPedido).invalidate().data(data.Pedido).draw();
+
                         alert(data.Mensagem);
                     }
                 });
             }
         }
 
-        function enviarComandaPorEmail(pedidoId)
-        {
-            if (confirm("Deseja realmente enviar por e-mail a comanda do pedido " + pedidoId + "?"))
-            {
+        function enviarComandaPorEmail(pedidoId) {
+            if (confirm("Deseja realmente enviar por e-mail a comanda do pedido " + pedidoId + "?")) {
                 var pedidoDao = {};
 
                 pedidoDao.PedidoID = pedidoId;
@@ -107,13 +155,13 @@
                             alert(data.Mensagem);
                             return;
                         }
-                        
+
                         alert(data.Mensagem);
                     }
                 });
             }
         }
-        
+
         $(document).ready(function () {
 
             $.getJSON("/Pedido/Listar", function (data) {
@@ -133,30 +181,25 @@
                     "sSearch": "Pesquisar",
                     "oPaginate": { "sNext": "Próximo", "sPrevious": "Anterior", "sFirst": "Primeiro", "sLast": "Último" }
                 },
-                "rowCallback": function (row, data, index)
-                {
+                "rowCallback": function (row, data, index) {
                     var pedidoStatusId = data.PedidoStatusDao[0].PedidoStatusID;
-                    
-                    if (pedidoStatusId == 1)
-                    {
+
+                    if (pedidoStatusId == '@PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega.GetHashCode()') {
                         $('td', row).removeClass('bg-success');
                         $('td', row).removeClass('bg-danger');
                         $('td', row).addClass('bg-warning');
                     }
-                    else if (pedidoStatusId == 2)
-                    {
+                    else if (pedidoStatusId == '@PedidoStatusDao.EPedidoStatus.RetiradoNaLoja.GetHashCode()') {
                         $('td', row).removeClass('bg-warning');
                         $('td', row).removeClass('bg-danger');
                         $('td', row).addClass('bg-success');
                     }
-                    else if (pedidoStatusId == 3)
-                    {
+                    else if (pedidoStatusId == '@PedidoStatusDao.EPedidoStatus.Cancelado.GetHashCode()') {
                         $('td', row).removeClass('bg-warning');
                         $('td', row).removeClass('bg-success');
                         $('td', row).addClass('bg-danger');
                     }
-                    else if (pedidoStatusId == 4)
-                    {
+                    else if (pedidoStatusId == '@PedidoStatusDao.EPedidoStatus.Entregue.GetHashCode()') {
                         $('td', row).removeClass('bg-warning');
                         $('td', row).removeClass('bg-danger');
                         $('td', row).addClass('bg-success');
@@ -183,37 +226,26 @@
                         },
                         "className": "text-center"
                     },
-                    {
-                        "data": function (data, type, row) {
-                            if (data["DataEntrega"] != null) { return moment(data["DataEntrega"]).format("DD/MM/YYYY"); } else { return "-"; }
-                        },
-                        "className": "text-center"
-                    },
                     { "data": "LojaSaidaDao[0].NomeFantasia", "className": "text-center" },
                     {
-                        "data": function (data, type, row)
-                        {
+                        "data": function (data, type, row) {
                             var comanda = "<a href='http://www.chicodocolchao.com.br/Pedido/Comanda?PedidoID=" + data["PedidoID"] + "' target='_blank'><i class='glyphicon glyphicon-print' title='Imprimir Pedido' style='cursor: pointer; color: #333'></i></a>";
                             //var comanda = "<a href='http://localhost:57163/Pedido/Comanda?PedidoID=" + data["PedidoID"] + "' target='_blank'><i class='glyphicon glyphicon-print' title='Imprimir Pedido' style='cursor: pointer'></i></a>";
-                            var entrega = "<i class='glyphicon glyphicon-ok' title='Entregar Pedido' style='cursor: pointer' onclick='entregarPedido(" + data["PedidoID"] + ", this)'></i>";
+
                             var cancelamento = "<i class='glyphicon glyphicon-remove' title='Cancelar Pedido' style='cursor: pointer' onclick='cancelarPedido(" + data["PedidoID"] + ", this)'></i>";
                             var comandaPorEmail = "<i class='glyphicon glyphicon-envelope' title='Enviar Comanda Por E-mail' style='cursor: pointer' onclick='enviarComandaPorEmail(" + data["PedidoID"] + ")'></i>";
                             var desconto = data["Desconto"] > 0 ? "<i class='glyphicon glyphicon-usd' title='Desconto Autorizado'></i>" : "";
 
-                            if (data.PedidoStatusDao[0].PedidoStatusID == 1) // Previsão de Entrega
-                            {
-                                return comanda + " " + entrega + " " + cancelamento + " " + comandaPorEmail + desconto;
-                            }
-                            else if (data.PedidoStatusDao[0].PedidoStatusID == 2) // Retirado na Loja
-                            {
+                            if (data.PedidoStatusDao[0].PedidoStatusID == '@PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega.GetHashCode()') {
                                 return comanda + " " + cancelamento + " " + comandaPorEmail + desconto;
                             }
-                            else if (data.PedidoStatusDao[0].PedidoStatusID == 3) // Cancelado
-                            {
+                            else if (data.PedidoStatusDao[0].PedidoStatusID == '@PedidoStatusDao.EPedidoStatus.RetiradoNaLoja.GetHashCode()') {
+                                return comanda + " " + cancelamento + " " + comandaPorEmail + desconto;
+                            }
+                            else if (data.PedidoStatusDao[0].PedidoStatusID == '@PedidoStatusDao.EPedidoStatus.Cancelado.GetHashCode()') {
                                 return "" + desconto;
                             }
-                            else if (data.PedidoStatusDao[0].PedidoStatusID == 4) // Entregue
-                            {
+                            else if (data.PedidoStatusDao[0].PedidoStatusID == '@PedidoStatusDao.EPedidoStatus.Entregue.GetHashCode()') {
                                 return cancelamento + " " + comandaPorEmail + desconto;
                             }
                         },
@@ -234,6 +266,44 @@
                     "infoEmpty": "Sem registros a serem exibidos",
                     "infoFiltered": "(filtrados de _MAX_ total de registros)"
                 },
+                "rowCallback": function (row, data, index)
+                {
+                    var pedidoStatusId = $("#lblPedidoStatusID").text();
+
+                    if (pedidoStatusId == '@PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega.GetHashCode()')
+                    {
+                        if (data.UsuarioBaixaDao != null && data.UsuarioBaixaDao.UsuarioID > 0)
+                        {
+                            $('td', row).removeClass('bg-warning');
+                            $('td', row).removeClass('bg-danger');
+                            $('td', row).addClass('bg-success');
+                        }
+                        else
+                        {
+                            $('td', row).removeClass('bg-success');
+                            $('td', row).removeClass('bg-danger');
+                            $('td', row).addClass('bg-warning');
+                        }
+                    }
+                    else if (pedidoStatusId == '@PedidoStatusDao.EPedidoStatus.RetiradoNaLoja.GetHashCode()')
+                    {
+                        $('td', row).removeClass('bg-warning');
+                        $('td', row).removeClass('bg-danger');
+                        $('td', row).addClass('bg-success');
+                    }
+                    else if (pedidoStatusId == '@PedidoStatusDao.EPedidoStatus.Cancelado.GetHashCode()')
+                    {
+                        $('td', row).removeClass('bg-warning');
+                        $('td', row).removeClass('bg-success');
+                        $('td', row).addClass('bg-danger');
+                    }
+                    else if (pedidoStatusId == '@PedidoStatusDao.EPedidoStatus.Entregue.GetHashCode()')
+                    {
+                        $('td', row).removeClass('bg-warning');
+                        $('td', row).removeClass('bg-danger');
+                        $('td', row).addClass('bg-success');
+                    }
+                },
                 "columns":
                 [
                     { "data": "ProdutoDao.ProdutoID", "className": "text-center", "visible": false },
@@ -241,7 +311,71 @@
                     { "data": "ProdutoDao.Descricao", "className": "text-center" },
                     { "data": "ProdutoDao.MedidaDao.Descricao", "className": "text-center" },
                     { "data": "Quantidade", "className": "text-center" },
-                    { "data": "ProdutoDao.CategoriaDao[0].Descricao", "className": "text-center" }
+                    { "data": "ProdutoDao.CategoriaDao[0].Descricao", "className": "text-center" },
+                    {
+                        "data": function (data, type, row)
+                        {
+                            var pedidoStatusId = $("#lblPedidoStatusID").text();
+
+                            var calendario = "<i class='glyphicon glyphicon-calendar' title='Alterar Data Entrega' style='cursor: pointer' onclick='modalAlterarDataEntrega(" + JSON.stringify(data) + ")'></i>";
+                            var programada = "Programada para " + moment(data.DataEntrega).format("DD/MM/YYYY");
+
+                            if (pedidoStatusId == '@PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega.GetHashCode()')
+                            {
+                                if (data.UsuarioEntregaDao == null || data.UsuarioEntregaDao.UsuarioID <= 0)
+                                {
+                                    return calendario;
+                                }
+                                else
+                                {
+                                    if (data.UsuarioBaixaDao == null || data.UsuarioBaixaDao.UsuarioID <= 0)
+                                    {
+                                        return programada + " " + calendario;
+                                    }
+                                    else
+                                    {
+                                        return programada;
+                                    }                                    
+                                }
+                            }
+                            else if (pedidoStatusId == '@PedidoStatusDao.EPedidoStatus.Entregue.GetHashCode()')
+                            {
+                                return programada;
+                            }
+                            else
+                            {
+                                return "";
+                            }
+                        },
+                        "className": "text-center"
+                    },
+                    {
+                        "data": function (data, type, row)
+                        {
+                            var pedidoStatusId = $("#lblPedidoStatusID").text();
+
+                            if (pedidoStatusId == '@PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega.GetHashCode()')
+                            {
+                                if (data.UsuarioBaixaDao == null || data.UsuarioBaixaDao.UsuarioID <= 0)
+                                {
+                                    return "<i class='glyphicon glyphicon-ok' title='Dar Baixa Produto' style='cursor: pointer' onclick='darBaixaProduto(" + JSON.stringify(data) + ")'></i>";
+                                }
+                                else
+                                {
+                                    return "Baixa em " + moment(data.DataBaixa).format("DD/MM/YYYY HH:mm");
+                                }
+                            }
+                            else if (pedidoStatusId == '@PedidoStatusDao.EPedidoStatus.Entregue.GetHashCode()')
+                            {
+                                return "Baixa em " + moment(data.DataBaixa).format("DD/MM/YYYY HH:mm");
+                            }
+                            else
+                            {
+                                return "";
+                            }
+                        },
+                        "className": "text-center"
+                    }
                 ]
             });
 
@@ -275,6 +409,46 @@
                 window.location.href = "/Pedido/Cadastro";
             });
 
+            $("#btnAlterarDataEntrega").click(function ()
+            {
+                var pedidoDao = { "PedidoID": $("#lblPedidoID").text() };
+
+                var pedidoProdutoDao = [];
+                pedidoProdutoDao.push({ "ProdutoID": $("#lblProdutoID").text(), "DataEntrega": $("#txtDataEntregaNova").val(), "UsuarioEntregaDao.UsuarioID": '@usuarioDao.UsuarioID' });
+                pedidoDao.PedidoProdutoDao = pedidoProdutoDao;
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Pedido/Atualizar/",
+                    data: { pedidoDao: pedidoDao },
+                    success: function (data)
+                    {
+                        if (!data.Sucesso) {
+                            alert(data.Mensagem);
+                            return;
+                        }
+
+                        var idxPedido;
+                        $("#tbPedido").DataTable().rows().every(function (rowIdx, tableLoop, rowLoop) {
+                            var json = this.data();
+                            if (json.PedidoID == data.Pedido.PedidoID) {
+                                idxPedido = rowIdx;
+                            }
+                        });
+                        $("#tbPedido").DataTable().row(idxPedido).invalidate().data(data.Pedido).draw();
+
+                        $("#tbProduto").DataTable().clear();
+                        $("#tbProduto").DataTable().rows.add(data.Pedido.PedidoProdutoDao).draw();
+
+                        $("#txtDataEntregaNova").val("");
+                        $('#modalAlterarDataEntrega').modal('hide');
+
+                        alert(data.Mensagem);
+                    }
+                });
+            });
+
         });
     </script>
 }
@@ -287,10 +461,9 @@
                 <thead>
                     <tr>
                         <td class="text-center" style="width: 10%"><b>Nº Pedido</b></td>
-                        <td class="text-center" style="width: 20%"><b>Funcionário</b></td>
-                        <td class="text-center" style="width: 25%"><b>Cliente</b></td>
+                        <td class="text-center" style="width: 25%"><b>Funcionário</b></td>
+                        <td class="text-center" style="width: 30%"><b>Cliente</b></td>
                         <td class="text-center" style="width: 10%"><b>Data Pedido</b></td>
-                        <td class="text-center" style="width: 10%"><b>Data Entrega</b></td>
                         <td class="text-center" style="width: 20%"><b>Loja Saída</b></td>
                         <td class="text-center" style="width: 5%"><b>Ação</b></td>
                     </tr>
@@ -305,7 +478,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Pedido <label id="lblPedidoID"></label></h4>
+                    <h4 class="modal-title" id="myModalLabel">Pedido <label id="lblPedidoID"></label><label id="lblPedidoStatusID" style="display: none"></label></h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -342,11 +515,13 @@
                                     <thead>
                                         <tr>
                                             <td class="text-center" style="width: 5%"><b>ProdutoID</b></td>
-                                            <td class="text-center" style="width: 15%"><b>Número</b></td>
-                                            <td class="text-center" style="width: 30%"><b>Produto</b></td>
-                                            <td class="text-center" style="width: 20%"><b>Medida</b></td>
+                                            <td class="text-center" style="width: 10%"><b>Número</b></td>
+                                            <td class="text-center" style="width: 25%"><b>Produto</b></td>
+                                            <td class="text-center" style="width: 10%"><b>Medida</b></td>
                                             <td class="text-center" style="width: 10%"><b>Quantidade</b></td>
                                             <td class="text-center" style="width: 20%"><b>Categoria</b></td>
+                                            <td class="text-center" style="width: 10%"><b>Entrega</b></td>
+                                            <td class="text-center" style="width: 10%"><b>Baixa</b></td>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -385,6 +560,32 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalAlterarDataEntrega" tabindex="-1" role="dialog" aria-labelledby="ModalAlterarDataEntrega" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Produto <label id="lblNumero"></label><label id="lblProdutoID" style="display: none"></label></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <label id="_lblDataEntrega" style="vertical-align: sub">Data de Entrega Antiga</label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input id="txtDataEntregaAntiga" class="form-control" disabled="disabled" />
+                        </div>
+                        <div class="col-lg-4">
+                            <input id="txtDataEntregaNova" class="form-control data datepicker" placeholder="Nova Data Entrega" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnAlterarDataEntrega" type="button" class="btn btn-info">Alterar</button>
                 </div>
             </div>
         </div>

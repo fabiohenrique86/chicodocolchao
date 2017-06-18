@@ -4,29 +4,32 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="ef7c14441a214dbcae2d2516ad2a6622" Name="Diagram1" ZoomLevel="55">
-        <EntityTypeShape EntityType="ChicoDoColchaoModel.Cliente" Width="1.5" PointX="3.75" PointY="20.375" />
-        <EntityTypeShape EntityType="ChicoDoColchaoModel.Estado" Width="1.5" PointX="1.5" PointY="22.125" />
-        <EntityTypeShape EntityType="ChicoDoColchaoModel.Funcionario" Width="1.5" PointX="3.75" PointY="16.375" />
-        <EntityTypeShape EntityType="ChicoDoColchaoModel.Loja" Width="1.5" PointX="1.5" PointY="16" />
-        <EntityTypeShape EntityType="ChicoDoColchaoModel.LojaProduto" Width="1.5" PointX="5.25" PointY="10" />
-        <EntityTypeShape EntityType="ChicoDoColchaoModel.Medida" Width="1.5" PointX="0.75" PointY="7.25" />
-        <EntityTypeShape EntityType="ChicoDoColchaoModel.NotaFiscal" Width="1.5" PointX="3" PointY="4.875" />
-        <EntityTypeShape EntityType="ChicoDoColchaoModel.NotaFiscalProduto" Width="1.5" PointX="5.25" PointY="7" />
-        <EntityTypeShape EntityType="ChicoDoColchaoModel.Orcamento" Width="1.5" PointX="6" PointY="2.625" />
-        <EntityTypeShape EntityType="ChicoDoColchaoModel.OrcamentoProduto" Width="1.5" PointX="8.25" PointY="9.875" />
-        <EntityTypeShape EntityType="ChicoDoColchaoModel.Parcela" Width="1.5" PointX="6" PointY="16.125" />
-        <EntityTypeShape EntityType="ChicoDoColchaoModel.Pedido" Width="1.5" PointX="6" PointY="20" />
-        <EntityTypeShape EntityType="ChicoDoColchaoModel.PedidoProduto" Width="1.5" PointX="8.25" PointY="6" />
-        <EntityTypeShape EntityType="ChicoDoColchaoModel.PedidoStatus" Width="1.5" PointX="3.75" PointY="26.25" />
-        <EntityTypeShape EntityType="ChicoDoColchaoModel.PedidoTipoPagamento" Width="1.5" PointX="8.25" PointY="18.75" />
-        <EntityTypeShape EntityType="ChicoDoColchaoModel.Produto" Width="1.5" PointX="3" PointY="9.125" />
-        <EntityTypeShape EntityType="ChicoDoColchaoModel.sysdiagrams" Width="1.5" PointX="10.75" PointY="5.375" />
-        <EntityTypeShape EntityType="ChicoDoColchaoModel.TipoPagamento" Width="1.5" PointX="6" PointY="25.25" />
-        <EntityTypeShape EntityType="ChicoDoColchaoModel.TipoUsuario" Width="1.5" PointX="8.75" PointY="1.75" />
-        <EntityTypeShape EntityType="ChicoDoColchaoModel.Transferencia" Width="1.5" PointX="3" PointY="0.75" />
-        <EntityTypeShape EntityType="ChicoDoColchaoModel.TransferenciaProduto" Width="1.5" PointX="5.25" PointY="13" />
-        <EntityTypeShape EntityType="ChicoDoColchaoModel.Usuario" Width="1.5" PointX="11" PointY="1.625" />
+      <Diagram DiagramId="ef7c14441a214dbcae2d2516ad2a6622" Name="Diagram1" ZoomLevel="62">
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.Categoria" Width="1.5" PointX="6" PointY="6.25" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.Cliente" Width="1.5" PointX="6" PointY="22.25" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.Estado" Width="1.5" PointX="3.75" PointY="24" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.Funcionario" Width="1.5" PointX="3" PointY="8.5" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.Log" Width="1.5" PointX="0.75" PointY="2.25" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.Loja" Width="1.5" PointX="0.75" PointY="11.375" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.LojaProduto" Width="1.5" PointX="3" PointY="12.25" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.Medida" Width="1.5" PointX="6" PointY="3.75" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.NotaFiscal" Width="1.5" PointX="3" PointY="18.75" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.NotaFiscalProduto" Width="1.5" PointX="5.25" PointY="19" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.Orcamento" Width="1.5" PointX="5.25" PointY="10.5" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.OrcamentoProduto" Width="1.5" PointX="10.5" PointY="10.625" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.Parcela" Width="1.5" PointX="8.25" PointY="17.25" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.Pedido" Width="1.5" PointX="8.25" PointY="9.25" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.PedidoProduto" Width="1.5" PointX="13.5" PointY="10.5" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.PedidoStatus" Width="1.5" PointX="6" PointY="0.75" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.PedidoTipoPagamento" Width="1.5" PointX="10.5" PointY="6.5" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.Produto" Width="1.5" PointX="8.25" PointY="3.875" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.sysdiagrams" Width="1.5" PointX="2.75" PointY="2.25" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.TipoPagamento" Width="1.5" PointX="8.25" PointY="0.75" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.TipoUsuario" Width="1.5" PointX="3.75" PointY="28.75" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.Transferencia" Width="1.5" PointX="3" PointY="15.25" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.TransferenciaProduto" Width="1.5" PointX="5.25" PointY="15.625" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.Usuario" Width="1.5" PointX="6" PointY="28.25" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_Produto_Categoria" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_Cliente_Estado" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_Pedido_Cliente" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_Funcionario_Loja" />
@@ -35,6 +38,7 @@
         <AssociationConnector Association="ChicoDoColchaoModel.FK_LojaProduto_Loja" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_NotaFiscal_Loja" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_Orcamento_Loja" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_Pedido_Loja" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_Pedido_LojaSaida" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_Transferencia_LojaDestino" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_Transferencia_LojaOrigem" />
@@ -46,17 +50,17 @@
         <AssociationConnector Association="ChicoDoColchaoModel.FK_Orcamento_Produto" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_PedidoTipoPagamento_Parcela" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_Pedido_PedidoStatus" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_Pedido_Usuario_Cancelamento" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_Pedido_Usuario_Pedido" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_PedidoProduto_Pedido" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_PedidoTipoPagamento_Pedido" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_PedidoProduto_Produto" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_PedidoProduto_Usuario_Entrega" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_PedidoTipoPagamento_TipoPagamento" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_Transferencia_Produto" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_Usuario_TipoUsuario" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_TransferenciaProduto_Transferencia" />
-        <AssociationConnector Association="ChicoDoColchaoModel.FK_Pedido_Loja" />
-        <EntityTypeShape EntityType="ChicoDoColchaoModel.Log" Width="1.5" PointX="10.375" PointY="8.75" />
-        <EntityTypeShape EntityType="ChicoDoColchaoModel.Categoria" Width="1.5" PointX="10.375" PointY="11.875" />
-        <AssociationConnector Association="ChicoDoColchaoModel.FK_Produto_Categoria" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_PedidoProduto_Usuario_Baixa" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
