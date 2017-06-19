@@ -527,7 +527,8 @@ namespace ChicoDoColchao.Business
                     Descricao = item.ProdutoDao.Descricao,
                     Medida = item.ProdutoDao.MedidaDao.Descricao,
                     Quantidade = item.Quantidade,
-                    DataEntrega = item.DataEntrega
+                    DataEntrega = item.DataEntrega,
+                    DataBaixa = item.DataBaixa
                 });
             }
             viewer.LocalReport.DataSources.Add(new ReportDataSource("ds_produto", pedidoProdutoDao));
