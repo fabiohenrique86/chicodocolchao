@@ -102,7 +102,8 @@ namespace ChicoDoColchao.Business
 
                 if (produto == null)
                 {
-                    throw new BusinessException(string.Format("Produto {0} não cadastrado na Loja {1}", pedidoProdutoDao.ProdutoDao.Descricao, lojaSaidaDao.NomeFantasia));
+                    throw new BusinessException(string.Format("Produto {0} não cadastrado na Loja", pedidoProdutoDao.ProdutoDao.Descricao));
+                    //throw new BusinessException(string.Format("Produto {0} não cadastrado na Loja {1}", pedidoProdutoDao.ProdutoDao.Descricao, lojaSaidaDao.NomeFantasia));
                 }
 
                 if (pedidoStatusDao.PedidoStatusID == PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega.GetHashCode())

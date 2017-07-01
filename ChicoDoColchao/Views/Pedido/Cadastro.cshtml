@@ -510,7 +510,8 @@
                 pedidoDao.LojaDao = [];
                 if (@lojaDao.LojaID > 0)
                 {
-                    pedidoDao.LojaDao.push({ LojaID: '@lojaDao.LojaID', NomeFantasia: '@lojaDao.NomeFantasia' });
+                    pedidoDao.LojaDao.push({ LojaID: '@lojaDao.LojaID' });
+                    // pedidoDao.LojaDao.push({ LojaID: '@lojaDao.LojaID', NomeFantasia: '@lojaDao.NomeFantasia' });
                 }
                 else
                 {
@@ -518,7 +519,8 @@
                 }
 
                 pedidoDao.LojaSaidaDao = [];
-                pedidoDao.LojaSaidaDao.push({ LojaID: $("#LojaID option:selected").val(), NomeFantasia: $("#LojaID").find(":selected").text() });
+                pedidoDao.LojaSaidaDao.push({ LojaID: $("#LojaID option:selected").val() });
+                //pedidoDao.LojaSaidaDao.push({ LojaID: $("#LojaID option:selected").val(), NomeFantasia: encodeURI($("#LojaID").find(":selected").text()) });
                 pedidoDao.PedidoStatusDao = [];
                 pedidoDao.PedidoStatusDao.push({ PedidoStatusID: $("#PedidoStatusID option:selected").val() });
                 //pedidoDao.NomeCarreto = $("#NomeCarreto").val();
