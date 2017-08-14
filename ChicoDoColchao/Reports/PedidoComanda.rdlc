@@ -967,6 +967,80 @@
               <TablixCells>
                 <TablixCell>
                   <CellContents>
+                    <Textbox Name="Textbox28">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>Desconto</Value>
+                              <Style>
+                                <FontSize>8pt</FontSize>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox28</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                    <ColSpan>2</ColSpan>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell />
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox31">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Microsoft.VisualBasic.Strings.FormatCurrency(Parameters!Desconto.Value, 2)</Value>
+                              <Style>
+                                <FontSize>8pt</FontSize>
+                                <FontWeight>Normal</FontWeight>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox31</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+              </TablixCells>
+            </TablixRow>
+            <TablixRow>
+              <Height>0.6cm</Height>
+              <TablixCells>
+                <TablixCell>
+                  <CellContents>
                     <Textbox Name="Textbox75">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
@@ -1061,11 +1135,14 @@
             <TablixMember>
               <KeepWithGroup>Before</KeepWithGroup>
             </TablixMember>
+            <TablixMember>
+              <KeepWithGroup>Before</KeepWithGroup>
+            </TablixMember>
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>ds_tipo_pagamento</DataSetName>
         <Top>7.27343cm</Top>
-        <Height>2.4cm</Height>
+        <Height>3cm</Height>
         <Width>19cm</Width>
         <ZIndex>1</ZIndex>
         <Style>
@@ -1655,73 +1732,6 @@
           </Border>
         </Style>
       </Tablix>
-      <Textbox Name="Textbox45">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>=Microsoft.VisualBasic.Strings.FormatCurrency(Parameters!Desconto.Value, 2)</Value>
-                <Style>
-                  <FontSize>8pt</FontSize>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style>
-              <TextAlign>Right</TextAlign>
-            </Style>
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>Textbox45</rd:DefaultName>
-        <Top>9.67343cm</Top>
-        <Left>16.21778cm</Left>
-        <Height>0.6cm</Height>
-        <Width>2.78222cm</Width>
-        <ZIndex>3</ZIndex>
-        <Style>
-          <Border>
-            <Color>LightGrey</Color>
-            <Style>Solid</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
-      <Textbox Name="Textbox46">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value EvaluationMode="Constant">Desconto</Value>
-                <Style>
-                  <FontSize>8pt</FontSize>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>Textbox45</rd:DefaultName>
-        <Top>9.67343cm</Top>
-        <Height>0.6cm</Height>
-        <Width>16.21778cm</Width>
-        <ZIndex>4</ZIndex>
-        <Style>
-          <Border>
-            <Color>LightGrey</Color>
-            <Style>Solid</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
       <Textbox Name="Textbox48">
         <CanGrow>true</CanGrow>
         <KeepTogether>true</KeepTogether>
@@ -1743,7 +1753,7 @@
         <Top>4.27343cm</Top>
         <Height>0.6cm</Height>
         <Width>19cm</Width>
-        <ZIndex>5</ZIndex>
+        <ZIndex>3</ZIndex>
         <Style>
           <Border>
             <Color>LightGrey</Color>
@@ -1775,7 +1785,7 @@
         <Top>4.87343cm</Top>
         <Height>0.6cm</Height>
         <Width>19cm</Width>
-        <ZIndex>6</ZIndex>
+        <ZIndex>4</ZIndex>
         <Style>
           <Border>
             <Color>LightGrey</Color>
@@ -1808,7 +1818,7 @@
         <Top>10.27343cm</Top>
         <Height>0.6cm</Height>
         <Width>19cm</Width>
-        <ZIndex>7</ZIndex>
+        <ZIndex>5</ZIndex>
         <Style>
           <Border>
             <Color>LightGrey</Color>
@@ -1842,7 +1852,7 @@
         <Top>10.87343cm</Top>
         <Height>0.6cm</Height>
         <Width>3.09972cm</Width>
-        <ZIndex>8</ZIndex>
+        <ZIndex>6</ZIndex>
         <Style>
           <Border>
             <Color>LightGrey</Color>
@@ -1876,7 +1886,7 @@
         <Top>11.47343cm</Top>
         <Height>0.6cm</Height>
         <Width>3.09972cm</Width>
-        <ZIndex>9</ZIndex>
+        <ZIndex>7</ZIndex>
         <Style>
           <Border>
             <Color>LightGrey</Color>
@@ -1910,7 +1920,7 @@
         <Top>12.07343cm</Top>
         <Height>0.6cm</Height>
         <Width>3.09972cm</Width>
-        <ZIndex>10</ZIndex>
+        <ZIndex>8</ZIndex>
         <Style>
           <Border>
             <Color>LightGrey</Color>
@@ -1945,7 +1955,7 @@
         <Left>3.09972cm</Left>
         <Height>0.6cm</Height>
         <Width>15.90028cm</Width>
-        <ZIndex>11</ZIndex>
+        <ZIndex>9</ZIndex>
         <Style>
           <Border>
             <Color>LightGrey</Color>
@@ -1980,7 +1990,7 @@
         <Left>3.09972cm</Left>
         <Height>0.6cm</Height>
         <Width>15.90028cm</Width>
-        <ZIndex>12</ZIndex>
+        <ZIndex>10</ZIndex>
         <Style>
           <Border>
             <Color>LightGrey</Color>
@@ -2015,7 +2025,7 @@
         <Left>3.09972cm</Left>
         <Height>0.6cm</Height>
         <Width>15.90028cm</Width>
-        <ZIndex>13</ZIndex>
+        <ZIndex>11</ZIndex>
         <Style>
           <Border>
             <Color>LightGrey</Color>
@@ -2049,7 +2059,7 @@
         <Top>13.27343cm</Top>
         <Height>1.89572cm</Height>
         <Width>19cm</Width>
-        <ZIndex>14</ZIndex>
+        <ZIndex>12</ZIndex>
         <Style>
           <Border>
             <Color>LightGrey</Color>
@@ -2082,7 +2092,7 @@
         <Top>12.67343cm</Top>
         <Height>0.6cm</Height>
         <Width>19cm</Width>
-        <ZIndex>15</ZIndex>
+        <ZIndex>13</ZIndex>
         <Style>
           <Border>
             <Color>LightGrey</Color>
@@ -2094,8 +2104,181 @@
           <PaddingBottom>2pt</PaddingBottom>
         </Style>
       </Textbox>
+      <Textbox Name="Textbox36">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>TERMO DE COMPROMISSO</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Center</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox36</rd:DefaultName>
+        <Top>15.16915cm</Top>
+        <Height>5.5cm</Height>
+        <Width>3.135cm</Width>
+        <ZIndex>14</ZIndex>
+        <Style>
+          <Border>
+            <Color>LightGrey</Color>
+            <Style>Solid</Style>
+          </Border>
+          <VerticalAlign>Middle</VerticalAlign>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox37">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>1 - A garantia só tem validade mediante a apresentação do certificado de garantia, obedecendo aos prazos e critérios nele descritos, juntamente com este pedido de compra, desde que a etiqueta não tenha sido arrancada do produto;</Value>
+                <Style>
+                  <FontSize>7pt</FontSize>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Left</TextAlign>
+            </Style>
+          </Paragraph>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>2 - Caso ocorra algum problema no produto, o mesmo deverá ser comunicado à loja de origem da compra, apresentando o certificado de garantia juntamente com este pedido;</Value>
+                <Style>
+                  <FontSize>7pt</FontSize>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Left</TextAlign>
+            </Style>
+          </Paragraph>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>3 - O fabricante é responsável pelos defeitos de fabricação apresentados e comprovados pelo parecer da assistência técnica, desde que o uso do produto esteja sendo feito de forma adequada;</Value>
+                <Style>
+                  <FontSize>7pt</FontSize>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Left</TextAlign>
+            </Style>
+          </Paragraph>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>4 - Todo produto deve ser conferido no ato do recebimento pelo consumidor, a fim de verificar se o mesmo está em perfeito estado (costuras do , bordado, tecido limpo e sem rasgos, etc); manchas, rasgos e urina no colchão não serão considerados como motivo de troca. A garantia não cobre preferência de conforto ou troca de modelo originalmente escolhido;</Value>
+                <Style>
+                  <FontSize>7pt</FontSize>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Left</TextAlign>
+            </Style>
+          </Paragraph>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>5 - Conforme norma da ABNT (Associação Brasileira de Normas Técnicas) nº13579, o colchão deve ser adequado ao Biotipo do seu usuário (peso x altura), conforme tabela de adequação Biotipo / Colchão, exposta nos pontos de revenda e no verso do certificado de garantia;</Value>
+                <Style>
+                  <FontSize>7pt</FontSize>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Left</TextAlign>
+            </Style>
+          </Paragraph>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>6 - As dimensões finais do produto poderão variar em aproximadamente 1 ou 2 cm, conforme descrição da etiqueta do produto;</Value>
+                <Style>
+                  <FontSize>7pt</FontSize>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Left</TextAlign>
+            </Style>
+          </Paragraph>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>7 - As medidas fornecidas pelo cliente, no ato da compra, são de sua inteira responsabilidade. Portanto não aceitaremos reclamações posteriores por esse tipo de erro;</Value>
+                <Style>
+                  <FontSize>7pt</FontSize>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Left</TextAlign>
+            </Style>
+          </Paragraph>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>8 - Nos casos de içamento, será de inteira responsabilidade do cliente a contratação/pagamento da empresa especializada para executar o serviço, bem como de quaisquer danos causados ao produto e/ou a terceiros;</Value>
+                <Style>
+                  <FontSize>7pt</FontSize>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Left</TextAlign>
+            </Style>
+          </Paragraph>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>9 - O pedido estará sujeito à aprovação de crédito.</Value>
+                <Style>
+                  <FontSize>7pt</FontSize>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Left</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox36</rd:DefaultName>
+        <Top>15.16915cm</Top>
+        <Left>3.135cm</Left>
+        <Height>5.5cm</Height>
+        <Width>15.865cm</Width>
+        <ZIndex>15</ZIndex>
+        <Style>
+          <Border>
+            <Color>LightGrey</Color>
+            <Style>Solid</Style>
+          </Border>
+          <VerticalAlign>Middle</VerticalAlign>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
     </ReportItems>
-    <Height>6.07638in</Height>
+    <Height>8.16311in</Height>
     <Style />
   </Body>
   <Width>19cm</Width>
@@ -2273,12 +2456,12 @@
       </Style>
     </PageHeader>
     <PageFooter>
-      <Height>1.34056cm</Height>
+      <Height>2.02806cm</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
         <Line Name="Line1">
-          <Top>0.59903cm</Top>
+          <Top>1.23403cm</Top>
           <Height>0cm</Height>
           <Width>7.84458cm</Width>
           <Style>
@@ -2305,7 +2488,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox4</rd:DefaultName>
-          <Top>0.59903cm</Top>
+          <Top>1.23403cm</Top>
           <Left>2.12015cm</Left>
           <Height>0.6cm</Height>
           <Width>2.90694cm</Width>
@@ -2337,7 +2520,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox4</rd:DefaultName>
-          <Top>0.59903cm</Top>
+          <Top>1.23403cm</Top>
           <Left>13.70014cm</Left>
           <Height>0.6cm</Height>
           <Width>3.69875cm</Width>
@@ -2353,7 +2536,7 @@
           </Style>
         </Textbox>
         <Line Name="Line2">
-          <Top>0.59903cm</Top>
+          <Top>1.23403cm</Top>
           <Left>11.15542cm</Left>
           <Height>0cm</Height>
           <Width>7.84458cm</Width>

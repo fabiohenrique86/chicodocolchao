@@ -29,7 +29,7 @@
             });
 
             var loja2 = new google.maps.Marker({
-                position: { lat: -13.0057695, lng: -38.4618252 },
+                position: { lat: -13.0055417, lng: -38.459536 },
                 map: map,
                 title: "Av. Manoel Dias da Silva, 1896 - Pituba / Tel: (71) 3248-2876"
             });
@@ -39,10 +39,24 @@
                 map: map,
                 title: "Shopping Piedade 1º Piso - Centro / Tel: (71) 3043-8982"
             });
+
+            var loja4 = new google.maps.Marker({
+                position: { lat: -12.9954946, lng: -38.4694049 },
+                map: map,
+                title: "Av. Antônio Carlos Magalhães, 1034, Loja 05, Edf. Pituba Parque Center - Itaigara / Tel: (71) 3035-5509"
+            });
+
+            var loja5 = new google.maps.Marker({
+                position: { lat: -12.984925, lng: -38.5185522 },
+                map: map,
+                title: "Av. Sete de Setembro, 1020, - Dois de Julho / Tel: (71) 3027-9007"
+            });
             
             loja1.setMap(map);
             loja2.setMap(map);
             loja3.setMap(map);
+            loja4.setMap(map);
+            loja5.setMap(map);
         }
 
         google.maps.event.addDomListener(window, 'load', initialize);

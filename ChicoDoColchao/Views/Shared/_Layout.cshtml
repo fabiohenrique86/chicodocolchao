@@ -19,16 +19,17 @@
 
         .navbar-inverse {
             background-color: #0f3456;
-            border-color: red;
+            border: none;
+            /*border-color: red;*/
         }
 
-        .navbar-inverse .navbar-nav > li > a, .navbar-inverse .navbar-brand {
-            color: #fff;
-        }
+            .navbar-inverse .navbar-nav > li > a, .navbar-inverse .navbar-brand {
+                color: #fff;
+            }
 
-        .navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
-            border-color: red;
-        }
+            .navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
+                border-color: red;
+            }
 
         .navbar-brand {
             padding: 0px 15px;
@@ -70,6 +71,24 @@
             /*width: 45%;*/
             padding: 1%;
         }
+
+        .dropdown-menu {
+            background-color: #0f3456;
+        }
+
+        .navbar-nav > li > a:hover, .nav .open > a, .nav .open > a:focus, .nav .open > a:hover {
+            background-color: #0f3456;
+        }
+
+        .dropdown-menu li > a:hover {
+            background-color: red;
+        }
+
+        .container-page
+        {
+            padding-top: 70px;
+            padding-bottom: 20px; 
+        }
     </style>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -79,8 +98,8 @@
     <![endif]-->
 </head>
 <body style="background-color: #2a2a2a">
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        <div class="container">
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" style="font-size: 14px">
+        <div class="container-full" style="padding-right: 30px">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
@@ -88,9 +107,9 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="@Url.Content("~/Home")"><img src="@Url.Content("~/img/logo.png")" style="width: 125px; background-color: #fff; box-shadow: 1px 1px 1px #fff;" class="img img-circle" /></a>
+                <a class="navbar-brand" href="@Url.Content("~/Home")"><img src="@Url.Content("~/img/logo.png")" style="width: 250px; padding-top: 5px" /></a>
             </div>
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="padding-top: 30px; ">
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="@Url.Content("~/ColchaoIdeal")"><i class="glyphicon glyphicon-ok" style="color: #5cb85c" title="Colchão Ideal"></i> Colchão Ideal</a></li>
                     <li><a href="@Url.Content("~/OndeComprar")"><i class="glyphicon glyphicon-map-marker" style="color: #c9302c" title="Onde Comprar"></i> Onde Comprar</a></li>
@@ -162,49 +181,49 @@
             || (c == "Contato" && a == "Index"))
             ))
         {
-            <div class="row" style="background-color: #fff; font-size: 16px; padding-top: 10px;">
+            <div class="row" style="background-color: #0f3456; font-size: 14px; padding-top: 60px; border: 2px solid red">
                 <div class="col-xs-12 col-lg-4"></div>
                 <div class="col-xs-12 col-lg-5">
                     <ul class="nav navbar-nav">
                         <li class="dropdown">
-                            <a style="color: #0f3456" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Camas <span class="caret"></span></a>
+                            <a style="color: #fff;" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Camas <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a style="color: #0f3456" href="#">Solteiro</a></li>
-                                <li><a style="color: #0f3456" href="#">Viúva</a></li>
-                                <li><a style="color: #0f3456" href="#">Casal</a></li>
-                                <li><a style="color: #0f3456" href="#">Queen</a></li>
-                                <li><a style="color: #0f3456" href="#">King</a></li>
+                                <li><a style="color: #fff;" href="#">Solteiro</a></li>
+                                <li><a style="color: #fff;" href="#">Viúva</a></li>
+                                <li><a style="color: #fff;" href="#">Casal</a></li>
+                                <li><a style="color: #fff" href="#">Queen</a></li>
+                                <li><a style="color: #fff" href="#">King</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
-                            <a style="color: #0f3456" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Colchões <span class="caret"></span></a>
+                            <a style="color: #fff" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Colchões <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a style="color: #0f3456" href="#">Molas Ensacadas</a></li>
-                                <li><a style="color: #0f3456" href="#">Molas Superlastic</a></li>
-                                <li><a style="color: #0f3456" href="#">MiraCoil</a></li>
-                                <li><a style="color: #0f3456" href="#">Espuma</a></li>
-                                <li><a style="color: #0f3456" href="#">Ortopédico</a></li>
+                                <li><a style="color: #fff" href="#">Molas Ensacadas</a></li>
+                                <li><a style="color: #fff" href="#">Molas Superlastic</a></li>
+                                <li><a style="color: #fff" href="#">MiraCoil</a></li>
+                                <li><a style="color: #fff" href="#">Espuma</a></li>
+                                <li><a style="color: #fff" href="#">Ortopédico</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
-                            <a style="color: #0f3456" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Travesseiros <span class="caret"></span></a>
+                            <a style="color: #fff" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Travesseiros <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a style="color: #0f3456" href="#">Visco Servical</a></li>
-                                <li><a style="color: #0f3456" href="#">Visco Gel</a></li>
-                                <li><a style="color: #0f3456" href="#">Visco Elástico</a></li>
-                                <li><a style="color: #0f3456" href="#">Soft Látex</a></li>
-                                <li><a style="color: #0f3456" href="#">Toque de Pluma</a></li>
+                                <li><a style="color: #fff" href="#">Visco Servical</a></li>
+                                <li><a style="color: #fff" href="#">Visco Gel</a></li>
+                                <li><a style="color: #fff" href="#">Visco Elástico</a></li>
+                                <li><a style="color: #fff" href="#">Soft Látex</a></li>
+                                <li><a style="color: #fff" href="#">Toque de Pluma</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
-                            <a style="color: #0f3456" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Acessórios <span class="caret"></span></a>
+                            <a style="color: #fff" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Acessórios <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a style="color: #0f3456" href="#">Cabeceira</a></li>
-                                <li><a style="color: #0f3456" href="#">Jogo de Lençol</a></li>
-                                <li><a style="color: #0f3456" href="#">Edredom</a></li>
-                                <li><a style="color: #0f3456" href="#">Suavencosto</a></li>
-                                <li><a style="color: #0f3456" href="#">Protetor de Colchão</a></li>
-                                <li><a style="color: #0f3456" href="#">Saia de Colchão</a></li>
+                                <li><a style="color: #fff" href="#">Cabeceira</a></li>
+                                <li><a style="color: #fff" href="#">Jogo de Lençol</a></li>
+                                <li><a style="color: #fff" href="#">Edredom</a></li>
+                                <li><a style="color: #fff" href="#">Suavencosto</a></li>
+                                <li><a style="color: #fff" href="#">Protetor de Colchão</a></li>
+                                <li><a style="color: #fff" href="#">Saia de Colchão</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -289,7 +308,6 @@
                     </div>
                     <div class="row text-center">
                         <a href="http://www.facebook.com.br/chicodocolchao" target="_blank"><i class="fa fa-facebook img-circle" style="background-color: #3b5998; color: white; font-size: 40px; padding: 20px 27px 20px 27px;"></i></a>
-                        <a href="http://www.twitter.com/chicodocolchao" target="_blank"><i class="fa fa-twitter img-circle" style="background-color: #428bca; color: white; font-size: 40px; padding: 20px"></i></a>
                         <a href="http://www.instagram.com/chicodocolchao" target="_blank"><i class="fa fa-instagram img-circle" style="background-color: #517fa4; color: white; font-size: 40px; padding: 20px"></i></a>
                         <a href="http://www.youtube.com/chicodocolchao" target="_blank"><i class="fa fa-youtube img-circle" style="background-color: #9d261d; color: white; font-size: 40px; padding: 20px"></i></a>
                     </div>
@@ -297,6 +315,16 @@
                         <h4 style="margin-top: 50px; margin-bottom: 50px;">Visite nossas lojas</h4>
                     </div>
                     <div class="row">
+                        <div class="col-lg-6 text-center">
+                            <i class="glyphicon glyphicon-map-marker" style="color: #c9302c"></i>&nbsp;Av. ACM, 1034 - Pituba Parque Center - Itaigara<br />
+                            <i class="glyphicon glyphicon-earphone" style="color: #ec971f"></i>&nbsp;(71) 3035-5509
+                        </div>
+                        <div class="col-lg-6 text-center">
+                            <i class="glyphicon glyphicon-map-marker" style="color: #c9302c"></i>&nbsp;Av. Sete de Setembro, 1020 - Dois de Julho<br />
+                            <i class="glyphicon glyphicon-earphone" style="color: #ec971f"></i>&nbsp;(71) 3027-9007
+                        </div>
+                    </div>
+                    <div class="row" style="padding-top: 15px">
                         <div class="col-lg-4 text-center">
                             <i class="glyphicon glyphicon-map-marker" style="color: #c9302c"></i>&nbsp;Av. Manoel Dias da Silva, 2.364 - Pituba<br />
                             <i class="glyphicon glyphicon-earphone" style="color: #ec971f"></i>&nbsp;(71) 3248-7569
@@ -309,7 +337,7 @@
                             <i class="glyphicon glyphicon-map-marker" style="color: #c9302c"></i>&nbsp;Shopping Piedade 1º Piso - Centro<br />
                             <i class="glyphicon glyphicon-earphone" style="color: #ec971f"></i>&nbsp; (71) 3043-8982
                         </div>
-                    </div>
+                    </div>                    
                     <div class="row text-center" style="margin-top: 30px;">
                         <div class="col-lg-12">
                             Ainda com dúvidas? Entre em <a href="@Url.Content("~/Contato")">contato@chicodocolchao.com.br</a>
