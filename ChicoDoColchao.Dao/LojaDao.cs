@@ -21,6 +21,9 @@ namespace ChicoDoColchao.Dao
         public string Telefone { get; set; }
         public bool Ativo { get; set; }
         public bool Deposito { get; set; }
+        public string Bairro { get; set; }
+
+        public string FantasiaBairro { get { return string.Format("{0} - {1}", NomeFantasia, Bairro); } }
 
         public virtual ICollection<FuncionarioDao> FuncionarioDao { get; set; }
         public virtual ICollection<LojaProdutoDao> LojaProdutoDao { get; set; }

@@ -26,10 +26,6 @@ namespace ChicoDoColchao.Controllers
             {
                 lojasDao = lojaBusiness.Listar(new LojaDao());
             }
-            catch (BusinessException ex)
-            {
-
-            }
             catch (Exception ex)
             {
 
@@ -39,7 +35,7 @@ namespace ChicoDoColchao.Controllers
         }
 
         [HttpPost]
-        public JsonResult Agendar(LojaDao lojaDao, string nome, string email, string data, string periodo)
+        public JsonResult Agendar(LojaDao lojaDao, string nome, string email, string telefone, string data, string periodo)
         {
             var sucesso = true;
             var mensagem = string.Empty;
@@ -56,6 +52,16 @@ namespace ChicoDoColchao.Controllers
                     throw new BusinessException("E-mail é obrigatório");
                 }
 
+                if (string.IsNullOrEmpty(telefone))
+                {
+                    throw new BusinessException("Telefone é obrigatório");
+                }
+
+                if (lojaDao == null || lojaDao.LojaID <= 0 || string.IsNullOrEmpty(lojaDao.NomeFantasia))
+                {
+                    throw new BusinessException("Loja é obrigatório");
+                }
+
                 if (string.IsNullOrEmpty(data))
                 {
                     throw new BusinessException("Data é obrigatório");
@@ -65,24 +71,19 @@ namespace ChicoDoColchao.Controllers
                 {
                     throw new BusinessException("Período é obrigatório");
                 }
-
-                if (lojaDao == null || lojaDao.LojaID <= 0 || string.IsNullOrEmpty(lojaDao.NomeFantasia))
-                {
-                    throw new BusinessException("Loja é obrigatório");
-                }
-
+                
                 EmailDao emailDao = new EmailDao();
 
                 emailDao.Titulo = "Agendamento de visita";
                 emailDao.Assunto = string.Format("Agendamento de visita - {0}", nome.Trim());
                 emailDao.Remetente = "contato@chicodocolchao.com.br";
                 emailDao.Destinatario = "contato@chicodocolchao.com.br";
-                emailDao.Mensagem = string.Format("{0}, agendou uma visita na data {1} pela {2} para a loja {3}.<br/><br/>O e-mail para retorno é: {4}.", nome.Trim(), data, periodo, lojaDao.NomeFantasia.Trim(), email.Trim());
+                emailDao.Mensagem = string.Format("{0}, agendou uma visita na data {1} pela {2} para a loja {3}.<br/><br/>E-mail para retorno {4} e o telefone {5}.", nome.Trim(), data, periodo, lojaDao.NomeFantasia.Trim(), email.Trim(), telefone.Trim());
 
                 emailBusiness.Enviar(emailDao);
 
                 sucesso = true;
-                mensagem = "Agendamento de visita enviado com sucesso.";
+                mensagem = "Visita agendada com sucesso.";
             }
             catch (BusinessException ex)
             {

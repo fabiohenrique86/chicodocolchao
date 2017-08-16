@@ -23,6 +23,7 @@ namespace ChicoDoColchao.Business.Tradutors
             }
             loja.Ativo = lojaDao.Ativo;
             loja.Deposito = lojaDao.Deposito;
+            loja.Bairro = lojaDao.Bairro;
 
             return loja;
         }
@@ -62,6 +63,7 @@ namespace ChicoDoColchao.Business.Tradutors
 
             lojaDao.Ativo = loja.Ativo;
             lojaDao.Deposito = loja.Deposito;
+            lojaDao.Bairro = loja.Bairro;
 
             return lojaDao;
         }

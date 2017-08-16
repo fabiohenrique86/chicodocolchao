@@ -8,14 +8,22 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
-            
+
             $("#btnCadastrar").click(function () {
-                                                
+
                 $.ajax({
                     dataType: "json",
                     type: "POST",
                     url: "/Loja/Incluir",
-                    data: { Cnpj: $("#Cnpj").val(), NomeFantasia: $("#NomeFantasia").val(), RazaoSocial: $("#RazaoSocial").val(), Telefone: $("#Telefone").val(), Deposito: $("#Deposito").prop("checked") },
+                    data:
+                    {
+                        Cnpj: $("#Cnpj").val(),
+                        NomeFantasia: $("#NomeFantasia").val(),
+                        RazaoSocial: $("#RazaoSocial").val(),
+                        Telefone: $("#Telefone").val(),
+                        Deposito: $("#Deposito").prop("checked"),
+                        Bairro: $("#Bairro").val()
+                    },
                     success: function (data) {
 
                         if (!data.Sucesso) {
@@ -26,6 +34,7 @@
                         $("#LojaForm")[0].reset();
                         $("#Cnpj").val("");
                         $("#Telefone").val("");
+                        $("#Bairro").val("");
 
                         alert(data.Mensagem);
                     }
@@ -68,6 +77,13 @@
             <div class="col-lg-6">
                 <div class="form-group">
                     @Html.TextBoxFor(x => x.Telefone, new { @class = "form-control fixo", @placeholder = "Telefone Fixo com DDD da loja", @maxlength = "10" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Bairro, new { @class = "form-control", @placeholder = "Qual o Bairro da loja?", @maxlength = "10" })
                 </div>
             </div>
         </div>

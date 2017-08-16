@@ -77,6 +77,7 @@
           <Property Name="Telefone" Type="varchar" MaxLength="10" />
           <Property Name="Ativo" Type="bit" Nullable="false" />
           <Property Name="Deposito" Type="bit" Nullable="false" />
+          <Property Name="Bairro" Type="varchar" MaxLength="75" Nullable="false" />
         </EntityType>
         <EntityType Name="LojaProduto">
           <Key>
@@ -1124,6 +1125,7 @@
           <NavigationProperty Name="Pedido1" Relationship="ChicoDoColchaoModel.FK_Pedido_LojaSaida" FromRole="Loja" ToRole="Pedido" />
           <NavigationProperty Name="Transferencia" Relationship="ChicoDoColchaoModel.FK_Transferencia_LojaDestino" FromRole="Loja" ToRole="Transferencia" />
           <NavigationProperty Name="Transferencia1" Relationship="ChicoDoColchaoModel.FK_Transferencia_LojaOrigem" FromRole="Loja" ToRole="Transferencia" />
+          <Property Name="Bairro" Type="String" Nullable="false" MaxLength="75" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="LojaProduto">
           <Key>
@@ -1848,6 +1850,7 @@
           <EntitySetMapping Name="Loja">
             <EntityTypeMapping TypeName="ChicoDoColchaoModel.Loja">
               <MappingFragment StoreEntitySet="Loja">
+                <ScalarProperty Name="Bairro" ColumnName="Bairro" />
                 <ScalarProperty Name="Deposito" ColumnName="Deposito" />
                 <ScalarProperty Name="Ativo" ColumnName="Ativo" />
                 <ScalarProperty Name="Telefone" ColumnName="Telefone" />

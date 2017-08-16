@@ -17,24 +17,25 @@ namespace ChicoDoColchao.Business
 
         private void ValidarEnviar(EmailDao emailDao)
         {
-            if (string.IsNullOrEmpty(emailDao.Assunto))
-            {
-                throw new BusinessException("Assunto é obrigatório");
-            }
-
-            if (string.IsNullOrEmpty(emailDao.Destinatario))
-            {
-                throw new BusinessException("Destinatario é obrigatório");
-            }
-
-            if (string.IsNullOrEmpty(emailDao.Mensagem))
-            {
-                throw new BusinessException("Mensagem é obrigatório");
-            }
 
             if (string.IsNullOrEmpty(emailDao.Remetente))
             {
                 throw new BusinessException("Remetente é obrigatório");
+            }
+
+            if (string.IsNullOrEmpty(emailDao.Destinatario))
+            {
+                throw new BusinessException("Destinatário é obrigatório");
+            }
+
+            if (string.IsNullOrEmpty(emailDao.Assunto))
+            {
+                throw new BusinessException("Assunto é obrigatório");
+            }
+            
+            if (string.IsNullOrEmpty(emailDao.Mensagem))
+            {
+                throw new BusinessException("Mensagem é obrigatório");
             }
         }
         

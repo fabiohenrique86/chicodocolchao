@@ -36,6 +36,11 @@ namespace ChicoDoColchao.Business
                 throw new BusinessException("Nome Fantasia é obrigatório");
             }
 
+            if (string.IsNullOrEmpty(lojaDao.Bairro))
+            {
+                throw new BusinessException("Bairro é obrigatório");
+            }
+
             //if (string.IsNullOrEmpty(lojaDao.RazaoSocial))
             //{
             //    throw new BusinessException("Razão Social é obrigatório");
