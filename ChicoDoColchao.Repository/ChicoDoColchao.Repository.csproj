@@ -125,15 +125,6 @@
     <Compile Include="Produto.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="sp_helpdiagramdefinition_Result.cs">
-      <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="sp_helpdiagrams_Result.cs">
-      <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="sysdiagrams.cs">
-      <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="TipoPagamento.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
@@ -162,7 +153,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <EntityDeploy Include="ChicoDoColchaoModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>ChicoDoColchaoModel.Designer.cs</LastGenOutput>
@@ -171,6 +164,9 @@
       <DependentUpon>ChicoDoColchaoModel.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ChicoDoColchaoModel.Context.tt">
@@ -183,9 +179,6 @@
       <DependentUpon>ChicoDoColchaoModel.edmx</DependentUpon>
       <LastGenOutput>ChicoDoColchaoModel.cs</LastGenOutput>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -40,6 +40,7 @@ namespace ChicoDoColchao.Repository
         public string PontoReferencia { get; set; }
         public bool Ativo { get; set; }
         public string Email { get; set; }
+        public string Cep { get; set; }
     
         public virtual Estado Estado { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

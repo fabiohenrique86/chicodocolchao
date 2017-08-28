@@ -480,11 +480,14 @@ namespace ChicoDoColchao.Business
             parametros.Add(new ReportParameter("Desconto", pedidoDao.Desconto.ToString()));
             parametros.Add(new ReportParameter("Funcionario", pedidoDao.FuncionarioDao.FirstOrDefault().Nome));
             parametros.Add(new ReportParameter("DataPedido", pedidoDao.DataPedido.ToString("dd/MM/yyyy")));
-            //parametros.Add(new ReportParameter("DataEntrega", pedidoDao.DataEntrega.GetValueOrDefault() == DateTime.MinValue ? "" : pedidoDao.DataEntrega.GetValueOrDefault().ToString("dd/MM/yyyy")));
-            parametros.Add(new ReportParameter("Endereco", pedidoDao.ClienteDao.FirstOrDefault().Logradouro + " " + pedidoDao.ClienteDao.FirstOrDefault().Numero + " " + pedidoDao.ClienteDao.FirstOrDefault().Bairro + " " + pedidoDao.ClienteDao.FirstOrDefault().Cidade + " - " + pedidoDao.ClienteDao.FirstOrDefault().EstadoDao.FirstOrDefault().Nome));
+            parametros.Add(new ReportParameter("Endereco", pedidoDao.ClienteDao.FirstOrDefault().Logradouro + " " +
+                                                            pedidoDao.ClienteDao.FirstOrDefault().Numero + " " +
+                                                            pedidoDao.ClienteDao.FirstOrDefault().Bairro + " " +
+                                                            pedidoDao.ClienteDao.FirstOrDefault().Cidade + " - " +
+                                                            pedidoDao.ClienteDao.FirstOrDefault().EstadoDao.FirstOrDefault().Nome + " CEP: " +
+                                                            pedidoDao.ClienteDao.FirstOrDefault().Cep));
             parametros.Add(new ReportParameter("Complemento", pedidoDao.ClienteDao.FirstOrDefault().Complemento));
             parametros.Add(new ReportParameter("PontoReferencia", pedidoDao.ClienteDao.FirstOrDefault().PontoReferencia));
-            //parametros.Add(new ReportParameter("ValorFrete", pedidoDao.ValorFrete.GetValueOrDefault().ToString()));
 
             viewer.LocalReport.SetParameters(parametros);
 
@@ -513,7 +516,8 @@ namespace ChicoDoColchao.Business
                     Complemento = item.Complemento,
                     PontoReferencia = item.PontoReferencia,
                     Email = item.Email,
-                    Ativo = item.Ativo
+                    Ativo = item.Ativo,
+                    Cep = item.Cep
                 });
             }
             viewer.LocalReport.DataSources.Add(new ReportDataSource("ds_cliente", clienteDao));

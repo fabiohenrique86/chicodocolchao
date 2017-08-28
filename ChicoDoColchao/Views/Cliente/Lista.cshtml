@@ -13,6 +13,7 @@
             $("#lblTelefoneResidencial2").text((cliente.TelefoneResidencial2 == null ? "" : cliente.TelefoneResidencial2));
             $("#lblTelefoneCelular").text((cliente.TelefoneCelular == null ? "" : cliente.TelefoneCelular));
             $("#lblTelefoneCelular2").text((cliente.TelefoneCelular2 == null ? "" : cliente.TelefoneCelular2));
+            $("#lblCep").text((cliente.Cep == null ? "" : cliente.Cep));
             $("#lblLogradouro").text((cliente.Logradouro == null ? "" : cliente.Logradouro));
             $("#lblComplemento").text((cliente.Complemento == null ? "" : cliente.Complemento));
             $("#lblPontoReferencia").text((cliente.PontoReferencia == null ? "" : cliente.PontoReferencia));
@@ -119,6 +120,11 @@
                     <div class="row">
                         <div class="col-lg-12">
                             Telefone Celular2: <label id="lblTelefoneCelular2"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            Cep: <label id="lblCep"></label>
                         </div>
                     </div>
                     <div class="row">

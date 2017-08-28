@@ -14,7 +14,7 @@
   <xs:element name="ds_cliente" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="True" msprop:Generator_DataSetName="ds_cliente" msprop:Generator_UserDSName="ds_cliente">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="ds_cliente" msprop:Generator_TableClassName="ds_clienteDataTable" msprop:Generator_TableVarName="tableds_cliente" msprop:Generator_TablePropName="_ds_cliente" msprop:Generator_RowDeletingName="ds_clienteRowDeleting" msprop:Generator_RowChangingName="ds_clienteRowChanging" msprop:Generator_RowEvHandlerName="ds_clienteRowChangeEventHandler" msprop:Generator_RowDeletedName="ds_clienteRowDeleted" msprop:Generator_UserTableName="ds_cliente" msprop:Generator_RowChangedName="ds_clienteRowChanged" msprop:Generator_RowEvArgName="ds_clienteRowChangeEvent" msprop:Generator_RowClassName="ds_clienteRow">
+        <xs:element name="ds_cliente" msprop:Generator_TableClassName="ds_clienteDataTable" msprop:Generator_TableVarName="tableds_cliente" msprop:Generator_RowChangedName="ds_clienteRowChanged" msprop:Generator_TablePropName="_ds_cliente" msprop:Generator_RowDeletingName="ds_clienteRowDeleting" msprop:Generator_RowChangingName="ds_clienteRowChanging" msprop:Generator_RowEvHandlerName="ds_clienteRowChangeEventHandler" msprop:Generator_RowDeletedName="ds_clienteRowDeleted" msprop:Generator_RowClassName="ds_clienteRow" msprop:Generator_UserTableName="ds_cliente" msprop:Generator_RowEvArgName="ds_clienteRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="ClienteID" msprop:Generator_ColumnVarNameInTable="columnClienteID" msprop:Generator_ColumnPropNameInRow="ClienteID" msprop:Generator_ColumnPropNameInTable="ClienteIDColumn" msprop:Generator_UserColumnName="ClienteID" type="xs:string" minOccurs="0" />
@@ -37,6 +37,7 @@
               <xs:element name="PontoReferencia" msprop:Generator_ColumnVarNameInTable="columnPontoReferencia" msprop:Generator_ColumnPropNameInRow="PontoReferencia" msprop:Generator_ColumnPropNameInTable="PontoReferenciaColumn" msprop:Generator_UserColumnName="PontoReferencia" type="xs:string" minOccurs="0" />
               <xs:element name="Ativo" msprop:Generator_ColumnVarNameInTable="columnAtivo" msprop:Generator_ColumnPropNameInRow="Ativo" msprop:Generator_ColumnPropNameInTable="AtivoColumn" msprop:Generator_UserColumnName="Ativo" type="xs:string" minOccurs="0" />
               <xs:element name="Email" msprop:Generator_ColumnVarNameInTable="columnEmail" msprop:Generator_ColumnPropNameInRow="Email" msprop:Generator_ColumnPropNameInTable="EmailColumn" msprop:Generator_UserColumnName="Email" type="xs:string" minOccurs="0" />
+              <xs:element name="Cep" msprop:Generator_ColumnVarNameInTable="columnCep" msprop:Generator_ColumnPropNameInRow="Cep" msprop:Generator_ColumnPropNameInTable="CepColumn" msprop:Generator_UserColumnName="Cep" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

@@ -9,6 +9,15 @@
 
         $(document).ready(function () {
 
+            $("#Login").focus();
+
+            $("input").on("keydown", function (event) {
+                if (event.keyCode == $.ui.keyCode.ENTER) {
+                    $("#btnEntrar").trigger("click");
+                    return false;
+                }
+            });
+
             $("#btnEntrar").click(function () {
 
                 $.ajax({
@@ -17,7 +26,7 @@
                     url: "/Usuario/Entrar",
                     data: $("#UsuarioLoginForm").serialize(),
                     success: function (data) {
-                        
+
                         if (!data.Sucesso) {
                             console.info(data.Erro);
                             alert(data.Mensagem);

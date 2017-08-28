@@ -27,7 +27,7 @@ namespace ChicoDoColchao.Controllers
                 return null;
             }
 
-            ClienteDao clienteDao = new ClienteDao();
+            var clienteDao = new ClienteDao();
 
             clienteDao.EstadoDao = estadoBusiness.Listar(new EstadoDao());
 
@@ -67,11 +67,11 @@ namespace ChicoDoColchao.Controllers
 
         public JsonResult Listar()
         {
-            List<ClienteDao> clientes = new List<ClienteDao>();
+            var clientes = new List<ClienteDao>();
 
             try
             {
-                ClienteDao clienteDao = new ClienteDao();
+                var clienteDao = new ClienteDao();
                 
                 clientes = clienteBusiness.Listar(clienteDao);
 
@@ -89,11 +89,11 @@ namespace ChicoDoColchao.Controllers
 
         public JsonResult ListarAutocomplete(string term)
         {
-            List<ClienteDao> clientes = new List<ClienteDao>();
+            var clientes = new List<ClienteDao>();
 
             try
             {
-                ClienteDao clienteDao = new ClienteDao();
+                var clienteDao = new ClienteDao();
                 
                 clienteDao.Cpf = term;
                 clienteDao.Cnpj = term;

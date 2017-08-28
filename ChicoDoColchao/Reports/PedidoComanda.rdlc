@@ -2614,7 +2614,7 @@
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>ds_tipo_pagamento</rd:DataSetName>
-        <rd:SchemaPath>C:\Users\Fabio Henrique\Documents\Visual Studio 2015\Projects\ChicoDoColchao\ChicoDoColchao\ds_tipo_pagamento.xsd</rd:SchemaPath>
+        <rd:SchemaPath>C:\Users\fabio\Documents\Visual Studio 2015\Projects\ChicoDoColchao\ChicoDoColchao\ds_tipo_pagamento.xsd</rd:SchemaPath>
         <rd:TableName>ds_tipo_pagamento</rd:TableName>
         <rd:TableAdapterFillMethod />
         <rd:TableAdapterGetDataMethod />
@@ -2654,7 +2654,7 @@
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>ds_produto</rd:DataSetName>
-        <rd:SchemaPath>C:\Users\Fabio Henrique\Documents\Visual Studio 2015\Projects\ChicoDoColchao\ChicoDoColchao\ds_produto.xsd</rd:SchemaPath>
+        <rd:SchemaPath>C:\Users\fabio\Documents\Visual Studio 2015\Projects\ChicoDoColchao\ChicoDoColchao\ds_produto.xsd</rd:SchemaPath>
         <rd:TableName>ds_produto</rd:TableName>
         <rd:TableAdapterFillMethod />
         <rd:TableAdapterGetDataMethod />
@@ -2747,10 +2747,14 @@
           <DataField>Email</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="Cep">
+          <DataField>Cep</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>ds_cliente</rd:DataSetName>
-        <rd:SchemaPath>C:\Users\Fabio Henrique\Documents\Visual Studio 2015\Projects\ChicoDoColchao\ChicoDoColchao\ds_cliente.xsd</rd:SchemaPath>
+        <rd:SchemaPath>C:\Users\fabio\Documents\Visual Studio 2015\Projects\ChicoDoColchao\ChicoDoColchao\ds_cliente.xsd</rd:SchemaPath>
         <rd:TableName>ds_cliente</rd:TableName>
         <rd:TableAdapterFillMethod />
         <rd:TableAdapterGetDataMethod />

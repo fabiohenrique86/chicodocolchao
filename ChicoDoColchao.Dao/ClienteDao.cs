@@ -14,13 +14,14 @@ namespace ChicoDoColchao.Dao
         public string Cpf { get; set; }
         public string Cnpj { get; set; }
         public string Nome { get; set; }
-        public Nullable<System.DateTime> DataNascimento { get; set; }
+        public DateTime? DataNascimento { get; set; }
         public string NomeFantasia { get; set; }
         public string RazaoSocial { get; set; }
         public string TelefoneResidencial { get; set; }
         public string TelefoneCelular { get; set; }
         public string TelefoneResidencial2 { get; set; }
         public string TelefoneCelular2 { get; set; }
+        public string Cep { get; set; }
         public string Cidade { get; set; }
         public ICollection<EstadoDao> EstadoDao { get; set; }
         public string Logradouro { get; set; }

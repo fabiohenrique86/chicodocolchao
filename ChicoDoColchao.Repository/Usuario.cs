@@ -35,8 +35,8 @@ namespace ChicoDoColchao.Repository
         public virtual ICollection<Pedido> Pedido1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PedidoProduto> PedidoProduto { get; set; }
-        public virtual TipoUsuario TipoUsuario { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PedidoProduto> PedidoProduto1 { get; set; }
+        public virtual TipoUsuario TipoUsuario { get; set; }
     }
 }

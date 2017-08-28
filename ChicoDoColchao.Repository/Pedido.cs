@@ -32,8 +32,8 @@ namespace ChicoDoColchao.Repository
         public int ClienteID { get; set; }
         public int LojaID { get; set; }
         public double Desconto { get; set; }
-        public Nullable<System.DateTime> DataCancelamento { get; set; }
         public Nullable<int> UsuarioPedidoID { get; set; }
+        public Nullable<System.DateTime> DataCancelamento { get; set; }
         public Nullable<int> UsuarioCancelamentoID { get; set; }
     
         public virtual Cliente Cliente { get; set; }

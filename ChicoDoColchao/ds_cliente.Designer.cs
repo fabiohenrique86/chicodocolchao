@@ -319,6 +319,8 @@ namespace ChicoDoColchao {
             
             private global::System.Data.DataColumn columnEmail;
             
+            private global::System.Data.DataColumn columnCep;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public ds_clienteDataTable() {
@@ -514,6 +516,14 @@ namespace ChicoDoColchao {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn CepColumn {
+                get {
+                    return this.columnCep;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -569,7 +579,8 @@ namespace ChicoDoColchao {
                         string Complemento, 
                         string PontoReferencia, 
                         string Ativo, 
-                        string Email) {
+                        string Email, 
+                        string Cep) {
                 ds_clienteRow rowds_clienteRow = ((ds_clienteRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         ClienteID,
@@ -591,7 +602,8 @@ namespace ChicoDoColchao {
                         Complemento,
                         PontoReferencia,
                         Ativo,
-                        Email};
+                        Email,
+                        Cep};
                 rowds_clienteRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowds_clienteRow);
                 return rowds_clienteRow;
@@ -634,6 +646,7 @@ namespace ChicoDoColchao {
                 this.columnPontoReferencia = base.Columns["PontoReferencia"];
                 this.columnAtivo = base.Columns["Ativo"];
                 this.columnEmail = base.Columns["Email"];
+                this.columnCep = base.Columns["Cep"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -679,6 +692,8 @@ namespace ChicoDoColchao {
                 base.Columns.Add(this.columnAtivo);
                 this.columnEmail = new global::System.Data.DataColumn("Email", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnEmail);
+                this.columnCep = new global::System.Data.DataColumn("Cep", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCep);
                 this.ExtendedProperties.Add("Generator_TablePropName", "_ds_cliente");
                 this.ExtendedProperties.Add("Generator_UserTableName", "ds_cliente");
             }
@@ -1143,6 +1158,22 @@ namespace ChicoDoColchao {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string Cep {
+                get {
+                    try {
+                        return ((string)(this[this.tableds_cliente.CepColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Cep\' in table \'ds_cliente\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableds_cliente.CepColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsClienteIDNull() {
                 return this.IsNull(this.tableds_cliente.ClienteIDColumn);
             }
@@ -1379,6 +1410,18 @@ namespace ChicoDoColchao {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetEmailNull() {
                 this[this.tableds_cliente.EmailColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsCepNull() {
+                return this.IsNull(this.tableds_cliente.CepColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetCepNull() {
+                this[this.tableds_cliente.CepColumn] = global::System.Convert.DBNull;
             }
         }
         

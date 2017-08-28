@@ -12,12 +12,15 @@ namespace ChicoDoColchao.Repository
     using System;
     using System.Collections.Generic;
     
-    public partial class sysdiagrams
+    public partial class ParcelaProduto
     {
-        public string name { get; set; }
-        public int principal_id { get; set; }
-        public int diagram_id { get; set; }
-        public Nullable<int> version { get; set; }
-        public byte[] definition { get; set; }
+        public int ParcelaProdutoID { get; set; }
+        public int ParcelaID { get; set; }
+        public int ProdutoID { get; set; }
+        public double Preco { get; set; }
+        public bool AVista { get; set; }
+    
+        public virtual Parcela Parcela { get; set; }
+        public virtual Produto Produto { get; set; }
     }
 }

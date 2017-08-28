@@ -289,6 +289,8 @@ namespace ChicoDoColchao {
             
             private global::System.Data.DataColumn columnObservacao;
             
+            private global::System.Data.DataColumn columnCV;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public ds_movimento_caixaDataTable() {
@@ -364,6 +366,14 @@ namespace ChicoDoColchao {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn CVColumn {
+                get {
+                    return this.columnCV;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -399,14 +409,15 @@ namespace ChicoDoColchao {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ds_movimento_caixaRow Addds_movimento_caixaRow(string PedidoID, string Valor, string Forma, string Prazo, string Observacao) {
+            public ds_movimento_caixaRow Addds_movimento_caixaRow(string PedidoID, string Valor, string Forma, string Prazo, string Observacao, string CV) {
                 ds_movimento_caixaRow rowds_movimento_caixaRow = ((ds_movimento_caixaRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         PedidoID,
                         Valor,
                         Forma,
                         Prazo,
-                        Observacao};
+                        Observacao,
+                        CV};
                 rowds_movimento_caixaRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowds_movimento_caixaRow);
                 return rowds_movimento_caixaRow;
@@ -434,6 +445,7 @@ namespace ChicoDoColchao {
                 this.columnForma = base.Columns["Forma"];
                 this.columnPrazo = base.Columns["Prazo"];
                 this.columnObservacao = base.Columns["Observacao"];
+                this.columnCV = base.Columns["CV"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -449,6 +461,8 @@ namespace ChicoDoColchao {
                 base.Columns.Add(this.columnPrazo);
                 this.columnObservacao = new global::System.Data.DataColumn("Observacao", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnObservacao);
+                this.columnCV = new global::System.Data.DataColumn("CV", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCV);
                 this.ExtendedProperties.Add("Generator_TablePropName", "_ds_movimento_caixa");
                 this.ExtendedProperties.Add("Generator_UserTableName", "ds_movimento_caixa");
             }
@@ -673,6 +687,22 @@ namespace ChicoDoColchao {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string CV {
+                get {
+                    try {
+                        return ((string)(this[this.tableds_movimento_caixa.CVColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'CV\' in table \'ds_movimento_caixa\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableds_movimento_caixa.CVColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsPedidoIDNull() {
                 return this.IsNull(this.tableds_movimento_caixa.PedidoIDColumn);
             }
@@ -729,6 +759,18 @@ namespace ChicoDoColchao {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetObservacaoNull() {
                 this[this.tableds_movimento_caixa.ObservacaoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsCVNull() {
+                return this.IsNull(this.tableds_movimento_caixa.CVColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetCVNull() {
+                this[this.tableds_movimento_caixa.CVColumn] = global::System.Convert.DBNull;
             }
         }
         

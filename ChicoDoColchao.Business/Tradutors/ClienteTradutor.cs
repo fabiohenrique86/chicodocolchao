@@ -65,6 +65,11 @@ namespace ChicoDoColchao.Business.Tradutors
                 cliente.TelefoneCelular2 = clienteDao.TelefoneCelular2.Trim().Replace(".", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace(" ", "");
             }
 
+            if (!string.IsNullOrEmpty(clienteDao.Cep))
+            {
+                cliente.Cep = clienteDao.Cep.Trim().Replace(".", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace(" ", "");
+            }
+
             if (!string.IsNullOrEmpty(clienteDao.Cidade))
             {
                 cliente.Cidade = clienteDao.Cidade.Trim();
@@ -73,10 +78,10 @@ namespace ChicoDoColchao.Business.Tradutors
             var estado = clienteDao.EstadoDao.FirstOrDefault();
             if (estado != null)
             {
-                cliente.Estado = new Estado() { EstadoID = estado.EstadoID };
+                //cliente.Estado = new Estado() { EstadoID = estado.EstadoID };
                 cliente.EstadoID = estado.EstadoID;
             }
-            
+
             if (!string.IsNullOrEmpty(clienteDao.Logradouro))
             {
                 cliente.Logradouro = clienteDao.Logradouro.Trim();
@@ -176,6 +181,11 @@ namespace ChicoDoColchao.Business.Tradutors
                 {
                     clienteDao.TelefoneCelular2 = Convert.ToInt64(cliente.TelefoneCelular2).ToString("(##) #####-####");
                 }
+            }
+
+            if (!string.IsNullOrEmpty(cliente.Cep))
+            {
+                clienteDao.Cep = Convert.ToInt64(cliente.Cep).ToString("#####-###");
             }
 
             clienteDao.Cidade = cliente.Cidade;

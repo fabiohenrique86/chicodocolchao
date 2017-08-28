@@ -1,0 +1,133 @@
+﻿@model ChicoDoColchao.Dao.ClienteDao
+
+@{
+    ViewBag.Title = "Cliente - Cadastro";
+}
+@section scripts
+{
+    <script type="text/javascript">
+    
+        $(document).ready(function () {
+
+            var validator = $("#PedidoForm").validate({
+                rules: {
+                    EstadoID: { required: true },
+                    Cidade: { required: true },
+                    Logradouro: { required: true },
+                    Bairro: { required: true },
+                    Numero: { required: true, digits: true }
+                }
+            });
+
+            $("#btnIncluirCliente").click(function () {
+
+                var clienteDao = {};
+
+                clienteDao.Nome = $("#Nome").val().trim();
+                clienteDao.Cpf = $("#Cpf").val().trim();
+                clienteDao.DataNascimento = $("#DataNascimento").val().trim();
+                clienteDao.NomeFantasia = $("#NomeFantasia").val().trim();
+                clienteDao.Cnpj = $("#Cnpj").val().trim();
+                clienteDao.RazaoSocial = $("#RazaoSocial").val().trim();
+                clienteDao.TelefoneResidencial = $("#TelefoneResidencial").val().trim();
+                clienteDao.TelefoneResidencial2 = $("#TelefoneResidencial2").val().trim();
+                clienteDao.TelefoneCelular = $("#TelefoneCelular").val().trim();
+                clienteDao.TelefoneCelular2 = $("#TelefoneCelular2").val().trim();
+                clienteDao.EstadoDao = [];
+                clienteDao.EstadoDao.push({ EstadoID: $("#EstadoID option:selected").val() });
+                clienteDao.Cidade = $("#Cidade").val().trim();
+                clienteDao.Logradouro = $("#Logradouro").val().trim();
+                clienteDao.Bairro = $("#Bairro").val().trim();
+                clienteDao.Numero = $("#Numero").val().trim();
+                clienteDao.Complemento = $("#Complemento").val().trim();
+                
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Cliente/Incluir",
+                    data: { clienteDao: clienteDao },
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            alert(data.Mensagem);
+                            return;
+                        }
+
+                        $("#ClienteForm")[0].reset();
+                        //validator.resetForm();                       
+
+                        alert(data.Mensagem);
+                    }
+                });
+
+            });
+        });
+    </script>
+}
+<h2><i class="glyphicon glyphicon-user" style="color: #660033" title="Cliente"></i> Cliente</h2>
+<hr />
+@using (Html.BeginForm("Incluir", "Cliente", FormMethod.Post, new { id = "ClienteForm" }))
+{
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="form-group">
+                @Html.TextBoxFor(x => x.Nome, new { @class = "form-control", @placeholder = "Nome", @maxlength = "100" })
+            </div>
+            <div class="form-group">
+                @Html.TextBoxFor(x => x.Cpf, new { @class = "form-control cpf", @placeholder = "Cpf", @maxlength = "11" })
+            </div>
+            <div class="form-group">
+                @Html.TextBoxFor(x => x.DataNascimento, new { @class = "form-control data datepicker", @placeholder = "Data de Nascimento", @maxlength = "10" })
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="form-group">
+                @Html.TextBoxFor(x => x.NomeFantasia, new { @class = "form-control", @placeholder = "Nome Fantasia", @maxlength = "100" })
+            </div>
+            <div class="form-group">
+                @Html.TextBoxFor(x => x.Cnpj, new { @class = "form-control cnpj", @placeholder = "Cnpj", @maxlength = "14" })
+            </div>
+            <div class="form-group">
+                @Html.TextBoxFor(x => x.RazaoSocial, new { @class = "form-control", @placeholder = "Razão Social", @maxlength = "100" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="form-group">
+                @Html.TextBoxFor(x => x.TelefoneResidencial, new { @class = "form-control telefone", @placeholder = "Telefone Residencial", @maxlength = "11" })
+            </div>
+            <div class="form-group">
+                @Html.TextBoxFor(x => x.TelefoneResidencial2, new { @class = "form-control telefone", @placeholder = "Telefone Residencial", @maxlength = "11" })
+            </div>
+            <div class="form-group">
+                @Html.TextBoxFor(x => x.TelefoneCelular, new { @class = "form-control telefone", @placeholder = "Telefone Celular", @maxlength = "11" })
+            </div>
+            <div class="form-group">
+                @Html.TextBoxFor(x => x.TelefoneCelular2, new { @class = "form-control telefone", @placeholder = "Telefone Celular", @maxlength = "11" })
+            </div>
+            <div class="form-group">
+                @Html.DropDownListFor(x => x.EstadoDao.FirstOrDefault().EstadoID, new SelectList(Model.EstadoDao, "EstadoID", "Nome"), "Estado", new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @Html.TextBoxFor(x => x.Cidade, new { @class = "form-control", @placeholder = "Cidade", @maxlength = "100" })
+            </div>
+            <div class="form-group">
+                @Html.TextBoxFor(x => x.Logradouro, new { @class = "form-control", @placeholder = "Logradouro", @maxlength = "100" })
+            </div>
+            <div class="form-group">
+                @Html.TextBoxFor(x => x.Bairro, new { @class = "form-control", @placeholder = "Bairro", @maxlength = "75" })
+            </div>
+            <div class="form-group">
+                @Html.TextBoxFor(x => x.Numero, new { @class = "form-control", @placeholder = "Número", @maxlength = "7" })
+            </div>
+            <div class="form-group">
+                @Html.TextBoxFor(x => x.Complemento, new { @class = "form-control", @placeholder = "Complemento", @maxlength = "100" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <button id="btnIncluirCliente" type="button" class="btn btn-success">Incluir Cliente</button>
+    </div>
+}
+

@@ -120,7 +120,8 @@ namespace ChicoDoColchao.Business.Tradutors
                 Numero = pedido.Cliente.Numero,
                 PontoReferencia = pedido.Cliente.PontoReferencia,
                 Complemento = pedido.Cliente.Complemento,
-                Bairro = pedido.Cliente.Bairro
+                Bairro = pedido.Cliente.Bairro,
+                Cep = pedido.Cliente.Cep
             });
             pedidoDao.DataPedido = pedido.DataPedido;
             pedidoDao.DataCancelamento = pedido.DataCancelamento;

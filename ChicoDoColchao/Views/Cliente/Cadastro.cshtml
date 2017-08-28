@@ -8,16 +8,94 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
+            
+            $("#Cep").change(function ()
+            {
+                var cep = $(this).val().replace("-", "");
 
-            var validator = $("#ClienteForm").validate({
-                rules: {
-                    EstadoID: { required: true },
-                    Cidade: { required: true },
-                    Logradouro: { required: true },
-                    Bairro: { required: true },
-                    Numero: { required: true, digits: true }
-                }
+                // verificação cep
+                if (cep == null || cep == "") { return; }
+
+                $.ajax({
+                    dataType: "json",
+                    type: "GET",
+                    url: "https://viacep.com.br/ws/" + cep + "/json/",
+                    success: function (data)
+                    {
+                        // verificação erro
+                        if (data == null || data.erro) { return; }
+
+                        var estadoID = $('#EstadoID option').filter(function () { return $(this).html() == obterNomeEstado(data.uf); }).val();
+                        $("#EstadoID").val(estadoID);
+                        $("#Cidade").val(data.localidade);
+                        $("#Logradouro").val(data.logradouro);
+                        $("#Complemento").val(data.complemento);
+                        $("#Bairro").val(data.bairro);
+                    }
+                });
+
             });
+
+            function obterNomeEstado(uf) {
+                switch (uf) {
+                    case "AC":
+                        return "Acre";
+                    case "AL":
+                        return "Alagoas";
+                    case "AM":
+                        return "Amazonas";
+                    case "AP":
+                        return "Amapá";
+                    case "BA":
+                        return "Bahia";
+                    case "CE":
+                        return "Ceará";
+                    case "DF":
+                        return "Distrito Federal";
+                    case "ES":
+                        return "Espírito Santo";
+                    case "GO":
+                        return "Goiás";
+                    case "MA":
+                        return "Maranhão";
+                    case "MG":
+                        return "Minas Gerais";
+                    case "MS":
+                        return "Mato Grosso do Sul";
+                    case "MT":
+                        return "Mato Grosso";
+                    case "PA":
+                        return "Pará";
+                    case "PB":
+                        return "Paraíba";
+                    case "PE":
+                        return "Pernambuco";
+                    case "PI":
+                        return "Piauí";
+                    case "PR":
+                        return "Paraná";
+                    case "RJ":
+                        return "Rio de Janeiro";
+                    case "RN":
+                        return "Rio Grande do Norte";
+                    case "RO":
+                        return "Rondônia";
+                    case "RR":
+                        return "Roraima";
+                    case "RG":
+                        return "Rio Grande do Sul";
+                    case "SC":
+                        return "Santa Catarina";
+                    case "SE":
+                        return "Sergipe";
+                    case "SP":
+                        return "São Paulo";
+                    case "TO":
+                        return "Tocantis";
+                    default:
+                        return "";
+                }
+            }
 
             $("#btnCadastrar").click(function () {
 
@@ -34,6 +112,7 @@
                 clienteDao.TelefoneResidencial2 = $("#TelefoneResidencial2").val().trim();
                 clienteDao.TelefoneCelular = $("#TelefoneCelular").val().trim();
                 clienteDao.TelefoneCelular2 = $("#TelefoneCelular2").val().trim();
+                clienteDao.Cep = $("#Cep").val().trim();
                 clienteDao.EstadoDao = [];
                 clienteDao.EstadoDao.push({ EstadoID: $("#EstadoID option:selected").val() });
                 clienteDao.Cidade = $("#Cidade").val().trim();
@@ -56,13 +135,14 @@
                         }
 
                         $("#ClienteForm")[0].reset();
-                        validator.resetForm();
+                        //validator.resetForm();
                         $("#Cpf").val("");
                         $("#DataNascimento").val("");
                         $("#TelefoneResidencial").val("");
                         $("#TelefoneResidencial2").val("");
                         $("#TelefoneCelular").val("");
                         $("#TelefoneCelular2").val("");
+                        $("#Cep").val("");
 
                         alert(data.Mensagem);
                     }
@@ -121,6 +201,9 @@
                 </div>
                 <div class="form-group">
                     @Html.TextBoxFor(x => x.TelefoneCelular2, new { @class = "form-control celular", @placeholder = "Telefone Celular (Opcional)" })
+                </div>
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Cep, new { @class = "form-control cep", @placeholder = "CEP", @maxlength = "9" })
                 </div>
                 <div class="form-group">
                     @Html.DropDownListFor(x => x.EstadoDao.FirstOrDefault().EstadoID, new SelectList(Model.EstadoDao, "EstadoID", "Nome"), "Estado", new { @class = "form-control" })

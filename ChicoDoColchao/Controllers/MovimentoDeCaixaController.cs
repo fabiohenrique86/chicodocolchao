@@ -85,7 +85,7 @@ namespace ChicoDoColchao.Controllers
             totalRecebido = dinheiro + cartaoVisa + cartaoMaster + cheque + cartaoElo + cartaoHiper + cartaoAmericanExpress + crediario;
 
             // parâmetros
-            List <ReportParameter> parametros = new List<ReportParameter>();
+            List<ReportParameter> parametros = new List<ReportParameter>();
             parametros.Add(new ReportParameter("Cnpj", pedidosDao.FirstOrDefault().LojaDao.FirstOrDefault().Cnpj));
             parametros.Add(new ReportParameter("Data", string.Format("{0} {1}:{2}", data, DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString())));
             parametros.Add(new ReportParameter("Dinheiro", dinheiro.ToString()));
@@ -110,7 +110,8 @@ namespace ChicoDoColchao.Controllers
                     Valor = item.PedidoTipoPagamentoDao.Sum(x => x.ValorPago),
                     Forma = string.Join(",", item.PedidoTipoPagamentoDao.Select(x => x.TipoPagamentoDao.Descricao)),
                     Prazo = string.Join(",", item.PedidoTipoPagamentoDao.Select(x => x.ParcelaDao.Numero)),
-                    Observacao = item.Observacao
+                    Observacao = item.Observacao,
+                    CV = string.Join(",", item.PedidoTipoPagamentoDao.Select(x => x.CV))
                 });
             }
             viewer.LocalReport.DataSources.Add(new ReportDataSource("ds_movimento_caixa", pedidos));

@@ -52,7 +52,7 @@ namespace ChicoDoColchao.Repository
             cliente.Ativo = true;
 
             chicoDoColchaoEntities.Entry(cliente).State = EntityState.Added;
-            chicoDoColchaoEntities.Entry(cliente.Estado).State = EntityState.Detached;
+            //chicoDoColchaoEntities.Entry(cliente.Estado).State = EntityState.Detached;
 
             chicoDoColchaoEntities.SaveChanges();
         }
