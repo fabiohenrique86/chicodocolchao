@@ -21,10 +21,10 @@ namespace ChicoDoColchao.Dao
 
         public int PedidoID { get; set; }
         public System.DateTime DataPedido { get; set; }
-        public Nullable<System.DateTime> DataCancelamento { get; set; }
+        public DateTime? DataCancelamento { get; set; }
         public string Observacao { get; set; }
         public string NomeCarreto { get; set; }
-        public Nullable<double> ValorFrete { get; set; }
+        public double? ValorFrete { get; set; }
         public double Desconto { get; set; }
 
         public virtual ICollection<ClienteDao> ClienteDao { get; set; }

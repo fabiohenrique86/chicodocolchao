@@ -69,7 +69,7 @@ namespace ChicoDoColchao.Controllers
             viewer.ProcessingMode = ProcessingMode.Local;
             viewer.LocalReport.ReportPath = Server.MapPath("~/bin/Reports/MovimentoDeCaixa.rdlc");
 
-            double dinheiro = 0, cartaoVisa = 0, cartaoMaster = 0, cheque = 0, cartaoElo = 0, cartaoHiper = 0, cartaoAmericanExpress = 0, crediario = 0, totalRecebido = 0;
+            double dinheiro = 0, cartaoVisa = 0, cartaoMaster = 0, cheque = 0, cartaoElo = 0, cartaoHiper = 0, cartaoAmericanExpress = 0, crediario = 0, totalRecebido = 0, totalFrete = 0;
             foreach (var item in pedidosDao)
             {
                 dinheiro += item.PedidoTipoPagamentoDao.Where(x => x.TipoPagamentoDao.TipoPagamentoID == TipoPagamentoDao.ETipoPagamento.Dinheiro.GetHashCode()).Sum(x => x.ValorPago);
@@ -80,12 +80,14 @@ namespace ChicoDoColchao.Controllers
                 cartaoHiper += item.PedidoTipoPagamentoDao.Where(x => x.TipoPagamentoDao.TipoPagamentoID == TipoPagamentoDao.ETipoPagamento.CartaoHiper.GetHashCode()).Sum(x => x.ValorPago);
                 cartaoAmericanExpress += item.PedidoTipoPagamentoDao.Where(x => x.TipoPagamentoDao.TipoPagamentoID == TipoPagamentoDao.ETipoPagamento.CartaoAmericanExpress.GetHashCode()).Sum(x => x.ValorPago);
                 crediario += item.PedidoTipoPagamentoDao.Where(x => x.TipoPagamentoDao.TipoPagamentoID == TipoPagamentoDao.ETipoPagamento.Crediario.GetHashCode()).Sum(x => x.ValorPago);
+                totalFrete += item.ValorFrete.GetValueOrDefault();
             }
 
             totalRecebido = dinheiro + cartaoVisa + cartaoMaster + cheque + cartaoElo + cartaoHiper + cartaoAmericanExpress + crediario;
 
             // parâmetros
             List<ReportParameter> parametros = new List<ReportParameter>();
+
             parametros.Add(new ReportParameter("Cnpj", pedidosDao.FirstOrDefault().LojaDao.FirstOrDefault().Cnpj));
             parametros.Add(new ReportParameter("Data", string.Format("{0} {1}:{2}", data, DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString())));
             parametros.Add(new ReportParameter("Dinheiro", dinheiro.ToString()));
@@ -97,6 +99,7 @@ namespace ChicoDoColchao.Controllers
             parametros.Add(new ReportParameter("CartaoHiper", cartaoHiper.ToString()));
             parametros.Add(new ReportParameter("CartaoAmericanExpress", cartaoAmericanExpress.ToString()));
             parametros.Add(new ReportParameter("Crediario", crediario.ToString()));
+            parametros.Add(new ReportParameter("TotalFrete", totalFrete.ToString()));
 
             viewer.LocalReport.SetParameters(parametros);
 
@@ -107,11 +110,12 @@ namespace ChicoDoColchao.Controllers
                 pedidos.Add(new
                 {
                     PedidoID = item.PedidoID,
-                    Valor = item.PedidoTipoPagamentoDao.Sum(x => x.ValorPago),
+                    ValorPago = item.PedidoTipoPagamentoDao.Sum(x => x.ValorPago),
                     Forma = string.Join(",", item.PedidoTipoPagamentoDao.Select(x => x.TipoPagamentoDao.Descricao)),
                     Prazo = string.Join(",", item.PedidoTipoPagamentoDao.Select(x => x.ParcelaDao.Numero)),
                     Observacao = item.Observacao,
-                    CV = string.Join(",", item.PedidoTipoPagamentoDao.Select(x => x.CV))
+                    CV = string.Join(",", item.PedidoTipoPagamentoDao.Select(x => x.CV)),
+                    ValorFrete = item.ValorFrete
                 });
             }
             viewer.LocalReport.DataSources.Add(new ReportDataSource("ds_movimento_caixa", pedidos));

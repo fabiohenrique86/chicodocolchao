@@ -281,7 +281,7 @@ namespace ChicoDoColchao {
             
             private global::System.Data.DataColumn columnPedidoID;
             
-            private global::System.Data.DataColumn columnValor;
+            private global::System.Data.DataColumn columnValorPago;
             
             private global::System.Data.DataColumn columnForma;
             
@@ -290,6 +290,8 @@ namespace ChicoDoColchao {
             private global::System.Data.DataColumn columnObservacao;
             
             private global::System.Data.DataColumn columnCV;
+            
+            private global::System.Data.DataColumn columnValorFrete;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
@@ -334,9 +336,9 @@ namespace ChicoDoColchao {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn ValorColumn {
+            public global::System.Data.DataColumn ValorPagoColumn {
                 get {
-                    return this.columnValor;
+                    return this.columnValorPago;
                 }
             }
             
@@ -369,6 +371,14 @@ namespace ChicoDoColchao {
             public global::System.Data.DataColumn CVColumn {
                 get {
                     return this.columnCV;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn ValorFreteColumn {
+                get {
+                    return this.columnValorFrete;
                 }
             }
             
@@ -409,15 +419,16 @@ namespace ChicoDoColchao {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ds_movimento_caixaRow Addds_movimento_caixaRow(string PedidoID, string Valor, string Forma, string Prazo, string Observacao, string CV) {
+            public ds_movimento_caixaRow Addds_movimento_caixaRow(string PedidoID, string ValorPago, string Forma, string Prazo, string Observacao, string CV, string ValorFrete) {
                 ds_movimento_caixaRow rowds_movimento_caixaRow = ((ds_movimento_caixaRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         PedidoID,
-                        Valor,
+                        ValorPago,
                         Forma,
                         Prazo,
                         Observacao,
-                        CV};
+                        CV,
+                        ValorFrete};
                 rowds_movimento_caixaRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowds_movimento_caixaRow);
                 return rowds_movimento_caixaRow;
@@ -441,11 +452,12 @@ namespace ChicoDoColchao {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             internal void InitVars() {
                 this.columnPedidoID = base.Columns["PedidoID"];
-                this.columnValor = base.Columns["Valor"];
+                this.columnValorPago = base.Columns["ValorPago"];
                 this.columnForma = base.Columns["Forma"];
                 this.columnPrazo = base.Columns["Prazo"];
                 this.columnObservacao = base.Columns["Observacao"];
                 this.columnCV = base.Columns["CV"];
+                this.columnValorFrete = base.Columns["ValorFrete"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -453,8 +465,8 @@ namespace ChicoDoColchao {
             private void InitClass() {
                 this.columnPedidoID = new global::System.Data.DataColumn("PedidoID", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnPedidoID);
-                this.columnValor = new global::System.Data.DataColumn("Valor", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnValor);
+                this.columnValorPago = new global::System.Data.DataColumn("ValorPago", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnValorPago);
                 this.columnForma = new global::System.Data.DataColumn("Forma", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnForma);
                 this.columnPrazo = new global::System.Data.DataColumn("Prazo", typeof(string), null, global::System.Data.MappingType.Element);
@@ -463,6 +475,8 @@ namespace ChicoDoColchao {
                 base.Columns.Add(this.columnObservacao);
                 this.columnCV = new global::System.Data.DataColumn("CV", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCV);
+                this.columnValorFrete = new global::System.Data.DataColumn("ValorFrete", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnValorFrete);
                 this.ExtendedProperties.Add("Generator_TablePropName", "_ds_movimento_caixa");
                 this.ExtendedProperties.Add("Generator_UserTableName", "ds_movimento_caixa");
             }
@@ -623,17 +637,17 @@ namespace ChicoDoColchao {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string Valor {
+            public string ValorPago {
                 get {
                     try {
-                        return ((string)(this[this.tableds_movimento_caixa.ValorColumn]));
+                        return ((string)(this[this.tableds_movimento_caixa.ValorPagoColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'Valor\' in table \'ds_movimento_caixa\' is DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'ValorPago\' in table \'ds_movimento_caixa\' is DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tableds_movimento_caixa.ValorColumn] = value;
+                    this[this.tableds_movimento_caixa.ValorPagoColumn] = value;
                 }
             }
             
@@ -703,6 +717,22 @@ namespace ChicoDoColchao {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string ValorFrete {
+                get {
+                    try {
+                        return ((string)(this[this.tableds_movimento_caixa.ValorFreteColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ValorFrete\' in table \'ds_movimento_caixa\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableds_movimento_caixa.ValorFreteColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsPedidoIDNull() {
                 return this.IsNull(this.tableds_movimento_caixa.PedidoIDColumn);
             }
@@ -715,14 +745,14 @@ namespace ChicoDoColchao {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsValorNull() {
-                return this.IsNull(this.tableds_movimento_caixa.ValorColumn);
+            public bool IsValorPagoNull() {
+                return this.IsNull(this.tableds_movimento_caixa.ValorPagoColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetValorNull() {
-                this[this.tableds_movimento_caixa.ValorColumn] = global::System.Convert.DBNull;
+            public void SetValorPagoNull() {
+                this[this.tableds_movimento_caixa.ValorPagoColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -771,6 +801,18 @@ namespace ChicoDoColchao {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetCVNull() {
                 this[this.tableds_movimento_caixa.CVColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsValorFreteNull() {
+                return this.IsNull(this.tableds_movimento_caixa.ValorFreteColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetValorFreteNull() {
+                this[this.tableds_movimento_caixa.ValorFreteColumn] = global::System.Convert.DBNull;
             }
         }
         
