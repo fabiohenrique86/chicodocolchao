@@ -106,8 +106,8 @@ namespace ChicoDoColchao.Business.Tradutors
                 Nome = pedido.Cliente.Nome,
                 Email = pedido.Cliente.Email,
                 DataNascimento = pedido.Cliente.DataNascimento,
-                Cpf = string.IsNullOrEmpty(pedido.Cliente.Cpf) ? string.Empty : Convert.ToInt64(pedido.Cliente.Cpf).ToString(@"###\.###\.###\-##"),
-                Cnpj = string.IsNullOrEmpty(pedido.Cliente.Cnpj) ? string.Empty : Convert.ToInt64(pedido.Cliente.Cnpj).ToString(@"##\.###\.###\/####\-##"),                
+                Cpf = string.IsNullOrEmpty(pedido.Cliente.Cpf) ? string.Empty : Convert.ToUInt64(pedido.Cliente.Cpf).ToString(@"000\.000\.000\-00"),
+                Cnpj = string.IsNullOrEmpty(pedido.Cliente.Cnpj) ? string.Empty : Convert.ToUInt64(pedido.Cliente.Cnpj).ToString(@"00\.000\.000\/0000\-00"),
                 NomeFantasia = pedido.Cliente.NomeFantasia,
                 RazaoSocial = pedido.Cliente.RazaoSocial,
                 TelefoneResidencial = string.IsNullOrEmpty(pedido.Cliente.TelefoneResidencial) ? string.Empty : pedido.Cliente.TelefoneResidencial.Length > 10 ? Convert.ToInt64(pedido.Cliente.TelefoneResidencial).ToString("(##) #####-####") : Convert.ToInt64(pedido.Cliente.TelefoneResidencial).ToString("(##) ####-####"),
@@ -208,7 +208,8 @@ namespace ChicoDoColchao.Business.Tradutors
                     CategoriaDao = new List<CategoriaDao>()
                     {
                         new CategoriaDao() { CategoriaID = pedidoProduto.Produto.Categoria.CategoriaID, Descricao = pedidoProduto.Produto.Categoria.Descricao }
-                    }
+                    },
+                    Preco = pedidoProduto.Produto.Preco
                 };
 
                 pedidoDao.PedidoProdutoDao.Add(pedidoProdutoDao);

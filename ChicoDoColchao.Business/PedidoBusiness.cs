@@ -472,6 +472,7 @@ namespace ChicoDoColchao.Business
 
             // parâmetros
             List<ReportParameter> parametros = new List<ReportParameter>();
+
             parametros.Add(new ReportParameter("PedidoID", pedidoDao.PedidoID.ToString()));
             parametros.Add(new ReportParameter("Observacao", pedidoDao.Observacao));
             parametros.Add(new ReportParameter("RazaoSocial", pedidoDao.LojaDao.FirstOrDefault().RazaoSocial));
@@ -487,7 +488,8 @@ namespace ChicoDoColchao.Business
                                                             pedidoDao.ClienteDao.FirstOrDefault().EstadoDao.FirstOrDefault().Nome + " CEP: " +
                                                             pedidoDao.ClienteDao.FirstOrDefault().Cep));
             parametros.Add(new ReportParameter("Complemento", pedidoDao.ClienteDao.FirstOrDefault().Complemento));
-            parametros.Add(new ReportParameter("PontoReferencia", pedidoDao.ClienteDao.FirstOrDefault().PontoReferencia));
+            parametros.Add(new ReportParameter("PontoReferencia", pedidoDao.ClienteDao.FirstOrDefault().PontoReferencia));            
+            parametros.Add(new ReportParameter("TotalPedido", Math.Round(pedidoDao.PedidoProdutoDao.Sum(x => x.ProdutoDao.Preco * 3 * x.Quantidade), 2).ToString()));
 
             viewer.LocalReport.SetParameters(parametros);
 
