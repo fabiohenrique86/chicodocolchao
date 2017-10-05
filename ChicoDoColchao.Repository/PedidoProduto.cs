@@ -26,7 +26,7 @@ namespace ChicoDoColchao.Repository
     
         public virtual Pedido Pedido { get; set; }
         public virtual Produto Produto { get; set; }
-        public virtual Usuario UsuarioEntrega { get; set; }
         public virtual Usuario UsuarioBaixa { get; set; }
+        public virtual Usuario UsuarioEntrega { get; set; }
     }
 }

@@ -56,6 +56,7 @@
     <Compile Include="NotaFiscalDao.cs" />
     <Compile Include="NotaFiscalProdutoDao.cs" />
     <Compile Include="OrcamentoDao.cs" />
+    <Compile Include="OrcamentoHistoricoDao.cs" />
     <Compile Include="OrcamentoProdutoDao.cs" />
     <Compile Include="ParcelaDao.cs" />
     <Compile Include="PedidoDao.cs" />

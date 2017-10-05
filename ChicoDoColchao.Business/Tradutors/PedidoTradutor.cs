@@ -150,7 +150,7 @@ namespace ChicoDoColchao.Business.Tradutors
             pedidoDao.LojaDao.Add(new LojaDao()
             {
                 LojaID = pedido.LojaOrigem.LojaID,
-                Cnpj = string.IsNullOrEmpty(pedido.LojaOrigem.Cnpj) ? string.Empty : Convert.ToInt64(pedido.LojaOrigem.Cnpj).ToString(@"##\.###\.###\/####\-##"),
+                Cnpj = string.IsNullOrEmpty(pedido.LojaOrigem.Cnpj) ? string.Empty : Convert.ToUInt64(pedido.LojaOrigem.Cnpj).ToString(@"00\.000\.000\/0000\-00"),
                 NomeFantasia = pedido.LojaOrigem.NomeFantasia,
                 RazaoSocial = pedido.LojaOrigem.RazaoSocial,
                 Telefone = string.IsNullOrEmpty(pedido.LojaOrigem.Telefone) ? string.Empty : pedido.LojaOrigem.Telefone.Length > 10 ? Convert.ToInt64(pedido.LojaOrigem.Telefone).ToString("(##) #####-####") : Convert.ToInt64(pedido.LojaOrigem.Telefone).ToString("(##) ####-####"),
@@ -159,7 +159,7 @@ namespace ChicoDoColchao.Business.Tradutors
             pedidoDao.LojaSaidaDao.Add(new LojaDao()
             {
                 LojaID = pedido.LojaSaida.LojaID,
-                Cnpj = string.IsNullOrEmpty(pedido.LojaSaida.Cnpj) ? string.Empty : Convert.ToInt64(pedido.LojaSaida.Cnpj).ToString(@"##\.###\.###\/####\-##"),
+                Cnpj = string.IsNullOrEmpty(pedido.LojaSaida.Cnpj) ? string.Empty : Convert.ToUInt64(pedido.LojaSaida.Cnpj).ToString(@"00\.000\.000\/0000\-00"),
                 NomeFantasia = pedido.LojaSaida.NomeFantasia,
                 RazaoSocial = pedido.LojaSaida.RazaoSocial,
                 Telefone = string.IsNullOrEmpty(pedido.LojaSaida.Telefone) ? string.Empty : pedido.LojaSaida.Telefone.Length > 10 ? Convert.ToInt64(pedido.LojaSaida.Telefone).ToString("(##) #####-####") : Convert.ToInt64(pedido.LojaSaida.Telefone).ToString("(##) ####-####"),

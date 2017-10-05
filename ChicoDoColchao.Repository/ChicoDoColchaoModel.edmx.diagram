@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="03d39fb402234a0898d7ed2e2d26171c" Name="Diagram1">
+      <Diagram DiagramId="03d39fb402234a0898d7ed2e2d26171c" Name="Diagram1" ZoomLevel="64">
         <EntityTypeShape EntityType="ChicoDoColchaoModel.Categoria" Width="1.5" PointX="6" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ChicoDoColchaoModel.Cliente" Width="1.5" PointX="6" PointY="22.125" IsExpanded="true" />
         <EntityTypeShape EntityType="ChicoDoColchaoModel.Estado" Width="1.5" PointX="3.75" PointY="23.875" IsExpanded="true" />
@@ -60,6 +60,11 @@
         <AssociationConnector Association="ChicoDoColchaoModel.FK_Transferencia_Produto" ManuallyRouted="false" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_Usuario_TipoUsuario" ManuallyRouted="false" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_TransferenciaProduto_Transferencia" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.OrcamentoHistorico" Width="1.5" PointX="0.75" PointY="4.75" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_OrcamentoHistorico_Orcamento" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_OrcamentoHistorico_Orcamento1" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_Orcamento_Cliente" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_Orcamento_Pedido" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

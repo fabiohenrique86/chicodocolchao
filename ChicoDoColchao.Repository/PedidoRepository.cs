@@ -112,11 +112,42 @@ namespace ChicoDoColchao.Repository
 
             if (top)
             {
-                return query.OrderByDescending(x => x.PedidoID).Take(take).ToList();
+                var lista = query.Include(x => x.Cliente.Estado)
+                    .Include(x => x.Funcionario)
+                    .Include(x => x.LojaOrigem)
+                    .Include(x => x.LojaSaida.LojaProduto)
+                    .Include(x => x.PedidoProduto.Select(w => w.Produto.Medida))
+                    .Include(x => x.PedidoProduto.Select(w => w.Produto.Categoria))
+                    .Include(x => x.PedidoProduto.Select(w => w.UsuarioBaixa))
+                    .Include(x => x.PedidoProduto.Select(w => w.UsuarioEntrega))
+                    .Include(x => x.PedidoStatus)
+                    .Include(x => x.PedidoTipoPagamento.Select(w => w.TipoPagamento))
+                    .Include(x => x.PedidoTipoPagamento.Select(w => w.Parcela))
+                    .Include(x => x.UsuarioPedido)
+                    .Include(x => x.UsuarioCancelamento)
+                    .OrderByDescending(x => x.PedidoID)
+                    .Take(take)
+                    .ToList();
+
+                return lista;
             }
             else
             {
-                return query.OrderByDescending(x => x.PedidoID).ToList();
+                return query.Include(x => x.Cliente.Estado)
+                    .Include(x => x.Funcionario)
+                    .Include(x => x.LojaOrigem)
+                    .Include(x => x.LojaSaida.LojaProduto)
+                    .Include(x => x.PedidoProduto.Select(w => w.Produto.Medida))
+                    .Include(x => x.PedidoProduto.Select(w => w.Produto.Categoria))
+                    .Include(x => x.PedidoProduto.Select(w => w.UsuarioBaixa))
+                    .Include(x => x.PedidoProduto.Select(w => w.UsuarioEntrega))
+                    .Include(x => x.PedidoStatus)
+                    .Include(x => x.PedidoTipoPagamento.Select(w => w.TipoPagamento))
+                    .Include(x => x.PedidoTipoPagamento.Select(w => w.Parcela))                    
+                    .Include(x => x.UsuarioPedido)
+                    .Include(x => x.UsuarioCancelamento)
+                    .OrderByDescending(x => x.PedidoID)
+                    .ToList();
             }
         }
 
@@ -151,6 +182,7 @@ namespace ChicoDoColchao.Repository
 
             // atualiza o status do pedido, se não houverem mais produtos pendentes de baixa
             var produtoPendente = chicoDoColchaoEntities.PedidoProduto.Count(x => x.PedidoID == pedido.PedidoID && x.UsuarioBaixaID == null) > 0 ? true : false;
+
             if (!produtoPendente)
             {
                 pedido.PedidoStatusID = pedidoStatusId;

@@ -9,7 +9,7 @@ namespace ChicoDoColchao.Business.Tradutors
     {
         public static Cliente ToBd(this ClienteDao clienteDao)
         {
-            Cliente cliente = new Cliente();
+            var cliente = new Cliente();
 
             cliente.ClienteID = clienteDao.ClienteID;
 
@@ -78,7 +78,6 @@ namespace ChicoDoColchao.Business.Tradutors
             var estado = clienteDao.EstadoDao.FirstOrDefault();
             if (estado != null)
             {
-                //cliente.Estado = new Estado() { EstadoID = estado.EstadoID };
                 cliente.EstadoID = estado.EstadoID;
             }
 
@@ -111,18 +110,18 @@ namespace ChicoDoColchao.Business.Tradutors
 
         public static ClienteDao ToApp(this Cliente cliente)
         {
-            ClienteDao clienteDao = new ClienteDao();
+            var clienteDao = new ClienteDao();
 
             clienteDao.ClienteID = cliente.ClienteID;
 
             if (!string.IsNullOrEmpty(cliente.Cpf))
             {
-                clienteDao.Cpf = Convert.ToInt64(cliente.Cpf).ToString(@"###\.###\.###\-##");
+                clienteDao.Cpf = Convert.ToUInt64(cliente.Cpf).ToString(@"000\.000\.000\-00");
             }
 
             if (!string.IsNullOrEmpty(cliente.Cnpj))
             {
-                clienteDao.Cnpj = Convert.ToInt64(cliente.Cnpj).ToString(@"##\.###\.###\/####\-##");
+                clienteDao.Cnpj = Convert.ToUInt64(cliente.Cnpj).ToString(@"00\.000\.000\/0000\-00");
             }
 
             if (!string.IsNullOrEmpty(cliente.Email))
@@ -185,7 +184,7 @@ namespace ChicoDoColchao.Business.Tradutors
 
             if (!string.IsNullOrEmpty(cliente.Cep))
             {
-                clienteDao.Cep = Convert.ToInt64(cliente.Cep).ToString("#####-###");
+                clienteDao.Cep = Convert.ToUInt64(cliente.Cep).ToString(@"00000\-000");
             }
 
             clienteDao.Cidade = cliente.Cidade;

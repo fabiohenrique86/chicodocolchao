@@ -12,16 +12,13 @@ namespace ChicoDoColchao.Repository
     using System;
     using System.Collections.Generic;
     
-    public partial class OrcamentoProduto
+    public partial class OrcamentoHistorico
     {
-        public int OrcamentoProdutoID { get; set; }
+        public int OrcamentoHistoricoID { get; set; }
         public int OrcamentoID { get; set; }
-        public int ProdutoID { get; set; }
-        public short Quantidade { get; set; }
-        public string Medida { get; set; }
-        public double Preco { get; set; }
+        public string Observacao { get; set; }
+        public System.DateTime DataCadastro { get; set; }
     
         public virtual Orcamento Orcamento { get; set; }
-        public virtual Produto Produto { get; set; }
     }
 }

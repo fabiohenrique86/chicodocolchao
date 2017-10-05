@@ -19,6 +19,7 @@ namespace ChicoDoColchao.Repository
         {
             this.PedidoProduto = new HashSet<PedidoProduto>();
             this.PedidoTipoPagamento = new HashSet<PedidoTipoPagamento>();
+            this.Orcamento = new HashSet<Orcamento>();
         }
     
         public int PedidoID { get; set; }
@@ -47,5 +48,7 @@ namespace ChicoDoColchao.Repository
         public virtual ICollection<PedidoProduto> PedidoProduto { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PedidoTipoPagamento> PedidoTipoPagamento { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Orcamento> Orcamento { get; set; }
     }
 }

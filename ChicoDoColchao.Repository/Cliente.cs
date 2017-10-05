@@ -18,6 +18,7 @@ namespace ChicoDoColchao.Repository
         public Cliente()
         {
             this.Pedido = new HashSet<Pedido>();
+            this.Orcamento = new HashSet<Orcamento>();
         }
     
         public int ClienteID { get; set; }
@@ -45,5 +46,7 @@ namespace ChicoDoColchao.Repository
         public virtual Estado Estado { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Pedido> Pedido { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Orcamento> Orcamento { get; set; }
     }
 }

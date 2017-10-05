@@ -38,18 +38,14 @@
 {
     <script type="text/javascript">
 
-        function modalPreco(produtoId) {
-
+        function modalPreco(produtoId, produtoPreco) {
+            
             $.getJSON("/Produto/Listar", { ProdutoID: produtoId }, function (data) {
 
-                // encontra o data-preco do produto
-                var data_preco = "4";
-                $("#tbProduto").DataTable().rows().every(function (rowIdx, tableLoop, rowLoop) {
-                    var data = this.data();
-                    if (data.ProdutoID == produtoId) {
-                        data_preco = $($(".preco")[rowIdx]).attr("data-preco");
-                    }
-                });
+                var precoAtacado = Globalize.format(data[0].Preco * 2.2, "n2");
+                var precoAVista = Globalize.format(data[0].Preco * 2.4, "n2");
+                var precoAte10 = Globalize.format(data[0].Preco * 2.5, "n2");
+                var preco = Globalize.format(data[0].Preco * 3, "n2");
 
                 $("#lblNumeroProduto").text(data[0].Numero);
 
@@ -59,22 +55,33 @@
 
                 var produtoPrecos =
                 [
-                    { ProdutoID: data[0].ProdutoID, Descricao: "Atacado", Preco: Globalize.format(data[0].Preco * 2.2, "n2") },
-                    { ProdutoID: data[0].ProdutoID, Descricao: "À Vista", Preco: Globalize.format(data[0].Preco * 2.4, "n2") },
-                    { ProdutoID: data[0].ProdutoID, Descricao: "Até 10x", Preco: Globalize.format(data[0].Preco * 2.5, "n2") },
-                    { ProdutoID: data[0].ProdutoID, Descricao: "Preço", Preco: Globalize.format(data[0].Preco * 3, "n2") },
+                    { ProdutoID: data[0].ProdutoID, Descricao: "Atacado", Preco: precoAtacado },
+                    { ProdutoID: data[0].ProdutoID, Descricao: "À Vista", Preco: precoAVista },
+                    { ProdutoID: data[0].ProdutoID, Descricao: "Até 10x", Preco: precoAte10 },
+                    { ProdutoID: data[0].ProdutoID, Descricao: "Preço", Preco: preco },
                 ];
 
                 var tbProdutoPreco = $("#tbProdutoPreco").DataTable();
                 tbProdutoPreco.clear();
                 tbProdutoPreco.rows.add(produtoPrecos).draw();
-
+                
                 // marca a linha selecionada para o preço selecionado
-                if (data_preco == "1") { $(tbProdutoPreco.row(0).node()).addClass('selected'); }
-                else if (data_preco == "2") { $(tbProdutoPreco.row(1).node()).addClass('selected'); }
-                else if (data_preco == "3") { $(tbProdutoPreco.row(2).node()).addClass('selected'); }
-                else if (data_preco == "4") { $(tbProdutoPreco.row(3).node()).addClass('selected'); }
-
+                switch (produtoPreco) {
+                    case (precoAtacado): // atacado
+                        $(tbProdutoPreco.row(0).node()).addClass('selected');
+                        break;
+                    case (precoAVista): // à vista
+                        $(tbProdutoPreco.row(1).node()).addClass('selected');
+                        break;
+                    case (precoAte10): // até 10x
+                        $(tbProdutoPreco.row(2).node()).addClass('selected');
+                        break;
+                    case (preco): // preço
+                        $(tbProdutoPreco.row(3).node()).addClass('selected');
+                        break;
+                    default:
+                }
+                
                 $('#modalpreco').modal('show');
             });
         }
@@ -110,7 +117,8 @@
                 return;
             }
 
-            $(".quantidade").each(function (index, element) {
+            $(".quantidade").each(function (index, element) 
+            {
                 var quantidade = $(element).val();
                 var tr = $(element).parents("tr");
                 var preco = Globalize.parseFloat($(tr).children().eq(4).text().trim());
@@ -118,7 +126,13 @@
                     preco = 0;
                 }
                 totalPedido += parseInt(quantidade) * preco;
+                                
+                tbProdutos.row(index).data().DataEntrega = "<input type='text' class='form-control data datepicker dataEntrega' value='" + $($($(".dataEntrega")[index]).parents("tr").children().eq(5)).children().val() + "' />";
+                tbProdutos.row(index).data().Quantidade = "<input type='text' class='form-control quantidade' min='0' onblur='calcularTotalPedido()' value='" + quantidade + "' />";
+                tbProdutos.row(index).invalidate();
             });
+
+            tbProdutos.draw();
 
             var totalDesconto = Globalize.parseFloat($("#lblTotalDesconto").text());
 
@@ -163,6 +177,30 @@
                 parcelas = data;
             });
 
+            // change da data de entrega do grid de produtos
+            $(document).on('change', '.dataEntrega', function(e) 
+            {
+                var index = $(this).closest('tr').index();
+
+                $("#tbProduto").DataTable().row(index).data().DataEntrega = "<input type='text' class='form-control data datepicker dataEntrega' value='" + $(this).val() + "' />";
+                $("#tbProduto").DataTable().row(index).invalidate();
+
+                $(".dataEntrega").datepicker({
+                    dateFormat: 'dd/mm/yy',
+                    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                    dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                    monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    nextText: 'Próximo',
+                    prevText: 'Anterior',
+                    changeMonth: true,
+                    changeYear: true
+                });
+
+            });
+            
+            // change do status do pedido
             $("#PedidoStatusID").change(function () {
                 var pedidoStatusId = $(this).val();
                 if (pedidoStatusId == '@PedidoStatusDao.EPedidoStatus.RetiradoNaLoja.GetHashCode()') {
@@ -305,48 +343,26 @@
                         alert('Produto ' + produto[0].trim() + ' já adicionado ao pedido.');
                         return;
                     }
-
-                    var p = {};
-                    p.ProdutoID = ui.item.value;
-                    p.Numero = produto[0].trim();
-                    p.Descricao = produto[1].trim();
-                    p.MedidaDao = {};
-                    p.MedidaDao.Descricao = produto[2].trim();
-                    p.Preco = parseFloat(produto[3].trim().replace(".", "").replace(",", ".")) / 3;
-
-                    var dataEntrega = "<input type='text' class='form-control data datepicker dataEntrega' min='0' value='' />";
+                    
+                    var dataEntrega = "<input type='text' class='form-control data datepicker dataEntrega' value='' />";
                     if ($("#PedidoStatusID").val() == '@PedidoStatusDao.EPedidoStatus.RetiradoNaLoja.GetHashCode()')
                     {
-                        dataEntrega = "<input type='text' class='form-control data datepicker dataEntrega' min='0' value='' disabled='disabled' />";
+                        dataEntrega = "<input type='text' class='form-control data datepicker dataEntrega' value='' disabled='disabled' />";
                     }
 
                     // adiciona o produto ao pedido
                     tbProduto.rows.add([
                     {
-                        "ProdutoID": p.ProdutoID,
-                        "Numero": p.Numero,
-                        "Descricao": p.Descricao,
-                        "MedidaDao": { "Descricao": p.MedidaDao.Descricao },
+                        "ProdutoID": ui.item.value,
+                        "Numero": produto[0].trim(),
+                        "Descricao": produto[1].trim(),
+                        "MedidaDao": { "Descricao": produto[2].trim() },
                         "Quantidade": "<input type='text' class='form-control quantidade' min='0' onblur='calcularTotalPedido()' value='1' />",
-                        "Preco": "<span class='preco' data-preco='4'>" + Globalize.format(p.Preco * 3, "n2") + "</span>",
+                        "Preco": "<span class='preco'>" + Globalize.format(parseFloat(produto[3].trim().replace(".", "").replace(",", ".")), "n2") + "</span>",
                         "DataEntrega": dataEntrega,
                         "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir Produto' style='cursor: pointer'></i>"
                     }]).draw();
-
-                    $(".quantidade").mask('000');
-                    $(".dataEntrega").datepicker({
-                        dateFormat: 'dd/mm/yy',
-                        dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
-                        dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
-                        dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
-                        monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-                        monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-                        nextText: 'Próximo',
-                        prevText: 'Anterior',
-                        changeMonth: true,
-                        changeYear: true
-                    });
-
+                    
                     // atualiza o total do pedido
                     calcularTotalPedido();
 
@@ -368,11 +384,28 @@
                     "infoEmpty": "Sem registros a serem exibidos",
                     "infoFiltered": "(filtrados de _MAX_ total de registros)"
                 },
+                "rowCallback": function (row, data, index) 
+                {
+                    $(".quantidade").mask('000');
+                    $(".dataEntrega").datepicker({
+                        dateFormat: 'dd/mm/yy',
+                        dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                        dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                        dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                        monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                        monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                        nextText: 'Próximo',
+                        prevText: 'Anterior',
+                        changeMonth: true,
+                        changeYear: true
+                    });
+                },
                 "columns":
                 [
                     {
-                        "data": function (data, type, row) {
-                            return "<a href='#' onclick='modalPreco(" + data["ProdutoID"] + ")'>" + data["Numero"] + "</a>";
+                        "data": function (data, type, row) 
+                        {
+                            return "<a href='#' onclick='modalPreco(" + data["ProdutoID"] + ",\"" + $(data.Preco).text().trim() + "\")'>" + data["Numero"] + "</a>";
                         },
                         "className": "text-center"
                     },
@@ -474,29 +507,19 @@
                 var row = $(this);
                 if (!row.hasClass('selected')) { row.addClass('selected').siblings().removeClass('selected'); }
                 tbProduto.rows().every(function (rowIdx, tableLoop, rowLoop) {
-                    var dataProduto = this.data();
-                    if (dataProduto.ProdutoID == dataProdutoPreco.ProdutoID) {
-                        if (dataProdutoPreco.Descricao == "Atacado") {
-                            $($(".preco")[rowIdx]).attr("data-preco", "1");
-                        }
-                        else if (dataProdutoPreco.Descricao == "À Vista") {
-                            $($(".preco")[rowIdx]).attr("data-preco", "2");
-                        }
-                        else if (dataProdutoPreco.Descricao == "Até 10x") {
-                            $($(".preco")[rowIdx]).attr("data-preco", "3");
-                        }
-                        else if (dataProdutoPreco.Descricao == "Preço") {
-                            $($(".preco")[rowIdx]).attr("data-preco", "4");
-                        }
-
-                        $($(".preco")[rowIdx]).text(dataProdutoPreco.Preco);
+                    var dataProduto = this.data();                    
+                    if (dataProduto.ProdutoID == dataProdutoPreco.ProdutoID) 
+                    {
+                        dataProduto.Preco = "<span class='preco'>" + dataProdutoPreco.Preco + "</span>";
+                        this.invalidate();
                     }
                 });
+                tbProduto.draw();
                 calcularTotalPedido();
                 $('#modalpreco').modal('hide');
             });
 
-            $("#btnCadastrar").click(function () {
+            $("#btnCadastrarPedido").click(function () {
 
                 var pedidoDao = {};
                 var pedidoProdutoDao = [];
@@ -511,7 +534,6 @@
                 if (@lojaDao.LojaID > 0)
                 {
                     pedidoDao.LojaDao.push({ LojaID: '@lojaDao.LojaID' });
-                    // pedidoDao.LojaDao.push({ LojaID: '@lojaDao.LojaID', NomeFantasia: '@lojaDao.NomeFantasia' });
                 }
                 else
                 {
@@ -532,9 +554,7 @@
                 // produtos
                 tbProduto.rows().every(function (rowIdx, tableLoop, rowLoop) {
                     var data = this.data();
-
                     var dtEntrega = $($($(".dataEntrega")[rowIdx]).parents("tr").children().eq(5)).children().val();
-
                     pedidoProdutoDao.push
                     ({
                         "ProdutoID": data.ProdutoID,
@@ -573,6 +593,15 @@
 
                 pedidoDao.PedidoTipoPagamentoDao = pedidoTipoPagamento;
 
+                // verifica se existe um orçamento associado ao pedido
+                if ('@ViewBag.OrcamentoDao' != null)
+                {
+                    var orcamentoDao = @Html.Raw(Json.Encode(ViewBag.OrcamentoDao));
+
+                    pedidoDao.OrcamentoDao = [];
+                    pedidoDao.OrcamentoDao.push({ OrcamentoID: orcamentoDao.OrcamentoID });
+                }
+                
                 $.ajax({
                     dataType: "json",
                     type: "POST",
@@ -601,6 +630,37 @@
                     }
                 });
             });
+            
+            if ('@ViewBag.OrcamentoDao' != '')
+            {
+                var orcamentoDao = @Html.Raw(Json.Encode(ViewBag.OrcamentoDao));
+                
+                $("#txtCliente").val(orcamentoDao.ClienteDao.Nome);
+                $("#ClienteID").val(orcamentoDao.ClienteDao.ClienteID);
+                $("#FuncionarioID").val(orcamentoDao.FuncionarioDao[0].FuncionarioID);
+                $("#LojaOrigemID").val(orcamentoDao.LojaDao[0].LojaID);
+
+                $("#lblTotalDesconto").text(Globalize.format(orcamentoDao.Desconto, "n2"));
+
+                $(orcamentoDao.OrcamentoProdutoDao).each(function (index, element) {
+                    
+                    // adiciona o produto ao pedido
+                    tbProduto.rows.add([
+                    {
+                        "ProdutoID": element.ProdutoID,
+                        "Numero": element.ProdutoDao.Numero,
+                        "Descricao": element.ProdutoDao.Descricao,
+                        "MedidaDao": { "Descricao": element.ProdutoDao.MedidaDao.Descricao },
+                        "Quantidade": "<input type='text' class='form-control quantidade' min='0' onblur='calcularTotalPedido()' value='" + element.Quantidade + "' />",
+                        "Preco": "<span class='preco'>" + Globalize.format(element.Preco, "n2") + "</span>",
+                        "DataEntrega": "<input type='text' class='form-control data datepicker dataEntrega' value='' />",
+                        "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir Produto' style='cursor: pointer'></i>"
+                    }]).draw();
+                });
+                
+                // atualiza o total do pedido
+                calcularTotalPedido();
+            }
 
         });
     </script>
@@ -695,30 +755,10 @@
             @Html.TextAreaFor(x => x.Observacao, 5, 10, new { @class = "form-control", @placeholder = "Observação (Opcional)" })
         </div>
         <div class="form-group">
-            <button id="btnCadastrar" type="button" class="btn btn-success">Cadastrar</button>
+            <button id="btnCadastrarPedido" type="button" class="btn btn-success">Cadastrar</button>
             <button id="btnLista" type="button" class="btn btn-info" onclick="window.location.href='@Url.Action("Lista", "Pedido")'">Lista de Pedidos Cadastrados</button>
         </div>
     </form>
 </div>
-<div class="modal fade" id="modaldesconto" tabindex="-1" role="dialog" aria-labelledby="ModalDesconto" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
-                <h4 class="modal-title" id="myModalLabel">Desconto Autorizado</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <input id="ValorDesconto" name="ValorDesconto" type="text" class="form-control valor" placeholder="Valor do desconto em reais" />
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button id="btnRetirarDesconto" type="button" class="btn btn-danger">Retirar Desconto</button>
-                <button id="btnAdicionarDesconto" type="button" class="btn btn-warning">Adicionar Desconto</button>
-            </div>
-        </div>
-    </div>
-</div>
+@Html.Partial("_ModalPedidoDesconto")
 @Html.Partial("_ModalProdutoPreco")

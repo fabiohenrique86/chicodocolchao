@@ -17,10 +17,11 @@ namespace ChicoDoColchao.Dao
             TipoPagamentoDao = new HashSet<TipoPagamentoDao>();
             UsuarioPedidoDao = new UsuarioDao();
             UsuarioCancelamentoDao = new UsuarioDao();
+            OrcamentoDao = new HashSet<OrcamentoDao>();
         }
 
         public int PedidoID { get; set; }
-        public System.DateTime DataPedido { get; set; }
+        public DateTime DataPedido { get; set; }
         public DateTime? DataCancelamento { get; set; }
         public string Observacao { get; set; }
         public string NomeCarreto { get; set; }
@@ -35,6 +36,7 @@ namespace ChicoDoColchao.Dao
         public virtual ICollection<PedidoProdutoDao> PedidoProdutoDao { get; set; }
         public virtual ICollection<PedidoTipoPagamentoDao> PedidoTipoPagamentoDao { get; set; }
         public virtual ICollection<TipoPagamentoDao> TipoPagamentoDao { get; set; }
+        public virtual ICollection<OrcamentoDao> OrcamentoDao { get; set; }
         public virtual UsuarioDao UsuarioPedidoDao { get; set; }
         public virtual UsuarioDao UsuarioCancelamentoDao { get; set; }
     }

@@ -13,8 +13,7 @@
     <hr />
     <div class="row">
         <div class="col-lg-4">
-            <ul class="nav nav-pills nav-stacked">
-                
+            <ul class="nav nav-pills nav-stacked">                
                 @{
                     if (usuarioDao != null)
                     {
@@ -27,11 +26,13 @@
                             <li><a href="@Url.Action("Cadastro", "Funcionario")" target="_self"><i class="glyphicon glyphicon-user" style="cursor: pointer"></i> Cadastrar Consultor</a></li>
                             <li><a href="@Url.Action("Cadastro", "Medida")" target="_self"><i class="glyphicon glyphicon-remove" style="cursor: pointer"></i> Cadastrar Medida</a></li>
                             <li><a href="@Url.Action("Cadastro", "Categoria")" target="_self"><i class="glyphicon glyphicon-tags" style="cursor: pointer"></i> Cadastrar Categoria</a></li>
+                            <li><a href="@Url.Action("Cadastro", "Orcamento")" target="_self"><i class="glyphicon glyphicon-time" style="cursor: pointer"></i> Tirar Orçamento</a></li>
                         }
                         else if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)ChicoDoColchao.Dao.TipoUsuarioDao.ETipoUsuario.Vendedor)
                         {
                             <li><a href="@Url.Action("Cadastro", "Cliente")" target="_self"><i class="glyphicon glyphicon-user" style="cursor: pointer"></i> Cadastrar Cliente</a></li>
                             <li><a href="@Url.Action("Cadastro", "Pedido")" target="_self"><i class="glyphicon glyphicon-ok" style="cursor: pointer"></i> Tirar Pedido</a></li>
+                            <li><a href="@Url.Action("Cadastro", "Orcamento")" target="_self"><i class="glyphicon glyphicon-time" style="cursor: pointer"></i> Tirar Orçamento</a></li>
                         }
                     }
                 }
@@ -51,6 +52,11 @@
                             <li><a href="@Url.Action("Lista", "Funcionario")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Consultores</a></li>
                             <li><a href="@Url.Action("Lista", "Medida")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Medidas</a></li>
                             <li><a href="@Url.Action("Lista", "Categoria")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Categorias</a></li>
+                            <li><a href="@Url.Action("Lista", "Orcamento")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Orçamentos</a></li>
+                        }
+                        else if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)ChicoDoColchao.Dao.TipoUsuarioDao.ETipoUsuario.Vendedor)
+                        {
+                            <li><a href="@Url.Action("Lista", "Orcamento")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Orçamentos</a></li>
                         }
                     }
                 }

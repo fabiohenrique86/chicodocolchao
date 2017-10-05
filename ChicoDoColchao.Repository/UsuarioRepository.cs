@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 
 namespace ChicoDoColchao.Repository
@@ -11,7 +12,7 @@ namespace ChicoDoColchao.Repository
         {
             chicoDoColchaoEntities = new ChicoDoColchaoEntities();
         }
-        
+
         public List<Usuario> Listar(Usuario usuario)
         {
             IQueryable<Usuario> query = chicoDoColchaoEntities.Usuario;
@@ -33,7 +34,9 @@ namespace ChicoDoColchao.Repository
 
             query = query.Where(x => x.Ativo);
 
-            return query.ToList();
+            return query.Include(x => x.TipoUsuario).OrderBy(x => x.Login).ToList();
+
+            // return query.ToList();
         }
     }
 }

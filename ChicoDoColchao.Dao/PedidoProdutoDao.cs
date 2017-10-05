@@ -17,8 +17,8 @@ namespace ChicoDoColchao.Dao
         public short Quantidade { get; set; }
         public string Medida { get; set; }
         public double Preco { get; set; }
-        public Nullable<System.DateTime> DataEntrega { get; set; }
-        public Nullable<System.DateTime> DataBaixa { get; set; }
+        public DateTime? DataEntrega { get; set; }
+        public DateTime? DataBaixa { get; set; }
 
         public virtual ProdutoDao ProdutoDao { get; set; }
         public virtual UsuarioDao UsuarioEntregaDao { get; set; }

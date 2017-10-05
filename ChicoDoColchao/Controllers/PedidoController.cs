@@ -1,11 +1,11 @@
-﻿using System;
+﻿using ChicoDoColchao.Business;
+using ChicoDoColchao.Business.Exceptions;
+using ChicoDoColchao.Dao;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using ChicoDoColchao.Business;
-using ChicoDoColchao.Dao;
-using ChicoDoColchao.Business.Exceptions;
-using Newtonsoft.Json;
 
 namespace ChicoDoColchao.Controllers
 {
@@ -16,6 +16,7 @@ namespace ChicoDoColchao.Controllers
         private FuncionarioBusiness funcionarioBusiness;
         private LojaBusiness lojaBusiness;
         private TipoPagamentoBusiness tipoPagamentoBusiness;
+        private OrcamentoBusiness orcamentoBusiness;
 
         public PedidoController()
         {
@@ -24,9 +25,10 @@ namespace ChicoDoColchao.Controllers
             funcionarioBusiness = new FuncionarioBusiness();
             lojaBusiness = new LojaBusiness();
             tipoPagamentoBusiness = new TipoPagamentoBusiness();
+            orcamentoBusiness = new OrcamentoBusiness();
         }
 
-        public ActionResult Cadastro()
+        public ActionResult Cadastro(string orcamentoID = null)
         {
             PedidoDao pedidoDao = new PedidoDao();
 
@@ -57,6 +59,19 @@ namespace ChicoDoColchao.Controllers
                 pedidoDao.LojaDao = lojasDao;
 
                 pedidoDao.TipoPagamentoDao = tipoPagamentoBusiness.Listar(new TipoPagamentoDao());
+
+                if (!string.IsNullOrEmpty(orcamentoID))
+                {
+                    var orcamentoDao = orcamentoBusiness.Listar(new OrcamentoDao() { OrcamentoID = Convert.ToInt32(orcamentoID) }).FirstOrDefault();
+
+                    // se não existe orçamento ou já virou venda deve ser direcionado para outra página
+                    if (orcamentoDao == null || orcamentoDao.PedidoDao != null)
+                    {
+                        return View(pedidoDao);
+                    }
+
+                    ViewBag.OrcamentoDao = orcamentoDao;
+                }
             }
             catch (Exception ex)
             {
@@ -117,7 +132,7 @@ namespace ChicoDoColchao.Controllers
             try
             {
                 pedidoDao.DataPedido = DateTime.Now;
-                                
+
                 int pedidoID = pedidoBusiness.Incluir(pedidoDao);
 
                 return Json(new { Sucesso = true, Mensagem = string.Format("Pedido {0} cadastrado com sucesso!", pedidoID) }, JsonRequestBehavior.AllowGet);
@@ -185,7 +200,7 @@ namespace ChicoDoColchao.Controllers
             {
                 var dtBaixa = DateTime.Now;
                 pedidoDao.PedidoProdutoDao.ToList().ForEach(x => x.DataBaixa = dtBaixa);
-                                
+
                 pedidoBusiness.DarBaixa(pedidoDao);
 
                 // obtém somente o pedido dado baixa
@@ -208,16 +223,17 @@ namespace ChicoDoColchao.Controllers
         {
             try
             {
-                var pedido = pedidoBusiness.Listar(pedidoDao).FirstOrDefault();
+                var email = string.Empty;
+                //var pedido = pedidoBusiness.Listar(pedidoDao).FirstOrDefault();
 
-                if (pedido == null)
-                {
-                    return Json(new { Sucesso = false, Mensagem = string.Format("Pedido {0} não encontrado", pedidoDao.PedidoID) }, JsonRequestBehavior.AllowGet);
-                }
+                //if (pedido == null)
+                //{
+                //    return Json(new { Sucesso = false, Mensagem = $"Pedido {pedidoDao.PedidoID} não encontrado" }, JsonRequestBehavior.AllowGet);
+                //}
 
-                pedidoBusiness.EnviarComandaPorEmail(pedido);
+                pedidoBusiness.EnviarComandaPorEmail(pedidoDao.PedidoID, out email);
 
-                return Json(new { Sucesso = true, Mensagem = string.Format("Comanda enviada para o email {0} com sucesso!", pedido.ClienteDao.FirstOrDefault().Email) }, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = true, Mensagem = $"Comanda enviada para o email {email} com sucesso!" }, JsonRequestBehavior.AllowGet);
             }
             catch (BusinessException ex)
             {

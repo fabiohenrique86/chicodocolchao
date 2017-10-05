@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChicoDoColchao.Dao
 {
@@ -10,19 +7,23 @@ namespace ChicoDoColchao.Dao
     {
         public OrcamentoDao()
         {
-            this.OrcamentoProdutoDao = new HashSet<OrcamentoProdutoDao>();
+            OrcamentoProdutoDao = new HashSet<OrcamentoProdutoDao>();
+            OrcamentoHistoricoDao = new HashSet<OrcamentoHistoricoDao>();
+            FuncionarioDao = new HashSet<FuncionarioDao>();
+            LojaDao = new HashSet<LojaDao>();
         }
 
         public int OrcamentoID { get; set; }
-        public int Numero { get; set; }
-        public int LojaID { get; set; }
-        public int FuncionarioID { get; set; }
-        public System.DateTime DataOrcamento { get; set; }
+        public DateTime DataOrcamento { get; set; }
         public string Observacao { get; set; }
         public bool Ativo { get; set; }
+        public double Desconto { get; set; }
 
-        public virtual FuncionarioDao FuncionarioDao { get; set; }
-        public virtual LojaDao LojaDao { get; set; }
+        public virtual ICollection<FuncionarioDao> FuncionarioDao { get; set; }
+        public virtual ClienteDao ClienteDao { get; set; }        
+        public virtual ICollection<LojaDao> LojaDao { get; set; }
         public virtual ICollection<OrcamentoProdutoDao> OrcamentoProdutoDao { get; set; }
+        public virtual ICollection<OrcamentoHistoricoDao> OrcamentoHistoricoDao { get; set; }
+        public virtual PedidoDao PedidoDao { get; set; }
     }
 }

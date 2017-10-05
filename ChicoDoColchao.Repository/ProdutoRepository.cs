@@ -154,7 +154,12 @@ namespace ChicoDoColchao.Repository
                 query = query.Where(x => x.Ativo == produto.Ativo);
             }
 
-            return query.OrderBy(x => x.Descricao).ToList();
+            return query.Include(x => x.LojaProduto.Select(w => w.Loja))
+                        .Include(x => x.Categoria)
+                        .Include(x => x.Medida)
+                        .OrderBy(x => x.Descricao).ToList();
+            
+            // return query.OrderBy(x => x.Descricao).ToList();
         }
     }
 }

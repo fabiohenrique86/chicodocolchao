@@ -1,0 +1,509 @@
+﻿@using ChicoDoColchao.Dao;
+@using Newtonsoft.Json;
+
+@model OrcamentoDao
+
+@{
+    ViewBag.Title = "Orçamento - Tirar";
+    
+    LojaDao lojaDao = new LojaDao();
+    if (Request.Cookies.Get("ChicoDoColchao_Loja") != null)
+    {
+        lojaDao = JsonConvert.DeserializeObject<LojaDao>(Request.Cookies.Get("ChicoDoColchao_Loja").Value);
+    }
+}
+@section styles
+{
+    <style type="text/css">
+        .table.dataTable tbody td {
+            font-size: 13px;
+        }
+
+        .link_preco {
+            cursor: pointer;
+        }
+
+        #tbProdutoPreco tbody tr {
+            cursor: pointer;
+        }
+    </style>
+}
+@section scripts
+{
+    <script type="text/javascript">
+
+        function modalPreco(produtoId, produtoPreco) {
+
+            $.getJSON("/Produto/Listar", { ProdutoID: produtoId }, function (data) {
+
+                // encontra o data-preco do produto
+                //var data_preco = "4";
+                //$("#tbProduto").DataTable().rows().every(function (rowIdx, tableLoop, rowLoop) {
+                //    var data = this.data();
+                //    if (data.ProdutoID == produtoId) {
+                //        data_preco = $($(".preco")[rowIdx]).attr("data-preco");
+                //    }
+                //});
+
+                var precoAtacado = Globalize.format(data[0].Preco * 2.2, "n2");
+                var precoAVista = Globalize.format(data[0].Preco * 2.4, "n2");
+                var precoAte10 = Globalize.format(data[0].Preco * 2.5, "n2");
+                var preco = Globalize.format(data[0].Preco * 3, "n2");
+
+                $("#lblNumeroProduto").text(data[0].Numero);
+
+                var tbLojaProduto = $("#tbLojaProduto").DataTable();
+                tbLojaProduto.clear();
+                tbLojaProduto.rows.add(data[0].LojaProdutoDao).draw();
+
+                var produtoPrecos =
+                [
+                    { ProdutoID: data[0].ProdutoID, Descricao: "Atacado", Preco: precoAtacado },
+                    { ProdutoID: data[0].ProdutoID, Descricao: "À Vista", Preco: precoAVista },
+                    { ProdutoID: data[0].ProdutoID, Descricao: "Até 10x", Preco: precoAte10 },
+                    { ProdutoID: data[0].ProdutoID, Descricao: "Preço", Preco: preco },
+                ];
+
+                var tbProdutoPreco = $("#tbProdutoPreco").DataTable();
+                tbProdutoPreco.clear();
+                tbProdutoPreco.rows.add(produtoPrecos).draw();
+
+                // marca a linha selecionada para o preço selecionado
+                //if (data_preco == "1") { $(tbProdutoPreco.row(0).node()).addClass('selected'); }
+                //else if (data_preco == "2") { $(tbProdutoPreco.row(1).node()).addClass('selected'); }
+                //else if (data_preco == "3") { $(tbProdutoPreco.row(2).node()).addClass('selected'); }
+                //else if (data_preco == "4") { $(tbProdutoPreco.row(3).node()).addClass('selected'); }
+
+                switch (produtoPreco) {
+                    case (precoAtacado): // atacado
+                        $(tbProdutoPreco.row(0).node()).addClass('selected');
+                        break;
+                    case (precoAVista): // à vista
+                        $(tbProdutoPreco.row(1).node()).addClass('selected');
+                        break;
+                    case (precoAte10): // até 10x
+                        $(tbProdutoPreco.row(2).node()).addClass('selected');
+                        break;
+                    case (preco): // preço
+                        $(tbProdutoPreco.row(3).node()).addClass('selected');
+                        break;
+                    default:
+                }
+
+                $('#modalpreco').modal('show');
+            });
+        }
+
+        function calcularTotalPago() {
+
+            var totalPago = 0;
+            var tbPagamentos = $("#tbTipoPagamento").DataTable();
+
+            if (tbPagamentos.rows().count() <= 0) {
+                $("#lblTotalPago").html(Globalize.format(totalPago, "n2"));
+                return;
+            }
+
+            $(".valorPago").each(function (index, element) {
+                var valorPago = Globalize.parseFloat($(element).val());
+                if (isNaN(valorPago)) { valorPago = 0; }
+                totalPago += valorPago;
+            });
+
+            if (!isNaN(totalPago)) {
+                $("#lblTotalPago").html(Globalize.format(totalPago, "n2"));
+            }
+        }
+
+        function calcularTotalOrcamento() {
+
+            var totalOrcamento = 0;
+            var tbProdutos = $("#tbProduto").DataTable();
+
+            if (tbProdutos.rows().count() <= 0) {
+                $("#lblTotalOrcamento").html(Globalize.format(totalOrcamento, "n2"));
+                return;
+            }
+
+            //console.info(tbProdutos.data()[0]);
+
+            $(".quantidade").each(function (index, element) 
+            {
+                var quantidade = $(element).val();
+                var tr = $(element).parents("tr");
+                var preco = Globalize.parseFloat($(tr).children().eq(4).text().trim());
+                if (isNaN(preco)) {
+                    preco = 0;
+                }
+                totalOrcamento += parseInt(quantidade) * preco;
+
+                tbProdutos.row(index).data().Quantidade = "<input type='text' class='form-control quantidade' min='0' onblur='calcularTotalOrcamento()' value='" + quantidade + "' />";
+                tbProdutos.row(index).invalidate();
+            });
+
+            tbProdutos.draw();
+            //console.info(tbProdutos.data()[0]);
+
+            var totalDesconto = Globalize.parseFloat($("#lblTotalDesconto").text());
+
+            if (!isNaN(totalOrcamento)) {
+                $("#lblTotalOrcamento").html(Globalize.format((totalOrcamento - totalDesconto), "n2"));
+            }
+        }
+
+        $(document).ready(function () {
+
+            $("#btnAdicionarDesconto").click(function () {
+                var totalDesconto = Globalize.parseFloat($("#lblTotalDesconto").text());
+                var valorDesconto = Globalize.parseFloat($("#ValorDesconto").val());
+                var totalOrcamento = Globalize.parseFloat($("#lblTotalOrcamento").text());
+
+                if (isNaN(valorDesconto)) {
+                    alert('Informe o valor do desconto');
+                    return;
+                }
+
+                $("#lblTotalDesconto").text(Globalize.format((totalDesconto + valorDesconto), "n2"));
+                $("#lblTotalOrcamento").text(Globalize.format((totalOrcamento - valorDesconto), "n2"));
+                $("#ValorDesconto").val("");
+
+                $('#modaldesconto').modal('hide');
+            });
+
+            $("#btnRetirarDesconto").click(function () {
+                var totalDesconto = Globalize.parseFloat($("#lblTotalDesconto").text());
+                var totalOrcamento = Globalize.parseFloat($("#lblTotalOrcamento").text());
+
+                $("#lblTotalDesconto").text(Globalize.format(0, "n2"));
+                $("#lblTotalOrcamento").text(Globalize.format((totalOrcamento + totalDesconto), "n2"));
+
+                $("#ValorDesconto").val("");
+                $('#modaldesconto').modal('hide');
+            });
+
+            var parcelas;
+
+            $.getJSON("/Parcela/Listar", function (data, status, xhr) {
+                parcelas = data;
+            });
+            
+            $("#txtCliente").autocomplete({
+                minLength: 3,
+                source: function (request, response) {
+                    $.getJSON("/Cliente/ListarAutocomplete", { term: request.term }, function (data, status, xhr) {
+
+                        // se não houver cliente cadastrado, retorna mensagem ao usuário
+                        if (data == null || data.length <= 0) { data.push({ ClienteID: 0, Nome: "Cliente não cadastrado" }); }
+
+                        response($.map(data, function (cliente) {
+                            var nome = cliente.Nome;
+
+                            if (nome == null || nome == "") {
+                                nome = cliente.NomeFantasia;
+                            }
+
+                            return { label: nome, value: cliente.ClienteID }
+                        }));
+                    });
+                },
+                select: function (event, ui) {
+
+                    // apaga a pesquisa do cliente selecionado
+                    if (ui.item.label == "Cliente não cadastrado") {
+                        ui.item.label = "";
+                        ui.item.value = "";
+                        return;
+                    }
+
+                    $("#ClienteID").val(ui.item.value);
+
+                    ui.item.label = ui.item.label;
+                    ui.item.value = ui.item.label;
+                }
+            });
+
+            $("#txtProduto").autocomplete({
+                minLength: 3,
+                source: function (request, response) {
+                    $.getJSON("/Produto/ListarAutocomplete", { term: request.term }, function (data, status, xhr) {
+                        response($.map(data, function (produto) {
+
+                            // verifica se o produto tem algum preço cadastrado
+                            if (produto.Preco == undefined || produto.Preco <= 0) { return { label: "Produto " + produto.Numero + " não tem preço cadastrado", value: 0 }; }
+
+                            return { label: produto.Numero + ' | ' + produto.Descricao + ' | ' + produto.MedidaDao.Descricao + ' | ' + Globalize.format(produto.Preco * 3, "n2"), value: produto.ProdutoID }
+                        }));
+                    });
+                },
+                select: function (event, ui) {
+
+                    var produto = ui.item.label.split("|");
+                    var produtoAdicionadoAoOrcamento = false;
+                    var idx = 0;
+
+                    // verifica se o produto selecionado já existe no Orcamento
+                    tbProduto.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                        var data = this.data();
+                        if (data.ProdutoID == ui.item.value) {
+                            produtoAdicionadoAoOrcamento = true;
+                        }
+                    });
+
+                    if (produtoAdicionadoAoOrcamento) {
+                        ui.item.label = "";
+                        ui.item.value = "";
+                        alert('Produto ' + produto[0].trim() + ' já adicionado ao orçamento.');
+                        return;
+                    }
+        
+                    // adiciona o produto ao orcamento
+                    tbProduto.rows.add([
+                    {
+                        "ProdutoID": ui.item.value,
+                        "Numero": produto[0].trim(),
+                        "Descricao": produto[1].trim(),
+                        "MedidaDao": { "Descricao": produto[2].trim() },
+                        "Quantidade": "<input type='text' class='form-control quantidade' min='0' onblur='calcularTotalOrcamento()' value='1' />",
+                        "Preco": "<span class='preco' data-preco='4'>" + Globalize.format(parseFloat(produto[3].trim().replace(".", "").replace(",", ".")), "n2") + "</span>",
+                        "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir Produto' style='cursor: pointer'></i>"
+                    }]).draw();
+
+                    $(".quantidade").mask('000');
+
+                    // atualiza o total do orçamento
+                    calcularTotalOrcamento();
+
+                    // apaga a pesquisa do produto selecionado
+                    ui.item.label = "";
+                    ui.item.value = "";
+                }
+            });
+
+            var tbProduto = $("#tbProduto").DataTable({
+                "paging": false,
+                "ordering": false,
+                "info": false,
+                "searching": false,
+                "language": {
+                    "lengthMenu": "Mostrar _MENU_ registros por página",
+                    "zeroRecords": "Sem registros a serem exibidos",
+                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Sem registros a serem exibidos",
+                    "infoFiltered": "(filtrados de _MAX_ total de registros)"
+                },
+                "columns":
+                [
+                    {
+                        "data": function (data, type, row) {
+                            return "<a href='#' onclick='modalPreco(" + data["ProdutoID"] + ",\"" + $(data.Preco).text().trim() + "\")'>" + data["Numero"] + "</a>";
+                        },
+                        "className": "text-center"
+                    },
+                    { "data": "Descricao", "className": "text-left" },
+                    { "data": "MedidaDao.Descricao", "className": "text-center" },
+                    { "data": "Quantidade", "className": "text-center" },
+                    { "data": "Preco", "className": "text-center" },
+                    { "data": "Acao", "className": "text-center" }
+                ]
+            });
+
+            var tbLojaProduto = $("#tbLojaProduto").DataTable({
+                "paging": false,
+                "ordering": false,
+                "info": false,
+                "searching": false,
+                "language": {
+                    "lengthMenu": "_MENU_ registros por página",
+                    "zeroRecords": "Sem registros a serem exibidos",
+                    "info": "Página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Sem registros a serem exibidos",
+                    "infoFiltered": "(filtrados de _MAX_ total de registros)",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": { "sNext": "Próximo", "sPrevious": "Anterior", "sFirst": "Primeiro", "sLast": "Último" }
+                },
+                "columns":
+                [
+                    { "data": "LojaDao.NomeFantasia", "className": "text-center" },
+                    { "data": "Quantidade", "className": "text-center" }
+                ]
+            });
+
+            var tbProdutoPreco = $("#tbProdutoPreco").DataTable({
+                "paging": false,
+                "ordering": false,
+                "info": false,
+                "searching": false,
+                "language": {
+                    "lengthMenu": "_MENU_ registros por página",
+                    "zeroRecords": "Sem registros a serem exibidos",
+                    "info": "Página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Sem registros a serem exibidos",
+                    "infoFiltered": "(filtrados de _MAX_ total de registros)",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": { "sNext": "Próximo", "sPrevious": "Anterior", "sFirst": "Primeiro", "sLast": "Último" }
+                },
+                "columns":
+                [
+                    { "data": "ProdutoID", "visible": false },
+                    { "data": "Descricao", "className": "text-center" },
+                    { "data": "Preco", "className": "text-center" }
+                ]
+            });
+
+            // botão excluir produto do orcamento
+            $('#tbProduto tbody').on('click', 'i.glyphicon-remove', function () {
+                if (confirm("Deseja realmente excluir produto do orçamento?")) {
+                    tbProduto.row($(this).parents('tr')).remove().draw();
+                    calcularTotalOrcamento();
+                }
+            });
+            
+            // altera o preço do produto
+            $('#tbProdutoPreco tbody').on('click', 'tr', function () {
+                var dataProdutoPreco = tbProdutoPreco.row(this).data();
+                var row = $(this);
+                if (!row.hasClass('selected')) { row.addClass('selected').siblings().removeClass('selected'); }
+                tbProduto.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                    var dataProduto = this.data();
+                    if (dataProduto.ProdutoID == dataProdutoPreco.ProdutoID) 
+                    {
+                        dataProduto.Preco = "<span class='preco'>" + dataProdutoPreco.Preco + "</span>";
+                        this.invalidate();
+                    }
+                });
+                tbProduto.draw();
+                calcularTotalOrcamento();
+                $('#modalpreco').modal('hide');
+            });
+
+            $("#btnCadastrarOrcamento").click(function () {
+
+                var orcamentoDao = {};
+                var orcamentoProdutoDao = [];
+
+                orcamentoDao.FuncionarioDao = [];
+                orcamentoDao.FuncionarioDao.push({ FuncionarioID: $("#FuncionarioID option:selected").val() });
+
+                orcamentoDao.ClienteDao = { ClienteID: $("#ClienteID").val() };
+
+                orcamentoDao.LojaDao = [];
+                if (@lojaDao.LojaID > 0)
+                {
+                    orcamentoDao.LojaDao.push({ LojaID: '@lojaDao.LojaID' });
+                }
+                else
+                {
+                    orcamentoDao.LojaDao.push({ LojaID: $("#LojaID option:selected").val() });
+                }
+
+                orcamentoDao.Observacao = $("#Observacao").val();
+                orcamentoDao.Desconto = $("#lblTotalDesconto").text();
+
+                // produtos
+                tbProduto.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                    var data = this.data();
+                    orcamentoProdutoDao.push
+                    ({
+                        "ProdutoID": data.ProdutoID,
+                        "ProdutoDao.Descricao": data.Descricao,
+                        "Quantidade": Globalize.parseInt($($($(".quantidade")[rowIdx]).parents("tr").children().eq(3)).children().val()),
+                        "Preco": $($($(".preco")[rowIdx]).parents("tr").children().eq(4)).text()
+                    });
+                });
+
+                orcamentoDao.OrcamentoProdutoDao = orcamentoProdutoDao;
+                
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Orcamento/Incluir",
+                    data: { orcamentoDao: orcamentoDao },
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            alert(data.Mensagem);
+                            return;
+                        }
+
+                        $("#OrcamentoForm")[0].reset();
+                        tbProduto.clear().draw();
+                        $("#lblTotalOrcamento").html("0,00");
+                        $("#lblTotalPago").html("0,00");
+                        $("#lblTotalDesconto").html("0,00");
+                        $("#ClienteID").val("");
+
+                        alert(data.Mensagem);
+                    }
+                });
+
+            });
+
+        });
+    </script>
+}
+<div class="container container-page">
+    <h2><i class="glyphicon glyphicon-time" style="color: #0f3456" title="Orçamento"></i> Tirar Orçamento</h2>
+    <hr />
+    <form id="OrcamentoForm" name="OrcamentoForm">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="form-group">
+                    @Html.DropDownListFor(x => x.FuncionarioDao.FirstOrDefault().FuncionarioID, new SelectList(Model.FuncionarioDao, "FuncionarioID", "Nome"), "Consultor", new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input id="txtCliente" name="txtCliente" type="text" class="form-control" placeholder="CPF/CNPJ do cliente (Mínimo de 3 letras)" />
+                            <input type="hidden" name="ClienteID" id="ClienteID" />
+                        </div>
+                        <div class="col-lg-2">
+                            <a href="@Url.Action("Cadastro", "Cliente")" target="_blank"><i class="glyphicon glyphicon-plus" title="Cadastrar cliente" style="vertical-align: bottom"></i></a>
+                        </div>
+                    </div>
+                </div>
+                @{
+                    if (lojaDao.LojaID <= 0)
+                    {
+                        <div class="form-group">
+                            @Html.DropDownListFor(x => x.LojaDao.FirstOrDefault().LojaID, new SelectList(Model.LojaDao, "LojaID", "NomeFantasia"), "Loja de origem dos produtos", new { @class = "form-control", @id = "LojaID" })
+                        </div>
+                    }
+                }                
+            </div>
+            <div class="col-lg-8">
+                <label style="font-size: 18px; margin-bottom: 10px; font-weight: normal">Produtos</label>
+                <input id="txtProduto" name="txtProduto" type="text" class="form-control" placeholder="Produtos (Mínimo de 3 letras)" />
+                <div class="table-responsive">
+                    <table id="tbProduto" class="table table-striped table-responsive table-condensed">
+                        <thead>
+                            <tr>
+                                <td class="text-center" style="width: 10%"><b>Número</b></td>
+                                <td class="text-left" style="width: 35%"><b>Descrição</b></td>
+                                <td class="text-center" style="width: 10%"><b>Medida</b></td>
+                                <td class="text-center" style="width: 10%"><b>Qtd</b></td>
+                                <td class="text-center" style="width: 10%"><b>Preço</b></td>
+                                <td class="text-center" style="width: 5%"><b>Ação</b></td>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div style="margin-top: 10px; margin-bottom: 10px">
+                    <div class="col-lg-12 text-right" style="font-size: 18px; padding: 0">Total Orçamento: <span style="color: cornflowerblue">R$ </span><label id="lblTotalOrcamento" style="color: cornflowerblue">0,00</label></div>
+                </div>
+                <div style="margin-top: 10px; margin-bottom: 10px">
+                    <div class="col-lg-12 text-right" style="font-size: 18px; padding: 0"><a href="#" data-toggle="modal" data-target="#modaldesconto">Desconto Autorizado</a>: <span style="color: darkorange">R$ </span><label id="lblTotalDesconto" style="color: darkorange; font-size: 18px">0,00</label></div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.TextAreaFor(x => x.Observacao, 5, 10, new { @class = "form-control", @placeholder = "Observação (Opcional)" })
+        </div>
+        <div class="form-group">
+            <button id="btnCadastrarOrcamento" type="button" class="btn btn-success">Cadastrar</button>
+            <button id="btnLista" type="button" class="btn btn-info" onclick="window.location.href='@Url.Action("Lista", "Orcamento")'">Lista de Orçamentos Cadastrados</button>
+        </div>
+    </form>
+</div>
+@Html.Partial("_ModalPedidoDesconto")
+@Html.Partial("_ModalProdutoPreco")

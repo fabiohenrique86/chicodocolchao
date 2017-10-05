@@ -160,6 +160,17 @@ namespace ChicoDoColchao.Controllers
                         {
                             return true;
                         }
+                        else if (controller == "Orcamento")
+                        {
+                            if (action == "Cadastro" || action == "Lista")
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
                         else
                         {
                             return false;

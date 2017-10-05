@@ -44,7 +44,8 @@ namespace ChicoDoColchao.Repository
 
             query = query.Where(x => x.Ativo);
 
-            return query.OrderBy(x => x.Nome).ToList();
+            return query.Include(x => x.Loja).OrderBy(x => x.Nome).ToList();
+            //return query.OrderBy(x => x.Nome).ToList();
         }
     }
 }

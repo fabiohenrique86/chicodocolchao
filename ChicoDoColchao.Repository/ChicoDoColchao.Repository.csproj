@@ -103,9 +103,13 @@
     <Compile Include="Orcamento.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="OrcamentoHistorico.cs">
+      <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="OrcamentoProduto.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="OrcamentoHistoricoRepository.cs" />
     <Compile Include="Parcela.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
@@ -115,6 +119,7 @@
     <Compile Include="PedidoProduto.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="OrcamentoRepository.cs" />
     <Compile Include="PedidoStatus.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>

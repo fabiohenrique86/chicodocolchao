@@ -123,12 +123,23 @@
             <PropertyRef Name="OrcamentoID" />
           </Key>
           <Property Name="OrcamentoID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Numero" Type="int" Nullable="false" />
           <Property Name="LojaID" Type="int" Nullable="false" />
           <Property Name="FuncionarioID" Type="int" Nullable="false" />
           <Property Name="DataOrcamento" Type="smalldatetime" Nullable="false" />
-          <Property Name="Observacao" Type="varchar" MaxLength="300" />
+          <Property Name="Observacao" Type="varchar" MaxLength="1000" />
           <Property Name="Ativo" Type="bit" Nullable="false" />
+          <Property Name="ClienteID" Type="int" Nullable="false" />
+          <Property Name="Desconto" Type="float" Nullable="false" />
+          <Property Name="PedidoID" Type="int" />
+        </EntityType>
+        <EntityType Name="OrcamentoHistorico">
+          <Key>
+            <PropertyRef Name="OrcamentoHistoricoID" />
+          </Key>
+          <Property Name="OrcamentoHistoricoID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrcamentoID" Type="int" Nullable="false" />
+          <Property Name="Observacao" Type="varchar" MaxLength="2000" />
+          <Property Name="DataCadastro" Type="smalldatetime" Nullable="false" />
         </EntityType>
         <EntityType Name="OrcamentoProduto">
           <Key>
@@ -138,8 +149,8 @@
           <Property Name="OrcamentoID" Type="int" Nullable="false" />
           <Property Name="ProdutoID" Type="int" Nullable="false" />
           <Property Name="Quantidade" Type="smallint" Nullable="false" />
+          <Property Name="Medida" Type="varchar" MaxLength="20" />
           <Property Name="Preco" Type="float" Nullable="false" />
-          <Property Name="Medida" Type="varchar" MaxLength="20" Nullable="false" />
         </EntityType>
         <EntityType Name="Parcela">
           <Key>
@@ -158,7 +169,7 @@
           <Property Name="DataPedido" Type="smalldatetime" Nullable="false" />
           <Property Name="LojaSaidaID" Type="int" Nullable="false" />
           <Property Name="PedidoStatusID" Type="int" Nullable="false" />
-          <Property Name="Observacao" Type="varchar" MaxLength="350" />
+          <Property Name="Observacao" Type="varchar" MaxLength="3000" />
           <Property Name="NomeCarreto" Type="varchar" MaxLength="150" />
           <Property Name="ValorFrete" Type="float" />
           <Property Name="ClienteID" Type="int" Nullable="false" />
@@ -345,6 +356,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Orcamento_Cliente">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="1" />
+          <End Role="Orcamento" Type="Self.Orcamento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="ClienteID" />
+            </Principal>
+            <Dependent Role="Orcamento">
+              <PropertyRef Name="ClienteID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Orcamento_Funcionario">
           <End Role="Funcionario" Type="Self.Funcionario" Multiplicity="1" />
           <End Role="Orcamento" Type="Self.Orcamento" Multiplicity="*" />
@@ -369,6 +392,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Orcamento_Pedido">
+          <End Role="Pedido" Type="Self.Pedido" Multiplicity="0..1" />
+          <End Role="Orcamento" Type="Self.Orcamento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pedido">
+              <PropertyRef Name="PedidoID" />
+            </Principal>
+            <Dependent Role="Orcamento">
+              <PropertyRef Name="PedidoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Orcamento_Produto">
           <End Role="Produto" Type="Self.Produto" Multiplicity="1" />
           <End Role="OrcamentoProduto" Type="Self.OrcamentoProduto" Multiplicity="*" />
@@ -378,6 +413,18 @@
             </Principal>
             <Dependent Role="OrcamentoProduto">
               <PropertyRef Name="ProdutoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrcamentoHistorico_Orcamento">
+          <End Role="Orcamento" Type="Self.Orcamento" Multiplicity="1" />
+          <End Role="OrcamentoHistorico" Type="Self.OrcamentoHistorico" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orcamento">
+              <PropertyRef Name="OrcamentoID" />
+            </Principal>
+            <Dependent Role="OrcamentoHistorico">
+              <PropertyRef Name="OrcamentoID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -657,6 +704,7 @@
           <EntitySet Name="NotaFiscal" EntityType="Self.NotaFiscal" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NotaFiscalProduto" EntityType="Self.NotaFiscalProduto" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Orcamento" EntityType="Self.Orcamento" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrcamentoHistorico" EntityType="Self.OrcamentoHistorico" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrcamentoProduto" EntityType="Self.OrcamentoProduto" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Parcela" EntityType="Self.Parcela" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Pedido" EntityType="Self.Pedido" Schema="dbo" store:Type="Tables" />
@@ -697,6 +745,10 @@
             <End Role="NotaFiscal" EntitySet="NotaFiscal" />
             <End Role="NotaFiscalProduto" EntitySet="NotaFiscalProduto" />
           </AssociationSet>
+          <AssociationSet Name="FK_Orcamento_Cliente" Association="Self.FK_Orcamento_Cliente">
+            <End Role="Cliente" EntitySet="Cliente" />
+            <End Role="Orcamento" EntitySet="Orcamento" />
+          </AssociationSet>
           <AssociationSet Name="FK_Orcamento_Funcionario" Association="Self.FK_Orcamento_Funcionario">
             <End Role="Funcionario" EntitySet="Funcionario" />
             <End Role="Orcamento" EntitySet="Orcamento" />
@@ -705,9 +757,17 @@
             <End Role="Loja" EntitySet="Loja" />
             <End Role="Orcamento" EntitySet="Orcamento" />
           </AssociationSet>
+          <AssociationSet Name="FK_Orcamento_Pedido" Association="Self.FK_Orcamento_Pedido">
+            <End Role="Pedido" EntitySet="Pedido" />
+            <End Role="Orcamento" EntitySet="Orcamento" />
+          </AssociationSet>
           <AssociationSet Name="FK_Orcamento_Produto" Association="Self.FK_Orcamento_Produto">
             <End Role="Produto" EntitySet="Produto" />
             <End Role="OrcamentoProduto" EntitySet="OrcamentoProduto" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrcamentoHistorico_Orcamento" Association="Self.FK_OrcamentoHistorico_Orcamento">
+            <End Role="Orcamento" EntitySet="Orcamento" />
+            <End Role="OrcamentoHistorico" EntitySet="OrcamentoHistorico" />
           </AssociationSet>
           <AssociationSet Name="FK_OrcamentoProduto_Orcamento" Association="Self.FK_OrcamentoProduto_Orcamento">
             <End Role="Orcamento" EntitySet="Orcamento" />
@@ -838,6 +898,7 @@
           <NavigationProperty Name="Estado" Relationship="Self.FK_Cliente_Estado" FromRole="Cliente" ToRole="Estado" />
           <NavigationProperty Name="Pedido" Relationship="Self.FK_Pedido_Cliente" FromRole="Cliente" ToRole="Pedido" />
           <Property Name="Cep" Type="String" MaxLength="9" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Orcamento" Relationship="ChicoDoColchaoModel.FK_Orcamento_Cliente" FromRole="Cliente" ToRole="Orcamento" />
         </EntityType>
         <EntityType Name="Estado">
           <Key>
@@ -942,15 +1003,22 @@
             <PropertyRef Name="OrcamentoID" />
           </Key>
           <Property Name="OrcamentoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Numero" Type="Int32" Nullable="false" />
           <Property Name="LojaID" Type="Int32" Nullable="false" />
           <Property Name="FuncionarioID" Type="Int32" Nullable="false" />
           <Property Name="DataOrcamento" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Observacao" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="Observacao" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
           <Property Name="Ativo" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Funcionario" Relationship="Self.FK_Orcamento_Funcionario" FromRole="Orcamento" ToRole="Funcionario" />
           <NavigationProperty Name="Loja" Relationship="Self.FK_Orcamento_Loja" FromRole="Orcamento" ToRole="Loja" />
           <NavigationProperty Name="OrcamentoProduto" Relationship="Self.FK_OrcamentoProduto_Orcamento" FromRole="Orcamento" ToRole="OrcamentoProduto" />
+          <NavigationProperty Name="Orcamento1" Relationship="ChicoDoColchaoModel.FK_OrcamentoHistorico_Orcamento" FromRole="Orcamento" ToRole="Orcamento1" />
+          <NavigationProperty Name="Orcamento2" Relationship="ChicoDoColchaoModel.FK_OrcamentoHistorico_Orcamento" FromRole="Orcamento1" ToRole="Orcamento" />
+          <NavigationProperty Name="OrcamentoHistorico" Relationship="ChicoDoColchaoModel.FK_OrcamentoHistorico_Orcamento1" FromRole="Orcamento" ToRole="OrcamentoHistorico" />
+          <Property Name="ClienteID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Cliente" Relationship="ChicoDoColchaoModel.FK_Orcamento_Cliente" FromRole="Orcamento" ToRole="Cliente" />
+          <Property Name="Desconto" Type="Double" Nullable="false" />
+          <Property Name="PedidoID" Type="Int32" />
+          <NavigationProperty Name="Pedido" Relationship="ChicoDoColchaoModel.FK_Orcamento_Pedido" FromRole="Orcamento" ToRole="Pedido" />
         </EntityType>
         <EntityType Name="OrcamentoProduto">
           <Key>
@@ -960,10 +1028,10 @@
           <Property Name="OrcamentoID" Type="Int32" Nullable="false" />
           <Property Name="ProdutoID" Type="Int32" Nullable="false" />
           <Property Name="Quantidade" Type="Int16" Nullable="false" />
-          <Property Name="Preco" Type="Double" Nullable="false" />
-          <Property Name="Medida" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Medida" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Orcamento" Relationship="Self.FK_OrcamentoProduto_Orcamento" FromRole="OrcamentoProduto" ToRole="Orcamento" />
           <NavigationProperty Name="Produto" Relationship="Self.FK_Orcamento_Produto" FromRole="OrcamentoProduto" ToRole="Produto" />
+          <Property Name="Preco" Type="Double" Nullable="false" />
         </EntityType>
         <EntityType Name="Parcela">
           <Key>
@@ -983,7 +1051,7 @@
           <Property Name="DataPedido" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="LojaSaidaID" Type="Int32" Nullable="false" />
           <Property Name="PedidoStatusID" Type="Int32" Nullable="false" />
-          <Property Name="Observacao" Type="String" MaxLength="350" FixedLength="false" Unicode="false" />
+          <Property Name="Observacao" Type="String" MaxLength="3000" FixedLength="false" Unicode="false" />
           <Property Name="NomeCarreto" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="ValorFrete" Type="Double" />
           <Property Name="ClienteID" Type="Int32" Nullable="false" />
@@ -1001,6 +1069,7 @@
           <NavigationProperty Name="UsuarioPedido" Relationship="Self.FK_Pedido_Usuario_Pedido" FromRole="Pedido" ToRole="Usuario" />
           <NavigationProperty Name="PedidoProduto" Relationship="Self.FK_PedidoProduto_Pedido" FromRole="Pedido" ToRole="PedidoProduto" />
           <NavigationProperty Name="PedidoTipoPagamento" Relationship="Self.FK_PedidoTipoPagamento_Pedido" FromRole="Pedido" ToRole="PedidoTipoPagamento" />
+          <NavigationProperty Name="Orcamento" Relationship="ChicoDoColchaoModel.FK_Orcamento_Pedido" FromRole="Pedido" ToRole="Orcamento" />
         </EntityType>
         <EntityType Name="PedidoProduto">
           <Key>
@@ -1017,8 +1086,8 @@
           <Property Name="UsuarioBaixaID" Type="Int32" />
           <NavigationProperty Name="Pedido" Relationship="Self.FK_PedidoProduto_Pedido" FromRole="PedidoProduto" ToRole="Pedido" />
           <NavigationProperty Name="Produto" Relationship="Self.FK_PedidoProduto_Produto" FromRole="PedidoProduto" ToRole="Produto" />
-          <NavigationProperty Name="UsuarioEntrega" Relationship="Self.FK_PedidoProduto_Usuario_Baixa" FromRole="PedidoProduto" ToRole="Usuario" />
-          <NavigationProperty Name="UsuarioBaixa" Relationship="Self.FK_PedidoProduto_Usuario_Entrega" FromRole="PedidoProduto" ToRole="Usuario" />
+          <NavigationProperty Name="UsuarioBaixa" Relationship="Self.FK_PedidoProduto_Usuario_Baixa" FromRole="PedidoProduto" ToRole="Usuario" />
+          <NavigationProperty Name="UsuarioEntrega" Relationship="Self.FK_PedidoProduto_Usuario_Entrega" FromRole="PedidoProduto" ToRole="Usuario" />
         </EntityType>
         <EntityType Name="PedidoStatus">
           <Key>
@@ -1116,7 +1185,6 @@
           <Property Name="Senha" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Ativo" Type="Boolean" Nullable="false" />
           <Property Name="TipoUsuarioID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Pedido" Relationship="Self.FK_Pedido_Usuario_Cancelamento" FromRole="Usuario" ToRole="Pedido" />
           <NavigationProperty Name="Pedido1" Relationship="Self.FK_Pedido_Usuario_Pedido" FromRole="Usuario" ToRole="Pedido" />
           <NavigationProperty Name="PedidoProduto" Relationship="Self.FK_PedidoProduto_Usuario_Baixa" FromRole="Usuario" ToRole="PedidoProduto" />
           <NavigationProperty Name="PedidoProduto1" Relationship="Self.FK_PedidoProduto_Usuario_Entrega" FromRole="Usuario" ToRole="PedidoProduto" />
@@ -1506,7 +1574,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="ChicoDoColchaoEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="ChicoDoColchaoEntities" annotation:LazyLoadingEnabled="false">
           <EntitySet Name="Categoria" EntityType="Self.Categoria" />
           <EntitySet Name="Cliente" EntityType="Self.Cliente" />
           <EntitySet Name="Estado" EntityType="Self.Estado" />
@@ -1658,7 +1726,82 @@
             <End Role="Transferencia" EntitySet="Transferencia" />
             <End Role="TransferenciaProduto" EntitySet="TransferenciaProduto" />
           </AssociationSet>
+          <EntitySet Name="OrcamentoHistorico" EntityType="ChicoDoColchaoModel.OrcamentoHistorico" />
+          <AssociationSet Name="FK_OrcamentoHistorico_Orcamento" Association="ChicoDoColchaoModel.FK_OrcamentoHistorico_Orcamento">
+            <End Role="Orcamento" EntitySet="Orcamento" />
+            <End Role="Orcamento1" EntitySet="Orcamento" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrcamentoHistorico_Orcamento1" Association="ChicoDoColchaoModel.FK_OrcamentoHistorico_Orcamento1">
+            <End Role="Orcamento" EntitySet="Orcamento" />
+            <End Role="OrcamentoHistorico" EntitySet="OrcamentoHistorico" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orcamento_Cliente" Association="ChicoDoColchaoModel.FK_Orcamento_Cliente">
+            <End Role="Cliente" EntitySet="Cliente" />
+            <End Role="Orcamento" EntitySet="Orcamento" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orcamento_Pedido" Association="ChicoDoColchaoModel.FK_Orcamento_Pedido">
+            <End Role="Pedido" EntitySet="Pedido" />
+            <End Role="Orcamento" EntitySet="Orcamento" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="OrcamentoHistorico">
+          <Key>
+            <PropertyRef Name="OrcamentoHistoricoID" />
+          </Key>
+          <Property Name="OrcamentoHistoricoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrcamentoID" Type="Int32" Nullable="false" />
+          <Property Name="Observacao" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Orcamento" Relationship="ChicoDoColchaoModel.FK_OrcamentoHistorico_Orcamento1" FromRole="OrcamentoHistorico" ToRole="Orcamento" />
+        </EntityType>
+        <Association Name="FK_OrcamentoHistorico_Orcamento">
+          <End Type="ChicoDoColchaoModel.Orcamento" Role="Orcamento" Multiplicity="1" />
+          <End Type="ChicoDoColchaoModel.Orcamento" Role="Orcamento1" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Orcamento">
+              <PropertyRef Name="OrcamentoID" />
+            </Principal>
+            <Dependent Role="Orcamento1">
+              <PropertyRef Name="OrcamentoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrcamentoHistorico_Orcamento1">
+          <End Type="ChicoDoColchaoModel.Orcamento" Role="Orcamento" Multiplicity="1" />
+          <End Type="ChicoDoColchaoModel.OrcamentoHistorico" Role="OrcamentoHistorico" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orcamento">
+              <PropertyRef Name="OrcamentoID" />
+            </Principal>
+            <Dependent Role="OrcamentoHistorico">
+              <PropertyRef Name="OrcamentoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orcamento_Cliente">
+          <End Type="ChicoDoColchaoModel.Cliente" Role="Cliente" Multiplicity="1" />
+          <End Type="ChicoDoColchaoModel.Orcamento" Role="Orcamento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="ClienteID" />
+            </Principal>
+            <Dependent Role="Orcamento">
+              <PropertyRef Name="ClienteID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orcamento_Pedido">
+          <End Type="ChicoDoColchaoModel.Pedido" Role="Pedido" Multiplicity="0..1" />
+          <End Type="ChicoDoColchaoModel.Orcamento" Role="Orcamento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pedido">
+              <PropertyRef Name="PedidoID" />
+            </Principal>
+            <Dependent Role="Orcamento">
+              <PropertyRef Name="PedidoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1791,8 +1934,10 @@
           <EntitySetMapping Name="Orcamento">
             <EntityTypeMapping TypeName="ChicoDoColchaoModel.Orcamento">
               <MappingFragment StoreEntitySet="Orcamento">
+                <ScalarProperty Name="PedidoID" ColumnName="PedidoID" />
+                <ScalarProperty Name="Desconto" ColumnName="Desconto" />
+                <ScalarProperty Name="ClienteID" ColumnName="ClienteID" />
                 <ScalarProperty Name="OrcamentoID" ColumnName="OrcamentoID" />
-                <ScalarProperty Name="Numero" ColumnName="Numero" />
                 <ScalarProperty Name="LojaID" ColumnName="LojaID" />
                 <ScalarProperty Name="FuncionarioID" ColumnName="FuncionarioID" />
                 <ScalarProperty Name="DataOrcamento" ColumnName="DataOrcamento" />
@@ -1804,11 +1949,11 @@
           <EntitySetMapping Name="OrcamentoProduto">
             <EntityTypeMapping TypeName="ChicoDoColchaoModel.OrcamentoProduto">
               <MappingFragment StoreEntitySet="OrcamentoProduto">
+                <ScalarProperty Name="Preco" ColumnName="Preco" />
                 <ScalarProperty Name="OrcamentoProdutoID" ColumnName="OrcamentoProdutoID" />
                 <ScalarProperty Name="OrcamentoID" ColumnName="OrcamentoID" />
                 <ScalarProperty Name="ProdutoID" ColumnName="ProdutoID" />
                 <ScalarProperty Name="Quantidade" ColumnName="Quantidade" />
-                <ScalarProperty Name="Preco" ColumnName="Preco" />
                 <ScalarProperty Name="Medida" ColumnName="Medida" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1941,6 +2086,16 @@
                 <ScalarProperty Name="Senha" ColumnName="Senha" />
                 <ScalarProperty Name="Ativo" ColumnName="Ativo" />
                 <ScalarProperty Name="TipoUsuarioID" ColumnName="TipoUsuarioID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrcamentoHistorico">
+            <EntityTypeMapping TypeName="ChicoDoColchaoModel.OrcamentoHistorico">
+              <MappingFragment StoreEntitySet="OrcamentoHistorico">
+                <ScalarProperty Name="DataCadastro" ColumnName="DataCadastro" />
+                <ScalarProperty Name="Observacao" ColumnName="Observacao" />
+                <ScalarProperty Name="OrcamentoID" ColumnName="OrcamentoID" />
+                <ScalarProperty Name="OrcamentoHistoricoID" ColumnName="OrcamentoHistoricoID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

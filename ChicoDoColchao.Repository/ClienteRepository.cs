@@ -34,7 +34,7 @@ namespace ChicoDoColchao.Repository
 
             query = query.Where(x => x.Ativo);
 
-            return query.OrderBy(x => x.Nome).ToList();
+            return query.Include(x => x.Estado).OrderBy(x => x.Nome).ToList();
         }
 
         public List<Cliente> ListarAutocomplete(Cliente cliente)
@@ -44,7 +44,7 @@ namespace ChicoDoColchao.Repository
             query = query.Where(x => x.Cpf.Contains(cliente.Cpf) || x.Cnpj.Contains(cliente.Cnpj));
             query = query.Where(x => x.Ativo);
 
-            return query.OrderBy(x => x.Nome).ToList();
+            return query.Include(x => x.Estado).OrderBy(x => x.Nome).ToList();
         }
 
         public void Incluir(Cliente cliente)
@@ -52,8 +52,6 @@ namespace ChicoDoColchao.Repository
             cliente.Ativo = true;
 
             chicoDoColchaoEntities.Entry(cliente).State = EntityState.Added;
-            //chicoDoColchaoEntities.Entry(cliente.Estado).State = EntityState.Detached;
-
             chicoDoColchaoEntities.SaveChanges();
         }
     }

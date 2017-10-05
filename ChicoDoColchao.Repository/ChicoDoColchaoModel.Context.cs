@@ -18,6 +18,7 @@ namespace ChicoDoColchao.Repository
         public ChicoDoColchaoEntities()
             : base("name=ChicoDoColchaoEntities")
         {
+            this.Configuration.LazyLoadingEnabled = false;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -48,5 +49,6 @@ namespace ChicoDoColchao.Repository
         public virtual DbSet<Transferencia> Transferencia { get; set; }
         public virtual DbSet<TransferenciaProduto> TransferenciaProduto { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
+        public virtual DbSet<OrcamentoHistorico> OrcamentoHistorico { get; set; }
     }
 }
