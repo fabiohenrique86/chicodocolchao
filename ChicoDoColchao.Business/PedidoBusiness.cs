@@ -290,13 +290,14 @@ namespace ChicoDoColchao.Business
         {
             try
             {
+                var email = string.Empty;
+
                 ValidarIncluir(pedidoDao);
 
                 var pedidoId = pedidoRepository.Incluir(pedidoDao.ToBd());
 
                 AtualizarOrcamento(pedidoDao.OrcamentoDao.FirstOrDefault(), pedidoId);
-
-                var email = string.Empty;
+                                
                 EnviarComandaPorEmail(pedidoId, out email);
 
                 return pedidoId;
@@ -341,7 +342,7 @@ namespace ChicoDoColchao.Business
                     return false;
                 }
 
-                var mensagem = $"Olá {pedidoDao.ClienteDao.FirstOrDefault().Nome}.<br /><br />";
+                var mensagem = $"Olá {pedidoDao.ClienteDao.FirstOrDefault().Nome.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).FirstOrDefault()}.<br /><br />";
                 mensagem += $"Seu pedido {pedidoDao.PedidoID} foi recebido com sucesso!<br /><br />";
                 mensagem += "Em anexo, segue todos os detalhes do seu pedido.<br /><br />";
                 mensagem += "A Chico do Colchão agradece a preferência!";

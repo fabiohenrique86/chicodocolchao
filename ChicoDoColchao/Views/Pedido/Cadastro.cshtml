@@ -126,8 +126,13 @@
                     preco = 0;
                 }
                 totalPedido += parseInt(quantidade) * preco;
-                                
-                tbProdutos.row(index).data().DataEntrega = "<input type='text' class='form-control data datepicker dataEntrega' value='" + $($($(".dataEntrega")[index]).parents("tr").children().eq(5)).children().val() + "' />";
+                
+                var dataEntrega = "<input type='text' class='form-control data datepicker dataEntrega' value='" + $($($(".dataEntrega")[index]).parents("tr").children().eq(5)).children().val() + "' />";
+                if ($("#PedidoStatusID").val() == '@PedidoStatusDao.EPedidoStatus.RetiradoNaLoja.GetHashCode()')
+                {
+                    dataEntrega = "<input type='text' class='form-control data datepicker dataEntrega' value='" + $($($(".dataEntrega")[index]).parents("tr").children().eq(5)).children().val() + "' disabled='disabled' />";
+                }
+                tbProdutos.row(index).data().DataEntrega = dataEntrega;
                 tbProdutos.row(index).data().Quantidade = "<input type='text' class='form-control quantidade' min='0' onblur='calcularTotalPedido()' value='" + quantidade + "' />";
                 tbProdutos.row(index).invalidate();
             });
@@ -349,7 +354,7 @@
                     {
                         dataEntrega = "<input type='text' class='form-control data datepicker dataEntrega' value='' disabled='disabled' />";
                     }
-
+                    
                     // adiciona o produto ao pedido
                     tbProduto.rows.add([
                     {
@@ -594,7 +599,7 @@
                 pedidoDao.PedidoTipoPagamentoDao = pedidoTipoPagamento;
 
                 // verifica se existe um orçamento associado ao pedido
-                if ('@ViewBag.OrcamentoDao' != null)
+                if ('@ViewBag.OrcamentoDao' != '')
                 {
                     var orcamentoDao = @Html.Raw(Json.Encode(ViewBag.OrcamentoDao));
 

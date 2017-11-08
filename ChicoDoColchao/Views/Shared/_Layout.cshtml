@@ -45,8 +45,8 @@
         }*/
 
         .carousel-control .glyphicon-chevron-left, .carousel-control .glyphicon-chevron-right, .carousel-control .icon-next, .carousel-control .icon-prev {
-            font-size: 80px;
-            margin-top: -60px;
+            font-size: 40px;
+            margin-top: -35px;
         }
 
         .carousel-indicators li {
@@ -84,10 +84,9 @@
             background-color: red;
         }
 
-        .container-page
-        {
+        .container-page {
             padding-top: 70px;
-            padding-bottom: 20px; 
+            padding-bottom: 20px;
         }
     </style>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -168,69 +167,61 @@
         var c = Url.RequestContext.RouteData.Values["controller"].ToString();
         var a = Url.RequestContext.RouteData.Values["action"].ToString();
 
-        // verifica quais tela deve exibir o carousel principal
-        if (
-            (usuarioDao == null && c != "Usuario" && a != "Login")
-            ||
-            (usuarioDao != null &&
-            ((c == "Home" && a == "Index")
-            || (c == "ColchaoIdeal" && a == "Index")
-            || (c == "AgendarVisita" && a == "Index")
-            || (c == "OndeComprar" && a == "Index")
-            || (c == "AtendimentoDelivery" && a == "Index")
-            || (c == "BaixarApp" && a == "Index")
-            || (c == "Contato" && a == "Index"))
-            ))
-        {
-            <div class="row" style="background-color: #0f3456; font-size: 14px; padding-top: 60px; border: 2px solid red">
-                <div class="col-xs-12 col-lg-4"></div>
-                <div class="col-xs-12 col-lg-5">
-                    <ul class="nav navbar-nav">
-                        <li class="dropdown">
-                            <a style="color: #fff;" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Camas <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a style="color: #fff;" href="#">Solteiro</a></li>
-                                <li><a style="color: #fff;" href="#">Viúva</a></li>
-                                <li><a style="color: #fff;" href="#">Casal</a></li>
-                                <li><a style="color: #fff" href="#">Queen</a></li>
-                                <li><a style="color: #fff" href="#">King</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a style="color: #fff" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Colchões <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a style="color: #fff" href="#">Molas Ensacadas</a></li>
-                                <li><a style="color: #fff" href="#">Molas Superlastic</a></li>
-                                <li><a style="color: #fff" href="#">MiraCoil</a></li>
-                                <li><a style="color: #fff" href="#">Espuma</a></li>
-                                <li><a style="color: #fff" href="#">Ortopédico</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a style="color: #fff" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Travesseiros <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a style="color: #fff" href="#">Visco Servical</a></li>
-                                <li><a style="color: #fff" href="#">Visco Gel</a></li>
-                                <li><a style="color: #fff" href="#">Visco Elástico</a></li>
-                                <li><a style="color: #fff" href="#">Soft Látex</a></li>
-                                <li><a style="color: #fff" href="#">Toque de Pluma</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a style="color: #fff" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Acessórios <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a style="color: #fff" href="#">Cabeceira</a></li>
-                                <li><a style="color: #fff" href="#">Jogo de Lençol</a></li>
-                                <li><a style="color: #fff" href="#">Edredom</a></li>
-                                <li><a style="color: #fff" href="#">Suavencosto</a></li>
-                                <li><a style="color: #fff" href="#">Protetor de Colchão</a></li>
-                                <li><a style="color: #fff" href="#">Saia de Colchão</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-xs-12 col-lg-3"></div>
+        <div class="row" style="background-color: #0f3456; font-size: 14px; padding-top: 60px; border: 2px solid red">
+            <div class="col-xs-12 col-lg-4"></div>
+            <div class="col-xs-12 col-lg-5">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a style="color: #fff;" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Camas <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a style="color: #fff;" href="#">Solteiro</a></li>
+                            <li><a style="color: #fff;" href="#">Viúva</a></li>
+                            <li><a style="color: #fff;" href="#">Casal</a></li>
+                            <li><a style="color: #fff" href="#">Queen</a></li>
+                            <li><a style="color: #fff" href="#">King</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a style="color: #fff" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Colchões <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a style="color: #fff" href="#">Molas Ensacadas</a></li>
+                            <li><a style="color: #fff" href="#">Molas Superlastic</a></li>
+                            <li><a style="color: #fff" href="#">MiraCoil</a></li>
+                            <li><a style="color: #fff" href="#">Espuma</a></li>
+                            <li><a style="color: #fff" href="#">Ortopédico</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a style="color: #fff" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Travesseiros <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a style="color: #fff" href="#">Visco Servical</a></li>
+                            <li><a style="color: #fff" href="#">Visco Gel</a></li>
+                            <li><a style="color: #fff" href="#">Visco Elástico</a></li>
+                            <li><a style="color: #fff" href="#">Soft Látex</a></li>
+                            <li><a style="color: #fff" href="#">Toque de Pluma</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a style="color: #fff" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Acessórios <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a style="color: #fff" href="#">Cabeceira</a></li>
+                            <li><a style="color: #fff" href="#">Jogo de Lençol</a></li>
+                            <li><a style="color: #fff" href="#">Edredom</a></li>
+                            <li><a style="color: #fff" href="#">Suavencosto</a></li>
+                            <li><a style="color: #fff" href="#">Protetor de Colchão</a></li>
+                            <li><a style="color: #fff" href="#">Saia de Colchão</a></li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
+            <div class="col-xs-12 col-lg-3"></div>
+        </div>
+        // verifica quais tela deve exibir o carousel principal
+        if
+        (
+            (c == "Home" && a == "Index")
+        )
+        {
             <header id="myCarousel" class="carousel slide" style="border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; background-color: #fff">
                 <ol class="carousel-indicators">
                     <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -261,10 +252,10 @@
                     </div>
                 </div>
                 <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-                    <span class="icon-prev"></span>
+                    <span class="glyphicon glyphicon-chevron-left"></span>
                 </a>
                 <a class="right carousel-control" href="#myCarousel" data-slide="next">
-                    <span class="icon-next"></span>
+                    <span class="glyphicon glyphicon-chevron-right"></span>
                 </a>
             </header>
         }
@@ -316,29 +307,46 @@
                         <h4 style="margin-top: 50px; margin-bottom: 50px;">Visite nossas lojas</h4>
                     </div>
                     <div class="row">
-                        <div class="col-lg-6 text-center">
+                        <div class="col-lg-4 text-center">
+                            <img class="img-responsive img-circle" src="~/img/pituba-parque-center.jpg" style="border-radius: 5%" />
                             <i class="glyphicon glyphicon-map-marker" style="color: #c9302c"></i>&nbsp;Av. ACM, 1034 - Pituba Parque Center - Itaigara<br />
                             <i class="glyphicon glyphicon-earphone" style="color: #ec971f"></i>&nbsp;(71) 3035-5509
                         </div>
-                        <div class="col-lg-6 text-center">
+                        <div class="col-lg-4 text-center">
+                            <img class="img-responsive" src="~/img/av-sete.jpg" style="border-radius: 5%" />
                             <i class="glyphicon glyphicon-map-marker" style="color: #c9302c"></i>&nbsp;Av. Sete de Setembro, 1020 - Dois de Julho<br />
                             <i class="glyphicon glyphicon-earphone" style="color: #ec971f"></i>&nbsp;(71) 3027-9007
+                        </div>
+                        <div class="col-lg-4 text-center">
+                            <img class="img-responsive" src="~/img/pituba.jpg" style="border-radius: 5%" />
+                            <i class="glyphicon glyphicon-map-marker" style="color: #c9302c"></i>&nbsp;Av. Manoel Dias da Silva, 2.364 - Pituba<br />
+                            <i class="glyphicon glyphicon-earphone" style="color: #ec971f"></i>&nbsp;(71) 3248-7569
                         </div>
                     </div>
                     <div class="row" style="padding-top: 15px">
                         <div class="col-lg-4 text-center">
-                            <i class="glyphicon glyphicon-map-marker" style="color: #c9302c"></i>&nbsp;Av. Manoel Dias da Silva, 2.364 - Pituba<br />
-                            <i class="glyphicon glyphicon-earphone" style="color: #ec971f"></i>&nbsp;(71) 3248-7569
+                            <img class="img-responsive" src="~/img/shop-piedade.jpg" style="border-radius: 5%" />
+                            <i class="glyphicon glyphicon-map-marker" style="color: #c9302c"></i>&nbsp;Shopping Piedade 1º Piso - Centro<br />
+                            <i class="glyphicon glyphicon-earphone" style="color: #ec971f"></i>&nbsp; (71) 3043-8982
                         </div>
                         <div class="col-lg-4 text-center">
+                            <img class="img-responsive" src="~/img/av-manoel-dias.jpg" style="border-radius: 5%" />
                             <i class="glyphicon glyphicon-map-marker" style="color: #c9302c"></i>&nbsp;Av. Manoel Dias da Silva, 1.896 - Pituba<br />
                             <i class="glyphicon glyphicon-earphone" style="color: #ec971f"></i>&nbsp;(71) 3248-2876
                         </div>
                         <div class="col-lg-4 text-center">
-                            <i class="glyphicon glyphicon-map-marker" style="color: #c9302c"></i>&nbsp;Shopping Piedade 1º Piso - Centro<br />
-                            <i class="glyphicon glyphicon-earphone" style="color: #ec971f"></i>&nbsp; (71) 3043-8982
+                            <img class="img-responsive" src="~/img/shopping-guarajuba.jpg" style="border-radius: 5%" />
+                            <i class="glyphicon glyphicon-map-marker" style="color: #c9302c"></i>&nbsp;Rodovia BA 099, S/N, Km 42.5 - Estrada do Coco<br />
+                            <i class="glyphicon glyphicon-earphone" style="color: #ec971f"></i>&nbsp;(71) 3674-1818
                         </div>
-                    </div>                    
+                    </div>
+                    <div class="row" style="padding-top: 15px">
+                        <div class="col-lg-4 text-center">
+                            <img class="img-responsive" src="~/img/piata.jpg" style="border-radius: 5%" />
+                            <i class="glyphicon glyphicon-map-marker" style="color: #c9302c"></i>&nbsp;Av. Orlando Gomes, 1296 Loja 07 - Piatã<br />
+                            <i class="glyphicon glyphicon-earphone" style="color: #ec971f"></i>&nbsp; (71) 98111-3056
+                        </div>
+                    </div>
                     <div class="row text-center" style="margin-top: 30px;">
                         <div class="col-lg-12">
                             Ainda com dúvidas? Entre em <a href="@Url.Content("~/Contato")">contato@chicodocolchao.com.br</a>
@@ -370,6 +378,11 @@
             {
                 interval: 10000 // segundos
             });
+
+            //$("#myCarousel2").carousel(
+            //{
+            //    interval: 4000 // segundos
+            //});
 
             // popover
             $('#popover-usuario').popover({ html: true, placement: "bottom", content: function () { return $("#popover-content-usuario").html(); } });

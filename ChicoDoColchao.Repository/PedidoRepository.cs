@@ -24,6 +24,12 @@ namespace ChicoDoColchao.Repository
                 // atualiza o estoque da loja de saída
                 foreach (var pedidoProduto in pedido.PedidoProduto)
                 {
+                    // assume a "data entrega" e "data baixa", a mesma do pedido
+                    pedidoProduto.UsuarioEntregaID = pedido.UsuarioPedidoID;
+                    pedidoProduto.DataEntrega = pedido.DataPedido;
+                    pedidoProduto.UsuarioBaixaID = pedido.UsuarioPedidoID;
+                    pedidoProduto.DataBaixa = pedido.DataPedido;
+
                     var lojaProduto = chicoDoColchaoEntities.LojaProduto.FirstOrDefault(x => x.ProdutoID == pedidoProduto.ProdutoID && x.LojaID == pedido.LojaSaidaID);
 
                     if (lojaProduto != null)
@@ -33,40 +39,13 @@ namespace ChicoDoColchao.Repository
                 }
             }
 
-            if (pedido.Cliente != null)
-            {
-                chicoDoColchaoEntities.Entry(pedido.Cliente).State = EntityState.Detached;
-            }
-
-            if (pedido.Funcionario != null)
-            {
-                chicoDoColchaoEntities.Entry(pedido.Funcionario).State = EntityState.Detached;
-            }
-
-            if (pedido.PedidoStatus != null)
-            {
-                chicoDoColchaoEntities.Entry(pedido.PedidoStatus).State = EntityState.Detached;
-            }
-
-            if (pedido.LojaOrigem != null)
-            {
-                chicoDoColchaoEntities.Entry(pedido.LojaOrigem).State = EntityState.Detached;
-            }
-
-            if (pedido.LojaSaida != null)
-            {
-                chicoDoColchaoEntities.Entry(pedido.LojaSaida).State = EntityState.Detached;
-            }
-
-            if (pedido.UsuarioPedido != null)
-            {
-                chicoDoColchaoEntities.Entry(pedido.UsuarioPedido).State = EntityState.Detached;
-            }
-
-            if (pedido.UsuarioCancelamento != null)
-            {
-                chicoDoColchaoEntities.Entry(pedido.UsuarioCancelamento).State = EntityState.Detached;
-            }
+            if (pedido.Cliente != null) { chicoDoColchaoEntities.Entry(pedido.Cliente).State = EntityState.Detached; }
+            if (pedido.Funcionario != null) { chicoDoColchaoEntities.Entry(pedido.Funcionario).State = EntityState.Detached; }
+            if (pedido.PedidoStatus != null) { chicoDoColchaoEntities.Entry(pedido.PedidoStatus).State = EntityState.Detached; }
+            if (pedido.LojaOrigem != null) { chicoDoColchaoEntities.Entry(pedido.LojaOrigem).State = EntityState.Detached; }
+            if (pedido.LojaSaida != null) { chicoDoColchaoEntities.Entry(pedido.LojaSaida).State = EntityState.Detached; }
+            if (pedido.UsuarioPedido != null) { chicoDoColchaoEntities.Entry(pedido.UsuarioPedido).State = EntityState.Detached; }
+            if (pedido.UsuarioCancelamento != null) { chicoDoColchaoEntities.Entry(pedido.UsuarioCancelamento).State = EntityState.Detached; }
 
             chicoDoColchaoEntities.SaveChanges();
 
