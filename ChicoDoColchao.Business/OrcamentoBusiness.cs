@@ -2,6 +2,7 @@
 using ChicoDoColchao.Business.Tradutors;
 using ChicoDoColchao.Dao;
 using ChicoDoColchao.Repository;
+using Microsoft.Reporting.WebForms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -151,6 +152,91 @@ namespace ChicoDoColchao.Business
 
                 throw ex;
             }
+        }
+
+        public byte[] Comanda(OrcamentoDao orcamentoDao)
+        {
+            if (orcamentoDao == null)
+            {
+                return null;
+            }
+
+            Warning[] warnings;
+            string mimeType;
+            string[] streamids;
+            string encoding;
+            string filenameExtension;
+
+            var viewer = new ReportViewer();
+
+            viewer.ProcessingMode = ProcessingMode.Local;
+            viewer.LocalReport.ReportPath = AppDomain.CurrentDomain.BaseDirectory + "/bin/Reports/OrcamentoComanda.rdlc";
+
+            // parâmetros
+            var parametros = new List<ReportParameter>();
+
+            parametros.Add(new ReportParameter("OrcamentoID", orcamentoDao.OrcamentoID.ToString()));
+            parametros.Add(new ReportParameter("Observacao", orcamentoDao.Observacao));
+            parametros.Add(new ReportParameter("RazaoSocial", orcamentoDao.LojaDao.FirstOrDefault().RazaoSocial));
+            parametros.Add(new ReportParameter("Cnpj", orcamentoDao.LojaDao.FirstOrDefault().Cnpj));
+            parametros.Add(new ReportParameter("Telefone", orcamentoDao.LojaDao.FirstOrDefault().Telefone));
+            parametros.Add(new ReportParameter("Desconto", orcamentoDao.Desconto.ToString()));
+            parametros.Add(new ReportParameter("Funcionario", orcamentoDao.FuncionarioDao.FirstOrDefault().Nome));
+            parametros.Add(new ReportParameter("DataOrcamento", orcamentoDao.DataOrcamento.ToString("dd/MM/yyyy")));            
+            parametros.Add(new ReportParameter("TotalOrcamento", Math.Round(orcamentoDao.OrcamentoProdutoDao.Sum(x => x.Preco * x.Quantidade) - orcamentoDao.Desconto, 2).ToString()));
+
+            viewer.LocalReport.SetParameters(parametros);
+
+            // cliente
+            var clientesDao = new List<dynamic>();
+
+            clientesDao.Add(new
+            {
+                ClienteID = orcamentoDao.ClienteDao.ClienteID,
+                Cpf = orcamentoDao.ClienteDao.Cpf,
+                Cnpj = orcamentoDao.ClienteDao.Cnpj,
+                Nome = orcamentoDao.ClienteDao.Nome,
+                DataNascimento = orcamentoDao.ClienteDao.DataNascimento,
+                NomeFantasia = orcamentoDao.ClienteDao.NomeFantasia,
+                RazaoSocial = orcamentoDao.ClienteDao.RazaoSocial,
+                TelefoneResidencial = orcamentoDao.ClienteDao.TelefoneResidencial,
+                TelefoneCelular = orcamentoDao.ClienteDao.TelefoneCelular,
+                TelefoneResidencial2 = orcamentoDao.ClienteDao.TelefoneResidencial2,
+                TelefoneCelular2 = orcamentoDao.ClienteDao.TelefoneCelular2,
+                Estado = orcamentoDao.ClienteDao.EstadoDao.FirstOrDefault().Nome,
+                Cidade = orcamentoDao.ClienteDao.Cidade,
+                Logradouro = orcamentoDao.ClienteDao.Logradouro,
+                Numero = orcamentoDao.ClienteDao.Numero,
+                Bairro = orcamentoDao.ClienteDao.Bairro,
+                Complemento = orcamentoDao.ClienteDao.Complemento,
+                PontoReferencia = orcamentoDao.ClienteDao.PontoReferencia,
+                Email = orcamentoDao.ClienteDao.Email,
+                Ativo = orcamentoDao.ClienteDao.Ativo,
+                Cep = orcamentoDao.ClienteDao.Cep
+            });
+
+            viewer.LocalReport.DataSources.Add(new ReportDataSource("ds_cliente", clientesDao));
+
+            // produtos
+            var pedidoProdutosDao = new List<dynamic>();
+            foreach (var orcamentoProdutoDao in orcamentoDao.OrcamentoProdutoDao)
+            {
+                pedidoProdutosDao.Add(new
+                {
+                    Numero = orcamentoProdutoDao.ProdutoDao.Numero,
+                    Descricao = orcamentoProdutoDao.ProdutoDao.Descricao,
+                    Medida = orcamentoProdutoDao.ProdutoDao.MedidaDao.Descricao,
+                    Quantidade = orcamentoProdutoDao.Quantidade,
+                    Preco = orcamentoProdutoDao.Preco
+                });
+            }
+            viewer.LocalReport.DataSources.Add(new ReportDataSource("ds_produto", pedidoProdutosDao));
+            
+            viewer.LocalReport.Refresh();
+
+            var bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out filenameExtension, out streamids, out warnings);
+
+            return bytes;
         }
     }
 }

@@ -82,15 +82,16 @@
                         {
                             var historico = "<i class='glyphicon glyphicon-list' title='Histórico' style='cursor: pointer' onclick='modalOrcamentoHistorico(" + JSON.stringify(data) + ")'></i>";
                             var gerarVenda = "<a style='color: #333' href='/Pedido/Cadastro?orcamentoID=" + data.OrcamentoID + "'><i class='glyphicon glyphicon-share-alt' title='Gerar Venda' style='cursor: pointer'></i></a>";
+                            var comanda = "<a href='http://www.chicodocolchao.com.br/Orcamento/Comanda?OrcamentoID=" + data["OrcamentoID"] + "' target='_blank'><i class='glyphicon glyphicon-print' title='Imprimir Orçamento' style='cursor: pointer; color: #333'></i></a>";
 
                             // se orçamento foi convertido em venda, não é possível converter novamente
                             if (data.PedidoDao == null)
                             {
-                                return historico + " " + gerarVenda;
+                                return comanda + " " + historico + " " + gerarVenda;
                             }
                             else
                             {
-                                return historico;
+                                return comanda + " " + historico;
                             }
                         },
                         "className": "text-center"
@@ -186,7 +187,7 @@
         });
     </script>
 }
-<div class="container container-page">
+<div class="container">
     <h2><i class="glyphicon glyphicon-list" style="color: #0f3456" title="Orçamento"></i> Lista de Orçamentos</h2>
     <hr />
     <div class="form-group">

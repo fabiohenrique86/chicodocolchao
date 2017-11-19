@@ -1,9 +1,9 @@
-﻿using System;
+﻿using ChicoDoColchao.Business;
+using ChicoDoColchao.Business.Exceptions;
+using ChicoDoColchao.Dao;
+using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
-using ChicoDoColchao.Business;
-using ChicoDoColchao.Dao;
-using ChicoDoColchao.Business.Exceptions;
 
 namespace ChicoDoColchao.Controllers
 {
@@ -25,6 +25,7 @@ namespace ChicoDoColchao.Controllers
             try
             {
                 lojasDao = lojaBusiness.Listar(new LojaDao());
+                lojasDao.RemoveAll(x => x.Deposito);
             }
             catch (Exception ex)
             {

@@ -127,13 +127,13 @@
                 }
                 totalPedido += parseInt(quantidade) * preco;
                 
-                var dataEntrega = "<input type='text' class='form-control data datepicker dataEntrega' value='" + $($($(".dataEntrega")[index]).parents("tr").children().eq(5)).children().val() + "' />";
+                var dataEntrega = "<input type='text' class='form-control data datepicker dataEntrega text-center' value='" + $($($(".dataEntrega")[index]).parents("tr").children().eq(5)).children().val() + "' />";
                 if ($("#PedidoStatusID").val() == '@PedidoStatusDao.EPedidoStatus.RetiradoNaLoja.GetHashCode()')
                 {
-                    dataEntrega = "<input type='text' class='form-control data datepicker dataEntrega' value='" + $($($(".dataEntrega")[index]).parents("tr").children().eq(5)).children().val() + "' disabled='disabled' />";
+                    dataEntrega = "<input type='text' class='form-control data datepicker dataEntrega text-center' value='" + $($($(".dataEntrega")[index]).parents("tr").children().eq(5)).children().val() + "' disabled='disabled' />";
                 }
                 tbProdutos.row(index).data().DataEntrega = dataEntrega;
-                tbProdutos.row(index).data().Quantidade = "<input type='text' class='form-control quantidade' min='0' onblur='calcularTotalPedido()' value='" + quantidade + "' />";
+                tbProdutos.row(index).data().Quantidade = "<input type='text' class='form-control quantidade text-center' min='0' onblur='calcularTotalPedido()' value='" + quantidade + "' />";
                 tbProdutos.row(index).invalidate();
             });
 
@@ -187,7 +187,7 @@
             {
                 var index = $(this).closest('tr').index();
 
-                $("#tbProduto").DataTable().row(index).data().DataEntrega = "<input type='text' class='form-control data datepicker dataEntrega' value='" + $(this).val() + "' />";
+                $("#tbProduto").DataTable().row(index).data().DataEntrega = "<input type='text' class='form-control data datepicker dataEntrega text-center' value='" + $(this).val() + "' />";
                 $("#tbProduto").DataTable().row(index).invalidate();
 
                 $(".dataEntrega").datepicker({
@@ -270,8 +270,8 @@
                         "TipoPagamentoID": tipoPagamentoID,
                         "Descricao": $(this).find(":selected").text(),
                         "ParcelaID": parcela,
-                        "CV": cv == true ? "<input name='CV' type='text' class='form-control cv' />" : "",
-                        "ValorPago": "<input name='ValorPago' type='text' class='form-control valorPago valor' onblur='calcularTotalPago()' />",
+                        "CV": cv == true ? "<input name='CV' type='text' class='form-control cv text-right' />" : "",
+                        "ValorPago": "<input name='ValorPago' type='text' class='form-control valorPago valor text-right' onblur='calcularTotalPago()' />",
                         "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir Tipo Pagamento' style='cursor: pointer'></i>"
                     }]).draw();
 
@@ -349,10 +349,10 @@
                         return;
                     }
                     
-                    var dataEntrega = "<input type='text' class='form-control data datepicker dataEntrega' value='' />";
+                    var dataEntrega = "<input type='text' class='form-control data datepicker dataEntrega text-center' value='' />";
                     if ($("#PedidoStatusID").val() == '@PedidoStatusDao.EPedidoStatus.RetiradoNaLoja.GetHashCode()')
                     {
-                        dataEntrega = "<input type='text' class='form-control data datepicker dataEntrega' value='' disabled='disabled' />";
+                        dataEntrega = "<input type='text' class='form-control data datepicker dataEntrega text-center' value='' disabled='disabled' />";
                     }
                     
                     // adiciona o produto ao pedido
@@ -362,7 +362,7 @@
                         "Numero": produto[0].trim(),
                         "Descricao": produto[1].trim(),
                         "MedidaDao": { "Descricao": produto[2].trim() },
-                        "Quantidade": "<input type='text' class='form-control quantidade' min='0' onblur='calcularTotalPedido()' value='1' />",
+                        "Quantidade": "<input type='text' class='form-control quantidade text-center' min='0' onblur='calcularTotalPedido()' value='1' />",
                         "Preco": "<span class='preco'>" + Globalize.format(parseFloat(produto[3].trim().replace(".", "").replace(",", ".")), "n2") + "</span>",
                         "DataEntrega": dataEntrega,
                         "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir Produto' style='cursor: pointer'></i>"
@@ -656,9 +656,9 @@
                         "Numero": element.ProdutoDao.Numero,
                         "Descricao": element.ProdutoDao.Descricao,
                         "MedidaDao": { "Descricao": element.ProdutoDao.MedidaDao.Descricao },
-                        "Quantidade": "<input type='text' class='form-control quantidade' min='0' onblur='calcularTotalPedido()' value='" + element.Quantidade + "' />",
+                        "Quantidade": "<input type='text' class='form-control quantidade text-center' min='0' onblur='calcularTotalPedido()' value='" + element.Quantidade + "' />",
                         "Preco": "<span class='preco'>" + Globalize.format(element.Preco, "n2") + "</span>",
-                        "DataEntrega": "<input type='text' class='form-control data datepicker dataEntrega' value='' />",
+                        "DataEntrega": "<input type='text' class='form-control data datepicker dataEntrega text-center' value='' />",
                         "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir Produto' style='cursor: pointer'></i>"
                     }]).draw();
                 });
@@ -670,7 +670,7 @@
         });
     </script>
 }
-<div class="container container-page">
+<div class="container">
     <h2><i class="glyphicon glyphicon-ok" style="color: #0f3456" title="Pedido"></i> Tirar Pedido</h2>
     <hr />
     <form id="PedidoForm" name="PedidoForm">
@@ -708,7 +708,7 @@
                         @Html.TextBoxFor(x => x.NomeCarreto, new { @class = "form-control", @placeholder = "Nome do carreto (Opcional)", @maxlength = "100" })
                     </div>*@
                 <div class="form-group">
-                    @Html.TextBoxFor(x => x.ValorFrete, new { @class = "form-control valor", @placeholder = "Valor do frete (Opcional)" })
+                    @Html.TextBoxFor(x => x.ValorFrete, new { @class = "form-control valor text-right", @placeholder = "Valor do frete (Opcional)" })
                 </div>
             </div>
             <div class="col-lg-8">

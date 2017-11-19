@@ -291,6 +291,8 @@ namespace ChicoDoColchao {
             
             private global::System.Data.DataColumn columnDataBaixa;
             
+            private global::System.Data.DataColumn columnPreco;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public ds_produtoDataTable() {
@@ -374,6 +376,14 @@ namespace ChicoDoColchao {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn PrecoColumn {
+                get {
+                    return this.columnPreco;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -409,7 +419,7 @@ namespace ChicoDoColchao {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ds_produtoRow Addds_produtoRow(string Descricao, string Medida, string Quantidade, string Numero, string DataEntrega, string DataBaixa) {
+            public ds_produtoRow Addds_produtoRow(string Descricao, string Medida, string Quantidade, string Numero, string DataEntrega, string DataBaixa, string Preco) {
                 ds_produtoRow rowds_produtoRow = ((ds_produtoRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         Descricao,
@@ -417,7 +427,8 @@ namespace ChicoDoColchao {
                         Quantidade,
                         Numero,
                         DataEntrega,
-                        DataBaixa};
+                        DataBaixa,
+                        Preco};
                 rowds_produtoRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowds_produtoRow);
                 return rowds_produtoRow;
@@ -446,6 +457,7 @@ namespace ChicoDoColchao {
                 this.columnNumero = base.Columns["Numero"];
                 this.columnDataEntrega = base.Columns["DataEntrega"];
                 this.columnDataBaixa = base.Columns["DataBaixa"];
+                this.columnPreco = base.Columns["Preco"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -463,6 +475,8 @@ namespace ChicoDoColchao {
                 base.Columns.Add(this.columnDataEntrega);
                 this.columnDataBaixa = new global::System.Data.DataColumn("DataBaixa", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnDataBaixa);
+                this.columnPreco = new global::System.Data.DataColumn("Preco", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPreco);
                 this.ExtendedProperties.Add("Generator_TablePropName", "_ds_produto");
                 this.ExtendedProperties.Add("Generator_UserTableName", "ds_produto");
             }
@@ -703,6 +717,22 @@ namespace ChicoDoColchao {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string Preco {
+                get {
+                    try {
+                        return ((string)(this[this.tableds_produto.PrecoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Preco\' in table \'ds_produto\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableds_produto.PrecoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsDescricaoNull() {
                 return this.IsNull(this.tableds_produto.DescricaoColumn);
             }
@@ -771,6 +801,18 @@ namespace ChicoDoColchao {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetDataBaixaNull() {
                 this[this.tableds_produto.DataBaixaColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsPrecoNull() {
+                return this.IsNull(this.tableds_produto.PrecoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetPrecoNull() {
+                this[this.tableds_produto.PrecoColumn] = global::System.Convert.DBNull;
             }
         }
         

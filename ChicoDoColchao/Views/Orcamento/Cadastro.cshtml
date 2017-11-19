@@ -35,16 +35,7 @@
         function modalPreco(produtoId, produtoPreco) {
 
             $.getJSON("/Produto/Listar", { ProdutoID: produtoId }, function (data) {
-
-                // encontra o data-preco do produto
-                //var data_preco = "4";
-                //$("#tbProduto").DataTable().rows().every(function (rowIdx, tableLoop, rowLoop) {
-                //    var data = this.data();
-                //    if (data.ProdutoID == produtoId) {
-                //        data_preco = $($(".preco")[rowIdx]).attr("data-preco");
-                //    }
-                //});
-
+                
                 var precoAtacado = Globalize.format(data[0].Preco * 2.2, "n2");
                 var precoAVista = Globalize.format(data[0].Preco * 2.4, "n2");
                 var precoAte10 = Globalize.format(data[0].Preco * 2.5, "n2");
@@ -67,13 +58,7 @@
                 var tbProdutoPreco = $("#tbProdutoPreco").DataTable();
                 tbProdutoPreco.clear();
                 tbProdutoPreco.rows.add(produtoPrecos).draw();
-
-                // marca a linha selecionada para o preço selecionado
-                //if (data_preco == "1") { $(tbProdutoPreco.row(0).node()).addClass('selected'); }
-                //else if (data_preco == "2") { $(tbProdutoPreco.row(1).node()).addClass('selected'); }
-                //else if (data_preco == "3") { $(tbProdutoPreco.row(2).node()).addClass('selected'); }
-                //else if (data_preco == "4") { $(tbProdutoPreco.row(3).node()).addClass('selected'); }
-
+        
                 switch (produtoPreco) {
                     case (precoAtacado): // atacado
                         $(tbProdutoPreco.row(0).node()).addClass('selected');
@@ -137,7 +122,7 @@
                 }
                 totalOrcamento += parseInt(quantidade) * preco;
 
-                tbProdutos.row(index).data().Quantidade = "<input type='text' class='form-control quantidade' min='0' onblur='calcularTotalOrcamento()' value='" + quantidade + "' />";
+                tbProdutos.row(index).data().Quantidade = "<input type='text' class='form-control quantidade text-center' min='0' onblur='calcularTotalOrcamento()' value='" + quantidade + "' />";
                 tbProdutos.row(index).invalidate();
             });
 
@@ -263,7 +248,7 @@
                         "Numero": produto[0].trim(),
                         "Descricao": produto[1].trim(),
                         "MedidaDao": { "Descricao": produto[2].trim() },
-                        "Quantidade": "<input type='text' class='form-control quantidade' min='0' onblur='calcularTotalOrcamento()' value='1' />",
+                        "Quantidade": "<input type='text' class='form-control quantidade text-center' min='0' onblur='calcularTotalOrcamento()' value='1' />",
                         "Preco": "<span class='preco' data-preco='4'>" + Globalize.format(parseFloat(produto[3].trim().replace(".", "").replace(",", ".")), "n2") + "</span>",
                         "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir Produto' style='cursor: pointer'></i>"
                     }]).draw();
@@ -431,8 +416,11 @@
                         $("#lblTotalPago").html("0,00");
                         $("#lblTotalDesconto").html("0,00");
                         $("#ClienteID").val("");
-
+                        
                         alert(data.Mensagem);
+
+                        //window.open('http://localhost:57163/Orcamento/Comanda?orcamentoId=' + data.OrcamentoID, '_blank');
+                        window.open('http://www.chicodocolchao.com.br/Orcamento/Comanda?orcamentoId=' + data.OrcamentoID, '_blank');
                     }
                 });
 
@@ -441,7 +429,7 @@
         });
     </script>
 }
-<div class="container container-page">
+<div class="container">
     <h2><i class="glyphicon glyphicon-time" style="color: #0f3456" title="Orçamento"></i> Tirar Orçamento</h2>
     <hr />
     <form id="OrcamentoForm" name="OrcamentoForm">

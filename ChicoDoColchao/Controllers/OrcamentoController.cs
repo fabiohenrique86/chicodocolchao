@@ -4,6 +4,7 @@ using ChicoDoColchao.Dao;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace ChicoDoColchao.Controllers
@@ -23,7 +24,7 @@ namespace ChicoDoColchao.Controllers
 
         public ActionResult Cadastro()
         {
-            OrcamentoDao orcamentoDao = new OrcamentoDao();
+            var orcamentoDao = new OrcamentoDao();
 
             try
             {
@@ -66,7 +67,28 @@ namespace ChicoDoColchao.Controllers
 
             return View();
         }
-        
+
+        public ActionResult Comanda(int orcamentoId)
+        {
+            string tela = "";
+            if (!SessaoAtivaEPerfilValidado(out tela))
+            {
+                Response.Redirect(tela, true);
+                return null;
+            }
+
+            var orcamentoDao = orcamentoBusiness.Listar(new OrcamentoDao() { OrcamentoID = orcamentoId }).FirstOrDefault();
+
+            if (orcamentoDao == null)
+            {
+                return Content(string.Format("Orçamento {0} não encontrado", orcamentoId));
+            }
+
+            var bytes = orcamentoBusiness.Comanda(orcamentoDao);
+
+            return new FileContentResult(bytes, "application/pdf");
+        }
+
         [HttpPost]
         public JsonResult Incluir(OrcamentoDao orcamentoDao)
         {
@@ -77,7 +99,7 @@ namespace ChicoDoColchao.Controllers
 
                 int orcamentoID = orcamentoBusiness.Incluir(orcamentoDao);
 
-                return Json(new { Sucesso = true, Mensagem = string.Format("Orçamento {0} cadastrado com sucesso!", orcamentoID) }, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = true, Mensagem = string.Format("Orçamento {0} cadastrado com sucesso!", orcamentoID), OrcamentoID = orcamentoID }, JsonRequestBehavior.AllowGet);
             }
             catch (BusinessException ex)
             {
@@ -91,7 +113,7 @@ namespace ChicoDoColchao.Controllers
 
         public JsonResult Listar(OrcamentoDao orcamentoDao)
         {
-            List<OrcamentoDao> orcamentosDao = new List<OrcamentoDao>();
+            var orcamentosDao = new List<OrcamentoDao>();
 
             try
             {

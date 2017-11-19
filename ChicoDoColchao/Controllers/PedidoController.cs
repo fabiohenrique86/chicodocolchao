@@ -224,14 +224,12 @@ namespace ChicoDoColchao.Controllers
             try
             {
                 var email = string.Empty;
-                //var pedido = pedidoBusiness.Listar(pedidoDao).FirstOrDefault();
+                var pedidoEncontrado = pedidoBusiness.EnviarComandaPorEmail(pedidoDao.PedidoID, out email);
 
-                //if (pedido == null)
-                //{
-                //    return Json(new { Sucesso = false, Mensagem = $"Pedido {pedidoDao.PedidoID} não encontrado" }, JsonRequestBehavior.AllowGet);
-                //}
-
-                pedidoBusiness.EnviarComandaPorEmail(pedidoDao.PedidoID, out email);
+                if (!pedidoEncontrado)
+                {
+                    return Json(new { Sucesso = false, Mensagem = $"Pedido {pedidoDao.PedidoID} não encontrado" }, JsonRequestBehavior.AllowGet);
+                }
 
                 return Json(new { Sucesso = true, Mensagem = $"Comanda enviada para o email {email} com sucesso!" }, JsonRequestBehavior.AllowGet);
             }
