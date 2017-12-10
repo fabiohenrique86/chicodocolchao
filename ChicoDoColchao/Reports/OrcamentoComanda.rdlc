@@ -945,7 +945,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -1312,9 +1312,9 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>="Total Orçamento: " &amp; FormatCurrency(Parameters!TotalOrcamento.Value, 2)</Value>
+                <Value EvaluationMode="Constant">Total Orçamento</Value>
                 <Style>
-                  <FontWeight>Bold</FontWeight>
+                  <FontSize>8pt</FontSize>
                 </Style>
               </TextRun>
             </TextRuns>
@@ -1326,7 +1326,7 @@
         <rd:DefaultName>Textbox45</rd:DefaultName>
         <Top>7.87343cm</Top>
         <Height>0.6cm</Height>
-        <Width>19cm</Width>
+        <Width>16.5cm</Width>
         <ZIndex>6</ZIndex>
         <Style>
           <Border>
@@ -1346,7 +1346,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>="Desconto: " &amp; Microsoft.VisualBasic.Strings.FormatCurrency(Parameters!Desconto.Value, 2)</Value>
+                <Value EvaluationMode="Constant">Total Desconto</Value>
                 <Style>
                   <FontSize>8pt</FontSize>
                 </Style>
@@ -1359,10 +1359,79 @@
         </Paragraphs>
         <rd:DefaultName>Textbox45</rd:DefaultName>
         <Top>7.27343cm</Top>
-        <Left>0cm</Left>
         <Height>0.6cm</Height>
-        <Width>19cm</Width>
+        <Width>16.5cm</Width>
         <ZIndex>7</ZIndex>
+        <Style>
+          <Border>
+            <Color>LightGrey</Color>
+            <Style>Solid</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox69">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=FormatCurrency(Parameters!Desconto.Value, 2)</Value>
+                <Style>
+                  <FontSize>8pt</FontSize>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Right</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox45</rd:DefaultName>
+        <Top>7.27343cm</Top>
+        <Left>16.50353cm</Left>
+        <Height>0.6cm</Height>
+        <Width>2.49647cm</Width>
+        <ZIndex>8</ZIndex>
+        <Style>
+          <Border>
+            <Color>LightGrey</Color>
+            <Style>Solid</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox70">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=FormatCurrency(Parameters!TotalOrcamento.Value, 2)</Value>
+                <Style>
+                  <FontWeight>Bold</FontWeight>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Right</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox45</rd:DefaultName>
+        <Top>7.87343cm</Top>
+        <Left>16.5cm</Left>
+        <Height>0.6cm</Height>
+        <Width>2.49647cm</Width>
+        <ZIndex>9</ZIndex>
         <Style>
           <Border>
             <Color>LightGrey</Color>

@@ -221,22 +221,22 @@
                     {
                         "data": function (data, type, row)
                         {
-                            var comanda = "<a href='http://www.chicodocolchao.com.br/Pedido/Comanda?PedidoID=" + data["PedidoID"] + "' target='_blank'><i class='glyphicon glyphicon-print' title='Imprimir Pedido' style='cursor: pointer; color: #333'></i></a>";
+                            var comanda = "<a href='" + window.location.origin + "/Pedido/Comanda?PedidoID=" + data["PedidoID"] + "' target='_blank'><i class='glyphicon glyphicon-print' title='Imprimir Pedido' style='cursor: pointer; color: #333'></i></a>";
                             var cancelamento = "<i class='glyphicon glyphicon-remove' title='Cancelar Pedido' style='cursor: pointer' onclick='cancelarPedido(" + data["PedidoID"] + ", this)'></i>";
                             var comandaPorEmail = "<i class='glyphicon glyphicon-envelope' title='Enviar Comanda Por E-mail' style='cursor: pointer' onclick='enviarComandaPorEmail(" + data["PedidoID"] + ")'></i>";
                             var desconto = data["Desconto"] > 0 ? "<i class='glyphicon glyphicon-usd' title='Desconto Autorizado'></i>" : "";
 
                             if (data.PedidoStatusDao[0].PedidoStatusID == '@PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega.GetHashCode()') {
-                                return comanda + " " + cancelamento + " " + comandaPorEmail + desconto;
+                                return comanda + " " + cancelamento + " " + comandaPorEmail + " " + desconto;
                             }
                             else if (data.PedidoStatusDao[0].PedidoStatusID == '@PedidoStatusDao.EPedidoStatus.RetiradoNaLoja.GetHashCode()') {
-                                return comanda + " " + cancelamento + " " + comandaPorEmail + desconto;
+                                return comanda + " " + cancelamento + " " + comandaPorEmail + " " + desconto;
                             }
                             else if (data.PedidoStatusDao[0].PedidoStatusID == '@PedidoStatusDao.EPedidoStatus.Cancelado.GetHashCode()') {
-                                return "" + desconto;
+                                return desconto;
                             }
                             else if (data.PedidoStatusDao[0].PedidoStatusID == '@PedidoStatusDao.EPedidoStatus.Entregue.GetHashCode()') {
-                                return cancelamento + " " + comandaPorEmail + desconto;
+                                return comanda + " " + cancelamento + " " + comandaPorEmail + " " + desconto;
                             }
                         },
                         "className": "text-center"

@@ -60,6 +60,16 @@ namespace ChicoDoColchao.Business
                 }
             }
 
+            if (string.IsNullOrEmpty(clienteDao.Email))
+            {
+                throw new BusinessException("E-mail é obrigatório");
+            }
+
+            if (string.IsNullOrEmpty(clienteDao.TelefoneResidencial) && string.IsNullOrEmpty(clienteDao.TelefoneResidencial2) && string.IsNullOrEmpty(clienteDao.TelefoneCelular) && string.IsNullOrEmpty(clienteDao.TelefoneCelular2))
+            {
+                throw new BusinessException("Um telefone é obrigatório");
+            }
+
             if (clienteDao.EstadoDao == null || clienteDao.EstadoDao.Count <= 0 || clienteDao.EstadoDao.FirstOrDefault().EstadoID <= 0)
             {
                 throw new BusinessException("Estado é obrigatório");
@@ -91,7 +101,7 @@ namespace ChicoDoColchao.Business
                 Cnpj = string.IsNullOrEmpty(clienteDao.Cnpj) ? string.Empty : clienteDao.Cnpj.Replace(".", "").Replace("-", "").Replace("/", ""),
             }).FirstOrDefault() != null)
             {
-                throw new BusinessException(string.Format("Cliente (CPF ou CNPJ {0}) já cadastrado", string.IsNullOrEmpty(clienteDao.Cpf) ? clienteDao.Cnpj : clienteDao.Cpf));
+                throw new BusinessException(string.Format("CPF ou CNPJ {0} já cadastrado", string.IsNullOrEmpty(clienteDao.Cpf) ? clienteDao.Cnpj : clienteDao.Cpf));
             }
         }
 

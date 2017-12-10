@@ -20,29 +20,20 @@
         .navbar-inverse {
             background-color: #0f3456;
             border: none;
-            /*border-color: red;*/
         }
 
-            .navbar-inverse .navbar-nav > li > a, .navbar-inverse .navbar-brand {
-                color: #fff;
-            }
+        .navbar-inverse .navbar-nav > li > a, .navbar-inverse .navbar-brand {
+            color: #fff;
+        }
 
-            .navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
-                border-color: red;
-            }
+        .navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
+            border-color: red;
+        }
 
         .navbar-brand {
             padding: 0px 15px;
             height: auto;
         }
-
-        /*.carousel-control.left {
-            background-image: none;
-        }
-
-        .carousel-control.right {
-            background-image: none;
-        }*/
 
         .carousel-control .glyphicon-chevron-left, .carousel-control .glyphicon-chevron-right, .carousel-control .icon-next, .carousel-control .icon-prev {
             font-size: 40px;
@@ -64,11 +55,9 @@
         .carousel-inner > .item > img, .carousel-inner > .item > a > img {
             display: block;
             height: 100%;
-            /*height: auto;*/
             line-height: 1;
             margin: 0 auto;
             max-width: 100%;
-            /*width: 45%;*/
             padding: 1%;
         }
 
@@ -87,6 +76,39 @@
         .container-page {
             padding-top: 70px;
             padding-bottom: 20px;
+        }
+
+        .huge {
+            font-size: 28px;
+        }
+
+        .small {
+            font-size: 9px;
+            font-style: italic;
+        }
+
+        .panel-yellow {
+            color: #fff;
+            background-color: #FE9A2E;
+            border-color: #FE9A2E;
+        }
+
+        .panel-green {
+            color: #fff;
+            background-color: #5cb85c;
+            border-color: #5cb85c;
+        }
+
+        .panel-red {
+            color: #fff;
+            background-color: #DD402E;
+            border-color: #DD402E;
+        }
+
+        .panel-gray {
+            color: #fff;
+            background-color: #777;
+            border-color: #777;
         }
     </style>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -167,7 +189,7 @@
         var c = Url.RequestContext.RouteData.Values["controller"].ToString();
         var a = Url.RequestContext.RouteData.Values["action"].ToString();
 
-        <div class="row" style="background-color: #0f3456; font-size: 14px; padding-top: 60px; border: 2px solid red">
+        <div class="row" style="background-color: #0f3456; font-size: 14px; padding-top: 60px; border-bottom: 2px solid red; margin: 0">
             <div class="col-xs-12 col-lg-4"></div>
             <div class="col-xs-12 col-lg-5">
                 <ul class="nav navbar-nav">
@@ -378,12 +400,7 @@
             {
                 interval: 10000 // segundos
             });
-
-            //$("#myCarousel2").carousel(
-            //{
-            //    interval: 4000 // segundos
-            //});
-
+            
             // popover
             $('#popover-usuario').popover({ html: true, placement: "bottom", content: function () { return $("#popover-content-usuario").html(); } });
 

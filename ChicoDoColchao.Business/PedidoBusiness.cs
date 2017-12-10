@@ -46,7 +46,17 @@ namespace ChicoDoColchao.Business
             var clienteDao = pedidoDao.ClienteDao.FirstOrDefault();
             if (clienteDao == null || clienteDao.ClienteID <= 0)
             {
-                throw new BusinessException("Cliente (CPF/CNPJ) é obrigatório");
+                throw new BusinessException("Cliente (CPF ou CNPJ) é obrigatório");
+            }
+
+            if (string.IsNullOrEmpty(clienteDao.Email))
+            {
+                throw new BusinessException("Cliente (E-mail) é obrigatório");
+            }
+
+            if (string.IsNullOrEmpty(clienteDao.TelefoneResidencial) && string.IsNullOrEmpty(clienteDao.TelefoneResidencial2) && string.IsNullOrEmpty(clienteDao.TelefoneCelular) && string.IsNullOrEmpty(clienteDao.TelefoneCelular2))
+            {
+                throw new BusinessException("Cliente (Um telefone) é obrigatório");
             }
 
             var lojaDao = pedidoDao.LojaDao.FirstOrDefault();
