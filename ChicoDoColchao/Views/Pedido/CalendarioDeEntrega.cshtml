@@ -48,7 +48,7 @@
                                 id: pedidoProduto.PedidoID + '-' + pedidoProduto.ProdutoID,
                                 title: "Pedido " + pedidoProduto.PedidoID + " - Produto " + pedidoProduto.ProdutoDao.Numero,
                                 start: moment(pedidoProduto.DataEntrega).format("YYYY-MM-DD"),
-                                url: 'http://www.chicodocolchao.com.br/Pedido/Comanda?PedidoID=' + pedidoProduto.PedidoID
+                                url: window.location.origin + '/Pedido/Comanda?PedidoID=' + pedidoProduto.PedidoID
                             });
                         }
                     });                    
