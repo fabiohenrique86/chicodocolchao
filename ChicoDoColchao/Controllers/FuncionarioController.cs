@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using ChicoDoColchao.Business;
 using ChicoDoColchao.Dao;
@@ -84,6 +82,27 @@ namespace ChicoDoColchao.Controllers
             catch (Exception ex)
             {
                 return Json(funcionarios, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult Excluir(FuncionarioDao funcionarioDao)
+        {
+            try
+            {
+                funcionarioBusiness.Excluir(funcionarioDao);
+
+                var funcionarios = funcionarioBusiness.Listar(new FuncionarioDao() { Ativo = true });
+
+                return Json(new { Sucesso = true, Mensagem = $"Funcionário {funcionarioDao.Numero} excluído com sucesso!", Lista = funcionarios }, JsonRequestBehavior.AllowGet);
+            }
+            catch (BusinessException ex)
+            {
+                return Json(new { Sucesso = false, Mensagem = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Funcionário não excluído. Tente novamente." }, JsonRequestBehavior.AllowGet);
             }
         }
     }

@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using ChicoDoColchao.Dao;
 using ChicoDoColchao.Business;
 using ChicoDoColchao.Business.Exceptions;
+using System.Collections.Generic;
 
 namespace ChicoDoColchao.Controllers
 {
@@ -20,7 +21,19 @@ namespace ChicoDoColchao.Controllers
         {
             return View();
         }
-        
+
+        public ActionResult Lista()
+        {
+            string tela = "";
+            if (!SessaoAtivaEPerfilValidado(out tela))
+            {
+                Response.Redirect(tela, true);
+                return null;
+            }
+
+            return View();
+        }
+
         [HttpPost]
         public JsonResult Entrar(UsuarioDao usuarioDao)
         {
@@ -46,7 +59,50 @@ namespace ChicoDoColchao.Controllers
                 return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro ao realizar login", Erro = ex.ToString() }, JsonRequestBehavior.AllowGet);
             }
         }
-        
+
+        public JsonResult Listar(UsuarioDao usuarioDao)
+        {
+            var usuarios = new List<UsuarioDao>();
+
+            try
+            {
+                usuarios = usuarioBusiness.Listar(usuarioDao);
+
+                return Json(usuarios, JsonRequestBehavior.AllowGet);
+            }
+            catch (BusinessException ex)
+            {
+                return Json(usuarios, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(usuarios, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult AlterarSenha(UsuarioDao usuarioDao)
+        {
+            var usuarios = new List<UsuarioDao>();
+
+            try
+            {
+                usuarioBusiness.AlterarSenha(usuarioDao);
+
+                usuarios = usuarioBusiness.Listar(new UsuarioDao());
+                
+                return Json(new { Sucesso = true, Mensagem = "Senha alterada com sucesso", Erro = string.Empty, Lista = usuarios }, JsonRequestBehavior.AllowGet);
+            }
+            catch (BusinessException ex)
+            {
+                return Json(new { Sucesso = false, Mensagem = ex.Message, Erro = string.Empty }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro ao alterar senha", Erro = ex.ToString() }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public ActionResult Sair()
         {
             Out();

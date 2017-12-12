@@ -45,7 +45,13 @@ namespace ChicoDoColchao.Repository
             query = query.Where(x => x.Ativo);
 
             return query.Include(x => x.Loja).OrderBy(x => x.Nome).ToList();
-            //return query.OrderBy(x => x.Nome).ToList();
+        }
+
+        public void Excluir(Funcionario funcionario)
+        {
+            chicoDoColchaoEntities.Entry(funcionario).State = EntityState.Modified;
+            funcionario.Ativo = false;
+            chicoDoColchaoEntities.SaveChanges();
         }
     }
 }

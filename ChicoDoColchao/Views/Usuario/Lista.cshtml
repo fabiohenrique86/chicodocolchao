@@ -1,0 +1,124 @@
+﻿@{
+    ViewBag.Title = "Usuário - Lista";
+}
+@section scripts
+{
+    <script type="text/javascript">
+        
+        function modalAlterarSenha(usuarioDao) {
+
+            $("#lblLoginUsuario").text(usuarioDao.Login);
+            $("#UsuarioID").val(usuarioDao.UsuarioID);
+            $('#modalalterarsenha').modal('show');
+        }
+
+        $(document).ready(function () {
+
+            var tbUsuario = $("#tbUsuario").DataTable({
+                "ordering": false,
+                "pageLength": 10,
+                "language": {
+                    "lengthMenu": "_MENU_ registros por página",
+                    "zeroRecords": "Sem registros a serem exibidos",
+                    "info": "Página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Sem registros a serem exibidos",
+                    "infoFiltered": "(filtrados de _MAX_ total de registros)",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": { "sNext": "Próximo", "sPrevious": "Anterior", "sFirst": "Primeiro", "sLast": "Último" }
+                },
+                "columns":
+                [
+                    { "data": "Login", "className": "text-center" },
+                    { "data": "Senha", "className": "text-center" },
+                    { "data": "TipoUsuarioDao.Descricao", "className": "text-center" },
+                    {
+                        "data": function (data, type, row)
+                        {
+                            return "<i class='glyphicon glyphicon-pencil' title='Alterar Senha' style='cursor: pointer' onclick='modalAlterarSenha(" + JSON.stringify(data) + ")'></i>";
+                        },
+                        "className": "text-center"
+                    }
+                ]
+            });
+
+            $.getJSON("/Usuario/Listar", function (data) {
+                tbUsuario.clear();
+                tbUsuario.rows.add(data).draw();
+            });
+
+            $("#btnAlterarSenha").click(function () {
+
+                var usuarioDao = {};
+
+                usuarioDao.UsuarioID = $("#UsuarioID").val();
+                usuarioDao.Senha = $("#NovaSenha").val();
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Usuario/AlterarSenha",
+                    data: { usuarioDao: usuarioDao },
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            alert(data.Mensagem);
+                            return;
+                        }
+
+                        $("#UsuarioID").val("");
+                        $("#NovaSenha").val("");
+                        
+                        $("#tbUsuario").DataTable().clear();
+                        $("#tbUsuario").DataTable().rows.add(data.Lista).draw();
+
+                        $('#modalalterarsenha').modal('hide');
+
+                        alert(data.Mensagem);
+                    }
+                });
+
+            });
+
+        });
+    </script>
+}
+<div class="container">
+    <h2><i class="glyphicon glyphicon-pencil" style="color: #0f3456" title="Usuário"></i> Lista de Usuários</h2>
+    <hr />
+    <div class="form-group">
+        <div class="table-responsive">
+            <table id="tbUsuario" class="table nowrap">
+                <thead>
+                    <tr>
+                        <td class="text-center" style="width: 20%"><b>Login</b></td>
+                        <td class="text-center" style="width: 30%"><b>Senha</b></td>
+                        <td class="text-center" style="width: 10%"><b>Tipo Usuário</b></td>
+                        <td class="text-center" style="width: 10%"><b>Ação</b></td>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal fade" id="modalalterarsenha" tabindex="-1" role="dialog" aria-labelledby="ModalAlterarSenha" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
+                    <h4 class="modal-title" id="myModalLabelHistorico">Alterar senha do login <label id="lblLoginUsuario"></label></h4>
+                </div>
+                <div class="modal-body">
+                    <input id="UsuarioID" name="UsuarioID" type="hidden" />
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <input id="NovaSenha" name="NovaSenha" type="text" class="form-control" placeholder="Nova Senha" maxlength="30" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnAlterarSenha" type="button" class="btn btn-warning">Alterar Senha</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

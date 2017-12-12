@@ -57,6 +57,26 @@ namespace ChicoDoColchao.Business
             }
         }
 
+        private void ValidarExcluir(FuncionarioDao funcionarioDao, out Funcionario funcionario)
+        {
+            if (funcionarioDao == null)
+            {
+                throw new BusinessException("Funcionário é obrigatório");
+            }
+
+            if (funcionarioDao.FuncionarioID <= 0)
+            {
+                throw new BusinessException("FuncionarioID é obrigatório");
+            }
+
+            funcionario = funcionarioRepository.Listar(new Funcionario() { FuncionarioID = funcionarioDao.FuncionarioID }).FirstOrDefault();
+
+            if (funcionario == null)
+            {
+                throw new BusinessException(string.Format("Funcionário {0} não encontrado", funcionarioDao.FuncionarioID));
+            }
+        }
+
         public void Incluir(FuncionarioDao funcionarioDao)
         {
             try
@@ -83,6 +103,29 @@ namespace ChicoDoColchao.Business
             try
             {
                 return funcionarioRepository.Listar(funcionarioDao.ToBd()).Select(x => x.ToApp()).ToList();
+            }
+            catch (BusinessException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                // inclui o log do erro
+                logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
+
+                throw ex;
+            }
+        }
+
+        public void Excluir(FuncionarioDao funcionarioDao)
+        {
+            try
+            {
+                Funcionario funcionario;
+
+                ValidarExcluir(funcionarioDao, out funcionario);
+
+                funcionarioRepository.Excluir(funcionario);
             }
             catch (BusinessException ex)
             {

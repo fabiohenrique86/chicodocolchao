@@ -107,10 +107,9 @@ namespace ChicoDoColchao.Controllers
                     {
                         return true;
                     }
-
-                    // verifica se alguma loja está selecionada. Se não, não deve permitir o acesso
-                    if (Request.Cookies.Get("ChicoDoColchao_Loja") == null)
+                    else if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)TipoUsuarioDao.ETipoUsuario.Vendedor && Request.Cookies.Get("ChicoDoColchao_Loja") == null)
                     {
+                        // verifica se alguma loja está selecionada. Se não, não deve permitir o acesso
                         tela = "~/Loja/Seleciona";
                         return false;
                     }

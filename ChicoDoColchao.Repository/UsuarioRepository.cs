@@ -35,8 +35,12 @@ namespace ChicoDoColchao.Repository
             query = query.Where(x => x.Ativo);
 
             return query.Include(x => x.TipoUsuario).OrderBy(x => x.Login).ToList();
+        }
 
-            // return query.ToList();
+        public void AlterarSenha(Usuario usuario)
+        {
+            chicoDoColchaoEntities.Entry(usuario).State = EntityState.Modified;
+            chicoDoColchaoEntities.SaveChanges();
         }
     }
 }

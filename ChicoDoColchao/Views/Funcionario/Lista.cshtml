@@ -5,6 +5,37 @@
 {
     <script type="text/javascript">
 
+        function excluirFuncionario(funcionarioId, numero, obj)
+        {
+            if (confirm("Deseja realmente excluir funcionário " + numero + "?")) {
+                var funcionarioDao = {};
+
+                funcionarioDao.FuncionarioID = funcionarioId;
+                funcionarioDao.Numero = numero;
+                funcionarioDao.Ativo = 0;
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Funcionario/Excluir",
+                    data: { funcionarioDao: funcionarioDao },
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            alert(data.Mensagem);
+                            return;
+                        }
+
+                        $("#tbFuncionario").DataTable().clear();
+                        $("#tbFuncionario").DataTable().rows.add(data.Lista).draw();
+
+                        // exibe mensagem de sucesso
+                        alert(data.Mensagem);
+                    }
+                });
+            }
+        }
+
         $(document).ready(function () {
 
             var tbFuncionario = $("#tbFuncionario").DataTable({
@@ -25,7 +56,13 @@
                     { "data": "LojaDao[0].NomeFantasia", "className": "text-center" },
                     { "data": "Nome", "className": "text-center" },
                     { "data": "Email", "className": "text-center" },
-                    { "data": "Telefone", "className": "text-center" }
+                    { "data": "Telefone", "className": "text-center" },
+                    {
+                        "data": function (data, type, row) {
+                            return "<i class='glyphicon glyphicon-remove' title='Excluir Consultor' style='cursor: pointer' onclick='excluirFuncionario(" + data["FuncionarioID"] + "," + data["Numero"] + ", this)'></i>";
+                        },
+                        "className": "text-center"
+                    }
                 ]
             });
 
@@ -50,10 +87,11 @@
                 <thead>
                     <tr>
                         <td class="text-center" style="width: 10%"><b>Número</b></td>
-                        <td class="text-center" style="width: 25%"><b>Loja</b></td>
+                        <td class="text-center" style="width: 20%"><b>Loja</b></td>
                         <td class="text-center" style="width: 30%"><b>Nome</b></td>
                         <td class="text-center" style="width: 25%"><b>E-mail</b></td>
                         <td class="text-center" style="width: 10%"><b>Telefone</b></td>
+                        <td class="text-center" style="width: 5%"><b>Ação</b></td>
                     </tr>
                 </thead>
                 <tbody></tbody>

@@ -470,6 +470,7 @@
     <Content Include="Views\Orcamento\Lista.cshtml" />
     <Content Include="Views\Orcamento\Cadastro.cshtml" />
     <Content Include="Views\Shared\_ModalPedidoDesconto.cshtml" />
+    <Content Include="Views\Usuario\Lista.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
