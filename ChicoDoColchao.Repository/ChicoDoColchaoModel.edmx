@@ -192,6 +192,7 @@
           <Property Name="UsuarioEntregaID" Type="int" />
           <Property Name="DataBaixa" Type="smalldatetime" />
           <Property Name="UsuarioBaixaID" Type="int" />
+          <Property Name="Preco" Type="float" Nullable="false" />
         </EntityType>
         <EntityType Name="PedidoStatus">
           <Key>
@@ -1088,6 +1089,7 @@
           <NavigationProperty Name="Produto" Relationship="Self.FK_PedidoProduto_Produto" FromRole="PedidoProduto" ToRole="Produto" />
           <NavigationProperty Name="UsuarioBaixa" Relationship="Self.FK_PedidoProduto_Usuario_Baixa" FromRole="PedidoProduto" ToRole="Usuario" />
           <NavigationProperty Name="UsuarioEntrega" Relationship="Self.FK_PedidoProduto_Usuario_Entrega" FromRole="PedidoProduto" ToRole="Usuario" />
+          <Property Name="Preco" Type="Double" Nullable="false" />
         </EntityType>
         <EntityType Name="PedidoStatus">
           <Key>
@@ -1990,6 +1992,7 @@
           <EntitySetMapping Name="PedidoProduto">
             <EntityTypeMapping TypeName="ChicoDoColchaoModel.PedidoProduto">
               <MappingFragment StoreEntitySet="PedidoProduto">
+                <ScalarProperty Name="Preco" ColumnName="Preco" />
                 <ScalarProperty Name="PedidoProdutoID" ColumnName="PedidoProdutoID" />
                 <ScalarProperty Name="PedidoID" ColumnName="PedidoID" />
                 <ScalarProperty Name="ProdutoID" ColumnName="ProdutoID" />

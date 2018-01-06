@@ -48,17 +48,7 @@ namespace ChicoDoColchao.Business
             {
                 throw new BusinessException("Cliente (CPF ou CNPJ) é obrigatório");
             }
-
-            if (string.IsNullOrEmpty(clienteDao.Email))
-            {
-                throw new BusinessException("Cliente (E-mail) é obrigatório");
-            }
-
-            if (string.IsNullOrEmpty(clienteDao.TelefoneResidencial) && string.IsNullOrEmpty(clienteDao.TelefoneResidencial2) && string.IsNullOrEmpty(clienteDao.TelefoneCelular) && string.IsNullOrEmpty(clienteDao.TelefoneCelular2))
-            {
-                throw new BusinessException("Cliente (Um telefone) é obrigatório");
-            }
-
+            
             var lojaDao = pedidoDao.LojaDao.FirstOrDefault();
             if (lojaDao == null || lojaDao.LojaID <= 0)
             {
@@ -301,6 +291,7 @@ namespace ChicoDoColchao.Business
             try
             {
                 var email = string.Empty;
+                var erro = string.Empty;
 
                 ValidarIncluir(pedidoDao);
 
@@ -308,7 +299,7 @@ namespace ChicoDoColchao.Business
 
                 AtualizarOrcamento(pedidoDao.OrcamentoDao.FirstOrDefault(), pedidoId);
                                 
-                EnviarComandaPorEmail(pedidoId, out email);
+                EnviarComandaPorEmail(pedidoId, out email, out erro);
 
                 return pedidoId;
             }
@@ -334,9 +325,10 @@ namespace ChicoDoColchao.Business
             }
         }
 
-        public bool EnviarComandaPorEmail(int pedidoId, out string email)
+        public bool EnviarComandaPorEmail(int pedidoId, out string email, out string erro)
         {
             email = string.Empty;
+            erro = string.Empty;
 
             try
             {
@@ -344,11 +336,13 @@ namespace ChicoDoColchao.Business
 
                 if (pedidoDao == null)
                 {
+                    erro = $"Pedido {pedidoId} não encontrado";
                     return false;
                 }
 
                 if (pedidoDao.ClienteDao.FirstOrDefault() == null || string.IsNullOrEmpty(pedidoDao.ClienteDao.FirstOrDefault().Email))
                 {
+                    erro = $"E-mail do cliente não encontrado";
                     return false;
                 }
 
@@ -377,6 +371,8 @@ namespace ChicoDoColchao.Business
             }
             catch (Exception ex)
             {
+                erro = ex.Message;
+
                 // inclui o log do erro
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
             }
@@ -524,7 +520,7 @@ namespace ChicoDoColchao.Business
                                                             pedidoDao.ClienteDao.FirstOrDefault().Cep));
             parametros.Add(new ReportParameter("Complemento", pedidoDao.ClienteDao.FirstOrDefault().Complemento));
             parametros.Add(new ReportParameter("PontoReferencia", pedidoDao.ClienteDao.FirstOrDefault().PontoReferencia));
-            parametros.Add(new ReportParameter("TotalPedido", Math.Round(pedidoDao.PedidoProdutoDao.Sum(x => x.ProdutoDao.Preco * 3 * x.Quantidade), 2).ToString()));
+            parametros.Add(new ReportParameter("TotalPedido", Math.Round(pedidoDao.PedidoProdutoDao.Sum(x => x.Preco * x.Quantidade), 2).ToString()));
 
             viewer.LocalReport.SetParameters(parametros);
 
@@ -570,7 +566,8 @@ namespace ChicoDoColchao.Business
                     Medida = item.ProdutoDao.MedidaDao.Descricao,
                     Quantidade = item.Quantidade,
                     DataEntrega = item.DataEntrega,
-                    DataBaixa = item.DataBaixa
+                    DataBaixa = item.DataBaixa,
+                    Preco = item.Preco
                 });
             }
             viewer.LocalReport.DataSources.Add(new ReportDataSource("ds_produto", pedidoProdutoDao));

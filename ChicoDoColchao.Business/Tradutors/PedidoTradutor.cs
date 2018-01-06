@@ -66,11 +66,15 @@ namespace ChicoDoColchao.Business.Tradutors
                 pedidoProduto.Quantidade = pedidoProdutoDao.Quantidade;
                 pedidoProduto.Medida = pedidoProdutoDao.Medida;
                 pedidoProduto.DataEntrega = pedidoProdutoDao.DataEntrega;
+                pedidoProduto.Preco = pedidoProdutoDao.Preco;
+
                 if (pedidoProdutoDao.UsuarioEntregaDao != null && pedidoProdutoDao.UsuarioEntregaDao.UsuarioID > 0)
                 {
                     pedidoProduto.UsuarioEntregaID = pedidoProdutoDao.UsuarioEntregaDao.UsuarioID;
                 }
+
                 pedidoProduto.DataBaixa = pedidoProdutoDao.DataBaixa;
+
                 if (pedidoProdutoDao.UsuarioBaixaDao != null && pedidoProdutoDao.UsuarioBaixaDao.UsuarioID > 0)
                 {
                     pedidoProduto.UsuarioBaixaID = pedidoProdutoDao.UsuarioBaixaDao.UsuarioID;
@@ -184,6 +188,7 @@ namespace ChicoDoColchao.Business.Tradutors
                 pedidoProdutoDao.Medida = pedidoProduto.Medida;
                 pedidoProdutoDao.DataEntrega = pedidoProduto.DataEntrega;
                 pedidoProdutoDao.DataBaixa = pedidoProduto.DataBaixa;
+                pedidoProdutoDao.Preco = pedidoProduto.Preco;
 
                 if (pedidoProduto.UsuarioEntrega != null)
                 {
