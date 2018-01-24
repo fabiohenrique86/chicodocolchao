@@ -53,5 +53,10 @@ namespace ChicoDoColchao.Repository
             funcionario.Ativo = false;
             chicoDoColchaoEntities.SaveChanges();
         }
+
+        public void Alterar(Funcionario funcionario)
+        {
+            chicoDoColchaoEntities.SaveChanges();
+        }
     }
 }

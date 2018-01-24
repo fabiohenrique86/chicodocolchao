@@ -1,9 +1,33 @@
-﻿@{
+﻿@using ChicoDoColchao.Dao;
+
+@{
     ViewBag.Title = "Consultor - Lista";
+}
+@{
+    UsuarioDao usuarioDao = null;
+    if (Request.Cookies.Get("ChicoDoColchao_Usuario") != null)
+    {
+        usuarioDao = Newtonsoft.Json.JsonConvert.DeserializeObject<ChicoDoColchao.Dao.UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value);
+    }
 }
 @section scripts
 {
     <script type="text/javascript">
+
+        function limpar()
+        {
+            $("#FuncionarioID").text("");
+            $("#Nome").val("");
+            $("#Email").val("");
+            $("#Telefone").val("");
+        }
+
+        function alterarFuncionario(funcionarioId, numero, obj)
+        {
+            $("#FuncionarioID").val(funcionarioId);
+            $("#Numero").text(numero);
+            $("#modalfuncionarioalterar").modal('show');
+        }
 
         function excluirFuncionario(funcionarioId, numero, obj)
         {
@@ -22,6 +46,7 @@
                     success: function (data) {
 
                         if (!data.Sucesso) {
+                            console.info(data.Erro);
                             alert(data.Mensagem);
                             return;
                         }
@@ -31,6 +56,8 @@
 
                         // exibe mensagem de sucesso
                         alert(data.Mensagem);
+
+                        $("#modalfuncionarioalterar").modal('hide');
                     }
                 });
             }
@@ -59,9 +86,13 @@
                     { "data": "Telefone", "className": "text-center" },
                     {
                         "data": function (data, type, row) {
-                            return "<i class='glyphicon glyphicon-remove' title='Excluir Consultor' style='cursor: pointer' onclick='excluirFuncionario(" + data["FuncionarioID"] + "," + data["Numero"] + ", this)'></i>";
+                            var alterar = "<i class='glyphicon glyphicon-edit' title='Editar Consultor' style='cursor: pointer' onclick='alterarFuncionario(" + data["FuncionarioID"] + "," + data["Numero"] + ", this)'></i>";
+                            var excluir = "<i class='glyphicon glyphicon-remove' title='Excluir Consultor' style='cursor: pointer' onclick='excluirFuncionario(" + data["FuncionarioID"] + "," + data["Numero"] + ", this)'></i>";
+
+                            return alterar + " " + excluir;
                         },
-                        "className": "text-center"
+                        "className": "text-center",
+                        "visible": '@usuarioDao.TipoUsuarioDao.TipoUsuarioID' == '@TipoUsuarioDao.ETipoUsuario.Gerencial.GetHashCode()' ? true : false
                     }
                 ]
             });
@@ -74,6 +105,42 @@
             $("#btnCadastrar").click(function () {
                 window.location.href = "/Funcionario/Cadastro";
             });
+
+            $("#btnAlterarFuncionario").click(function () {
+
+                var funcionarioDao = {};
+
+                funcionarioDao.FuncionarioID = $("#FuncionarioID").val();
+                funcionarioDao.Nome = $("#Nome").val();
+                funcionarioDao.Email = $("#Email").val();
+                funcionarioDao.Telefone = $("#Telefone").val();
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Funcionario/Alterar",
+                    data: { funcionarioDao: funcionarioDao },
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            console.info(data.Erro);
+                            alert(data.Mensagem);
+                            return;
+                        }
+
+                        $("#tbFuncionario").DataTable().clear();
+                        $("#tbFuncionario").DataTable().rows.add(data.Lista).draw();
+
+                        limpar();
+
+                        alert(data.Mensagem);
+
+                        $("#modalfuncionarioalterar").modal('hide');
+                    }
+                });
+
+            });
+
 
         });
     </script>
@@ -89,7 +156,7 @@
                         <td class="text-center" style="width: 10%"><b>Número</b></td>
                         <td class="text-center" style="width: 20%"><b>Loja</b></td>
                         <td class="text-center" style="width: 30%"><b>Nome</b></td>
-                        <td class="text-center" style="width: 25%"><b>E-mail</b></td>
+                        <td class="text-center" style="width: 20%"><b>E-mail</b></td>
                         <td class="text-center" style="width: 10%"><b>Telefone</b></td>
                         <td class="text-center" style="width: 5%"><b>Ação</b></td>
                     </tr>
@@ -100,3 +167,4 @@
     </div>
     <button id="btnCadastrar" type="button" class="btn btn-info">Cadastrar Novo Consultor</button>
 </div>
+@Html.Partial("_ModalFuncionarioAlterar")

@@ -77,6 +77,26 @@ namespace ChicoDoColchao.Business
             }
         }
 
+        private void ValidarAlterar(FuncionarioDao funcionarioDao, out Funcionario funcionario)
+        {
+            if (funcionarioDao == null)
+            {
+                throw new BusinessException("Funcionário é obrigatório");
+            }
+
+            if (funcionarioDao.FuncionarioID <= 0)
+            {
+                throw new BusinessException("FuncionarioID é obrigatório");
+            }
+
+            funcionario = funcionarioRepository.Listar(new Funcionario() { FuncionarioID = funcionarioDao.FuncionarioID }).FirstOrDefault();
+
+            if (funcionario == null)
+            {
+                throw new BusinessException(string.Format("Funcionário {0} não encontrado", funcionarioDao.FuncionarioID));
+            }
+        }
+
         public void Incluir(FuncionarioDao funcionarioDao)
         {
             try
@@ -126,6 +146,44 @@ namespace ChicoDoColchao.Business
                 ValidarExcluir(funcionarioDao, out funcionario);
 
                 funcionarioRepository.Excluir(funcionario);
+            }
+            catch (BusinessException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                // inclui o log do erro
+                logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
+
+                throw ex;
+            }
+        }
+
+        public void Alterar(FuncionarioDao funcionarioDao)
+        {
+            try
+            {
+                Funcionario funcionario;
+
+                ValidarAlterar(funcionarioDao, out funcionario);
+
+                if (!string.IsNullOrEmpty(funcionarioDao.Nome))
+                {
+                    funcionario.Nome = funcionarioDao.Nome;
+                }
+
+                if (!string.IsNullOrEmpty(funcionarioDao.Email))
+                {
+                    funcionario.Email = funcionarioDao.Email;
+                }
+
+                if (!string.IsNullOrEmpty(funcionarioDao.Telefone))
+                {
+                    funcionario.Telefone = funcionarioDao.Telefone.Trim().Replace(".", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace(" ", "");
+                }
+
+                funcionarioRepository.Alterar(funcionario);
             }
             catch (BusinessException ex)
             {

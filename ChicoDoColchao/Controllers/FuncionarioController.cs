@@ -98,11 +98,32 @@ namespace ChicoDoColchao.Controllers
             }
             catch (BusinessException ex)
             {
-                return Json(new { Sucesso = false, Mensagem = ex.Message }, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = ex.Message, Erro = ex.Message }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Funcionário não excluído. Tente novamente." }, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Funcionário não excluído. Tente novamente.", Erro = ex.ToString() }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult Alterar(FuncionarioDao funcionarioDao)
+        {
+            try
+            {
+                funcionarioBusiness.Alterar(funcionarioDao);
+
+                var funcionarios = funcionarioBusiness.Listar(new FuncionarioDao() { Ativo = true });
+
+                return Json(new { Sucesso = true, Mensagem = $"Funcionário {funcionarioDao.Numero} alterado com sucesso!", Lista = funcionarios }, JsonRequestBehavior.AllowGet);
+            }
+            catch (BusinessException ex)
+            {
+                return Json(new { Sucesso = false, Mensagem = ex.Message, Erro = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Funcionário não alterado. Tente novamente.", Erro = ex.ToString() }, JsonRequestBehavior.AllowGet);
             }
         }
     }
