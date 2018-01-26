@@ -1,11 +1,11 @@
-﻿using System;
+﻿using ChicoDoColchao.Business;
+using ChicoDoColchao.Business.Exceptions;
+using ChicoDoColchao.Dao;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using ChicoDoColchao.Business;
-using ChicoDoColchao.Dao;
-using ChicoDoColchao.Business.Exceptions;
 
 namespace ChicoDoColchao.Controllers
 {
@@ -50,7 +50,9 @@ namespace ChicoDoColchao.Controllers
                 return View("Cadastro", produtoDao);
             }
 
-            if (arquivo.ContentType != "application/octet-stream")
+            var extensao = arquivo.FileName.Split(".".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).LastOrDefault();
+
+            if (string.IsNullOrEmpty(extensao) || (!extensao.Contains("xls") && !extensao.Contains("xlsx") && !extensao.Contains("XLS") && !extensao.Contains("XLSX")))
             {
                 produtoDao.Erro = true;
                 produtoDao.Mensagem = "Arquivo não tem extensão XLSX";

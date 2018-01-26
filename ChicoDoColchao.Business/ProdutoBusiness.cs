@@ -316,10 +316,12 @@ namespace ChicoDoColchao.Business
                             // busca se a medida da planilha já existe na base de dados
                             // caso não exista, cadastra-a na base de dados
                             // caso exista, substitui a medida da planilha pela da base de dados por conta do MedidaID
-                            if (produtoDao.MedidaDao == null)
+                            if (produtoDao.MedidaDao == null || (string.IsNullOrEmpty(produtoDao.MedidaDao.Descricao)))
                             {
                                 retorno.Add(string.Format("Produto {0} não possui Medida associada", produtoDao.Numero));
+                                continue;
                             }
+
                             var medidaDao = medidaRepository.Listar(produtoDao.MedidaDao.ToBd()).FirstOrDefault();
                             if (medidaDao == null)
                             {
@@ -336,10 +338,12 @@ namespace ChicoDoColchao.Business
                             // caso não exista, cadastra-a na base de dados
                             // caso exista, substitui a linha da planilha pela da base de dados por conta do MedidaID
                             var categoria = produtoDao.CategoriaDao.FirstOrDefault();
-                            if (categoria == null)
+                            if (categoria == null || (string.IsNullOrEmpty(produtoDao.CategoriaDao.FirstOrDefault().Descricao)))
                             {
                                 retorno.Add(string.Format("Produto {0} não possui Categoria associada", produtoDao.Numero));
+                                continue;
                             }
+
                             var categoriaDao = categoriaRepository.Listar(categoria.ToBd()).FirstOrDefault();
                             if (categoriaDao == null)
                             {
@@ -360,7 +364,7 @@ namespace ChicoDoColchao.Business
                         {
                             // atualiza o produto
                             var lojaProdutoDao = produtoDao.LojaProdutoDao.FirstOrDefault();
-                            if (lojaProdutoDao != null) { produtoRepository.Atualizar(lojaProdutoDao.LojaID, produtoDao.Numero.GetValueOrDefault(), lojaProdutoDao.Quantidade); }
+                            if (lojaProdutoDao != null) { produtoRepository.Atualizar(lojaProdutoDao.LojaID, produtoDao.Numero.GetValueOrDefault(), lojaProdutoDao.Quantidade, produtoDao.Preco); }
                         }
                     }
 
@@ -403,34 +407,48 @@ namespace ChicoDoColchao.Business
                 {
                     switch (cellUsed.Address.ColumnLetter.ToUpper())
                     {
+                        // Início da linha, deve zerar o objeto para um novo produto
                         case "A":
-                            // A = Número
-                            // Inicio da linha, deve zerar o objeto para um novo produto
+
+                            // A = Número                            
                             produtoDao = new ProdutoDao();
                             long numero;
                             cellUsed.TryGetValue(out numero);
                             produtoDao.Numero = numero;
+
                             break;
+
                         case "B":
+
                             // B = Descrição
                             string descricao;
                             cellUsed.TryGetValue(out descricao);
                             produtoDao.Descricao = descricao.Trim();
+
                             break;
+
                         case "C":
+
                             // C = Categoria
                             string categoria;
+
                             cellUsed.TryGetValue(out categoria);
                             produtoDao.CategoriaDao.Clear();
                             produtoDao.CategoriaDao.Add(new CategoriaDao() { Descricao = categoria.Trim(), Ativo = true });
+
                             break;
+
                         case "D":
+
                             // D = Medida
                             string medida;
                             cellUsed.TryGetValue(out medida);
                             produtoDao.MedidaDao = new MedidaDao() { Descricao = medida.Replace(" ", "").Trim(), Ativo = true };
+
                             break;
+
                         case "E":
+
                             // E = Quantidade
                             short quantidade;
                             cellUsed.TryGetValue(out quantidade);
@@ -443,8 +461,12 @@ namespace ChicoDoColchao.Business
                                 produtoDao.LojaProdutoDao.Clear();
                                 produtoDao.LojaProdutoDao.Add(new LojaProdutoDao() { LojaID = loja.LojaID, Quantidade = quantidade, Ativo = true });
                             }
+
                             break;
+
+                        // fim da linha, deve adicionar o produto a lista
                         case "F":
+
                             // F = Preço de Compra
                             double preco = 0;
                             if (cellUsed.Value != null)
@@ -454,11 +476,17 @@ namespace ChicoDoColchao.Business
                                 {
                                     produtoDao.Preco = Math.Round(preco, 2);
                                 }
-                                // fim da linha, deve adicionar o produto a lista
-                                produtosDao.Add(produtoDao);
+
+                                if (produtoDao.Numero > 0)
+                                {
+                                    produtosDao.Add(produtoDao);
+                                }
                             }
+
                             break;
+
                         default:
+
                             break;
                     }
                 }

@@ -314,6 +314,7 @@
     <Content Include="img\banner-5.png" />
     <Content Include="img\banner-6.png" />
     <Content Include="img\cama-bau.png" />
+    <Content Include="img\imediata.png" />
     <Content Include="img\logo-sem-fundo.png" />
     <Content Include="img\logo.png" />
     <Content Include="img\natal-2017.jpg" />
@@ -421,6 +422,7 @@
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="fonts\FontAwesome.otf" />
     <Content Include="Planilhas\cdc-produtos.xlsx" />
+    <Content Include="Planilhas\cdc-produtos-old.xlsx" />
     <None Include="Properties\PublishProfiles\ChicoDoColchao-Release.pubxml" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.dataTables-1.10.12.min.js" />

@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using ChicoDoColchao.Business.Exceptions;
+using ChicoDoColchao.Business.Tradutors;
 using ChicoDoColchao.Dao;
 using ChicoDoColchao.Repository;
-using ChicoDoColchao.Business.Exceptions;
-using ChicoDoColchao.Business.Tradutors;
-using System.Xml.Linq;
-using System.IO;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Xml.Linq;
 
 namespace ChicoDoColchao.Business
 {

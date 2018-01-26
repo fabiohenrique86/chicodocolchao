@@ -103,7 +103,7 @@ namespace ChicoDoColchao.Repository
             chicoDoColchaoEntities.SaveChanges();
         }
 
-        public bool Atualizar(int lojaDestinoId, long numero, int quantidade)
+        public bool Atualizar(int lojaDestinoId, long numero, int quantidade, double preco = 0)
         {
             bool retorno = false;
 
@@ -113,7 +113,14 @@ namespace ChicoDoColchao.Repository
 
             // atualiza o produto para ativo = true
             var produto = chicoDoColchaoEntities.Produto.Where(x => x.Numero == numero).FirstOrDefault();
-            if (produto != null) { produto.Ativo = true; }
+            if (produto != null)
+            {
+                produto.Ativo = true;
+                if (preco > 0)
+                {
+                    produto.Preco = preco;
+                }
+            }
 
             chicoDoColchaoEntities.SaveChanges();
 
