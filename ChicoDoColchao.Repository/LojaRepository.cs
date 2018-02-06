@@ -42,6 +42,11 @@ namespace ChicoDoColchao.Repository
                 query = query.Where(x => x.Deposito == loja.Deposito);
             }
 
+            if (!string.IsNullOrEmpty(loja.NomeFantasia))
+            {
+                query = query.Where(x => x.NomeFantasia.Contains(loja.NomeFantasia));
+            }
+
             query = query.Where(x => x.Ativo);
 
             return query.OrderBy(x => x.NomeFantasia).ToList();

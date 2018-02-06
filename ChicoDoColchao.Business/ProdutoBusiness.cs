@@ -454,8 +454,8 @@ namespace ChicoDoColchao.Business
                             cellUsed.TryGetValue(out quantidade);
                             produtoDao.Quantidade = quantidade;
 
-                            // busca a loja por CNPJ
-                            var loja = lojaRepository.Listar(new Loja() { Cnpj = worksheet.Name.Trim(), Ativo = true }).FirstOrDefault();
+                            // busca a loja por NomeFantasia
+                            var loja = lojaRepository.Listar(new Loja() { NomeFantasia = worksheet.Name.Trim(), Ativo = true }).FirstOrDefault();
                             if (loja != null)
                             {
                                 produtoDao.LojaProdutoDao.Clear();
