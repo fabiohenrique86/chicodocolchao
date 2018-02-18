@@ -49,7 +49,7 @@ namespace ChicoDoColchao.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Cliente não cadastrado. Tente novamente." }, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Cliente não cadastrado. Tente novamente.", Erro = ex.ToString() }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -79,11 +79,11 @@ namespace ChicoDoColchao.Controllers
             }
             catch (BusinessException ex)
             {
-                return Json(clientes, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = ex.Message }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                return Json(clientes, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = ex.Message, Erro = ex.ToString() }, JsonRequestBehavior.AllowGet);
             }
         }
 

@@ -11,12 +11,24 @@
         $(document).ready(function () {
 
             $("#btnGerar").click(function () {
+                
+                $.ajax({
+                    dataType: "json",
+                    type: "GET",
+                    url: "/MovimentoDeCaixa/Gerar",
+                    data: { data: $("#Data").val(), lojaId: $("#LojaID option:selected").val() },
+                    success: function (data) {
 
-                var data = $("#Data").val();
-                var lojaId = $("#LojaID option:selected").val();
+                        if (!data.Sucesso) {
+                            console.info(data.Erro);
+                            alert(data.Mensagem);
+                            return;
+                        }
 
-                window.open("http://www.chicodocolchao.com.br/MovimentoDeCaixa/Gerar?data=" + data + "&lojaId=" + lojaId, "blank");
-                //window.open("http://localhost:57163/MovimentoDeCaixa/Gerar?data=" + data + "&lojaId=" + lojaId, "blank");
+                        window.location.href = '@Url.Action("Download", "Base")' + "?caminho=" + data.Caminho + "&arquivo=" + data.Arquivo + "&tipo=" + data.Tipo;
+                    }
+                });
+
             });
 
         });

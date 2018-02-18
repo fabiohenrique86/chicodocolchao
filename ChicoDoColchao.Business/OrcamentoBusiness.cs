@@ -36,7 +36,7 @@ namespace ChicoDoColchao.Business
 
             if (orcamentoDao.FuncionarioDao == null || orcamentoDao.FuncionarioDao.Count() <= 0 || orcamentoDao.FuncionarioDao.Count(x => x.FuncionarioID <= 0) > 0)
             {
-                throw new BusinessException("Funcionário é obrigatório");
+                throw new BusinessException("Consultor é obrigatório");
             }
 
             if (orcamentoDao.ClienteDao == null || orcamentoDao.ClienteDao.ClienteID <= 0)
@@ -170,7 +170,7 @@ namespace ChicoDoColchao.Business
             var viewer = new ReportViewer();
 
             viewer.ProcessingMode = ProcessingMode.Local;
-            viewer.LocalReport.ReportPath = AppDomain.CurrentDomain.BaseDirectory + "/bin/Reports/OrcamentoComanda.rdlc";
+            viewer.LocalReport.ReportPath = AppDomain.CurrentDomain.BaseDirectory + "/Reports/OrcamentoComanda.rdlc";
 
             // parâmetros
             var parametros = new List<ReportParameter>();

@@ -18,15 +18,22 @@ namespace ChicoDoColchao.Dao
         }
 
         public int ProdutoID { get; set; }
-        public Nullable<long> Numero { get; set; }
+        public long? Numero { get; set; }
         public string Descricao { get; set; }
         public double Preco { get; set; }
-        public Nullable<short> ComissaoFuncionario { get; set; }
-        public Nullable<short> ComissaoFranqueado { get; set; }
+        public short? ComissaoFuncionario { get; set; }
+        public short? ComissaoFranqueado { get; set; }
         public bool Ativo { get; set; }
         public int Quantidade { get; set; }
         public bool Erro { get; set; }
         public string Mensagem { get; set; }
+
+        // propriedades somente da classe
+        public double PrecoAtacado { get { return Preco * 2.2; } }
+        public double PrecoAVista { get { return Preco * 2.3; } }
+        public double PrecoAte10 { get { return Preco * 2.5; } }
+        public double PrecoNormal { get { return Preco * 3.1; } }
+        // propriedades somente da classe
 
         public virtual ICollection<CategoriaDao> CategoriaDao { get; set; }
         public virtual ICollection<LojaProdutoDao> LojaProdutoDao { get; set; }

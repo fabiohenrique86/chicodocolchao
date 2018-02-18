@@ -88,6 +88,7 @@
     <Compile Include="LojaProduto.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="LojaProdutoRepository.cs" />
     <Compile Include="Medida.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>

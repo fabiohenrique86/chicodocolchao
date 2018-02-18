@@ -48,11 +48,11 @@ namespace ChicoDoColchao.Controllers
 
                 In(usuarios.FirstOrDefault());
 
-                return Json(new { Sucesso = true, Mensagem = "", Erro = string.Empty }, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = true, Mensagem = "" }, JsonRequestBehavior.AllowGet);
             }
             catch (BusinessException ex)
             {
-                return Json(new { Sucesso = false, Mensagem = ex.Message, Erro = string.Empty }, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = ex.Message }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -95,7 +95,7 @@ namespace ChicoDoColchao.Controllers
             }
             catch (BusinessException ex)
             {
-                return Json(new { Sucesso = false, Mensagem = ex.Message, Erro = string.Empty }, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = ex.Message }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {

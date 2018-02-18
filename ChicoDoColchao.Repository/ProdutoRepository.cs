@@ -109,7 +109,11 @@ namespace ChicoDoColchao.Repository
 
             // adiciona a quantidade da loja de destino
             var lojaProdutoDestino = chicoDoColchaoEntities.LojaProduto.SingleOrDefault(x => x.Produto.Numero == numero && x.LojaID == lojaDestinoId && x.Ativo == true);
-            if (lojaProdutoDestino != null) { lojaProdutoDestino.Quantidade = Convert.ToInt16(lojaProdutoDestino.Quantidade + quantidade); retorno = true; }
+            if (lojaProdutoDestino != null)
+            {
+                lojaProdutoDestino.Quantidade = Convert.ToInt16(lojaProdutoDestino.Quantidade + quantidade);
+                retorno = true;
+            }
 
             // atualiza o produto para ativo = true
             var produto = chicoDoColchaoEntities.Produto.Where(x => x.Numero == numero).FirstOrDefault();

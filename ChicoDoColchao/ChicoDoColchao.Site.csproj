@@ -235,6 +235,7 @@
     <Compile Include="Controllers\OrcamentoHistoricoController.cs" />
     <Compile Include="Controllers\OrcamentoController.cs" />
     <Compile Include="Controllers\ParcelaController.cs" />
+    <Compile Include="Controllers\RelatorioController.cs" />
     <Compile Include="Controllers\TipoPagamentoController.cs" />
     <Compile Include="Controllers\OndeComprarController.cs" />
     <Compile Include="Controllers\PedidoController.cs" />
@@ -245,6 +246,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ds_cliente.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="ds_estoque.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ds_estoque.xsd</DependentUpon>
     </Compile>
     <Compile Include="ds_movimento_caixa.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -392,6 +398,17 @@
     <Content Include="ds_movimento_caixa.xsc">
       <DependentUpon>ds_movimento_caixa.xsd</DependentUpon>
     </Content>
+    <Content Include="ds_estoque.xsc">
+      <DependentUpon>ds_estoque.xsd</DependentUpon>
+    </Content>
+    <None Include="ds_estoque.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ds_estoque.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="ds_estoque.xss">
+      <DependentUpon>ds_estoque.xsd</DependentUpon>
+    </Content>
     <None Include="ds_movimento_caixa.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>ds_movimento_caixa.Designer.cs</LastGenOutput>
@@ -422,7 +439,6 @@
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="fonts\FontAwesome.otf" />
     <Content Include="Planilhas\cdc-produtos.xlsx" />
-    <Content Include="Planilhas\cdc-produtos-old.xlsx" />
     <None Include="Properties\PublishProfiles\ChicoDoColchao-Release.pubxml" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.dataTables-1.10.12.min.js" />
@@ -483,10 +499,10 @@
     <Content Include="Views\Shared\_ModalPedidoDesconto.cshtml" />
     <Content Include="Views\Usuario\Lista.cshtml" />
     <Content Include="Views\Shared\_ModalFuncionarioAlterar.cshtml" />
+    <Content Include="Views\Relatorio\Estoque.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -505,15 +521,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Reports\MovimentoDeCaixa.rdlc">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\OrcamentoComanda.rdlc">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\PedidoComanda.rdlc">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <Content Include="Reports\MovimentoDeCaixa.rdlc" />
+    <Content Include="Reports\OrcamentoComanda.rdlc" />
+    <Content Include="Reports\Estoque.rdlc" />
+    <Content Include="Reports\PedidoComanda.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ds_estoque" targetNamespace="http://tempuri.org/ds_estoque.xsd" xmlns:mstns="http://tempuri.org/ds_estoque.xsd" xmlns="http://tempuri.org/ds_estoque.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection ConnectionStringObject="Data Source=mssql.chicodocolchao.com.br;Initial Catalog=chicodocolchao;Persist Security Info=True;User ID=chicodocolchao;Password=ch1c0d0c0lch40;MultipleActiveResultSets=True;Application Name=EntityFramework" IsAppSettingsProperty="false" Modifier="Assembly" Name="ChicoDoColchaoEntities (ChicoDoColchao.Site)" ParameterPrefix="@" Provider="System.Data.SqlClient" />
+        </Connections>
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="ds_estoque" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="True" msprop:Generator_DataSetName="ds_estoque" msprop:Generator_UserDSName="ds_estoque">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="ds_estoque" msprop:Generator_TableClassName="ds_estoqueDataTable" msprop:Generator_TableVarName="tableds_estoque" msprop:Generator_TablePropName="_ds_estoque" msprop:Generator_RowDeletingName="ds_estoqueRowDeleting" msprop:Generator_RowChangingName="ds_estoqueRowChanging" msprop:Generator_RowEvHandlerName="ds_estoqueRowChangeEventHandler" msprop:Generator_RowDeletedName="ds_estoqueRowDeleted" msprop:Generator_UserTableName="ds_estoque" msprop:Generator_RowChangedName="ds_estoqueRowChanged" msprop:Generator_RowEvArgName="ds_estoqueRowChangeEvent" msprop:Generator_RowClassName="ds_estoqueRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="ProdutoID" msprop:Generator_ColumnVarNameInTable="columnProdutoID" msprop:Generator_ColumnPropNameInRow="ProdutoID" msprop:Generator_ColumnPropNameInTable="ProdutoIDColumn" msprop:Generator_UserColumnName="ProdutoID" type="xs:string" minOccurs="0" />
+              <xs:element name="Numero" msprop:Generator_ColumnVarNameInTable="columnNumero" msprop:Generator_ColumnPropNameInRow="Numero" msprop:Generator_ColumnPropNameInTable="NumeroColumn" msprop:Generator_UserColumnName="Numero" type="xs:string" minOccurs="0" />
+              <xs:element name="Descricao" msprop:Generator_ColumnVarNameInTable="columnDescricao" msprop:Generator_ColumnPropNameInRow="Descricao" msprop:Generator_ColumnPropNameInTable="DescricaoColumn" msprop:Generator_UserColumnName="Descricao" type="xs:string" minOccurs="0" />
+              <xs:element name="LojaID" msprop:Generator_ColumnVarNameInTable="columnLojaID" msprop:Generator_ColumnPropNameInRow="LojaID" msprop:Generator_ColumnPropNameInTable="LojaIDColumn" msprop:Generator_UserColumnName="LojaID" type="xs:string" minOccurs="0" />
+              <xs:element name="NomeFantasia" msprop:Generator_ColumnVarNameInTable="columnNomeFantasia" msprop:Generator_ColumnPropNameInRow="NomeFantasia" msprop:Generator_ColumnPropNameInTable="NomeFantasiaColumn" msprop:Generator_UserColumnName="NomeFantasia" type="xs:string" minOccurs="0" />
+              <xs:element name="Quantidade" msprop:Generator_ColumnVarNameInTable="columnQuantidade" msprop:Generator_ColumnPropNameInRow="Quantidade" msprop:Generator_ColumnPropNameInTable="QuantidadeColumn" msprop:Generator_UserColumnName="Quantidade" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

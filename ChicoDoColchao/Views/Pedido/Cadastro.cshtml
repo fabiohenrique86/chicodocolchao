@@ -41,32 +41,35 @@
         function modalPreco(produtoId, produtoPreco) {
             
             $.getJSON("/Produto/Listar", { ProdutoID: produtoId }, function (data) {
-
-                var precoAtacado = Globalize.format(data[0].Preco * 2.2, "n2");
-                var precoAVista = Globalize.format(data[0].Preco * 2.4, "n2");
-                var precoAte10 = Globalize.format(data[0].Preco * 2.5, "n2");
-                var preco = Globalize.format(data[0].Preco * 3, "n2");
-
+                
                 $("#lblNumeroProduto").text(data[0].Numero);
 
                 var tbLojaProduto = $("#tbLojaProduto").DataTable();
+
                 tbLojaProduto.clear();
                 tbLojaProduto.rows.add(data[0].LojaProdutoDao).draw();
+
+                var precoAtacado = Globalize.format(data[0].PrecoAtacado, "n2");
+                var precoAVista = Globalize.format(data[0].PrecoAVista, "n2");
+                var precoAte10 = Globalize.format(data[0].PrecoAte10, "n2");
+                var precoNormal = Globalize.format(data[0].PrecoNormal, "n2");
 
                 var produtoPrecos =
                 [
                     { ProdutoID: data[0].ProdutoID, Descricao: "Atacado", Preco: precoAtacado },
                     { ProdutoID: data[0].ProdutoID, Descricao: "À Vista", Preco: precoAVista },
                     { ProdutoID: data[0].ProdutoID, Descricao: "Até 10x", Preco: precoAte10 },
-                    { ProdutoID: data[0].ProdutoID, Descricao: "Preço", Preco: preco },
+                    { ProdutoID: data[0].ProdutoID, Descricao: "Preço", Preco: precoNormal },
                 ];
 
                 var tbProdutoPreco = $("#tbProdutoPreco").DataTable();
+
                 tbProdutoPreco.clear();
                 tbProdutoPreco.rows.add(produtoPrecos).draw();
                 
                 // marca a linha selecionada para o preço selecionado
-                switch (produtoPreco) {
+                switch (produtoPreco) 
+                {
                     case (precoAtacado): // atacado
                         $(tbProdutoPreco.row(0).node()).addClass('selected');
                         break;
@@ -76,7 +79,7 @@
                     case (precoAte10): // até 10x
                         $(tbProdutoPreco.row(2).node()).addClass('selected');
                         break;
-                    case (preco): // preço
+                    case (precoNormal): // preço
                         $(tbProdutoPreco.row(3).node()).addClass('selected');
                         break;
                     default:
@@ -312,6 +315,11 @@
 
                     ui.item.label = ui.item.label;
                     ui.item.value = ui.item.label;
+                },
+                change: function (event, ui) {
+                    if (ui == null || ui.item == undefined || ui.item == null) {
+                        $("#ClienteID").val("");
+                    }
                 }
             });
 

@@ -36,6 +36,11 @@
 
                     ui.item.label = ui.item.label;
                     ui.item.value = ui.item.label;
+                },
+                change: function (event, ui) {
+                    if (ui == null || ui.item == undefined || ui.item == null) {
+                        $("#MedidaID").val("");
+                    }
                 }
             });
 
@@ -163,7 +168,7 @@
         <div class="row">
             <div class="col-lg-3">
                 <div class="form-group">
-                    @Html.TextBoxFor(x => x.ComissaoFuncionario, new { @class = "form-control comissao", @placeholder = "% Rentabilidade funcionário (opcional)", @maxlength = "3" })
+                    @Html.TextBoxFor(x => x.ComissaoFuncionario, new { @class = "form-control comissao", @placeholder = "% Rentabilidade consultor (opcional)", @maxlength = "3" })
                 </div>
             </div>
             <div class="col-lg-3">

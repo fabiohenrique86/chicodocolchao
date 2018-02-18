@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using ChicoDoColchao.Business.Exceptions;
+using ChicoDoColchao.Business.Tradutors;
 using ChicoDoColchao.Dao;
 using ChicoDoColchao.Repository;
-using ChicoDoColchao.Business.Exceptions;
-using ChicoDoColchao.Business.Tradutors;
 using ClosedXML.Excel;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Transactions;
 
 namespace ChicoDoColchao.Business
@@ -18,6 +18,7 @@ namespace ChicoDoColchao.Business
         MedidaBusiness medidaBusiness;
         CategoriaRepository categoriaRepository;
         CategoriaBusiness categoriaBusiness;
+        LojaProdutoBusiness lojaProdutoBusiness;
         LogRepository logRepository;
 
         public ProdutoBusiness()
@@ -28,6 +29,7 @@ namespace ChicoDoColchao.Business
             lojaRepository = new LojaRepository();
             categoriaBusiness = new CategoriaBusiness();
             categoriaRepository = new CategoriaRepository();
+            lojaProdutoBusiness = new LojaProdutoBusiness();
             logRepository = new LogRepository();
         }
 
@@ -286,7 +288,7 @@ namespace ChicoDoColchao.Business
 
         public List<string> Importar(System.IO.Stream arquivo)
         {
-            List<string> retorno = new List<string>();
+            var retorno = new List<string>();
 
             try
             {
@@ -301,13 +303,18 @@ namespace ChicoDoColchao.Business
                     return retorno;
                 }
 
-                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions() { Timeout = TimeSpan.FromMinutes(5) }))
+                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions() { Timeout = TimeSpan.FromMinutes(10) }))
                 {
                     // busca todos os produtos da planilha na base de dados
                     // caso exista, atualiza somente a quantidade
                     // caso não exista, cadastra na base de dados
                     foreach (var produtoDao in produtosDao)
                     {
+                        //if (produtoDao.Numero.GetValueOrDefault() == 52843)
+                        //{
+
+                        //}
+
                         var produto = produtoRepository.Listar(new Produto() { Numero = produtoDao.Numero.GetValueOrDefault() }).FirstOrDefault();
 
                         // caso o produto não exista na base de dados
@@ -362,9 +369,25 @@ namespace ChicoDoColchao.Business
                         }
                         else
                         {
-                            // atualiza o produto
+                            // inclui/atualiza o produto na loja
                             var lojaProdutoDao = produtoDao.LojaProdutoDao.FirstOrDefault();
-                            if (lojaProdutoDao != null) { produtoRepository.Atualizar(lojaProdutoDao.LojaID, produtoDao.Numero.GetValueOrDefault(), lojaProdutoDao.Quantidade, produtoDao.Preco); }
+                            if (lojaProdutoDao != null)
+                            {
+                                var lojaProduto = lojaProdutoBusiness.Listar(new LojaProdutoDao() { LojaID = lojaProdutoDao.LojaID, ProdutoID = produto.ProdutoID }).FirstOrDefault();
+
+                                if (lojaProduto == null)
+                                {
+                                    lojaProdutoBusiness.Incluir(new LojaProdutoDao() { LojaID = lojaProdutoDao.LojaID, ProdutoID = produto.ProdutoID, Quantidade = lojaProdutoDao.Quantidade, Ativo = true });
+                                }
+                                else
+                                {
+                                    lojaProdutoBusiness.Atualizar(new LojaProdutoDao() { LojaProdutoID = lojaProduto.LojaProdutoID, Quantidade = lojaProdutoDao.Quantidade, Ativo = true });
+                                }
+
+                                produtoRepository.Atualizar(new Produto() { Numero = produtoDao.Numero.GetValueOrDefault(), Preco = produtoDao.Preco });
+
+                                //produtoRepository.Atualizar(lojaProdutoDao.LojaID, produtoDao.Numero.GetValueOrDefault(), lojaProdutoDao.Quantidade, produtoDao.Preco);
+                            }
                         }
                     }
 
@@ -392,8 +415,7 @@ namespace ChicoDoColchao.Business
 
         private List<ProdutoDao> LerXLSX(System.IO.Stream arquivo)
         {
-            List<ProdutoDao> produtosDao = new List<ProdutoDao>();
-
+            var produtosDao = new List<ProdutoDao>();
             var workbook = new XLWorkbook(arquivo);
             var worksheets = workbook.Worksheets;
 
@@ -402,16 +424,20 @@ namespace ChicoDoColchao.Business
             {
                 ProdutoDao produtoDao = null;
 
+                // busca a loja por NomeFantasia
+                var loja = lojaRepository.Listar(new Loja() { NomeFantasia = worksheet.Name.Trim(), Ativo = true }).FirstOrDefault();
+
                 // cada célula que tem valor
-                foreach (var cellUsed in worksheet.CellsUsed())
+                foreach (var cellUsed in worksheet.Cells())
                 {
                     switch (cellUsed.Address.ColumnLetter.ToUpper())
                     {
-                        // Início da linha, deve zerar o objeto para um novo produto
+                        // início da linha, deve zerar o objeto para um novo produto
                         case "A":
-
-                            // A = Número                            
+           
                             produtoDao = new ProdutoDao();
+
+                            // A = Número
                             long numero;
                             cellUsed.TryGetValue(out numero);
                             produtoDao.Numero = numero;
@@ -419,6 +445,11 @@ namespace ChicoDoColchao.Business
                             break;
 
                         case "B":
+
+                            if (produtoDao.Numero.GetValueOrDefault() <= 0)
+                            {
+                                break;
+                            }
 
                             // B = Descrição
                             string descricao;
@@ -428,6 +459,11 @@ namespace ChicoDoColchao.Business
                             break;
 
                         case "C":
+
+                            if (produtoDao.Numero.GetValueOrDefault() <= 0)
+                            {
+                                break;
+                            }
 
                             // C = Categoria
                             string categoria;
@@ -440,6 +476,11 @@ namespace ChicoDoColchao.Business
 
                         case "D":
 
+                            if (produtoDao.Numero.GetValueOrDefault() <= 0)
+                            {
+                                break;
+                            }
+
                             // D = Medida
                             string medida;
                             cellUsed.TryGetValue(out medida);
@@ -449,13 +490,16 @@ namespace ChicoDoColchao.Business
 
                         case "E":
 
+                            if (produtoDao.Numero.GetValueOrDefault() <= 0)
+                            {
+                                break;
+                            }
+
                             // E = Quantidade
                             short quantidade;
                             cellUsed.TryGetValue(out quantidade);
                             produtoDao.Quantidade = quantidade;
-
-                            // busca a loja por NomeFantasia
-                            var loja = lojaRepository.Listar(new Loja() { NomeFantasia = worksheet.Name.Trim(), Ativo = true }).FirstOrDefault();
+                            
                             if (loja != null)
                             {
                                 produtoDao.LojaProdutoDao.Clear();
@@ -466,6 +510,11 @@ namespace ChicoDoColchao.Business
 
                         // fim da linha, deve adicionar o produto a lista
                         case "F":
+
+                            if (produtoDao.Numero.GetValueOrDefault() <= 0)
+                            {
+                                break;
+                            }
 
                             // F = Preço de Compra
                             double preco = 0;

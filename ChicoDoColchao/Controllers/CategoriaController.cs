@@ -55,7 +55,7 @@ namespace ChicoDoColchao.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Categoria não cadastrada. Tente novamente." }, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Categoria não cadastrada. Tente novamente.", Erro = ex.ToString() }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -71,11 +71,11 @@ namespace ChicoDoColchao.Controllers
             }
             catch (BusinessException ex)
             {
-                return Json(categorias, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = ex.Message }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                return Json(categorias, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = ex.Message, Erro = ex.ToString() }, JsonRequestBehavior.AllowGet);
             }
         }
     }

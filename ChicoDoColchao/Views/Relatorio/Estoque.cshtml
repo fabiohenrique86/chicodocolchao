@@ -1,0 +1,90 @@
+﻿@{
+    ViewBag.Title = "Estoque";
+}
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $("#txtProduto").autocomplete({
+                minLength: 3,
+                source: function (request, response) {
+                    $.getJSON("/Produto/ListarAutocomplete", { term: request.term }, function (data, status, xhr) {
+                        response($.map(data, function (produto) {
+
+                            // verifica se o produto está cadastrado
+                            if (produto == undefined || produto == null) {
+                                return { label: "Produto " + request.term + " não cadastrado", value: 0 };
+                            }
+
+                            return { label: produto.Numero + ' | ' + produto.Descricao + ' | ' + produto.MedidaDao.Descricao, value: produto.ProdutoID }
+                        }));
+                    });
+                },
+                select: function (event, ui) {
+
+                    // apaga a pesquisa do produto selecionado
+                    if (ui.item.value == 0) {
+                        ui.item.label = "";
+                        ui.item.value = "";
+                        return;
+                    }
+
+                    $("#ProdutoID").val(ui.item.value);
+
+                    ui.item.label = ui.item.label;
+                    ui.item.value = ui.item.label;
+                },
+                change: function (event, ui)
+                {
+                    if (ui == null || ui.item == undefined || ui.item == null)
+                    {
+                        $("#ProdutoID").val("");
+                    }
+                }
+            });
+
+            $("#btnGerar").click(function () {
+
+                $.ajax({
+                    dataType: "json",
+                    type: "GET",
+                    url: "/Relatorio/ListarEstoque",
+                    data: { produtoId: $("#ProdutoID").val() },
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            console.info(data.Erro);
+                            alert(data.Mensagem);
+                            return;
+                        }
+
+                        window.location.href = '@Url.Action("Download", "Base")' + "?caminho=" + data.Caminho + "&arquivo=" + data.Arquivo + "&tipo=" + data.Tipo;
+                    }
+                });
+
+            });
+
+        });
+    </script>
+}
+<div class="container" style="padding-bottom: 20px;">
+    <h2><i class="glyphicon glyphicon-stats" style="color: #0f3456" title="Estoque"></i> Relatório Estoque</h2>
+    <hr />
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="form-group">
+                <input type="hidden" name="ProdutoID" id="ProdutoID" />
+                <input id="txtProduto" name="txtProduto" type="text" class="form-control" placeholder="Produtos (Mínimo de 3 letras)" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="form-group">
+                <button id="btnGerar" type="button" class="btn btn-info">Gerar</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -22,20 +22,21 @@
 {
     <script type="text/javascript">
 
-        function modalPreco(produto) {
+        function modalPreco(produtoDao) {
 
-            $("#lblNumeroProduto").text(produto.Numero);
+            $("#lblNumeroProduto").text(produtoDao.Numero);
 
             $("#tbLojaProduto").DataTable().clear();
-            $("#tbLojaProduto").DataTable().rows.add(produto.LojaProdutoDao).draw();
+            $("#tbLojaProduto").DataTable().rows.add(produtoDao.LojaProdutoDao).draw();
 
             var produtoPrecos =
             [
-                { ProdutoID: produto.ProdutoID, Descricao: "Atacado", Preco: Globalize.format(produto.Preco * 2.2, "n2") },
-                { ProdutoID: produto.ProdutoID, Descricao: "À Vista", Preco: Globalize.format(produto.Preco * 2.4, "n2") },
-                { ProdutoID: produto.ProdutoID, Descricao: "Até 10x", Preco: Globalize.format(produto.Preco * 2.5, "n2") },
-                { ProdutoID: produto.ProdutoID, Descricao: "Preço", Preco: Globalize.format(produto.Preco * 3, "n2") },
+                { ProdutoID: produtoDao.ProdutoID, Descricao: "Atacado", Preco: Globalize.format(produtoDao.PrecoAtacado, "n2") },
+                { ProdutoID: produtoDao.ProdutoID, Descricao: "À Vista", Preco: Globalize.format(produtoDao.PrecoAVista, "n2") },
+                { ProdutoID: produtoDao.ProdutoID, Descricao: "Até 10x", Preco: Globalize.format(produtoDao.PrecoAte10, "n2") },
+                { ProdutoID: produtoDao.ProdutoID, Descricao: "Preço", Preco: Globalize.format(produtoDao.PrecoNormal, "n2") },
             ];
+
             $("#tbProdutoPreco").DataTable().clear();
             $("#tbProdutoPreco").DataTable().rows.add(produtoPrecos).draw();
 

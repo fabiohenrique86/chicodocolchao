@@ -40,7 +40,7 @@ namespace ChicoDoColchao.Business
             var funcionarioDao = pedidoDao.FuncionarioDao.FirstOrDefault();
             if (funcionarioDao == null || funcionarioDao.FuncionarioID <= 0)
             {
-                throw new BusinessException("Funcionário é obrigatório");
+                throw new BusinessException("Consultor é obrigatório");
             }
 
             var clienteDao = pedidoDao.ClienteDao.FirstOrDefault();
@@ -499,7 +499,7 @@ namespace ChicoDoColchao.Business
             var viewer = new ReportViewer();
 
             viewer.ProcessingMode = ProcessingMode.Local;
-            viewer.LocalReport.ReportPath = AppDomain.CurrentDomain.BaseDirectory + "/bin/Reports/PedidoComanda.rdlc";
+            viewer.LocalReport.ReportPath = AppDomain.CurrentDomain.BaseDirectory + "/Reports/PedidoComanda.rdlc";
 
             // parâmetros
             List<ReportParameter> parametros = new List<ReportParameter>();

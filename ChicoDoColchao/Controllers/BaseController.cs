@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json;
@@ -170,6 +168,17 @@ namespace ChicoDoColchao.Controllers
                                 return false;
                             }
                         }
+                        else if (controller == "Relatorio")
+                        {
+                            if (action == "Estoque")
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
                         else
                         {
                             return false;
@@ -210,6 +219,17 @@ namespace ChicoDoColchao.Controllers
                                 return false;
                             }
                         }
+                        else if (controller == "Relatorio")
+                        {
+                            if (action == "Estoque")
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
                         else
                         {
                             return false;
@@ -224,6 +244,23 @@ namespace ChicoDoColchao.Controllers
             catch (Exception)
             {
                 return false;
+            }
+        }
+
+        public ActionResult Download(string caminho, string arquivo, string tipo)
+        {
+            try
+            {
+                var bytes = System.IO.File.ReadAllBytes(caminho);
+                return File(bytes, tipo, arquivo);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+            finally
+            {
+                System.IO.File.Delete(arquivo);
             }
         }
     }

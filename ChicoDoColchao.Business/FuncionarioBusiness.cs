@@ -23,7 +23,7 @@ namespace ChicoDoColchao.Business
         {
             if (funcionarioDao == null)
             {
-                throw new BusinessException("Funcionário é obrigatório");
+                throw new BusinessException("Consultor é obrigatório");
             }
 
             if (funcionarioDao.Numero.GetValueOrDefault() <= 0)
@@ -53,7 +53,7 @@ namespace ChicoDoColchao.Business
 
             if (funcionarioRepository.Listar(new Funcionario() { Numero = funcionarioDao.Numero.GetValueOrDefault() }).FirstOrDefault() != null)
             {
-                throw new BusinessException(string.Format("Funcionário (Número {0}) já cadastrado", funcionarioDao.Numero.GetValueOrDefault()));
+                throw new BusinessException(string.Format("Consultor (Número {0}) já cadastrado", funcionarioDao.Numero.GetValueOrDefault()));
             }
         }
 
@@ -61,7 +61,7 @@ namespace ChicoDoColchao.Business
         {
             if (funcionarioDao == null)
             {
-                throw new BusinessException("Funcionário é obrigatório");
+                throw new BusinessException("Consultor é obrigatório");
             }
 
             if (funcionarioDao.FuncionarioID <= 0)
@@ -73,7 +73,7 @@ namespace ChicoDoColchao.Business
 
             if (funcionario == null)
             {
-                throw new BusinessException(string.Format("Funcionário {0} não encontrado", funcionarioDao.FuncionarioID));
+                throw new BusinessException(string.Format("Consultor {0} não encontrado", funcionarioDao.FuncionarioID));
             }
         }
 
@@ -81,7 +81,7 @@ namespace ChicoDoColchao.Business
         {
             if (funcionarioDao == null)
             {
-                throw new BusinessException("Funcionário é obrigatório");
+                throw new BusinessException("Consultor é obrigatório");
             }
 
             if (funcionarioDao.FuncionarioID <= 0)
@@ -93,7 +93,7 @@ namespace ChicoDoColchao.Business
 
             if (funcionario == null)
             {
-                throw new BusinessException(string.Format("Funcionário {0} não encontrado", funcionarioDao.FuncionarioID));
+                throw new BusinessException(string.Format("Consultor {0} não encontrado", funcionarioDao.FuncionarioID));
             }
         }
 

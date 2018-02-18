@@ -114,7 +114,7 @@ namespace ChicoDoColchao.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Produto não cadastrado. Tente novamente." }, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Produto não cadastrado. Tente novamente.", Erro = ex.ToString() }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -133,7 +133,7 @@ namespace ChicoDoColchao.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Produto não atualizado. Tente novamente." }, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Produto não atualizado. Tente novamente.", Erro = ex.ToString() }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -154,7 +154,7 @@ namespace ChicoDoColchao.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Produto não excluído. Tente novamente." }, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Produto não excluído. Tente novamente.", Erro = ex.ToString() }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -173,7 +173,7 @@ namespace ChicoDoColchao.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Produto não transferido. Tente novamente." }, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Produto não transferido. Tente novamente.", Erro = ex.ToString() }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -188,7 +188,7 @@ namespace ChicoDoColchao.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Produto não listado. Tente novamente.", Erro = ex.ToString() }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -218,7 +218,7 @@ namespace ChicoDoColchao.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Produto não listado. Tente novamente.", Erro = ex.ToString() }, JsonRequestBehavior.AllowGet);
             }
         }
     }

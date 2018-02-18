@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using ChicoDoColchao.Dao;
 using ChicoDoColchao.Repository;
@@ -10,7 +9,7 @@ namespace ChicoDoColchao.Business.Tradutors
     {
         public static Produto ToBd(this ProdutoDao produtoDao)
         {
-            Produto produto = new Produto();
+            var produto = new Produto();
 
             produto.ProdutoID = produtoDao.ProdutoID;
             produto.Numero = produtoDao.Numero.HasValue ? produtoDao.Numero.Value : 0;
@@ -27,7 +26,7 @@ namespace ChicoDoColchao.Business.Tradutors
 
             foreach (var lojaProdutoDao in produtoDao.LojaProdutoDao)
             {
-                LojaProduto lojaProduto = new LojaProduto();
+                var lojaProduto = new LojaProduto();
 
                 lojaProduto.ProdutoID = produtoDao.ProdutoID;
                 lojaProduto.LojaID = lojaProdutoDao.LojaID;
@@ -42,7 +41,7 @@ namespace ChicoDoColchao.Business.Tradutors
 
         public static ProdutoDao ToApp(this Produto produto)
         {
-            ProdutoDao produtoDao = new ProdutoDao();
+            var produtoDao = new ProdutoDao();
 
             produtoDao.ProdutoID = produto.ProdutoID;
             produtoDao.Numero = produto.Numero;
@@ -57,7 +56,7 @@ namespace ChicoDoColchao.Business.Tradutors
 
             foreach (var lojaProduto in produto.LojaProduto.Where(x => x.Ativo).OrderBy(x => x.Loja.NomeFantasia))
             {
-                LojaProdutoDao lojaProdutoDao = new LojaProdutoDao();
+                var lojaProdutoDao = new LojaProdutoDao();
 
                 lojaProdutoDao.LojaProdutoID = lojaProduto.LojaProdutoID;
                 lojaProdutoDao.LojaID = lojaProduto.LojaID;

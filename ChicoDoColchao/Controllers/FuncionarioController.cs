@@ -53,7 +53,7 @@ namespace ChicoDoColchao.Controllers
             {
                 funcionarioBusiness.Incluir(funcionarioDao);
 
-                return Json(new { Sucesso = true, Mensagem = "Funcionário cadastrado com sucesso!" }, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = true, Mensagem = "Consultor cadastrado com sucesso!" }, JsonRequestBehavior.AllowGet);
             }
             catch (BusinessException ex)
             {
@@ -61,7 +61,7 @@ namespace ChicoDoColchao.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Funcionário não cadastrado. Tente novamente." }, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Consultor não cadastrado. Tente novamente." }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -94,7 +94,7 @@ namespace ChicoDoColchao.Controllers
 
                 var funcionarios = funcionarioBusiness.Listar(new FuncionarioDao() { Ativo = true });
 
-                return Json(new { Sucesso = true, Mensagem = $"Funcionário {funcionarioDao.Numero} excluído com sucesso!", Lista = funcionarios }, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = true, Mensagem = $"Consultor {funcionarioDao.Numero} excluído com sucesso!", Lista = funcionarios }, JsonRequestBehavior.AllowGet);
             }
             catch (BusinessException ex)
             {
@@ -102,7 +102,7 @@ namespace ChicoDoColchao.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Funcionário não excluído. Tente novamente.", Erro = ex.ToString() }, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Consultor não excluído. Tente novamente.", Erro = ex.ToString() }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -115,7 +115,7 @@ namespace ChicoDoColchao.Controllers
 
                 var funcionarios = funcionarioBusiness.Listar(new FuncionarioDao() { Ativo = true });
 
-                return Json(new { Sucesso = true, Mensagem = $"Funcionário {funcionarioDao.Numero} alterado com sucesso!", Lista = funcionarios }, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = true, Mensagem = $"Consultor {funcionarioDao.Numero} alterado com sucesso!", Lista = funcionarios }, JsonRequestBehavior.AllowGet);
             }
             catch (BusinessException ex)
             {
@@ -123,7 +123,7 @@ namespace ChicoDoColchao.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Funcionário não alterado. Tente novamente.", Erro = ex.ToString() }, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Consultor não alterado. Tente novamente.", Erro = ex.ToString() }, JsonRequestBehavior.AllowGet);
             }
         }
     }
