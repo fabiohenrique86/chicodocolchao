@@ -260,7 +260,7 @@ namespace ChicoDoColchao.Controllers
             }
             finally
             {
-                System.IO.File.Delete(arquivo);
+                System.IO.File.Delete(caminho);
             }
         }
     }
