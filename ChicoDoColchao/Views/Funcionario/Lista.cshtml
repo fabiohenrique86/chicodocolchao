@@ -7,7 +7,7 @@
     UsuarioDao usuarioDao = null;
     if (Request.Cookies.Get("ChicoDoColchao_Usuario") != null)
     {
-        usuarioDao = Newtonsoft.Json.JsonConvert.DeserializeObject<ChicoDoColchao.Dao.UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value);
+        usuarioDao = Newtonsoft.Json.JsonConvert.DeserializeObject<UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value);
     }
 }
 @section scripts
@@ -140,7 +140,6 @@
                 });
 
             });
-
 
         });
     </script>

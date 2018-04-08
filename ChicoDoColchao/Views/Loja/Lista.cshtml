@@ -1,10 +1,36 @@
-﻿@{
+﻿@using ChicoDoColchao.Dao;
+
+@{
     ViewBag.Title = "Loja - Lista";
+}
+@{
+    UsuarioDao usuarioDao = null;
+    if (Request.Cookies.Get("ChicoDoColchao_Usuario") != null)
+    {
+        usuarioDao = Newtonsoft.Json.JsonConvert.DeserializeObject<UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value);
+    }
 }
 @section scripts
 {
     <script type="text/javascript">
-        
+
+        function limpar()
+        {
+            $("#lblCnpj").text("");
+            $("#LojaID").val("");
+            $("#Cnpj").val("");
+            $("#RazaoSocial").val("");
+            $("#NomeFantasia").val("");
+            $("#Telefone").val("");
+            $("#Bairro").val("");
+        }
+
+        function alterarLoja(lojaId, cnpj, obj) {
+            $("#LojaID").val(lojaId);
+            $("#lblCnpj").text(cnpj);
+            $("#modallojaalterar").modal('show');
+        }
+
         $(document).ready(function () {
 
             var tbLoja = $("#tbLoja").DataTable({
@@ -25,7 +51,21 @@
                     { "data": "RazaoSocial", "className": "text-center" },
                     { "data": "NomeFantasia", "className": "text-center" },
                     { "data": "Telefone", "className": "text-center" },
-                    { "data": "Bairro", "className": "text-center" }
+                    { "data": "Bairro", "className": "text-center" },
+                    {
+                        "data": function (data, type, row)
+                        {
+                            // não pode alterar a loja "depósito"
+                            if (data["Deposito"] == true)
+                            {
+                                return "";
+                            }
+
+                            return "<i class='glyphicon glyphicon-edit' title='Editar Loja' style='cursor: pointer' onclick='alterarLoja(" + data["LojaID"] + ",\"" + data["Cnpj"] + "\", this)'></i>";
+                        },
+                        "className": "text-center",
+                        "visible": '@usuarioDao.TipoUsuarioDao.TipoUsuarioID' == '@TipoUsuarioDao.ETipoUsuario.Gerencial.GetHashCode()' ? true : false
+                    }
                 ]
             });
 
@@ -36,6 +76,43 @@
 
             $("#btnCadastrar").click(function () {
                 window.location.href = "/Loja/Cadastro";
+            });
+
+            $("#btnAlterarLoja").click(function () {
+
+                var lojaDao = {};
+
+                lojaDao.LojaID = $("#LojaID").val();
+                lojaDao.Cnpj = $("#Cnpj").val();
+                lojaDao.RazaoSocial = $("#RazaoSocial").val();
+                lojaDao.NomeFantasia = $("#NomeFantasia").val();
+                lojaDao.Telefone = $("#Telefone").val();
+                lojaDao.Bairro = $("#Bairro").val();
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Loja/Alterar",
+                    data: { lojaDao: lojaDao },
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            console.info(data.Erro);
+                            alert(data.Mensagem);
+                            return;
+                        }
+
+                        $("#tbLoja").DataTable().clear();
+                        $("#tbLoja").DataTable().rows.add(data.Lista).draw();
+
+                        limpar();
+
+                        alert(data.Mensagem);
+
+                        $("#modallojaalterar").modal('hide');
+                    }
+                });
+
             });
 
         });
@@ -51,9 +128,10 @@
                     <tr>
                         <td class="text-center" style="width: 20%"><b>CNPJ</b></td>
                         <td class="text-center" style="width: 30%"><b>Razão Social</b></td>
-                        <td class="text-center" style="width: 30%"><b>Nome Fantasia</b></td>
+                        <td class="text-center" style="width: 25%"><b>Nome Fantasia</b></td>
                         <td class="text-center" style="width: 10%"><b>Telefone</b></td>
                         <td class="text-center" style="width: 10%"><b>Bairro</b></td>
+                        <td class="text-center" style="width: 5%"><b>Ação</b></td>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -62,3 +140,4 @@
     </div>
     <button id="btnCadastrar" type="button" class="btn btn-info">Cadastrar Nova Loja</button>
 </div>
+@Html.Partial("_ModalLojaAlterar")

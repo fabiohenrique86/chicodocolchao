@@ -500,6 +500,7 @@
     <Content Include="Views\Usuario\Lista.cshtml" />
     <Content Include="Views\Shared\_ModalFuncionarioAlterar.cshtml" />
     <Content Include="Views\Relatorio\Estoque.cshtml" />
+    <Content Include="Views\Shared\_ModalLojaAlterar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

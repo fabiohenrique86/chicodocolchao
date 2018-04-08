@@ -51,5 +51,10 @@ namespace ChicoDoColchao.Repository
 
             return query.OrderBy(x => x.NomeFantasia).ToList();
         }
+
+        public void Alterar(Loja loja)
+        {
+            chicoDoColchaoEntities.SaveChanges();
+        }
     }
 }

@@ -101,5 +101,26 @@ namespace ChicoDoColchao.Controllers
                 return RedirectToAction("Login", "Usuario");
             }
         }
+
+        [HttpPost]
+        public JsonResult Alterar(LojaDao lojaDao)
+        {
+            try
+            {
+                lojaBusiness.Alterar(lojaDao);
+
+                var lojas = lojaBusiness.Listar(new LojaDao() { Ativo = true });
+
+                return Json(new { Sucesso = true, Mensagem = "Loja alterada com sucesso!", Lista = lojas }, JsonRequestBehavior.AllowGet);
+            }
+            catch (BusinessException ex)
+            {
+                return Json(new { Sucesso = false, Mensagem = ex.Message, Erro = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Loja não alterada. Tente novamente.", Erro = ex.ToString() }, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }

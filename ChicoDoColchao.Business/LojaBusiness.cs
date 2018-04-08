@@ -57,6 +57,35 @@ namespace ChicoDoColchao.Business
             }
         }
 
+        private void ValidarAlterar(LojaDao lojaDao, out Loja loja)
+        {
+            if (lojaDao == null)
+            {
+                throw new BusinessException("Loja é obrigatório");
+            }
+
+            if (lojaDao.LojaID <= 0)
+            {
+                throw new BusinessException("LojaID é obrigatório");
+            }
+
+            loja = lojaRepository.Listar(new Loja() { LojaID = lojaDao.LojaID }).FirstOrDefault();
+
+            if (loja == null)
+            {
+                throw new BusinessException(string.Format("Loja {0} não encontrado", lojaDao.LojaID));
+            }
+
+            if (string.IsNullOrEmpty(lojaDao.Cnpj) && 
+                string.IsNullOrEmpty(lojaDao.NomeFantasia) && 
+                string.IsNullOrEmpty(lojaDao.RazaoSocial) &&
+                string.IsNullOrEmpty(lojaDao.Telefone) &&
+                string.IsNullOrEmpty(lojaDao.Bairro))
+            {
+                throw new BusinessException("Infome algum campo a ser atualizado");
+            }
+        }
+
         public void Incluir(LojaDao lojaDao)
         {
             try
@@ -83,6 +112,54 @@ namespace ChicoDoColchao.Business
             try
             {
                 return lojaRepository.Listar(lojaDao.ToBd()).Select(x => x.ToApp()).ToList();
+            }
+            catch (BusinessException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                // inclui o log do erro
+                logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
+
+                throw ex;
+            }
+        }
+
+        public void Alterar(LojaDao lojaDao)
+        {
+            try
+            {
+                Loja loja;
+
+                ValidarAlterar(lojaDao, out loja);
+
+                if (!string.IsNullOrEmpty(lojaDao.Cnpj))
+                {
+                    loja.Cnpj = lojaDao.Cnpj.Trim().Replace(".", "").Replace("/", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace(" ", "");
+                }
+
+                if (!string.IsNullOrEmpty(lojaDao.NomeFantasia))
+                {
+                    loja.NomeFantasia = lojaDao.NomeFantasia;
+                }
+
+                if (!string.IsNullOrEmpty(lojaDao.RazaoSocial))
+                {
+                    loja.RazaoSocial = lojaDao.RazaoSocial;
+                }
+
+                if (!string.IsNullOrEmpty(lojaDao.Telefone))
+                {
+                    loja.Telefone = lojaDao.Telefone.Trim().Replace(".", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace(" ", "");
+                }
+
+                if (!string.IsNullOrEmpty(lojaDao.Bairro))
+                {
+                    loja.Bairro = lojaDao.Bairro;
+                }
+
+                lojaRepository.Alterar(loja);
             }
             catch (BusinessException ex)
             {
