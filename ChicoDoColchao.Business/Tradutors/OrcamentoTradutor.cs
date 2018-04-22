@@ -19,9 +19,9 @@ namespace ChicoDoColchao.Business.Tradutors
                 orcamento.LojaID = orcamentoDao.LojaDao.FirstOrDefault().LojaID;
             }
 
-            if (orcamentoDao.FuncionarioDao.FirstOrDefault() != null)
+            if (orcamentoDao.ConsultorDao.FirstOrDefault() != null)
             {
-                orcamento.FuncionarioID = orcamentoDao.FuncionarioDao.FirstOrDefault().FuncionarioID;
+                orcamento.FuncionarioID = orcamentoDao.ConsultorDao.FirstOrDefault().FuncionarioID;
             }
 
             orcamento.DataOrcamento = orcamentoDao.DataOrcamento;
@@ -107,7 +107,7 @@ namespace ChicoDoColchao.Business.Tradutors
                 Cep = orcamento.Cliente.Cep
             };
 
-            orcamentoDao.FuncionarioDao.Add(new FuncionarioDao()
+            orcamentoDao.ConsultorDao.Add(new ConsultorDao()
             {
                 FuncionarioID = orcamento.Funcionario.FuncionarioID,
                 Numero = orcamento.Funcionario.Numero,

@@ -46,7 +46,7 @@
     <Compile Include="ContatoDao.cs" />
     <Compile Include="AtendimentoDeliveryDao.cs" />
     <Compile Include="EstadoDao.cs" />
-    <Compile Include="FuncionarioDao.cs" />
+    <Compile Include="ConsultorDao.cs" />
     <Compile Include="EmailDao.cs" />
     <Compile Include="LogDao.cs" />
     <Compile Include="CategoriaDao.cs" />

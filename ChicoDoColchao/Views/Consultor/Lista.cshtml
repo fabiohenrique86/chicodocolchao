@@ -1,4 +1,5 @@
 ﻿@using ChicoDoColchao.Dao;
+@model ConsultorDao
 
 @{
     ViewBag.Title = "Consultor - Lista";
@@ -20,6 +21,7 @@
             $("#Nome").val("");
             $("#Email").val("");
             $("#Telefone").val("");
+            $("#LojaID").val("");
         }
 
         function alterarFuncionario(funcionarioId, numero, obj)
@@ -32,17 +34,17 @@
         function excluirFuncionario(funcionarioId, numero, obj)
         {
             if (confirm("Deseja realmente excluir consultor " + numero + "?")) {
-                var funcionarioDao = {};
+                var consultorDao = {};
 
-                funcionarioDao.FuncionarioID = funcionarioId;
-                funcionarioDao.Numero = numero;
-                funcionarioDao.Ativo = 0;
+                consultorDao.FuncionarioID = funcionarioId;
+                consultorDao.Numero = numero;
+                consultorDao.Ativo = 0;
 
                 $.ajax({
                     dataType: "json",
                     type: "POST",
-                    url: "/Funcionario/Excluir",
-                    data: { funcionarioDao: funcionarioDao },
+                    url: "/Consultor/Excluir",
+                    data: { consultorDao: consultorDao },
                     success: function (data) {
 
                         if (!data.Sucesso) {
@@ -97,29 +99,32 @@
                 ]
             });
 
-            $.getJSON("/Funcionario/Listar", function (data) {
+            $.getJSON("/Consultor/Listar", function (data) {
                 tbFuncionario.clear();
                 tbFuncionario.rows.add(data).draw();
             });
 
             $("#btnCadastrar").click(function () {
-                window.location.href = "/Funcionario/Cadastro";
+                window.location.href = "/Consultor/Cadastro";
             });
 
             $("#btnAlterarFuncionario").click(function () {
 
-                var funcionarioDao = {};
+                var consultorDao = {};
 
-                funcionarioDao.FuncionarioID = $("#FuncionarioID").val();
-                funcionarioDao.Nome = $("#Nome").val();
-                funcionarioDao.Email = $("#Email").val();
-                funcionarioDao.Telefone = $("#Telefone").val();
+                consultorDao.FuncionarioID = $("#FuncionarioID").val();
+                consultorDao.Nome = $("#Nome").val();
+                consultorDao.Email = $("#Email").val();
+                consultorDao.Telefone = $("#Telefone").val();
+                
+                consultorDao.LojaDao = [];
+                consultorDao.LojaDao.push({ LojaID: $("#LojaID option:selected").val() });
 
                 $.ajax({
                     dataType: "json",
                     type: "POST",
-                    url: "/Funcionario/Alterar",
-                    data: { funcionarioDao: funcionarioDao },
+                    url: "/Consultor/Alterar",
+                    data: { consultorDao: consultorDao },
                     success: function (data) {
 
                         if (!data.Sucesso) {
@@ -166,4 +171,4 @@
     </div>
     <button id="btnCadastrar" type="button" class="btn btn-info">Cadastrar Novo Consultor</button>
 </div>
-@Html.Partial("_ModalFuncionarioAlterar")
+@Html.Partial("_ModalFuncionarioAlterar", Model)

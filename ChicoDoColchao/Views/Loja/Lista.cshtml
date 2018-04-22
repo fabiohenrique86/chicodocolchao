@@ -31,6 +31,42 @@
             $("#modallojaalterar").modal('show');
         }
 
+        function excluirLoja(lojaId, cnpj, obj)
+        {
+            if (confirm("Deseja realmente excluir loja " + cnpj + "?"))
+            {
+                var lojaDao = {};
+
+                lojaDao.LojaID = lojaId;
+                lojaDao.Cnpj = cnpj;
+                lojaDao.Ativo = 0;
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Loja/Excluir",
+                    data: { lojaDao: lojaDao },
+                    success: function (data)
+                    {
+
+                        if (!data.Sucesso) {
+                            console.info(data.Erro);
+                            alert(data.Mensagem);
+                            return;
+                        }
+
+                        $("#tbLoja").DataTable().clear();
+                        $("#tbLoja").DataTable().rows.add(data.Lista).draw();
+
+                        // exibe mensagem de sucesso
+                        alert(data.Mensagem);
+
+                        $("#modallojaalterar").modal('hide');
+                    }
+                });
+            }
+        }
+
         $(document).ready(function () {
 
             var tbLoja = $("#tbLoja").DataTable({
@@ -61,7 +97,10 @@
                                 return "";
                             }
 
-                            return "<i class='glyphicon glyphicon-edit' title='Editar Loja' style='cursor: pointer' onclick='alterarLoja(" + data["LojaID"] + ",\"" + data["Cnpj"] + "\", this)'></i>";
+                            var alterar = "<i class='glyphicon glyphicon-edit' title='Editar Loja' style='cursor: pointer' onclick='alterarLoja(" + data["LojaID"] + ",\"" + data["Cnpj"] + "\", this)'></i>";
+                            var excluir = "<i class='glyphicon glyphicon-remove' title='Excluir Loja' style='cursor: pointer' onclick='excluirLoja(" + data["LojaID"] + ",\"" + data["Cnpj"] + "\", this)'></i>";
+
+                            return alterar + " " + excluir;
                         },
                         "className": "text-center",
                         "visible": '@usuarioDao.TipoUsuarioDao.TipoUsuarioID' == '@TipoUsuarioDao.ETipoUsuario.Gerencial.GetHashCode()' ? true : false
@@ -69,7 +108,7 @@
                 ]
             });
 
-            $.getJSON("/Loja/Listar", function (data) {
+            $.getJSON("/Loja/Listar", { Ativo: true }, function (data) {
                 tbLoja.clear();
                 tbLoja.rows.add(data).draw();
             });

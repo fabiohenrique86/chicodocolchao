@@ -29,7 +29,7 @@ namespace ChicoDoColchao.Controllers
                 return null;
             }
 
-            var lojasDao = lojaBusiness.Listar(new LojaDao());
+            var lojasDao = lojaBusiness.Listar(new LojaDao() { Ativo = true });
 
             return View(lojasDao);
         }

@@ -1,4 +1,6 @@
-﻿<div class="modal fade" id="modalfuncionarioalterar" tabindex="-1" role="dialog" aria-labelledby="ModalFuncionarioAlterar" aria-hidden="true">
+﻿@model ChicoDoColchao.Dao.ConsultorDao 
+        
+<div class="modal fade" id="modalfuncionarioalterar" tabindex="-1" role="dialog" aria-labelledby="ModalFuncionarioAlterar" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -25,6 +27,13 @@
                     <div class="row">
                         <div class="col-lg-10">
                             <input id="Telefone" name="Telefone" type="text" class="form-control celular" placeholder="Telefone" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-10">
+                        <div class="form-group">
+                            @Html.DropDownList("LojaID", new SelectList(Model.LojaDao, "LojaID", "NomeFantasia"), "Pra qual loja o consultor irá mudar?", new { @class = "form-control", @id = "LojaID" })
                         </div>
                     </div>
                 </div>

@@ -434,7 +434,7 @@ namespace ChicoDoColchao.Business
                     {
                         // início da linha, deve zerar o objeto para um novo produto
                         case "A":
-           
+
                             produtoDao = new ProdutoDao();
 
                             // A = Número
@@ -499,7 +499,7 @@ namespace ChicoDoColchao.Business
                             short quantidade;
                             cellUsed.TryGetValue(out quantidade);
                             produtoDao.Quantidade = quantidade;
-                            
+
                             if (loja != null)
                             {
                                 produtoDao.LojaProdutoDao.Clear();

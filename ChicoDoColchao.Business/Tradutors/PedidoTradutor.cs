@@ -22,9 +22,9 @@ namespace ChicoDoColchao.Business.Tradutors
             pedido.DataPedido = pedidoDao.DataPedido;
             pedido.DataCancelamento = pedidoDao.DataCancelamento;
 
-            if (pedidoDao.FuncionarioDao.FirstOrDefault() != null)
+            if (pedidoDao.ConsultorDao.FirstOrDefault() != null)
             {
-                pedido.FuncionarioID = pedidoDao.FuncionarioDao.FirstOrDefault().FuncionarioID;
+                pedido.FuncionarioID = pedidoDao.ConsultorDao.FirstOrDefault().FuncionarioID;
             }
 
             if (pedidoDao.LojaDao.FirstOrDefault() != null)
@@ -142,7 +142,7 @@ namespace ChicoDoColchao.Business.Tradutors
                 pedidoDao.UsuarioCancelamentoDao = new UsuarioDao() { UsuarioID = pedido.UsuarioCancelamento.UsuarioID, Login = pedido.UsuarioCancelamento.Login };
             }
 
-            pedidoDao.FuncionarioDao.Add(new FuncionarioDao()
+            pedidoDao.ConsultorDao.Add(new ConsultorDao()
             {
                 FuncionarioID = pedido.Funcionario.FuncionarioID,
                 Numero = pedido.Funcionario.Numero,

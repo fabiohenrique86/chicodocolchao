@@ -7,14 +7,14 @@ using ChicoDoColchao.Business.Exceptions;
 
 namespace ChicoDoColchao.Controllers
 {
-    public class FuncionarioController : BaseController
+    public class ConsultorController : BaseController
     {
-        private FuncionarioBusiness funcionarioBusiness;
+        private ConsultorBusiness consultorBusiness;
         private LojaBusiness lojaBusiness;
 
-        public FuncionarioController()
+        public ConsultorController()
         {
-            funcionarioBusiness = new FuncionarioBusiness();
+            consultorBusiness = new ConsultorBusiness();
             lojaBusiness = new LojaBusiness();
         }
 
@@ -27,11 +27,10 @@ namespace ChicoDoColchao.Controllers
                 return null;
             }
 
-            FuncionarioDao funcionarioDao = new FuncionarioDao();
+            var consultorDao = new ConsultorDao();
+            consultorDao.LojaDao = lojaBusiness.Listar(new LojaDao() { Ativo = true });
 
-            funcionarioDao.LojaDao = lojaBusiness.Listar(new LojaDao());
-
-            return View(funcionarioDao);
+            return View(consultorDao);
         }
 
         public ActionResult Lista()
@@ -43,15 +42,18 @@ namespace ChicoDoColchao.Controllers
                 return null;
             }
 
-            return View();
+            var consultorDao = new ConsultorDao();
+            consultorDao.LojaDao = lojaBusiness.Listar(new LojaDao() { Ativo = true });
+
+            return View(consultorDao);
         }
 
         [HttpPost]
-        public JsonResult Incluir(FuncionarioDao funcionarioDao)
+        public JsonResult Incluir(ConsultorDao consultorDao)
         {
             try
             {
-                funcionarioBusiness.Incluir(funcionarioDao);
+                consultorBusiness.Incluir(consultorDao);
 
                 return Json(new { Sucesso = true, Mensagem = "Consultor cadastrado com sucesso!" }, JsonRequestBehavior.AllowGet);
             }
@@ -65,36 +67,36 @@ namespace ChicoDoColchao.Controllers
             }
         }
 
-        public JsonResult Listar(FuncionarioDao funcionarioDao)
+        public JsonResult Listar(ConsultorDao consultorDao)
         {
-            List<FuncionarioDao> funcionarios = new List<FuncionarioDao>();
+            List<ConsultorDao> consultores = new List<ConsultorDao>();
 
             try
             {
-                funcionarios = funcionarioBusiness.Listar(funcionarioDao);
+                consultores = consultorBusiness.Listar(consultorDao);
 
-                return Json(funcionarios, JsonRequestBehavior.AllowGet);
+                return Json(consultores, JsonRequestBehavior.AllowGet);
             }
             catch (BusinessException ex)
             {
-                return Json(funcionarios, JsonRequestBehavior.AllowGet);
+                return Json(consultores, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                return Json(funcionarios, JsonRequestBehavior.AllowGet);
+                return Json(consultores, JsonRequestBehavior.AllowGet);
             }
         }
 
         [HttpPost]
-        public JsonResult Excluir(FuncionarioDao funcionarioDao)
+        public JsonResult Excluir(ConsultorDao consultorDao)
         {
             try
             {
-                funcionarioBusiness.Excluir(funcionarioDao);
+                consultorBusiness.Excluir(consultorDao);
 
-                var funcionarios = funcionarioBusiness.Listar(new FuncionarioDao() { Ativo = true });
+                var consultores = consultorBusiness.Listar(new ConsultorDao() { Ativo = true });
 
-                return Json(new { Sucesso = true, Mensagem = $"Consultor {funcionarioDao.Numero} excluído com sucesso!", Lista = funcionarios }, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = true, Mensagem = $"Consultor {consultorDao.Numero} excluído com sucesso!", Lista = consultores }, JsonRequestBehavior.AllowGet);
             }
             catch (BusinessException ex)
             {
@@ -107,15 +109,15 @@ namespace ChicoDoColchao.Controllers
         }
 
         [HttpPost]
-        public JsonResult Alterar(FuncionarioDao funcionarioDao)
+        public JsonResult Alterar(ConsultorDao consultorDao)
         {
             try
             {
-                funcionarioBusiness.Alterar(funcionarioDao);
+                consultorBusiness.Alterar(consultorDao);
 
-                var funcionarios = funcionarioBusiness.Listar(new FuncionarioDao() { Ativo = true });
+                var consultores = consultorBusiness.Listar(new ConsultorDao() { Ativo = true });
 
-                return Json(new { Sucesso = true, Mensagem = $"Consultor {funcionarioDao.Numero} alterado com sucesso!", Lista = funcionarios }, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = true, Mensagem = $"Consultor alterado com sucesso!", Lista = consultores }, JsonRequestBehavior.AllowGet);
             }
             catch (BusinessException ex)
             {

@@ -88,7 +88,7 @@
     <Compile Include="ParcelaBusiness.cs" />
     <Compile Include="TipoPagamentoBusiness.cs" />
     <Compile Include="LojaBusiness.cs" />
-    <Compile Include="FuncionarioBusiness.cs" />
+    <Compile Include="ConsultorBusiness.cs" />
     <Compile Include="ProdutoBusiness.cs" />
     <Compile Include="PedidoStatusBusiness.cs" />
     <Compile Include="PedidoBusiness.cs" />
@@ -98,7 +98,7 @@
     <Compile Include="Tradutors\EstadoTradutor.cs" />
     <Compile Include="Tradutors\TipoPagamentoTradutor.cs" />
     <Compile Include="Tradutors\LojaTradutor.cs" />
-    <Compile Include="Tradutors\FuncionarioTradutor.cs" />
+    <Compile Include="Tradutors\ConsultorTradutor.cs" />
     <Compile Include="Tradutors\ProdutoTradutor.cs" />
     <Compile Include="Tradutors\PedidoStatusTradutor.cs" />
     <Compile Include="Tradutors\PedidoTradutor.cs" />

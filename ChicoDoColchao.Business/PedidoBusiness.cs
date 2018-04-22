@@ -37,8 +37,8 @@ namespace ChicoDoColchao.Business
                 throw new BusinessException("Pedido é obrigatório");
             }
 
-            var funcionarioDao = pedidoDao.FuncionarioDao.FirstOrDefault();
-            if (funcionarioDao == null || funcionarioDao.FuncionarioID <= 0)
+            var consultorDao = pedidoDao.ConsultorDao.FirstOrDefault();
+            if (consultorDao == null || consultorDao.FuncionarioID <= 0)
             {
                 throw new BusinessException("Consultor é obrigatório");
             }
@@ -510,7 +510,7 @@ namespace ChicoDoColchao.Business
             parametros.Add(new ReportParameter("Cnpj", pedidoDao.LojaDao.FirstOrDefault().Cnpj));
             parametros.Add(new ReportParameter("Telefone", pedidoDao.LojaDao.FirstOrDefault().Telefone));
             parametros.Add(new ReportParameter("Desconto", pedidoDao.Desconto.ToString()));
-            parametros.Add(new ReportParameter("Funcionario", pedidoDao.FuncionarioDao.FirstOrDefault().Nome));
+            parametros.Add(new ReportParameter("Funcionario", pedidoDao.ConsultorDao.FirstOrDefault().Nome));
             parametros.Add(new ReportParameter("DataPedido", pedidoDao.DataPedido.ToString("dd/MM/yyyy")));
             parametros.Add(new ReportParameter("Endereco", pedidoDao.ClienteDao.FirstOrDefault().Logradouro + " " +
                                                             pedidoDao.ClienteDao.FirstOrDefault().Numero + " " +

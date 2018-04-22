@@ -34,7 +34,7 @@ namespace ChicoDoColchao.Business
                 throw new BusinessException("Loja é obrigatório");
             }
 
-            if (orcamentoDao.FuncionarioDao == null || orcamentoDao.FuncionarioDao.Count() <= 0 || orcamentoDao.FuncionarioDao.Count(x => x.FuncionarioID <= 0) > 0)
+            if (orcamentoDao.ConsultorDao == null || orcamentoDao.ConsultorDao.Count() <= 0 || orcamentoDao.ConsultorDao.Count(x => x.FuncionarioID <= 0) > 0)
             {
                 throw new BusinessException("Consultor é obrigatório");
             }
@@ -181,7 +181,7 @@ namespace ChicoDoColchao.Business
             parametros.Add(new ReportParameter("Cnpj", orcamentoDao.LojaDao.FirstOrDefault().Cnpj));
             parametros.Add(new ReportParameter("Telefone", orcamentoDao.LojaDao.FirstOrDefault().Telefone));
             parametros.Add(new ReportParameter("Desconto", orcamentoDao.Desconto.ToString()));
-            parametros.Add(new ReportParameter("Funcionario", orcamentoDao.FuncionarioDao.FirstOrDefault().Nome));
+            parametros.Add(new ReportParameter("Funcionario", orcamentoDao.ConsultorDao.FirstOrDefault().Nome));
             parametros.Add(new ReportParameter("DataOrcamento", orcamentoDao.DataOrcamento.ToString("dd/MM/yyyy")));            
             parametros.Add(new ReportParameter("TotalOrcamento", Math.Round(orcamentoDao.OrcamentoProdutoDao.Sum(x => x.Preco * x.Quantidade) - orcamentoDao.Desconto, 2).ToString()));
 

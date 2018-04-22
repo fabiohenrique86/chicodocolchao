@@ -31,7 +31,7 @@
                 ]
             });
 
-            $.getJSON("/Loja/Listar", function (data) {
+            $.getJSON("/Loja/Listar", { Ativo: true }, function (data) {
                 tbLoja.clear();
                 tbLoja.rows.add(data).draw();
             });

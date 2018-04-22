@@ -9,7 +9,7 @@ namespace ChicoDoColchao.Dao
         {
             OrcamentoProdutoDao = new HashSet<OrcamentoProdutoDao>();
             OrcamentoHistoricoDao = new HashSet<OrcamentoHistoricoDao>();
-            FuncionarioDao = new HashSet<FuncionarioDao>();
+            ConsultorDao = new HashSet<ConsultorDao>();
             LojaDao = new HashSet<LojaDao>();
         }
 
@@ -19,7 +19,7 @@ namespace ChicoDoColchao.Dao
         public bool Ativo { get; set; }
         public double Desconto { get; set; }
 
-        public virtual ICollection<FuncionarioDao> FuncionarioDao { get; set; }
+        public virtual ICollection<ConsultorDao> ConsultorDao { get; set; }
         public virtual ClienteDao ClienteDao { get; set; }        
         public virtual ICollection<LojaDao> LojaDao { get; set; }
         public virtual ICollection<OrcamentoProdutoDao> OrcamentoProdutoDao { get; set; }

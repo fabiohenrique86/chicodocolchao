@@ -52,7 +52,7 @@ namespace ChicoDoColchao.Business
                 qtdNFeImportada = 0;
                 mensagem = new List<string>();
 
-                var lojaDao = lojaRepository.Listar(new Loja() { Deposito = true }).FirstOrDefault();
+                var lojaDao = lojaRepository.Listar(new Loja() { Deposito = true, Ativo = true }).FirstOrDefault();
 
                 // se não houver loja depósito, retorna
                 if (lojaDao == null)

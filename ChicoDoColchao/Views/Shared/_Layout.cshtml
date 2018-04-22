@@ -500,8 +500,9 @@
                 ]
             });
 
-            $("#aMudarLoja").click(function () {
-                $.getJSON("/Loja/Listar", function (data) {
+            $("#aMudarLoja").click(function ()
+            {
+                $.getJSON("/Loja/Listar", { Ativo: true }, function (data) {
                     $("#tbLojas").DataTable().clear();
                     $("#tbLojas").DataTable().rows.add(data).draw();
                     $('#modalLoja').modal('show');

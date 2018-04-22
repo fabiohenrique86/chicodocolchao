@@ -1,4 +1,4 @@
-﻿@model ChicoDoColchao.Dao.FuncionarioDao
+﻿@model ChicoDoColchao.Dao.ConsultorDao
 
 @{
     ViewBag.Title = "Consultor - Cadastro";
@@ -14,7 +14,7 @@
                 $.ajax({
                     dataType: "json",
                     type: "POST",
-                    url: "/Funcionario/Incluir",
+                    url: "/Consultor/Incluir",
                     data: $("#FuncionarioForm").serialize(),
                     success: function (data) {
 
@@ -33,7 +33,7 @@
             });
 
             $("#btnLista").click(function () {
-                window.location.href = "/Funcionario/Lista";
+                window.location.href = "/Consultor/Lista";
             });
 
         });

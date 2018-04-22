@@ -85,7 +85,18 @@ namespace ChicoDoColchao.Repository
             if (p != null)
             {
                 p.Ativo = false;
-                chicoDoColchaoEntities.Entry(p).State = EntityState.Modified;
+
+                if (p.LojaProduto == null || p.LojaProduto.Count() <= 0)
+                {
+                    p.LojaProduto = chicoDoColchaoEntities.LojaProduto.Where(x => x.ProdutoID == p.ProdutoID).ToList();
+                }
+
+                // seta para inativo o produto em todas as lojas
+                foreach (var lojaProduto in p.LojaProduto)
+                {
+                    lojaProduto.Ativo = false;
+                }
+                
                 chicoDoColchaoEntities.SaveChanges();
             }
         }
@@ -165,12 +176,30 @@ namespace ChicoDoColchao.Repository
                 query = query.Where(x => x.Ativo == produto.Ativo);
             }
 
-            return query.Include(x => x.LojaProduto.Select(w => w.Loja))
+            var lista = query.Include(x => x.LojaProduto.Select(w => w.Loja))
                         .Include(x => x.Categoria)
                         .Include(x => x.Medida)
                         .OrderBy(x => x.Descricao).ToList();
             
-            // return query.OrderBy(x => x.Descricao).ToList();
+            // retira os produtos / lojasproduto / lojas que estão inativas
+            foreach (var p in lista.ToList())
+            {
+                if (!p.Ativo)
+                {
+                    lista.Remove(p);
+                    continue;
+                }
+
+                foreach (var lp in p.LojaProduto.ToList())
+                {
+                    if (!lp.Loja.Ativo || !lp.Ativo)
+                    {
+                        p.LojaProduto.Remove(lp);
+                    }
+                }
+            }
+
+            return lista;
         }
     }
 }

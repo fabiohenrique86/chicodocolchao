@@ -11,13 +11,13 @@ namespace ChicoDoColchao.Controllers
 {
     public class OrcamentoController : BaseController
     {
-        private FuncionarioBusiness funcionarioBusiness;
+        private ConsultorBusiness consultorBusiness;
         private LojaBusiness lojaBusiness;
         private OrcamentoBusiness orcamentoBusiness;
 
         public OrcamentoController()
         {
-            funcionarioBusiness = new FuncionarioBusiness();
+            consultorBusiness = new ConsultorBusiness();
             lojaBusiness = new LojaBusiness();
             orcamentoBusiness = new OrcamentoBusiness();
         }
@@ -35,18 +35,17 @@ namespace ChicoDoColchao.Controllers
                     return null;
                 }
 
-                // filtra os funcionario por loja logada, se existir
-                var funcionarioDao = new FuncionarioDao();
+                // filtra os consultores por loja logada, se existir
+                var consultorDao = new ConsultorDao();
                 if (Request.Cookies.Get("ChicoDoColchao_Loja") != null)
                 {
                     var lojaDao = JsonConvert.DeserializeObject<LojaDao>(Request.Cookies.Get("ChicoDoColchao_Loja").Value);
-                    funcionarioDao.LojaDao.Clear();
-                    funcionarioDao.LojaDao.Add(new LojaDao() { LojaID = lojaDao.LojaID });
+                    consultorDao.LojaDao.Clear();
+                    consultorDao.LojaDao.Add(new LojaDao() { LojaID = lojaDao.LojaID });
                 }
-                orcamentoDao.FuncionarioDao = funcionarioBusiness.Listar(funcionarioDao);
+                orcamentoDao.ConsultorDao = consultorBusiness.Listar(consultorDao);
 
-                orcamentoDao.LojaDao = lojaBusiness.Listar(new LojaDao());
-
+                orcamentoDao.LojaDao = lojaBusiness.Listar(new LojaDao() { Ativo = true });
             }
             catch (Exception ex)
             {

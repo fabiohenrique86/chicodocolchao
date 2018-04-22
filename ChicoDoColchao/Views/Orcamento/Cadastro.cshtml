@@ -372,8 +372,8 @@
                 var orcamentoDao = {};
                 var orcamentoProdutoDao = [];
 
-                orcamentoDao.FuncionarioDao = [];
-                orcamentoDao.FuncionarioDao.push({ FuncionarioID: $("#FuncionarioID option:selected").val() });
+                orcamentoDao.ConsultorDao = [];
+                orcamentoDao.ConsultorDao.push({ FuncionarioID: $("#FuncionarioID option:selected").val() });
 
                 orcamentoDao.ClienteDao = { ClienteID: $("#ClienteID").val() };
 
@@ -442,7 +442,7 @@
         <div class="row">
             <div class="col-lg-4">
                 <div class="form-group">
-                    @Html.DropDownListFor(x => x.FuncionarioDao.FirstOrDefault().FuncionarioID, new SelectList(Model.FuncionarioDao, "FuncionarioID", "Nome"), "Consultor", new { @class = "form-control" })
+                    @Html.DropDownListFor(x => x.ConsultorDao.FirstOrDefault().FuncionarioID, new SelectList(Model.ConsultorDao, "FuncionarioID", "Nome"), "Consultor", new { @class = "form-control" })
                 </div>
                 <div class="form-group">
                     <div class="row">

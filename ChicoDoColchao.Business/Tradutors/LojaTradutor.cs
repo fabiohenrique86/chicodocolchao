@@ -8,7 +8,7 @@ namespace ChicoDoColchao.Business.Tradutors
     {
         public static Loja ToBd(this LojaDao lojaDao)
         {
-            Loja loja = new Loja();
+            var loja = new Loja();
 
             loja.LojaID = lojaDao.LojaID;
             if (!string.IsNullOrEmpty(lojaDao.Cnpj))
@@ -30,7 +30,7 @@ namespace ChicoDoColchao.Business.Tradutors
 
         public static LojaDao ToApp(this Loja loja)
         {
-            LojaDao lojaDao = new LojaDao();
+            var lojaDao = new LojaDao();
 
             lojaDao.LojaID = loja.LojaID;
 

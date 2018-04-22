@@ -66,7 +66,7 @@ namespace ChicoDoColchao.Controllers
 
         public JsonResult Listar(LojaDao lojaDao)
         {
-            List<LojaDao> lojas = new List<LojaDao>();
+            var lojas = new List<LojaDao>();
 
             try
             {
@@ -120,6 +120,27 @@ namespace ChicoDoColchao.Controllers
             catch (Exception ex)
             {
                 return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Loja não alterada. Tente novamente.", Erro = ex.ToString() }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult Excluir(LojaDao lojaDao)
+        {
+            try
+            {
+                lojaBusiness.Excluir(lojaDao);
+
+                var lojas = lojaBusiness.Listar(new LojaDao() { Ativo = true });
+
+                return Json(new { Sucesso = true, Mensagem = $"Loja {lojaDao.Cnpj} excluída com sucesso!", Lista = lojas }, JsonRequestBehavior.AllowGet);
+            }
+            catch (BusinessException ex)
+            {
+                return Json(new { Sucesso = false, Mensagem = ex.Message, Erro = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Loja não excluída. Tente novamente.", Erro = ex.ToString() }, JsonRequestBehavior.AllowGet);
             }
         }
     }

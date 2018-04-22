@@ -2,9 +2,9 @@
 
 namespace ChicoDoColchao.Dao
 {
-    public class FuncionarioDao
+    public class ConsultorDao
     {
-        public FuncionarioDao()
+        public ConsultorDao()
         {
             this.LojaDao = new HashSet<LojaDao>();
         }

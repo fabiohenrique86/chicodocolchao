@@ -51,7 +51,7 @@ namespace ChicoDoColchao.Business
             //    throw new BusinessException("Telefone é obrigatório");
             //}
 
-            if (lojaRepository.Listar(new Loja() { Cnpj = string.IsNullOrEmpty(lojaDao.Cnpj) ? string.Empty : lojaDao.Cnpj.Replace(".", "").Replace("-", "").Replace("/", "") }).FirstOrDefault() != null)
+            if (lojaRepository.Listar(new Loja() { Cnpj = string.IsNullOrEmpty(lojaDao.Cnpj) ? string.Empty : lojaDao.Cnpj.Replace(".", "").Replace("-", "").Replace("/", ""), Ativo = true }).FirstOrDefault() != null)
             {
                 throw new BusinessException(string.Format("Loja (CNPJ {0}) já cadastrada", lojaDao.Cnpj));
             }
@@ -69,7 +69,7 @@ namespace ChicoDoColchao.Business
                 throw new BusinessException("LojaID é obrigatório");
             }
 
-            loja = lojaRepository.Listar(new Loja() { LojaID = lojaDao.LojaID }).FirstOrDefault();
+            loja = lojaRepository.Listar(new Loja() { LojaID = lojaDao.LojaID, Ativo = true }).FirstOrDefault();
 
             if (loja == null)
             {
@@ -83,6 +83,26 @@ namespace ChicoDoColchao.Business
                 string.IsNullOrEmpty(lojaDao.Bairro))
             {
                 throw new BusinessException("Infome algum campo a ser atualizado");
+            }
+        }
+
+        private void ValidarExcluir(LojaDao lojaDao, out Loja loja)
+        {
+            if (lojaDao == null)
+            {
+                throw new BusinessException("Loja é obrigatório");
+            }
+
+            if (lojaDao.LojaID <= 0)
+            {
+                throw new BusinessException("LojaID é obrigatório");
+            }
+
+            loja = lojaRepository.Listar(new Loja() { LojaID = lojaDao.LojaID, Ativo = true }).FirstOrDefault();
+
+            if (loja == null)
+            {
+                throw new BusinessException(string.Format("Loja {0} não encontrada", lojaDao.LojaID));
             }
         }
 
@@ -160,6 +180,29 @@ namespace ChicoDoColchao.Business
                 }
 
                 lojaRepository.Alterar(loja);
+            }
+            catch (BusinessException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                // inclui o log do erro
+                logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
+
+                throw ex;
+            }
+        }
+
+        public void Excluir(LojaDao lojaDao)
+        {
+            try
+            {
+                Loja loja;
+
+                ValidarExcluir(lojaDao, out loja);
+
+                lojaRepository.Excluir(loja);
             }
             catch (BusinessException ex)
             {

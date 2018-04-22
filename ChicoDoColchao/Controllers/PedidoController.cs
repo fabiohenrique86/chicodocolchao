@@ -13,7 +13,7 @@ namespace ChicoDoColchao.Controllers
     {
         private PedidoBusiness pedidoBusiness;
         private PedidoStatusBusiness pedidoStatusBusiness;
-        private FuncionarioBusiness funcionarioBusiness;
+        private ConsultorBusiness consultorBusiness;
         private LojaBusiness lojaBusiness;
         private TipoPagamentoBusiness tipoPagamentoBusiness;
         private OrcamentoBusiness orcamentoBusiness;
@@ -22,7 +22,7 @@ namespace ChicoDoColchao.Controllers
         {
             pedidoBusiness = new PedidoBusiness();
             pedidoStatusBusiness = new PedidoStatusBusiness();
-            funcionarioBusiness = new FuncionarioBusiness();
+            consultorBusiness = new ConsultorBusiness();
             lojaBusiness = new LojaBusiness();
             tipoPagamentoBusiness = new TipoPagamentoBusiness();
             orcamentoBusiness = new OrcamentoBusiness();
@@ -44,17 +44,17 @@ namespace ChicoDoColchao.Controllers
                 // lista somente os status "Previsão de entrega" e "Retirado na Loja"
                 pedidoDao.PedidoStatusDao = pedidoStatusBusiness.Listar(new PedidoStatusDao()).Where(x => x.PedidoStatusID == (int)PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega || x.PedidoStatusID == (int)PedidoStatusDao.EPedidoStatus.RetiradoNaLoja).ToList();
 
-                // filtra os funcionario por loja logada, se existir
-                var funcionarioDao = new FuncionarioDao();
+                // filtra os consultores por loja logada, se existir
+                var consultorDao = new ConsultorDao();
                 if (Request.Cookies.Get("ChicoDoColchao_Loja") != null)
                 {
                     var lojaDao = JsonConvert.DeserializeObject<LojaDao>(Request.Cookies.Get("ChicoDoColchao_Loja").Value);
-                    funcionarioDao.LojaDao.Clear();
-                    funcionarioDao.LojaDao.Add(new LojaDao() { LojaID = lojaDao.LojaID });
+                    consultorDao.LojaDao.Clear();
+                    consultorDao.LojaDao.Add(new LojaDao() { LojaID = lojaDao.LojaID });
                 }
-                pedidoDao.FuncionarioDao = funcionarioBusiness.Listar(funcionarioDao);
+                pedidoDao.ConsultorDao = consultorBusiness.Listar(consultorDao);
 
-                var lojasDao = lojaBusiness.Listar(new LojaDao());
+                var lojasDao = lojaBusiness.Listar(new LojaDao() { Ativo = true });
                 pedidoDao.LojaSaidaDao = lojasDao;
                 pedidoDao.LojaDao = lojasDao;
 

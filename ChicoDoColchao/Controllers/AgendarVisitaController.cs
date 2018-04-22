@@ -24,7 +24,7 @@ namespace ChicoDoColchao.Controllers
 
             try
             {
-                lojasDao = lojaBusiness.Listar(new LojaDao());
+                lojasDao = lojaBusiness.Listar(new LojaDao() { Ativo = true });
                 lojasDao.RemoveAll(x => x.Deposito);
             }
             catch (Exception ex)
@@ -72,7 +72,7 @@ namespace ChicoDoColchao.Controllers
                 {
                     throw new BusinessException("Período é obrigatório");
                 }
-                
+
                 EmailDao emailDao = new EmailDao();
 
                 emailDao.Titulo = "Agendamento de visita";
@@ -94,7 +94,7 @@ namespace ChicoDoColchao.Controllers
             catch (Exception ex)
             {
                 sucesso = false;
-                mensagem = "Ocorreu um erro ao agendar visita. Por favor, tente novamente";
+                mensagem = "Ocorreu um erro ao agendar visita. Tente novamente";
             }
 
             return Json(new { Sucesso = sucesso, Mensagem = mensagem }, JsonRequestBehavior.AllowGet);

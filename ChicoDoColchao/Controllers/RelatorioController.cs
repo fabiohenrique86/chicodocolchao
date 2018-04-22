@@ -82,7 +82,7 @@ namespace ChicoDoColchao.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { Sucesso = false, Mensagem = ex.Message, Erro = ex.ToString() }, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro ao gerar relatório. Tente novamente", Erro = ex.ToString() }, JsonRequestBehavior.AllowGet);
             }
         }
     }

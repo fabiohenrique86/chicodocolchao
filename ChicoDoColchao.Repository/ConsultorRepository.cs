@@ -4,11 +4,11 @@ using System.Data.Entity;
 
 namespace ChicoDoColchao.Repository
 {
-    public class FuncionarioRepository
+    public class ConsultorRepository
     {
         private ChicoDoColchaoEntities chicoDoColchaoEntities = null;
 
-        public FuncionarioRepository()
+        public ConsultorRepository()
         {
             chicoDoColchaoEntities = new ChicoDoColchaoEntities();
         }

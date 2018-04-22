@@ -6,7 +6,7 @@ namespace ChicoDoColchao.Dao
     {
         public LojaDao()
         {
-            FuncionarioDao = new HashSet<FuncionarioDao>();
+            ConsultorDao = new HashSet<ConsultorDao>();
             LojaProdutoDao = new HashSet<LojaProdutoDao>();
             NotaFiscalDao = new HashSet<NotaFiscalDao>();
             OrcamentoDao = new HashSet<OrcamentoDao>();
@@ -25,7 +25,7 @@ namespace ChicoDoColchao.Dao
 
         public string FantasiaBairro { get { return string.Format("{0} - {1}", NomeFantasia, Bairro); } }
 
-        public virtual ICollection<FuncionarioDao> FuncionarioDao { get; set; }
+        public virtual ICollection<ConsultorDao> ConsultorDao { get; set; }
         public virtual ICollection<LojaProdutoDao> LojaProdutoDao { get; set; }
         public virtual ICollection<NotaFiscalDao> NotaFiscalDao { get; set; }
         public virtual ICollection<OrcamentoDao> OrcamentoDao { get; set; }

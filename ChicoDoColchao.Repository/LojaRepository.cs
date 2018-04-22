@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
+using System.Linq;
 
 namespace ChicoDoColchao.Repository
 {
@@ -47,13 +45,33 @@ namespace ChicoDoColchao.Repository
                 query = query.Where(x => x.NomeFantasia.Contains(loja.NomeFantasia));
             }
 
-            query = query.Where(x => x.Ativo);
+            query = query.Where(x => x.Ativo == loja.Ativo);
 
             return query.OrderBy(x => x.NomeFantasia).ToList();
         }
 
         public void Alterar(Loja loja)
         {
+            chicoDoColchaoEntities.SaveChanges();
+        }
+
+        public void Excluir(Loja loja)
+        {
+            chicoDoColchaoEntities.Entry(loja).State = EntityState.Modified;
+
+            loja.Ativo = false;
+
+            if (loja.LojaProduto == null || loja.LojaProduto.Count() <= 0)
+            {
+                loja.LojaProduto = chicoDoColchaoEntities.LojaProduto.Where(x => x.LojaID == loja.LojaID).ToList();
+            }
+
+            // seta para inativo todas as produtos dessa loja inativa
+            foreach (var lojaProduto in loja.LojaProduto)
+            {
+                lojaProduto.Ativo = false;
+            }
+
             chicoDoColchaoEntities.SaveChanges();
         }
     }

@@ -152,7 +152,7 @@
     <Compile Include="ParcelaRepository.cs" />
     <Compile Include="TipoPagamentoRepository.cs" />
     <Compile Include="LojaRepository.cs" />
-    <Compile Include="FuncionarioRepository.cs" />
+    <Compile Include="ConsultorRepository.cs" />
     <Compile Include="ProdutoRepository.cs" />
     <Compile Include="PedidoStatusRepository.cs" />
     <Compile Include="PedidoRepository.cs" />

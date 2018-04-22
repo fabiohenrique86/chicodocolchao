@@ -31,10 +31,10 @@ namespace ChicoDoColchao.Controllers
                 return null;
             }
 
-            ProdutoDao produtoDao = new ProdutoDao();
+            var produtoDao = new ProdutoDao();
 
             produtoDao.CategoriaDao = categoriaBusiness.Listar(new CategoriaDao());
-            produtoDao.LojaDao = lojaBusiness.Listar(new LojaDao());
+            produtoDao.LojaDao = lojaBusiness.Listar(new LojaDao() { Ativo = true });
 
             if (arquivo == null)
             {
@@ -94,7 +94,7 @@ namespace ChicoDoColchao.Controllers
                 return null;
             }
 
-            var lojaDao = lojaBusiness.Listar(new LojaDao());
+            var lojaDao = lojaBusiness.Listar(new LojaDao() { Ativo = true });
 
             return View(lojaDao);
         }

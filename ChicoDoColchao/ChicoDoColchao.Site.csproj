@@ -231,7 +231,7 @@
     <Compile Include="Controllers\CategoriaController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\FuncionarioController.cs" />
+    <Compile Include="Controllers\ConsultorController.cs" />
     <Compile Include="Controllers\OrcamentoHistoricoController.cs" />
     <Compile Include="Controllers\OrcamentoController.cs" />
     <Compile Include="Controllers\ParcelaController.cs" />
@@ -475,8 +475,8 @@
     <Content Include="Views\Loja\Cadastro.cshtml" />
     <Content Include="Views\Menu\Index.cshtml" />
     <Content Include="Views\Loja\Lista.cshtml" />
-    <Content Include="Views\Funcionario\Cadastro.cshtml" />
-    <Content Include="Views\Funcionario\Lista.cshtml" />
+    <Content Include="Views\Consultor\Cadastro.cshtml" />
+    <Content Include="Views\Consultor\Lista.cshtml" />
     <Content Include="Views\Categoria\Cadastro.cshtml" />
     <Content Include="Views\Categoria\Lista.cshtml" />
     <Content Include="Views\Produto\Cadastro.cshtml" />
