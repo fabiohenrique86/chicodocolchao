@@ -222,7 +222,7 @@
                             // verifica se o produto tem algum preço cadastrado
                             if (produto.Preco == undefined || produto.Preco <= 0) { return { label: "Produto " + produto.Numero + " não tem preço cadastrado", value: 0 }; }
 
-                            return { label: produto.Numero + ' | ' + produto.Descricao + ' | ' + produto.MedidaDao.Descricao + ' | ' + Globalize.format(produto.Preco * 3, "n2"), value: produto.ProdutoID }
+                            return { label: produto.Numero + ' | ' + produto.Descricao + ' | ' + produto.MedidaDao.Descricao + ' | ' + Globalize.format(produto.PrecoNormal, "n2"), value: produto.ProdutoID }
                         }));
                     });
                 },

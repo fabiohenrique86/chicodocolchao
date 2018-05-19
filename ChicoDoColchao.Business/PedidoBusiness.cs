@@ -48,7 +48,7 @@ namespace ChicoDoColchao.Business
             {
                 throw new BusinessException("Cliente (CPF ou CNPJ) é obrigatório");
             }
-            
+
             var lojaDao = pedidoDao.LojaDao.FirstOrDefault();
             if (lojaDao == null || lojaDao.LojaID <= 0)
             {
@@ -104,7 +104,7 @@ namespace ChicoDoColchao.Business
 
                 if (produto == null)
                 {
-                    throw new BusinessException(string.Format("Produto {0} não cadastrado na Loja", pedidoProdutoDao.ProdutoDao.Descricao));
+                    throw new BusinessException(string.Format("Produto {0} não cadastrado na loja de saída", pedidoProdutoDao.ProdutoDao.Descricao));
                 }
 
                 if (pedidoStatusDao.PedidoStatusID == PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega.GetHashCode())
@@ -125,9 +125,10 @@ namespace ChicoDoColchao.Business
             }
 
             // verifica se o cv informado já existe
-            foreach (var pedidoTipoPagamentoDao in pedidoDao.PedidoTipoPagamentoDao.Where(x => x.CV > 0))
+            foreach (var pedidoTipoPagamentoDao in pedidoDao.PedidoTipoPagamentoDao.Where(x => !string.IsNullOrEmpty(x.CV)))
             {
                 var ptp = pedidoTipoPagamentoRepository.Listar(new PedidoTipoPagamento() { CV = pedidoTipoPagamentoDao.CV });
+                
                 if (ptp != null && ptp.Count() > 0)
                 {
                     throw new BusinessException(string.Format("CV {0} já cadastrado", pedidoTipoPagamentoDao.CV));
@@ -298,7 +299,7 @@ namespace ChicoDoColchao.Business
                 var pedidoId = pedidoRepository.Incluir(pedidoDao.ToBd());
 
                 AtualizarOrcamento(pedidoDao.OrcamentoDao.FirstOrDefault(), pedidoId);
-                                
+
                 EnviarComandaPorEmail(pedidoId, out email, out erro);
 
                 return pedidoId;
@@ -502,7 +503,7 @@ namespace ChicoDoColchao.Business
             viewer.LocalReport.ReportPath = AppDomain.CurrentDomain.BaseDirectory + "/Reports/PedidoComanda.rdlc";
 
             // parâmetros
-            List<ReportParameter> parametros = new List<ReportParameter>();
+            var parametros = new List<ReportParameter>();
 
             parametros.Add(new ReportParameter("PedidoID", pedidoDao.PedidoID.ToString()));
             parametros.Add(new ReportParameter("Observacao", pedidoDao.Observacao));
@@ -525,7 +526,7 @@ namespace ChicoDoColchao.Business
             viewer.LocalReport.SetParameters(parametros);
 
             // cliente
-            List<dynamic> clienteDao = new List<dynamic>();
+            var clienteDao = new List<dynamic>();
             foreach (var item in pedidoDao.ClienteDao)
             {
                 clienteDao.Add(new
@@ -556,7 +557,7 @@ namespace ChicoDoColchao.Business
             viewer.LocalReport.DataSources.Add(new ReportDataSource("ds_cliente", clienteDao));
 
             // produto
-            List<dynamic> pedidoProdutoDao = new List<dynamic>();
+            var pedidoProdutoDao = new List<dynamic>();
             foreach (var item in pedidoDao.PedidoProdutoDao)
             {
                 pedidoProdutoDao.Add(new
@@ -573,7 +574,7 @@ namespace ChicoDoColchao.Business
             viewer.LocalReport.DataSources.Add(new ReportDataSource("ds_produto", pedidoProdutoDao));
 
             // tipo pagamento
-            List<dynamic> pedidoTipoPagamentoDao = new List<dynamic>();
+            var pedidoTipoPagamentoDao = new List<dynamic>();
             foreach (var item in pedidoDao.PedidoTipoPagamentoDao)
             {
                 pedidoTipoPagamentoDao.Add(new

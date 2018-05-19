@@ -30,7 +30,7 @@ namespace ChicoDoColchao.Controllers
 
         public ActionResult Cadastro(string orcamentoID = null)
         {
-            PedidoDao pedidoDao = new PedidoDao();
+            var pedidoDao = new PedidoDao();
 
             try
             {

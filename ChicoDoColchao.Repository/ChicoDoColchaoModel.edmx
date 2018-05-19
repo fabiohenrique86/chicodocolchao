@@ -211,7 +211,7 @@
           <Property Name="TipoPagamentoID" Type="int" Nullable="false" />
           <Property Name="ParcelaID" Type="int" Nullable="false" />
           <Property Name="ValorPago" Type="float" Nullable="false" />
-          <Property Name="CV" Type="bigint" />
+          <Property Name="CV" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="Produto">
           <Key>
@@ -1041,7 +1041,7 @@
           <Property Name="ParcelaID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Numero" Type="Int32" Nullable="false" />
           <Property Name="Ativo" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="PedidoTipoPagamento" Relationship="Self.FK_PedidoTipoPagamento_Parcela" FromRole="Parcela" ToRole="PedidoTipoPagamento" />
+          <NavigationProperty Name="PedidoTipoPagamento" Relationship="ChicoDoColchaoModel.FK_PedidoTipoPagamento_Parcela" FromRole="Parcela" ToRole="PedidoTipoPagamento" />
         </EntityType>
         <EntityType Name="Pedido">
           <Key>
@@ -1069,8 +1069,8 @@
           <NavigationProperty Name="UsuarioCancelamento" Relationship="Self.FK_Pedido_Usuario_Cancelamento" FromRole="Pedido" ToRole="Usuario" />
           <NavigationProperty Name="UsuarioPedido" Relationship="Self.FK_Pedido_Usuario_Pedido" FromRole="Pedido" ToRole="Usuario" />
           <NavigationProperty Name="PedidoProduto" Relationship="Self.FK_PedidoProduto_Pedido" FromRole="Pedido" ToRole="PedidoProduto" />
-          <NavigationProperty Name="PedidoTipoPagamento" Relationship="Self.FK_PedidoTipoPagamento_Pedido" FromRole="Pedido" ToRole="PedidoTipoPagamento" />
           <NavigationProperty Name="Orcamento" Relationship="ChicoDoColchaoModel.FK_Orcamento_Pedido" FromRole="Pedido" ToRole="Orcamento" />
+          <NavigationProperty Name="PedidoTipoPagamento" Relationship="ChicoDoColchaoModel.FK_PedidoTipoPagamento_Pedido" FromRole="Pedido" ToRole="PedidoTipoPagamento" />
         </EntityType>
         <EntityType Name="PedidoProduto">
           <Key>
@@ -1100,20 +1100,6 @@
           <Property Name="Ativo" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Pedido" Relationship="Self.FK_Pedido_PedidoStatus" FromRole="PedidoStatus" ToRole="Pedido" />
         </EntityType>
-        <EntityType Name="PedidoTipoPagamento">
-          <Key>
-            <PropertyRef Name="PedidoTipoPagamentoID" />
-          </Key>
-          <Property Name="PedidoTipoPagamentoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PedidoID" Type="Int32" Nullable="false" />
-          <Property Name="TipoPagamentoID" Type="Int32" Nullable="false" />
-          <Property Name="ParcelaID" Type="Int32" Nullable="false" />
-          <Property Name="ValorPago" Type="Double" Nullable="false" />
-          <Property Name="CV" Type="Int64" />
-          <NavigationProperty Name="Parcela" Relationship="Self.FK_PedidoTipoPagamento_Parcela" FromRole="PedidoTipoPagamento" ToRole="Parcela" />
-          <NavigationProperty Name="Pedido" Relationship="Self.FK_PedidoTipoPagamento_Pedido" FromRole="PedidoTipoPagamento" ToRole="Pedido" />
-          <NavigationProperty Name="TipoPagamento" Relationship="Self.FK_PedidoTipoPagamento_TipoPagamento" FromRole="PedidoTipoPagamento" ToRole="TipoPagamento" />
-        </EntityType>
         <EntityType Name="Produto">
           <Key>
             <PropertyRef Name="ProdutoID" />
@@ -1142,7 +1128,7 @@
           <Property Name="TipoPagamentoID" Type="Int32" Nullable="false" />
           <Property Name="Descricao" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Ativo" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="PedidoTipoPagamento" Relationship="Self.FK_PedidoTipoPagamento_TipoPagamento" FromRole="TipoPagamento" ToRole="PedidoTipoPagamento" />
+          <NavigationProperty Name="PedidoTipoPagamento" Relationship="ChicoDoColchaoModel.FK_PedidoTipoPagamento_TipoPagamento" FromRole="TipoPagamento" ToRole="PedidoTipoPagamento" />
         </EntityType>
         <EntityType Name="TipoUsuario">
           <Key>
@@ -1420,18 +1406,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PedidoTipoPagamento_Parcela">
-          <End Role="Parcela" Type="Self.Parcela" Multiplicity="1" />
-          <End Role="PedidoTipoPagamento" Type="Self.PedidoTipoPagamento" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Parcela">
-              <PropertyRef Name="ParcelaID" />
-            </Principal>
-            <Dependent Role="PedidoTipoPagamento">
-              <PropertyRef Name="ParcelaID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Pedido_PedidoStatus">
           <End Role="PedidoStatus" Type="Self.PedidoStatus" Multiplicity="1" />
           <End Role="Pedido" Type="Self.Pedido" Multiplicity="*" />
@@ -1480,18 +1454,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PedidoTipoPagamento_Pedido">
-          <End Role="Pedido" Type="Self.Pedido" Multiplicity="1" />
-          <End Role="PedidoTipoPagamento" Type="Self.PedidoTipoPagamento" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Pedido">
-              <PropertyRef Name="PedidoID" />
-            </Principal>
-            <Dependent Role="PedidoTipoPagamento">
-              <PropertyRef Name="PedidoID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_PedidoProduto_Produto">
           <End Role="Produto" Type="Self.Produto" Multiplicity="1" />
           <End Role="PedidoProduto" Type="Self.PedidoProduto" Multiplicity="*" />
@@ -1525,18 +1487,6 @@
             </Principal>
             <Dependent Role="PedidoProduto">
               <PropertyRef Name="UsuarioEntregaID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PedidoTipoPagamento_TipoPagamento">
-          <End Role="TipoPagamento" Type="Self.TipoPagamento" Multiplicity="1" />
-          <End Role="PedidoTipoPagamento" Type="Self.PedidoTipoPagamento" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="TipoPagamento">
-              <PropertyRef Name="TipoPagamentoID" />
-            </Principal>
-            <Dependent Role="PedidoTipoPagamento">
-              <PropertyRef Name="TipoPagamentoID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1593,7 +1543,6 @@
           <EntitySet Name="Pedido" EntityType="Self.Pedido" />
           <EntitySet Name="PedidoProduto" EntityType="Self.PedidoProduto" />
           <EntitySet Name="PedidoStatus" EntityType="Self.PedidoStatus" />
-          <EntitySet Name="PedidoTipoPagamento" EntityType="Self.PedidoTipoPagamento" />
           <EntitySet Name="Produto" EntityType="Self.Produto" />
           <EntitySet Name="TipoPagamento" EntityType="Self.TipoPagamento" />
           <EntitySet Name="TipoUsuario" EntityType="Self.TipoUsuario" />
@@ -1676,10 +1625,6 @@
             <End Role="Produto" EntitySet="Produto" />
             <End Role="OrcamentoProduto" EntitySet="OrcamentoProduto" />
           </AssociationSet>
-          <AssociationSet Name="FK_PedidoTipoPagamento_Parcela" Association="Self.FK_PedidoTipoPagamento_Parcela">
-            <End Role="Parcela" EntitySet="Parcela" />
-            <End Role="PedidoTipoPagamento" EntitySet="PedidoTipoPagamento" />
-          </AssociationSet>
           <AssociationSet Name="FK_Pedido_PedidoStatus" Association="Self.FK_Pedido_PedidoStatus">
             <End Role="PedidoStatus" EntitySet="PedidoStatus" />
             <End Role="Pedido" EntitySet="Pedido" />
@@ -1696,10 +1641,6 @@
             <End Role="Pedido" EntitySet="Pedido" />
             <End Role="PedidoProduto" EntitySet="PedidoProduto" />
           </AssociationSet>
-          <AssociationSet Name="FK_PedidoTipoPagamento_Pedido" Association="Self.FK_PedidoTipoPagamento_Pedido">
-            <End Role="Pedido" EntitySet="Pedido" />
-            <End Role="PedidoTipoPagamento" EntitySet="PedidoTipoPagamento" />
-          </AssociationSet>
           <AssociationSet Name="FK_PedidoProduto_Produto" Association="Self.FK_PedidoProduto_Produto">
             <End Role="Produto" EntitySet="Produto" />
             <End Role="PedidoProduto" EntitySet="PedidoProduto" />
@@ -1711,10 +1652,6 @@
           <AssociationSet Name="FK_PedidoProduto_Usuario_Entrega" Association="Self.FK_PedidoProduto_Usuario_Entrega">
             <End Role="Usuario" EntitySet="Usuario" />
             <End Role="PedidoProduto" EntitySet="PedidoProduto" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PedidoTipoPagamento_TipoPagamento" Association="Self.FK_PedidoTipoPagamento_TipoPagamento">
-            <End Role="TipoPagamento" EntitySet="TipoPagamento" />
-            <End Role="PedidoTipoPagamento" EntitySet="PedidoTipoPagamento" />
           </AssociationSet>
           <AssociationSet Name="FK_Transferencia_Produto" Association="Self.FK_Transferencia_Produto">
             <End Role="Produto" EntitySet="Produto" />
@@ -1744,6 +1681,19 @@
           <AssociationSet Name="FK_Orcamento_Pedido" Association="ChicoDoColchaoModel.FK_Orcamento_Pedido">
             <End Role="Pedido" EntitySet="Pedido" />
             <End Role="Orcamento" EntitySet="Orcamento" />
+          </AssociationSet>
+          <EntitySet Name="PedidoTipoPagamento" EntityType="ChicoDoColchaoModel.PedidoTipoPagamento" />
+          <AssociationSet Name="FK_PedidoTipoPagamento_Parcela" Association="ChicoDoColchaoModel.FK_PedidoTipoPagamento_Parcela">
+            <End Role="Parcela" EntitySet="Parcela" />
+            <End Role="PedidoTipoPagamento" EntitySet="PedidoTipoPagamento" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PedidoTipoPagamento_Pedido" Association="ChicoDoColchaoModel.FK_PedidoTipoPagamento_Pedido">
+            <End Role="Pedido" EntitySet="Pedido" />
+            <End Role="PedidoTipoPagamento" EntitySet="PedidoTipoPagamento" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PedidoTipoPagamento_TipoPagamento" Association="ChicoDoColchaoModel.FK_PedidoTipoPagamento_TipoPagamento">
+            <End Role="TipoPagamento" EntitySet="TipoPagamento" />
+            <End Role="PedidoTipoPagamento" EntitySet="PedidoTipoPagamento" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="OrcamentoHistorico">
@@ -1801,6 +1751,56 @@
             </Principal>
             <Dependent Role="Orcamento">
               <PropertyRef Name="PedidoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PedidoTipoPagamento">
+          <Key>
+            <PropertyRef Name="PedidoTipoPagamentoID" />
+          </Key>
+          <Property Name="PedidoTipoPagamentoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PedidoID" Type="Int32" Nullable="false" />
+          <Property Name="TipoPagamentoID" Type="Int32" Nullable="false" />
+          <Property Name="ParcelaID" Type="Int32" Nullable="false" />
+          <Property Name="ValorPago" Type="Double" Nullable="false" />
+          <Property Name="CV" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Parcela" Relationship="ChicoDoColchaoModel.FK_PedidoTipoPagamento_Parcela" FromRole="PedidoTipoPagamento" ToRole="Parcela" />
+          <NavigationProperty Name="Pedido" Relationship="ChicoDoColchaoModel.FK_PedidoTipoPagamento_Pedido" FromRole="PedidoTipoPagamento" ToRole="Pedido" />
+          <NavigationProperty Name="TipoPagamento" Relationship="ChicoDoColchaoModel.FK_PedidoTipoPagamento_TipoPagamento" FromRole="PedidoTipoPagamento" ToRole="TipoPagamento" />
+        </EntityType>
+        <Association Name="FK_PedidoTipoPagamento_Parcela">
+          <End Type="ChicoDoColchaoModel.Parcela" Role="Parcela" Multiplicity="1" />
+          <End Type="ChicoDoColchaoModel.PedidoTipoPagamento" Role="PedidoTipoPagamento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Parcela">
+              <PropertyRef Name="ParcelaID" />
+            </Principal>
+            <Dependent Role="PedidoTipoPagamento">
+              <PropertyRef Name="ParcelaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PedidoTipoPagamento_Pedido">
+          <End Type="ChicoDoColchaoModel.Pedido" Role="Pedido" Multiplicity="1" />
+          <End Type="ChicoDoColchaoModel.PedidoTipoPagamento" Role="PedidoTipoPagamento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pedido">
+              <PropertyRef Name="PedidoID" />
+            </Principal>
+            <Dependent Role="PedidoTipoPagamento">
+              <PropertyRef Name="PedidoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PedidoTipoPagamento_TipoPagamento">
+          <End Type="ChicoDoColchaoModel.TipoPagamento" Role="TipoPagamento" Multiplicity="1" />
+          <End Type="ChicoDoColchaoModel.PedidoTipoPagamento" Role="PedidoTipoPagamento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoPagamento">
+              <PropertyRef Name="TipoPagamentoID" />
+            </Principal>
+            <Dependent Role="PedidoTipoPagamento">
+              <PropertyRef Name="TipoPagamentoID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2014,18 +2014,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PedidoTipoPagamento">
-            <EntityTypeMapping TypeName="ChicoDoColchaoModel.PedidoTipoPagamento">
-              <MappingFragment StoreEntitySet="PedidoTipoPagamento">
-                <ScalarProperty Name="PedidoTipoPagamentoID" ColumnName="PedidoTipoPagamentoID" />
-                <ScalarProperty Name="PedidoID" ColumnName="PedidoID" />
-                <ScalarProperty Name="TipoPagamentoID" ColumnName="TipoPagamentoID" />
-                <ScalarProperty Name="ParcelaID" ColumnName="ParcelaID" />
-                <ScalarProperty Name="ValorPago" ColumnName="ValorPago" />
-                <ScalarProperty Name="CV" ColumnName="CV" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Produto">
             <EntityTypeMapping TypeName="ChicoDoColchaoModel.Produto">
               <MappingFragment StoreEntitySet="Produto">
@@ -2099,6 +2087,18 @@
                 <ScalarProperty Name="Observacao" ColumnName="Observacao" />
                 <ScalarProperty Name="OrcamentoID" ColumnName="OrcamentoID" />
                 <ScalarProperty Name="OrcamentoHistoricoID" ColumnName="OrcamentoHistoricoID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PedidoTipoPagamento">
+            <EntityTypeMapping TypeName="ChicoDoColchaoModel.PedidoTipoPagamento">
+              <MappingFragment StoreEntitySet="PedidoTipoPagamento">
+                <ScalarProperty Name="CV" ColumnName="CV" />
+                <ScalarProperty Name="ValorPago" ColumnName="ValorPago" />
+                <ScalarProperty Name="ParcelaID" ColumnName="ParcelaID" />
+                <ScalarProperty Name="TipoPagamentoID" ColumnName="TipoPagamentoID" />
+                <ScalarProperty Name="PedidoID" ColumnName="PedidoID" />
+                <ScalarProperty Name="PedidoTipoPagamentoID" ColumnName="PedidoTipoPagamentoID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

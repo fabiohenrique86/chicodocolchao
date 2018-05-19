@@ -4,7 +4,7 @@
     {
         public int PedidoTipoPagamentoID { get; set; }
         public int PedidoID { get; set; }
-        public long? CV { get; set; }
+        public string CV { get; set; }
         public double ValorPago { get; set; }
 
         public virtual ParcelaDao ParcelaDao { get; set; }

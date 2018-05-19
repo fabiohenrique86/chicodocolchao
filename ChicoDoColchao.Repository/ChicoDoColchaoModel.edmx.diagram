@@ -21,7 +21,6 @@
         <EntityTypeShape EntityType="ChicoDoColchaoModel.Pedido" Width="1.5" PointX="8.25" PointY="9.25" IsExpanded="true" />
         <EntityTypeShape EntityType="ChicoDoColchaoModel.PedidoProduto" Width="1.5" PointX="13.5" PointY="10.125" IsExpanded="true" />
         <EntityTypeShape EntityType="ChicoDoColchaoModel.PedidoStatus" Width="1.5" PointX="6" PointY="1.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="ChicoDoColchaoModel.PedidoTipoPagamento" Width="1.5" PointX="10.5" PointY="6.5" IsExpanded="true" />
         <EntityTypeShape EntityType="ChicoDoColchaoModel.Produto" Width="1.5" PointX="8.25" PointY="3.875" IsExpanded="true" />
         <EntityTypeShape EntityType="ChicoDoColchaoModel.TipoPagamento" Width="1.5" PointX="8.25" PointY="16.25" IsExpanded="true" />
         <EntityTypeShape EntityType="ChicoDoColchaoModel.TipoUsuario" Width="1.5" PointX="3.75" PointY="29.25" IsExpanded="true" />
@@ -47,16 +46,13 @@
         <AssociationConnector Association="ChicoDoColchaoModel.FK_NotaFiscal_Produto" ManuallyRouted="false" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_OrcamentoProduto_Orcamento" ManuallyRouted="false" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_Orcamento_Produto" ManuallyRouted="false" />
-        <AssociationConnector Association="ChicoDoColchaoModel.FK_PedidoTipoPagamento_Parcela" ManuallyRouted="false" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_Pedido_PedidoStatus" ManuallyRouted="false" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_Pedido_Usuario_Cancelamento" ManuallyRouted="false" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_Pedido_Usuario_Pedido" ManuallyRouted="false" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_PedidoProduto_Pedido" ManuallyRouted="false" />
-        <AssociationConnector Association="ChicoDoColchaoModel.FK_PedidoTipoPagamento_Pedido" ManuallyRouted="false" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_PedidoProduto_Produto" ManuallyRouted="false" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_PedidoProduto_Usuario_Baixa" ManuallyRouted="false" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_PedidoProduto_Usuario_Entrega" ManuallyRouted="false" />
-        <AssociationConnector Association="ChicoDoColchaoModel.FK_PedidoTipoPagamento_TipoPagamento" ManuallyRouted="false" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_Transferencia_Produto" ManuallyRouted="false" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_Usuario_TipoUsuario" ManuallyRouted="false" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_TransferenciaProduto_Transferencia" ManuallyRouted="false" />
@@ -65,6 +61,10 @@
         <AssociationConnector Association="ChicoDoColchaoModel.FK_OrcamentoHistorico_Orcamento1" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_Orcamento_Cliente" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_Orcamento_Pedido" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.PedidoTipoPagamento" Width="1.5" PointX="10.5" PointY="7" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_PedidoTipoPagamento_Parcela" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_PedidoTipoPagamento_Pedido" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_PedidoTipoPagamento_TipoPagamento" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

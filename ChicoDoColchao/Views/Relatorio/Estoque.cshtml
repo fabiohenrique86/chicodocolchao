@@ -1,4 +1,8 @@
-﻿@{
+﻿@using ChicoDoColchao.Dao;
+
+@model List<LojaDao>
+
+@{
     ViewBag.Title = "Estoque";
 }
 @section scripts
@@ -51,7 +55,7 @@
                     dataType: "json",
                     type: "GET",
                     url: "/Relatorio/ListarEstoque",
-                    data: { produtoId: $("#ProdutoID").val() },
+                    data: { lojaId: $("#LojaID").val(), produtoId: $("#ProdutoID").val() },
                     success: function (data) {
 
                         if (!data.Sucesso) {
@@ -72,6 +76,13 @@
 <div class="container" style="padding-bottom: 20px;">
     <h2><i class="glyphicon glyphicon-stats" style="color: #0f3456" title="Estoque"></i> Relatório Estoque</h2>
     <hr />
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="form-group">
+                @Html.DropDownListFor(x => x.FirstOrDefault().LojaID, new SelectList(Model, "LojaID", "NomeFantasia"), "Lojas", new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-lg-6">
             <div class="form-group">

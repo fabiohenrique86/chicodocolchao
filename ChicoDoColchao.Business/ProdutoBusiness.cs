@@ -385,8 +385,6 @@ namespace ChicoDoColchao.Business
                                 }
 
                                 produtoRepository.Atualizar(new Produto() { Numero = produtoDao.Numero.GetValueOrDefault(), Preco = produtoDao.Preco });
-
-                                //produtoRepository.Atualizar(lojaProdutoDao.LojaID, produtoDao.Numero.GetValueOrDefault(), lojaProdutoDao.Quantidade, produtoDao.Preco);
                             }
                         }
                     }

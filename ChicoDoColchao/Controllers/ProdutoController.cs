@@ -196,7 +196,7 @@ namespace ChicoDoColchao.Controllers
         {
             try
             {
-                ProdutoDao produtoDao = new ProdutoDao() { Ativo = true };
+                var produtoDao = new ProdutoDao() { Ativo = true };
 
                 long numero = 0;
                 long.TryParse(string.Join("", System.Text.RegularExpressions.Regex.Split(term, @"[^\d]")), out numero);

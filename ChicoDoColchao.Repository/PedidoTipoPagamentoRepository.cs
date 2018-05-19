@@ -21,7 +21,7 @@ namespace ChicoDoColchao.Repository
                 query = query.Where(x => x.PedidoTipoPagamentoID == pedidoTipoPagamento.PedidoTipoPagamentoID);
             }
 
-            if (pedidoTipoPagamento.CV > 0)
+            if (!string.IsNullOrEmpty(pedidoTipoPagamento.CV))
             {
                 query = query.Where(x => x.CV == pedidoTipoPagamento.CV);
             }

@@ -196,6 +196,22 @@ namespace ChicoDoColchao.Repository
                     {
                         p.LojaProduto.Remove(lp);
                     }
+
+                    if (lojaOrigemId > 0)
+                    {
+                        if (lp.LojaID != lojaOrigemId)
+                        {
+                            p.LojaProduto.Remove(lp);
+                        }
+                    }
+
+                    if (lojaDestinoId > 0)
+                    {
+                        if (lp.LojaID != lojaDestinoId)
+                        {
+                            p.LojaProduto.Remove(lp);
+                        }
+                    }
                 }
             }
 

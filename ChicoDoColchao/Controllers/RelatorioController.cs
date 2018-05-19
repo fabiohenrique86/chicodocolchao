@@ -10,26 +10,39 @@ namespace ChicoDoColchao.Controllers
 {
     public class RelatorioController : BaseController
     {
+        private LojaBusiness lojaBusiness;
         private ProdutoBusiness produtoBusiness;
 
         public RelatorioController()
         {
+            lojaBusiness = new LojaBusiness();
             produtoBusiness = new ProdutoBusiness();
         }
 
         public ActionResult Estoque()
         {
-            string tela = "";
-            if (!SessaoAtivaEPerfilValidado(out tela))
+            var lojasDao = new List<LojaDao>();
+
+            try
             {
-                Response.Redirect(tela, true);
-                return null;
+                string tela = "";
+                if (!SessaoAtivaEPerfilValidado(out tela))
+                {
+                    Response.Redirect(tela, true);
+                    return null;
+                }
+
+                lojasDao = lojaBusiness.Listar(new LojaDao() { Ativo = true });
+            }
+            catch (Exception ex)
+            {
+
             }
 
-            return View();
+            return View(lojasDao);
         }
 
-        public JsonResult ListarEstoque(int produtoId = 0)
+        public JsonResult ListarEstoque(int lojaId = 0, int produtoId = 0)
         {
             try
             {
@@ -47,10 +60,10 @@ namespace ChicoDoColchao.Controllers
 
                 viewer.ProcessingMode = ProcessingMode.Local;
                 viewer.LocalReport.ReportPath = Server.MapPath("~/Reports/Estoque.rdlc");
-                
+
                 var produtos = new List<dynamic>();
-                var produtosDao = produtoBusiness.Listar(new ProdutoDao() { ProdutoID = produtoId });
-                
+                var produtosDao = produtoBusiness.Listar(new ProdutoDao() { ProdutoID = produtoId }, lojaId);
+
                 foreach (var produto in produtosDao)
                 {
                     foreach (var lojaProduto in produto.LojaProdutoDao)
