@@ -206,7 +206,7 @@ namespace ChicoDoColchao.Business
             try
             {
                 ValidarAtualizar(produtoDao);
-
+                
                 produtoRepository.Atualizar(produtoDao.ToBd());
             }
             catch (BusinessException ex)

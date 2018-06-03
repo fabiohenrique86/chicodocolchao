@@ -23,7 +23,7 @@ namespace ChicoDoColchao.Controllers
 
                 return usuarioDao;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return null;
             }

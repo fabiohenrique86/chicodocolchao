@@ -54,6 +54,7 @@
     <Compile Include="Categoria.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="MenuRepository.cs" />
     <Compile Include="ChicoDoColchaoModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -185,6 +186,12 @@
       <DependentUpon>ChicoDoColchaoModel.edmx</DependentUpon>
       <LastGenOutput>ChicoDoColchaoModel.cs</LastGenOutput>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ChicoDoColchao.Dao\ChicoDoColchao.Dao.csproj">
+      <Project>{9EC7E64B-4E9D-4831-A7CA-B44BB5298318}</Project>
+      <Name>ChicoDoColchao.Dao</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

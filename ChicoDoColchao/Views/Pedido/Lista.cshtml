@@ -224,7 +224,7 @@
                             var comanda = "<a href='" + window.location.origin + "/Pedido/Comanda?PedidoID=" + data["PedidoID"] + "' target='_blank'><i class='glyphicon glyphicon-print' title='Imprimir Pedido' style='cursor: pointer; color: #333'></i></a>";
                             var cancelamento = "<i class='glyphicon glyphicon-remove' title='Cancelar Pedido' style='cursor: pointer' onclick='cancelarPedido(" + data["PedidoID"] + ", this)'></i>";
                             var comandaPorEmail = "<i class='glyphicon glyphicon-envelope' title='Enviar Comanda Por E-mail' style='cursor: pointer' onclick='enviarComandaPorEmail(" + data["PedidoID"] + ")'></i>";
-                            var desconto = data["Desconto"] > 0 ? "<i class='glyphicon glyphicon-usd' title='Desconto Autorizado'></i>" : "";
+                            var desconto = data["Desconto"] > 0 ? "<i class='glyphicon glyphicon-usd' title='Desconto (R$ " + Globalize.format(data["Desconto"], "n2") + ")'></i>" : "";
 
                             if (data.PedidoStatusDao[0].PedidoStatusID == '@PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega.GetHashCode()') {
                                 return comanda + " " + cancelamento + " " + comandaPorEmail + " " + desconto;
@@ -481,10 +481,10 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-5">
                             Status: <label id="lblPedidoStatus"></label>
                         </div>
-                        <div class="col-lg-3">
+                        <div class="col-lg-4">
                             Desconto: <label id="lblTotalDesconto"></label>
                         </div>
                         <div class="col-lg-3">

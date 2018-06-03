@@ -1,377 +1,472 @@
-﻿@{
+﻿@model MenuDao
+@using ChicoDoColchao.Dao;
+
+@{
     ViewBag.Title = "Menu";
 }
 @{
-    ChicoDoColchao.Dao.UsuarioDao usuarioDao = null;
+    UsuarioDao usuarioDao = null;
     if (Request.Cookies.Get("ChicoDoColchao_Usuario") != null)
     {
-        usuarioDao = Newtonsoft.Json.JsonConvert.DeserializeObject<ChicoDoColchao.Dao.UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value);
+        usuarioDao = Newtonsoft.Json.JsonConvert.DeserializeObject<UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value);
     }
 }
 <style type="text/css">
-    .panel-heading { height: 92px }
+    .panel-heading {
+        height: 125px;
+    }
+
+    .card-header {
+        background-color: whitesmoke;
+    }
+
+    .card-body {
+        background-color: #fff;
+    }
 </style>
 <div class="container" style="padding-bottom: 20px;">
-    <h2><i class="glyphicon glyphicon-cog" style="color: #FFD700" title="Usuário"></i> Menu</h2>
+    <h2>Início</h2>
     <hr />
+    <div id="accordion">
+        @{
+            if (usuarioDao != null)
+            {
+                if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)TipoUsuarioDao.ETipoUsuario.Gerencial)
+                {
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    <i class="fa fa-line-chart" style="color: #FFD700"></i> Resumo
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="panel panel-gray">
+                                            <div class="panel-heading">
+                                                <div class="row">
+                                                    <div class="col-xs-2">
+                                                        <i class="fa fa-dollar fa-3x"></i>
+                                                    </div>
+                                                    <div class="col-xs-10 text-right">
+                                                        <div class="huge">@Model.FaturamentoLojaMes.Sum(x => x.vendaMes).ToString("c2")</div>
+                                                        <div class="small">Faturamento de todas as lojas neste mês</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="panel panel-gray">
+                                            <div class="panel-heading">
+                                                <div class="row">
+                                                    <div class="col-xs-2">
+                                                        <i class="fa fa-home fa-3x"></i>
+                                                    </div>
+                                                    <div class="col-xs-10 text-right">
+                                                        <div>Top 5 Faturamento por loja</div>
+                                                        @{
+                                                            foreach (var item in Model.FaturamentoLojaMes.Take(5))
+                                                            {
+                                                                <div class="small">@item.nomeFantasia - @item.vendaMes.ToString("c2")</div>
+                                                            }
+                                                        }
+                                                        <div class="small">neste mês</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="panel panel-gray">
+                                            <div class="panel-heading">
+                                                <div class="row">
+                                                    <div class="col-xs-2">
+                                                        <i class="fa fa-credit-card fa-3x"></i>
+                                                    </div>
+                                                    <div class="col-xs-10 text-right">
+                                                        <div>Top 5 Faturamento por pagamento</div>
+                                                        @{
+                                                            foreach (var item in Model.FaturamentoTipoPagamentoMes.Take(5))
+                                                            {
+                                                                <div class="small">@item.descricao - @item.vendaMes.ToString("c2")</div>
+                                                            }
+                                                        }
+                                                        <div class="small">neste mês</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-6">
+                                        <div class="panel panel-gray">
+                                            <div class="panel-heading">
+                                                <div class="row">
+                                                    <div class="col-xs-2">
+                                                        <i class="fa fa-check fa-3x"></i>
+                                                    </div>
+                                                    <div class="col-xs-10 text-right">
+                                                        <div class="huge">@Model.PedidoStatusMes.Sum(x => x.qtdPedidoMes)</div>
+                                                        <div class="small">Pedidos tirados neste mês</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6">
+                                        <div class="panel panel-gray">
+                                            <div class="panel-heading">
+                                                <div class="row">
+                                                    <div class="col-xs-2">
+                                                        <i class="fa fa-thumbs-up fa-3x"></i>
+                                                    </div>
+                                                    <div class="col-xs-10 text-right">
+                                                        <div class="huge">
+                                                            @{
+                                                                var pedidoStatusMesEntregue = Model.PedidoStatusMes.FirstOrDefault(x => x.pedidoStatusID == (int)PedidoStatusDao.EPedidoStatus.Entregue);
 
-    @*<div class="row">
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-green">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-2">
-                            <i class="fa fa-dollar fa-3x"></i>
-                        </div>
-                        <div class="col-xs-10 text-right">
-                            <div class="huge">R$ 130.000,00</div>
-                            <div class="small">Faturamento neste mês</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-green">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-2">
-                            <i class="fa fa-home fa-3x"></i>
-                        </div>
-                        <div class="col-xs-10 text-right">
-                            <div>Faturamento por loja</div>
-                            <div class="small">CDC COMÉRCIO: R$ 100.000,00</div>
-                            <div class="small">PITUBA: R$ 21.000,00</div>
-                            <div class="small">GUARAJUBA: R$ 9.000,00</div>
-                            <div class="small">neste mês</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>    
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-green">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-2">
-                            <i class="fa fa-credit-card fa-3x"></i>
-                        </div>
-                        <div class="col-xs-10 text-right">
-                            <div>Faturamento por pagamento</div>
-                            <div class="small">Cartão Master: R$ 33.303,16</div>
-                            <div class="small">Cartão Visa: R$ 41.000,00</div>
-                            <div class="small">Dinheiro: R$ 22.100,00</div>
-                            <div class="small">neste mês</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>     
-    </div>
+                                                                if (pedidoStatusMesEntregue != null)
+                                                                {
+                                                                    @Html.Raw(pedidoStatusMesEntregue.qtdPedidoMes);
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Html.Raw("0");
+                                                                }
+                                                            }
+                                                        </div>
+                                                        <div class="small">Pedidos entregues neste mês</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6">
+                                        <div class="panel panel-gray">
+                                            <div class="panel-heading">
+                                                <div class="row">
+                                                    <div class="col-xs-2">
+                                                        <i class="fa fa-question fa-3x"></i>
+                                                    </div>
+                                                    <div class="col-xs-10 text-right">
+                                                        <div class="huge">
+                                                            @{
+                                                                var pedidoStatusMesPrevisaoDeEntrega = Model.PedidoStatusMes.FirstOrDefault(x => x.pedidoStatusID == (int)PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega);
 
-    <div class="row">
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-2">
-                            <i class="fa fa-check fa-3x"></i>
-                        </div>
-                        <div class="col-xs-10 text-right">
-                            <div class="huge">38</div>
-                            <div class="small">Pedidos tirados neste mês</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-2">
-                            <i class="fa fa-thumbs-up fa-3x"></i>
-                        </div>
-                        <div class="col-xs-10 text-right">
-                            <div class="huge">12</div>
-                            <div class="small">Pedidos entregues neste mês</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-2">
-                            <i class="fa fa-thumbs-down fa-3x"></i>
-                        </div>
-                        <div class="col-xs-10 text-right">
-                            <div class="huge">26</div>
-                            <div class="small">Pedidos pendentes de baixa neste mês</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>        
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-2">
-                            <i class="fa fa-arrow-right fa-3x"></i>
-                        </div>
-                        <div class="col-xs-10 text-right">
-                            <div class="huge">5</div>
-                            <div class="small">Pedidos gerados de orçamentos neste mês</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>        
-    </div>
-    <div class="row">
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-gray">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-2">
-                            <i class="fa fa-user-times fa-3x"></i>
-                        </div>
-                        <div class="col-xs-10 text-right">
-                            <div>Fabio Costa</div>
-                            <div class="small">Consultor com menos vendas neste mês</div>
-                            <div class="small">5 vendas</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-gray">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-2">
-                            <i class="fa fa-user-plus fa-3x"></i>
-                        </div>
-                        <div class="col-xs-10 text-right">
-                            <div>José Filho</div>
-                            <div class="small">Consultor com mais vendas neste mês</div>
-                            <div class="small">15 vendas</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-gray">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-2">
-                            <i class="fa fa-calendar-times-o fa-3x"></i>
-                        </div>
-                        <div class="col-xs-10 text-right">
-                            <div class="huge">1</div>
-                            <div class="small">Dia com menos vendas no geral</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-gray">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-2">
-                            <i class="fa fa-calendar-check-o fa-3x"></i>
-                        </div>
-                        <div class="col-xs-10 text-right">
-                            <div class="huge">16</div>
-                            <div class="small">Dia com mais vendas no geral</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-yellow">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-2">
-                            <i class="fa fa-plus fa-3x"></i>
-                        </div>
-                        <div class="col-xs-10 text-right">
-                            <div class="huge">150</div>
-                            <div class="small">Produtos com baixa efetuada neste mês</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-yellow">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-2">
-                            <i class="fa fa-minus fa-3x"></i>
-                        </div>
-                        <div class="col-xs-10 text-right">
-                            <div class="huge">100</div>
-                            <div class="small">Produtos pendentes de baixa neste mês</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>        
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-yellow">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-2">
-                            <i class="fa fa-shopping-cart fa-3x"></i>
-                        </div>
-                        <div class="col-xs-10 text-right">
-                            <div>Produtos com mais venda</div>
-                            <div class="small">Produto X - 038X143X180: 150 vendas</div>
-                            <div class="small">Produto Y - 038X143X180: 150 vendas</div>
-                            <div class="small">Produto Z - 038X143X180: 150 vendas</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-yellow">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-2">
-                            <i class="fa fa-level-down fa-3x"></i>
-                        </div>
-                        <div class="col-xs-10 text-right">
-                            <div>Produtos com mais falta</div>
-                            <div class="small">Produto X - 038X143X180: - 20</div>
-                            <div class="small">Produto Y - 038X143X180: - 15</div>
-                            <div class="small">Produto Z - 038X143X180: -5</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                                                                if (pedidoStatusMesPrevisaoDeEntrega != null)
+                                                                {
+                                                                    @Html.Raw(pedidoStatusMesPrevisaoDeEntrega.qtdPedidoMes);
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Html.Raw("0");
+                                                                }
+                                                            }
+                                                        </div>
+                                                        <div class="small">Pedidos com entrega agendada neste mês</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6">
+                                        <div class="panel panel-gray">
+                                            <div class="panel-heading">
+                                                <div class="row">
+                                                    <div class="col-xs-2">
+                                                        <i class="fa fa-arrow-right fa-3x"></i>
+                                                    </div>
+                                                    <div class="col-xs-10 text-right">
+                                                        <div class="huge">
+                                                            @{
+                                                                var pedidoStatusMesRetiradoNaLoja = Model.PedidoStatusMes.FirstOrDefault(x => x.pedidoStatusID == (int)PedidoStatusDao.EPedidoStatus.RetiradoNaLoja);
 
-    <div class="row">
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-red">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-2">
-                            <i class="fa fa-battery-empty fa-3x"></i>
-                        </div>
-                        <div class="col-xs-10 text-right">
-                            <div>Lojas com estoque negativo</div>
-                            <div class="small">CDC COMÉRCIO</div>
-                            <div class="small">PITUBA</div>
+                                                                if (pedidoStatusMesRetiradoNaLoja != null)
+                                                                {
+                                                                    @Html.Raw(pedidoStatusMesRetiradoNaLoja.qtdPedidoMes);
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Html.Raw("0");
+                                                                }
+                                                            }
+                                                        </div>
+                                                        <div class="small">Pedidos retirados na loja neste mês</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @*<div class="row">
+                                        <div class="col-lg-3 col-md-6">
+                                            <div class="panel panel-gray">
+                                                <div class="panel-heading">
+                                                    <div class="row">
+                                                        <div class="col-xs-2">
+                                                            <i class="fa fa-user-times fa-3x"></i>
+                                                        </div>
+                                                        <div class="col-xs-10 text-right">
+                                                            <div>Fabio Costa</div>
+                                                            <div class="small">Consultor com menos vendas neste mês</div>
+                                                            <div class="small">5 vendas</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-6">
+                                            <div class="panel panel-gray">
+                                                <div class="panel-heading">
+                                                    <div class="row">
+                                                        <div class="col-xs-2">
+                                                            <i class="fa fa-user-plus fa-3x"></i>
+                                                        </div>
+                                                        <div class="col-xs-10 text-right">
+                                                            <div>José Filho</div>
+                                                            <div class="small">Consultor com mais vendas neste mês</div>
+                                                            <div class="small">15 vendas</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-6">
+                                            <div class="panel panel-gray">
+                                                <div class="panel-heading">
+                                                    <div class="row">
+                                                        <div class="col-xs-2">
+                                                            <i class="fa fa-calendar-times-o fa-3x"></i>
+                                                        </div>
+                                                        <div class="col-xs-10 text-right">
+                                                            <div class="huge">1</div>
+                                                            <div class="small">Dia com menos vendas no geral</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-6">
+                                            <div class="panel panel-gray">
+                                                <div class="panel-heading">
+                                                    <div class="row">
+                                                        <div class="col-xs-2">
+                                                            <i class="fa fa-calendar-check-o fa-3x"></i>
+                                                        </div>
+                                                        <div class="col-xs-10 text-right">
+                                                            <div class="huge">16</div>
+                                                            <div class="small">Dia com mais vendas no geral</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-6">
+                                            <div class="panel panel-yellow">
+                                                <div class="panel-heading">
+                                                    <div class="row">
+                                                        <div class="col-xs-2">
+                                                            <i class="fa fa-plus fa-3x"></i>
+                                                        </div>
+                                                        <div class="col-xs-10 text-right">
+                                                            <div class="huge">150</div>
+                                                            <div class="small">Produtos com baixa efetuada neste mês</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-6">
+                                            <div class="panel panel-yellow">
+                                                <div class="panel-heading">
+                                                    <div class="row">
+                                                        <div class="col-xs-2">
+                                                            <i class="fa fa-minus fa-3x"></i>
+                                                        </div>
+                                                        <div class="col-xs-10 text-right">
+                                                            <div class="huge">100</div>
+                                                            <div class="small">Produtos pendentes de baixa neste mês</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-6">
+                                            <div class="panel panel-yellow">
+                                                <div class="panel-heading">
+                                                    <div class="row">
+                                                        <div class="col-xs-2">
+                                                            <i class="fa fa-shopping-cart fa-3x"></i>
+                                                        </div>
+                                                        <div class="col-xs-10 text-right">
+                                                            <div>Produtos com mais venda</div>
+                                                            <div class="small">Produto X - 038X143X180: 150 vendas</div>
+                                                            <div class="small">Produto Y - 038X143X180: 150 vendas</div>
+                                                            <div class="small">Produto Z - 038X143X180: 150 vendas</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-6">
+                                            <div class="panel panel-yellow">
+                                                <div class="panel-heading">
+                                                    <div class="row">
+                                                        <div class="col-xs-2">
+                                                            <i class="fa fa-level-down fa-3x"></i>
+                                                        </div>
+                                                        <div class="col-xs-10 text-right">
+                                                            <div>Produtos com mais falta</div>
+                                                            <div class="small">Produto X - 038X143X180: - 20</div>
+                                                            <div class="small">Produto Y - 038X143X180: - 15</div>
+                                                            <div class="small">Produto Z - 038X143X180: -5</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>*@
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-6">
+                                        <div class="panel panel-gray">
+                                            <div class="panel-heading">
+                                                <div class="row">
+                                                    <div class="col-xs-2">
+                                                        <i class="fa fa-battery-1 fa-3x"></i>
+                                                    </div>
+                                                    <div class="col-xs-10 text-right">
+                                                        <div>Lojas com estoque negativo</div>
+                                                        @{
+                                                            foreach (var item in Model.LojaEstoqueNegativo)
+                                                            {
+                                                                <div class="small">@item.nomeFantasia</div>
+                                                            }
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6">
+                                        <div class="panel panel-gray">
+                                            <div class="panel-heading">
+                                                <div class="row">
+                                                    <div class="col-xs-2">
+                                                        <i class="fa fa-download fa-3x"></i>
+                                                    </div>
+                                                    <div class="col-xs-10 text-right">
+                                                        <div class="huge">@Model.NotaFiscalImportadaMes.quantidade</div>
+                                                        <div class="small">NFEs importadas neste mês</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-red">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-2">
-                            <i class="fa fa-download fa-3x"></i>
-                        </div>
-                        <div class="col-xs-10 text-right">
-                            <div class="huge">87</div>
-                            <div class="small">NFEs importadas neste mês</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>*@
-
-    <div class="row">
-        <div class="col-lg-4">
-            <ul class="nav nav-pills nav-stacked">                
-                @{
-                    if (usuarioDao != null)
-                    {
-                        if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)ChicoDoColchao.Dao.TipoUsuarioDao.ETipoUsuario.Gerencial)
-                        {
-                            <li><a href="@Url.Action("Cadastro", "Cliente")" target="_self"><i class="glyphicon glyphicon-user" style="cursor: pointer"></i> Cadastrar Cliente</a></li>
-                            <li><a href="@Url.Action("Cadastro", "Pedido")" target="_self"><i class="glyphicon glyphicon-ok" style="cursor: pointer"></i> Tirar Pedido</a></li>
-                            <li><a href="@Url.Action("Cadastro", "Produto")" target="_self"><i class="glyphicon glyphicon-th" style="cursor: pointer"></i> Cadastrar Produto</a></li>
-                            <li><a href="@Url.Action("Cadastro", "Loja")" target="_self"><i class="glyphicon glyphicon-home" style="cursor: pointer"></i> Cadastrar Loja</a></li>
-                            <li><a href="@Url.Action("Cadastro", "Consultor")" target="_self"><i class="glyphicon glyphicon-user" style="cursor: pointer"></i> Cadastrar Consultor</a></li>
-                            <li><a href="@Url.Action("Cadastro", "Medida")" target="_self"><i class="glyphicon glyphicon-remove" style="cursor: pointer"></i> Cadastrar Medida</a></li>
-                            <li><a href="@Url.Action("Cadastro", "Categoria")" target="_self"><i class="glyphicon glyphicon-tags" style="cursor: pointer"></i> Cadastrar Categoria</a></li>
-                            <li><a href="@Url.Action("Cadastro", "Orcamento")" target="_self"><i class="glyphicon glyphicon-time" style="cursor: pointer"></i> Tirar Orçamento</a></li>
-                        }
-                        else if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)ChicoDoColchao.Dao.TipoUsuarioDao.ETipoUsuario.Vendedor)
-                        {
-                            <li><a href="@Url.Action("Cadastro", "Cliente")" target="_self"><i class="glyphicon glyphicon-user" style="cursor: pointer"></i> Cadastrar Cliente</a></li>
-                            <li><a href="@Url.Action("Cadastro", "Pedido")" target="_self"><i class="glyphicon glyphicon-ok" style="cursor: pointer"></i> Tirar Pedido</a></li>
-                            <li><a href="@Url.Action("Cadastro", "Orcamento")" target="_self"><i class="glyphicon glyphicon-time" style="cursor: pointer"></i> Tirar Orçamento</a></li>
-                        }
-                    }
                 }
-            </ul>
-        </div>
-        <div class="col-lg-4">
-            <ul class="nav nav-pills nav-stacked">
-                <li><a href="@Url.Action("Lista", "Cliente")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Clientes</a></li>
-                <li><a href="@Url.Action("Lista", "Pedido")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Pedidos</a></li>
-                <li><a href="@Url.Action("Lista", "Produto")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Produtos</a></li>
-                @{
-                    if (usuarioDao != null)
-                    {
-                        if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)ChicoDoColchao.Dao.TipoUsuarioDao.ETipoUsuario.Gerencial)
-                        {
-                            <li><a href="@Url.Action("Lista", "Loja")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Lojas</a></li>
-                            <li><a href="@Url.Action("Lista", "Consultor")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Consultores</a></li>
-                            <li><a href="@Url.Action("Lista", "Medida")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Medidas</a></li>
-                            <li><a href="@Url.Action("Lista", "Categoria")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Categorias</a></li>
-                            <li><a href="@Url.Action("Lista", "Orcamento")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Orçamentos</a></li>
-                        }
-                        else if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)ChicoDoColchao.Dao.TipoUsuarioDao.ETipoUsuario.Vendedor)
-                        {
-                            <li><a href="@Url.Action("Lista", "Orcamento")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Orçamentos</a></li>
-                        }
-                    }
-                }
-            </ul>
-        </div>
-        <div class="col-lg-4">
-            <ul class="nav nav-pills nav-stacked">
-                @{
-                    if (usuarioDao != null)
-                    {
-                        if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)ChicoDoColchao.Dao.TipoUsuarioDao.ETipoUsuario.Gerencial)
-                        {
-                            <li><a href="@Url.Action("Transferencia", "Produto")" target="_self"><i class="glyphicon glyphicon-resize-full" style="cursor: pointer"></i> Transferência de Produto entre Lojas</a></li>
-                            <li><a href="@Url.Action("Cadastro", "NotaFiscal")" target="_self"><i class="glyphicon glyphicon-triangle-right" style="cursor: pointer"></i> Entrada de NFe</a></li>
-                            <li><a href="@Url.Action("Index", "MovimentoDeCaixa")" target="_self"><i class="glyphicon glyphicon-usd" style="cursor: pointer"></i> Movimento de Caixa</a></li>
-                            <li><a href="@Url.Action("CalendarioDeEntrega", "Pedido")" target="_self"><i class="glyphicon glyphicon-calendar" style="cursor: pointer"></i> Calendário de Entrega</a></li>
-                            <li><a href="@Url.Action("Lista", "Usuario")" target="_self"><i class="glyphicon glyphicon-pencil" style="cursor: pointer"></i> Alterar Senha de Usuário</a></li>
-                        }
-                        else if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)ChicoDoColchao.Dao.TipoUsuarioDao.ETipoUsuario.Vendedor)
-                        {
-                            <li><a href="@Url.Action("Index", "MovimentoDeCaixa")" target="_self"><i class="glyphicon glyphicon-usd" style="cursor: pointer"></i> Movimento de Caixa</a></li>
-                        }
-                        else if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)ChicoDoColchao.Dao.TipoUsuarioDao.ETipoUsuario.Deposito)
-                        {
-                            <li><a href="@Url.Action("CalendarioDeEntrega", "Pedido")" target="_self"><i class="glyphicon glyphicon-calendar" style="cursor: pointer"></i> Calendário de Entrega</a></li>
-                        }
-                        <li><a href="@Url.Action("Estoque", "Relatorio")" target="_self"><i class="glyphicon glyphicon-stats" style="cursor: pointer"></i> Relatório de Estoque</a></li>
-                    }
-                }
-            </ul>
+            }
+        }
+        <div class="card">
+            <div class="card-header" id="headingTwo">
+                <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        <i class="glyphicon glyphicon-cog" style="color: #FFD700" title="Menu"></i> Menu
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <ul class="nav nav-pills nav-stacked">
+                                @{
+                                    if (usuarioDao != null)
+                                    {
+                                        if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)TipoUsuarioDao.ETipoUsuario.Gerencial)
+                                        {
+                                            <li><a href="@Url.Action("Cadastro", "Cliente")" target="_self"><i class="glyphicon glyphicon-user" style="cursor: pointer"></i> Cadastrar Cliente</a></li>
+                                            <li><a href="@Url.Action("Cadastro", "Pedido")" target="_self"><i class="glyphicon glyphicon-ok" style="cursor: pointer"></i> Tirar Pedido</a></li>
+                                                    <li><a href="@Url.Action("Cadastro", "Produto")" target="_self"><i class="glyphicon glyphicon-th" style="cursor: pointer"></i> Cadastrar Produto</a></li>
+                                                    <li><a href="@Url.Action("Cadastro", "Loja")" target="_self"><i class="glyphicon glyphicon-home" style="cursor: pointer"></i> Cadastrar Loja</a></li>
+                                                    <li><a href="@Url.Action("Cadastro", "Consultor")" target="_self"><i class="glyphicon glyphicon-user" style="cursor: pointer"></i> Cadastrar Consultor</a></li>
+                                                    <li><a href="@Url.Action("Cadastro", "Medida")" target="_self"><i class="glyphicon glyphicon-remove" style="cursor: pointer"></i> Cadastrar Medida</a></li>
+                                                    <li><a href="@Url.Action("Cadastro", "Categoria")" target="_self"><i class="glyphicon glyphicon-tags" style="cursor: pointer"></i> Cadastrar Categoria</a></li>
+                                                    <li><a href="@Url.Action("Cadastro", "Orcamento")" target="_self"><i class="glyphicon glyphicon-time" style="cursor: pointer"></i> Tirar Orçamento</a></li>
+                                        }
+                                        else if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)TipoUsuarioDao.ETipoUsuario.Vendedor)
+                                        {
+                                            <li><a href="@Url.Action("Cadastro", "Cliente")" target="_self"><i class="glyphicon glyphicon-user" style="cursor: pointer"></i> Cadastrar Cliente</a></li>
+                                            <li><a href="@Url.Action("Cadastro", "Pedido")" target="_self"><i class="glyphicon glyphicon-ok" style="cursor: pointer"></i> Tirar Pedido</a></li>
+                                                    <li><a href="@Url.Action("Cadastro", "Orcamento")" target="_self"><i class="glyphicon glyphicon-time" style="cursor: pointer"></i> Tirar Orçamento</a></li>
+                                        }
+                                    }
+                                }
+                            </ul>
+                        </div>
+                        <div class="col-lg-4">
+                            <ul class="nav nav-pills nav-stacked">
+                                <li><a href="@Url.Action("Lista", "Cliente")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Clientes</a></li>
+                                <li><a href="@Url.Action("Lista", "Pedido")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Pedidos</a></li>
+                                <li><a href="@Url.Action("Lista", "Produto")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Produtos</a></li>
+                                @{
+                                    if (usuarioDao != null)
+                                    {
+                                        if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)TipoUsuarioDao.ETipoUsuario.Gerencial)
+                                        {
+                                            <li><a href="@Url.Action("Lista", "Loja")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Lojas</a></li>
+                                            <li><a href="@Url.Action("Lista", "Consultor")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Consultores</a></li>
+                                                    <li><a href="@Url.Action("Lista", "Medida")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Medidas</a></li>
+                                                    <li><a href="@Url.Action("Lista", "Categoria")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Categorias</a></li>
+                                                    <li><a href="@Url.Action("Lista", "Orcamento")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Orçamentos</a></li>
+                                        }
+                                        else if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)TipoUsuarioDao.ETipoUsuario.Vendedor)
+                                        {
+                                            <li><a href="@Url.Action("Lista", "Orcamento")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Orçamentos</a></li>
+                                        }
+                                    }
+                                }
+                            </ul>
+                        </div>
+                        <div class="col-lg-4">
+                            <ul class="nav nav-pills nav-stacked">
+                                @{
+                                    if (usuarioDao != null)
+                                    {
+                                        if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)TipoUsuarioDao.ETipoUsuario.Gerencial)
+                                        {
+                                            <li><a href="@Url.Action("Transferencia", "Produto")" target="_self"><i class="glyphicon glyphicon-resize-full" style="cursor: pointer"></i> Transferência de Produto entre Lojas</a></li>
+                                            <li><a href="@Url.Action("Cadastro", "NotaFiscal")" target="_self"><i class="glyphicon glyphicon-triangle-right" style="cursor: pointer"></i> Entrada de NFe</a></li>
+                                                    <li><a href="@Url.Action("Index", "MovimentoDeCaixa")" target="_self"><i class="glyphicon glyphicon-usd" style="cursor: pointer"></i> Movimento de Caixa</a></li>
+                                                    <li><a href="@Url.Action("CalendarioDeEntrega", "Pedido")" target="_self"><i class="glyphicon glyphicon-calendar" style="cursor: pointer"></i> Calendário de Entrega</a></li>
+                                                    <li><a href="@Url.Action("Lista", "Usuario")" target="_self"><i class="glyphicon glyphicon-pencil" style="cursor: pointer"></i> Alterar Senha de Usuário</a></li>
+                                        }
+                                        else if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)TipoUsuarioDao.ETipoUsuario.Vendedor)
+                                        {
+                                            <li><a href="@Url.Action("Index", "MovimentoDeCaixa")" target="_self"><i class="glyphicon glyphicon-usd" style="cursor: pointer"></i> Movimento de Caixa</a></li>
+                                        }
+                                        else if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)TipoUsuarioDao.ETipoUsuario.Deposito)
+                                        {
+                                            <li><a href="@Url.Action("CalendarioDeEntrega", "Pedido")" target="_self"><i class="glyphicon glyphicon-calendar" style="cursor: pointer"></i> Calendário de Entrega</a></li>
+                                        }
+                                        <li><a href="@Url.Action("Estoque", "Relatorio")" target="_self"><i class="glyphicon glyphicon-stats" style="cursor: pointer"></i> Relatório de Estoque</a></li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
 </div>

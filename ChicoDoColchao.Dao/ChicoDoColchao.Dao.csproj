@@ -53,6 +53,7 @@
     <Compile Include="LojaDao.cs" />
     <Compile Include="LojaProdutoDao.cs" />
     <Compile Include="MedidaDao.cs" />
+    <Compile Include="MenuDao.cs" />
     <Compile Include="NotaFiscalDao.cs" />
     <Compile Include="NotaFiscalProdutoDao.cs" />
     <Compile Include="OrcamentoDao.cs" />

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Data.Entity;
 
 namespace ChicoDoColchao.Repository
@@ -27,6 +26,7 @@ namespace ChicoDoColchao.Repository
         public void Atualizar(LojaProduto lojaProduto)
         {
             var lp = chicoDoColchaoEntities.LojaProduto.SingleOrDefault(x => x.LojaProdutoID == lojaProduto.LojaProdutoID && x.Ativo == true);
+
             if (lp != null)
             {
                 lp.Quantidade = Convert.ToInt16(lp.Quantidade + lojaProduto.Quantidade);

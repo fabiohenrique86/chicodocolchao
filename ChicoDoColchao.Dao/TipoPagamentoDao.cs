@@ -18,8 +18,8 @@ namespace ChicoDoColchao.Dao
         public enum ETipoPagamento
         {
             Dinheiro = 1,
-            CartaoBancoDoBrasilMasterCard = 2,
-            CartaoBancoDoBrasilVisa = 3,
+            CartaoBancoDoBrasilVisa = 2,
+            CartaoBancoDoBrasilMasterCard = 3,            
             Cheque = 4,
             CartaoBancoDoBrasilElo = 5,
             CartaoBancoDoBrasilHiperCard = 6,
