@@ -9,6 +9,7 @@ namespace ChicoDoColchao.Dao
         public List<FaturamentoTipoPagamentoMes> FaturamentoTipoPagamentoMes;
         public List<LojaEstoqueNegativo> LojaEstoqueNegativo;
         public NotaFiscalImportadaMes NotaFiscalImportadaMes;
+        public List<FaturamentoConsultorMes> FaturamentoConsultorMes;
 
         public MenuDao()
         {
@@ -17,12 +18,13 @@ namespace ChicoDoColchao.Dao
             FaturamentoTipoPagamentoMes = new List<FaturamentoTipoPagamentoMes>();
             LojaEstoqueNegativo = new List<LojaEstoqueNegativo>();
             NotaFiscalImportadaMes = new NotaFiscalImportadaMes();
+            FaturamentoConsultorMes = new List<FaturamentoConsultorMes>();
         }
     }
 
     public class PedidoStatusMes
     {
-        public int qtdPedidoMes { get; set; }
+        public int qtdPedido { get; set; }
         public int pedidoStatusID { get; set; }
         public string descricaoStatus { get; set; }
     }
@@ -31,24 +33,33 @@ namespace ChicoDoColchao.Dao
     {
         public int lojaId { get; set; }
         public string nomeFantasia { get; set; }
-        public double vendaMes { get; set; }
+        public double venda { get; set; }
     }
 
     public class FaturamentoTipoPagamentoMes
     {
         public int tipoPagamentoId { get; set; }
         public string descricao { get; set; }
-        public double vendaMes { get; set; }
+        public double venda { get; set; }
     }
 
     public class LojaEstoqueNegativo
     {
         public int lojaId { get; set; }
         public string nomeFantasia { get; set; }
+        public int qtdTotal { get; set; }
     }
 
     public class NotaFiscalImportadaMes
     {
         public int quantidade { get; set; }
+    }
+
+    public class FaturamentoConsultorMes
+    {
+        public int funcionarioID { get; set; }
+        public string nome { get; set; }
+        public int qtdPedido { get; set; }
+        public double venda { get; set; }
     }
 }

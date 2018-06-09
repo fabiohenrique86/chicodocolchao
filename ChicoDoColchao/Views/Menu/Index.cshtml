@@ -52,7 +52,7 @@
                                                         <i class="fa fa-dollar fa-3x"></i>
                                                     </div>
                                                     <div class="col-xs-10 text-right">
-                                                        <div class="huge">@Model.FaturamentoLojaMes.Sum(x => x.vendaMes).ToString("c2")</div>
+                                                        <div class="huge">@Model.FaturamentoLojaMes.Sum(x => x.venda).ToString("c2")</div>
                                                         <div class="small">Faturamento de todas as lojas neste mês</div>
                                                     </div>
                                                 </div>
@@ -71,7 +71,7 @@
                                                         @{
                                                             foreach (var item in Model.FaturamentoLojaMes.Take(5))
                                                             {
-                                                                <div class="small">@item.nomeFantasia - @item.vendaMes.ToString("c2")</div>
+                                                                <div class="small">@item.nomeFantasia - @item.venda.ToString("c2")</div>
                                                             }
                                                         }
                                                         <div class="small">neste mês</div>
@@ -92,7 +92,7 @@
                                                         @{
                                                             foreach (var item in Model.FaturamentoTipoPagamentoMes.Take(5))
                                                             {
-                                                                <div class="small">@item.descricao - @item.vendaMes.ToString("c2")</div>
+                                                                <div class="small">@item.descricao - @item.venda.ToString("c2")</div>
                                                             }
                                                         }
                                                         <div class="small">neste mês</div>
@@ -111,7 +111,7 @@
                                                         <i class="fa fa-check fa-3x"></i>
                                                     </div>
                                                     <div class="col-xs-10 text-right">
-                                                        <div class="huge">@Model.PedidoStatusMes.Sum(x => x.qtdPedidoMes)</div>
+                                                        <div class="huge">@Model.PedidoStatusMes.Sum(x => x.qtdPedido)</div>
                                                         <div class="small">Pedidos tirados neste mês</div>
                                                     </div>
                                                 </div>
@@ -132,7 +132,7 @@
 
                                                                 if (pedidoStatusMesEntregue != null)
                                                                 {
-                                                                    @Html.Raw(pedidoStatusMesEntregue.qtdPedidoMes);
+                                                                    @Html.Raw(pedidoStatusMesEntregue.qtdPedido);
                                                                 }
                                                                 else
                                                                 {
@@ -160,7 +160,7 @@
 
                                                                 if (pedidoStatusMesPrevisaoDeEntrega != null)
                                                                 {
-                                                                    @Html.Raw(pedidoStatusMesPrevisaoDeEntrega.qtdPedidoMes);
+                                                                    @Html.Raw(pedidoStatusMesPrevisaoDeEntrega.qtdPedido);
                                                                 }
                                                                 else
                                                                 {
@@ -188,7 +188,7 @@
 
                                                                 if (pedidoStatusMesRetiradoNaLoja != null)
                                                                 {
-                                                                    @Html.Raw(pedidoStatusMesRetiradoNaLoja.qtdPedidoMes);
+                                                                    @Html.Raw(pedidoStatusMesRetiradoNaLoja.qtdPedido);
                                                                 }
                                                                 else
                                                                 {
@@ -346,7 +346,7 @@
                                                         @{
                                                             foreach (var item in Model.LojaEstoqueNegativo)
                                                             {
-                                                                <div class="small">@item.nomeFantasia</div>
+                                                                <div class="small">@item.nomeFantasia (total: @item.qtdTotal)</div>
                                                             }
                                                         }
                                                     </div>
@@ -364,6 +364,52 @@
                                                     <div class="col-xs-10 text-right">
                                                         <div class="huge">@Model.NotaFiscalImportadaMes.quantidade</div>
                                                         <div class="small">NFEs importadas neste mês</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6">
+                                        <div class="panel panel-gray">
+                                            <div class="panel-heading">
+                                                <div class="row">
+                                                    <div class="col-xs-2">
+                                                        <i class="fa fa-user-times fa-3x"></i>
+                                                    </div>
+                                                    <div class="col-xs-10 text-right">
+                                                        @{
+                                                            var faturamentoConsultorMesMenor = Model.FaturamentoConsultorMes.FirstOrDefault();
+                                                            if (faturamentoConsultorMesMenor != null)
+                                                            {
+                                                                <div>@faturamentoConsultorMesMenor.nome</div>
+                                                                <div class="small">Consultor com menor faturamento neste mês</div>
+                                                                <div class="small">Pedidos tirados: @faturamentoConsultorMesMenor.qtdPedido</div>
+                                                                <div class="small">Faturamento: @faturamentoConsultorMesMenor.venda.ToString("c2")</div>
+                                                            }
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6">
+                                        <div class="panel panel-gray">
+                                            <div class="panel-heading">
+                                                <div class="row">
+                                                    <div class="col-xs-2">
+                                                        <i class="fa fa-user-plus fa-3x"></i>
+                                                    </div>
+                                                    <div class="col-xs-10 text-right">
+                                                        @{
+                                                            var faturamentoConsultorMesMaior = Model.FaturamentoConsultorMes.LastOrDefault();
+                                                            if (faturamentoConsultorMesMaior != null)
+                                                            {
+                                                                <div>@faturamentoConsultorMesMaior.nome</div>
+                                                                <div class="small">Consultor com menor faturamento neste mês</div>
+                                                                <div class="small">Pedidos tirados: @faturamentoConsultorMesMaior.qtdPedido</div>
+                                                                <div class="small">Faturamento: @faturamentoConsultorMesMaior.venda.ToString("c2")</div>
+                                                            }
+                                                        }
                                                     </div>
                                                 </div>
                                             </div>

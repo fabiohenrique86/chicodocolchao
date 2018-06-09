@@ -22,8 +22,8 @@ namespace ChicoDoColchao.Repository
                                        where p.DataPedido.Month == DateTime.Now.Month && p.DataPedido.Year == DateTime.Now.Year
                                        join ps in chicoDoColchaoEntities.PedidoStatus on p.PedidoStatusID equals ps.PedidoStatusID
                                        group p by new { ps.PedidoStatusID, ps.Descricao } into g1
-                                       select new PedidoStatusMes() { pedidoStatusID = g1.Key.PedidoStatusID, descricaoStatus = g1.Key.Descricao, qtdPedidoMes = g1.Count() }).ToList();
-            
+                                       select new PedidoStatusMes() { pedidoStatusID = g1.Key.PedidoStatusID, descricaoStatus = g1.Key.Descricao, qtdPedido = g1.Count() }).ToList();
+
             menuDao.FaturamentoLojaMes = (from p in chicoDoColchaoEntities.Pedido
                                           join ptp in chicoDoColchaoEntities.PedidoTipoPagamento on p.PedidoID equals ptp.PedidoID
                                           join l in chicoDoColchaoEntities.Loja on p.LojaID equals l.LojaID
@@ -33,8 +33,8 @@ namespace ChicoDoColchao.Repository
                                           {
                                               lojaId = g1.Key.LojaID,
                                               nomeFantasia = g1.Key.NomeFantasia,
-                                              vendaMes = g1.Sum(x => x.ValorPago)
-                                          }).OrderByDescending(x => x.vendaMes).ToList();
+                                              venda = g1.Sum(x => x.ValorPago)
+                                          }).OrderByDescending(x => x.venda).ToList();
 
             menuDao.FaturamentoTipoPagamentoMes = (from p in chicoDoColchaoEntities.Pedido
                                                    join ptp in chicoDoColchaoEntities.PedidoTipoPagamento on p.PedidoID equals ptp.PedidoID
@@ -45,21 +45,39 @@ namespace ChicoDoColchao.Repository
                                                    {
                                                        tipoPagamentoId = g1.Key.TipoPagamentoID,
                                                        descricao = g1.Key.Descricao,
-                                                       vendaMes = g1.Sum(x => x.ValorPago)
-                                                   }).OrderByDescending(x => x.vendaMes).ToList();
+                                                       venda = g1.Sum(x => x.ValorPago)
+                                                   }).OrderByDescending(x => x.venda).ToList();
 
             menuDao.LojaEstoqueNegativo = (from l in chicoDoColchaoEntities.Loja
                                            join lp in chicoDoColchaoEntities.LojaProduto on l.LojaID equals lp.LojaID
                                            where lp.Quantidade < 0
+                                           group lp by new { l.LojaID, l.NomeFantasia } into g1
                                            select new LojaEstoqueNegativo()
                                            {
-                                               lojaId = l.LojaID,
-                                               nomeFantasia = l.NomeFantasia
-                                           }).OrderBy(x => x.nomeFantasia).Take(5).ToList();
+                                               lojaId = g1.Key.LojaID,
+                                               nomeFantasia = g1.Key.NomeFantasia,
+                                               qtdTotal = g1.Sum(x => x.Quantidade)
+                                           }).OrderBy(x => x.qtdTotal).Take(5).ToList();
 
             menuDao.NotaFiscalImportadaMes.quantidade = chicoDoColchaoEntities.NotaFiscal.
                                                         Where(x => x.DataNotaFiscal.Month == DateTime.Now.Month && x.DataNotaFiscal.Year == DateTime.Now.Year).
                                                         Count();
+
+            var consultores = (from p in chicoDoColchaoEntities.Pedido
+                               join ptp in chicoDoColchaoEntities.PedidoTipoPagamento on p.PedidoID equals ptp.PedidoID
+                               join f in chicoDoColchaoEntities.Funcionario on p.FuncionarioID equals f.FuncionarioID
+                               where p.DataPedido.Month == DateTime.Now.Month && p.DataPedido.Year == DateTime.Now.Year
+                               group ptp by new { f.FuncionarioID, f.Nome } into g1
+                               select new FaturamentoConsultorMes()
+                               {
+                                   funcionarioID = g1.Key.FuncionarioID,
+                                   nome = g1.Key.Nome,
+                                   venda = g1.Sum(x => x.ValorPago),
+                                   qtdPedido = g1.Select(x => x.PedidoID).Distinct().Count()
+                               }).OrderBy(x => x.venda).ToList();
+
+            menuDao.FaturamentoConsultorMes.Add(consultores.FirstOrDefault());
+            menuDao.FaturamentoConsultorMes.Add(consultores.LastOrDefault());
 
             return menuDao;
         }
