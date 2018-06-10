@@ -53,7 +53,12 @@
                                                     </div>
                                                     <div class="col-xs-10 text-right">
                                                         <div class="huge">@Model.FaturamentoLojaMes.Sum(x => x.venda).ToString("c2")</div>
-                                                        <div class="small">Faturamento de todas as lojas neste mês</div>
+                                                        <div class="small">Faturamento de todas as lojas</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-12 text-right">
+                                                        <div class="small">neste mês</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -74,6 +79,10 @@
                                                                 <div class="small">@item.nomeFantasia - @item.venda.ToString("c2")</div>
                                                             }
                                                         }
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-12 text-right">
                                                         <div class="small">neste mês</div>
                                                     </div>
                                                 </div>
@@ -95,6 +104,10 @@
                                                                 <div class="small">@item.descricao - @item.venda.ToString("c2")</div>
                                                             }
                                                         }
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-12 text-right">
                                                         <div class="small">neste mês</div>
                                                     </div>
                                                 </div>
@@ -103,7 +116,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-6">
+                                    <div class="col-lg-4 col-md-6">
                                         <div class="panel panel-gray">
                                             <div class="panel-heading">
                                                 <div class="row">
@@ -112,20 +125,25 @@
                                                     </div>
                                                     <div class="col-xs-10 text-right">
                                                         <div class="huge">@Model.PedidoStatusMes.Sum(x => x.qtdPedido)</div>
-                                                        <div class="small">Pedidos tirados neste mês</div>
+                                                        <div class="small">Pedidos tirados</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-12 text-right">
+                                                        <div class="small">neste mês</div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-md-6">
+                                    <div class="col-lg-2 col-md-6">
                                         <div class="panel panel-gray">
                                             <div class="panel-heading">
-                                                <div class="row">
-                                                    <div class="col-xs-2">
+                                                <div class="row form-group">
+                                                    <div class="col-xs-3">
                                                         <i class="fa fa-thumbs-up fa-3x"></i>
                                                     </div>
-                                                    <div class="col-xs-10 text-right">
+                                                    <div class="col-xs-9 text-right">
                                                         <div class="huge">
                                                             @{
                                                                 var pedidoStatusMesEntregue = Model.PedidoStatusMes.FirstOrDefault(x => x.pedidoStatusID == (int)PedidoStatusDao.EPedidoStatus.Entregue);
@@ -140,20 +158,29 @@
                                                                 }
                                                             }
                                                         </div>
-                                                        <div class="small">Pedidos entregues neste mês</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-12 text-right">
+                                                        <div class="small">Pedidos entregues</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-12 text-right">
+                                                        <div class="small">neste mês</div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-md-6">
+                                    <div class="col-lg-2 col-md-6">
                                         <div class="panel panel-gray">
                                             <div class="panel-heading">
-                                                <div class="row">
-                                                    <div class="col-xs-2">
-                                                        <i class="fa fa-question fa-3x"></i>
+                                                <div class="row form-group">
+                                                    <div class="col-xs-3">
+                                                        <i class="fa fa-calendar fa-3x"></i>
                                                     </div>
-                                                    <div class="col-xs-10 text-right">
+                                                    <div class="col-xs-9 text-right">
                                                         <div class="huge">
                                                             @{
                                                                 var pedidoStatusMesPrevisaoDeEntrega = Model.PedidoStatusMes.FirstOrDefault(x => x.pedidoStatusID == (int)PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega);
@@ -168,20 +195,29 @@
                                                                 }
                                                             }
                                                         </div>
-                                                        <div class="small">Pedidos com entrega agendada neste mês</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-12 text-right">
+                                                        <div class="small">Pedidos com entrega agendada</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-12 text-right">
+                                                        <div class="small">neste mês</div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-md-6">
+                                    <div class="col-lg-2 col-md-6">
                                         <div class="panel panel-gray">
                                             <div class="panel-heading">
-                                                <div class="row">
-                                                    <div class="col-xs-2">
+                                                <div class="row form-group">
+                                                    <div class="col-xs-3">
                                                         <i class="fa fa-arrow-right fa-3x"></i>
                                                     </div>
-                                                    <div class="col-xs-10 text-right">
+                                                    <div class="col-xs-9 text-right">
                                                         <div class="huge">
                                                             @{
                                                                 var pedidoStatusMesRetiradoNaLoja = Model.PedidoStatusMes.FirstOrDefault(x => x.pedidoStatusID == (int)PedidoStatusDao.EPedidoStatus.RetiradoNaLoja);
@@ -196,7 +232,53 @@
                                                                 }
                                                             }
                                                         </div>
-                                                        <div class="small">Pedidos retirados na loja neste mês</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-12 text-right">
+                                                        <div class="small">Pedidos retirados na loja</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-12 text-right">
+                                                        <div class="small">neste mês</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col-md-6">
+                                        <div class="panel panel-gray">
+                                            <div class="panel-heading">
+                                                <div class="row form-group">
+                                                    <div class="col-xs-3">
+                                                        <i class="fa fa-times fa-3x"></i>
+                                                    </div>
+                                                    <div class="col-xs-9 text-right">
+                                                        <div class="huge">
+                                                            @{
+                                                                var pedidoStatusMesCancelado = Model.PedidoStatusMes.FirstOrDefault(x => x.pedidoStatusID == (int)PedidoStatusDao.EPedidoStatus.Cancelado);
+
+                                                                if (pedidoStatusMesCancelado != null)
+                                                                {
+                                                                    @Html.Raw(pedidoStatusMesCancelado.qtdPedido);
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Html.Raw("0");
+                                                                }
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-12 text-right">
+                                                        <div class="small">Pedidos cancelados</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-12 text-right">
+                                                        <div class="small">neste mês</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -363,7 +445,12 @@
                                                     </div>
                                                     <div class="col-xs-10 text-right">
                                                         <div class="huge">@Model.NotaFiscalImportadaMes.quantidade</div>
-                                                        <div class="small">NFEs importadas neste mês</div>
+                                                        <div class="small">NFEs importadas</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-12 text-right">
+                                                        <div class="small">neste mês</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -382,11 +469,16 @@
                                                             if (faturamentoConsultorMesMenor != null)
                                                             {
                                                                 <div>@faturamentoConsultorMesMenor.nome</div>
-                                                                <div class="small">Consultor com menor faturamento neste mês</div>
+                                                                <div class="small">Consultor com menor faturamento</div>
                                                                 <div class="small">Pedidos tirados: @faturamentoConsultorMesMenor.qtdPedido</div>
                                                                 <div class="small">Faturamento: @faturamentoConsultorMesMenor.venda.ToString("c2")</div>
                                                             }
                                                         }
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-12 text-right">
+                                                        <div class="small">neste mês</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -405,11 +497,16 @@
                                                             if (faturamentoConsultorMesMaior != null)
                                                             {
                                                                 <div>@faturamentoConsultorMesMaior.nome</div>
-                                                                <div class="small">Consultor com menor faturamento neste mês</div>
+                                                                <div class="small">Consultor com menor faturamento</div>
                                                                 <div class="small">Pedidos tirados: @faturamentoConsultorMesMaior.qtdPedido</div>
                                                                 <div class="small">Faturamento: @faturamentoConsultorMesMaior.venda.ToString("c2")</div>
                                                             }
                                                         }
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-12 text-right">
+                                                        <div class="small">neste mês</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -419,8 +516,8 @@
                             </div>
                         </div>
                     </div>
-                }
-            }
+                                                                }
+                                                            }
         }
         <div class="card">
             <div class="card-header" id="headingTwo">
@@ -442,9 +539,9 @@
                                         {
                                             <li><a href="@Url.Action("Cadastro", "Cliente")" target="_self"><i class="glyphicon glyphicon-user" style="cursor: pointer"></i> Cadastrar Cliente</a></li>
                                             <li><a href="@Url.Action("Cadastro", "Pedido")" target="_self"><i class="glyphicon glyphicon-ok" style="cursor: pointer"></i> Tirar Pedido</a></li>
-                                                    <li><a href="@Url.Action("Cadastro", "Produto")" target="_self"><i class="glyphicon glyphicon-th" style="cursor: pointer"></i> Cadastrar Produto</a></li>
-                                                    <li><a href="@Url.Action("Cadastro", "Loja")" target="_self"><i class="glyphicon glyphicon-home" style="cursor: pointer"></i> Cadastrar Loja</a></li>
-                                                    <li><a href="@Url.Action("Cadastro", "Consultor")" target="_self"><i class="glyphicon glyphicon-user" style="cursor: pointer"></i> Cadastrar Consultor</a></li>
+                                            <li><a href="@Url.Action("Cadastro", "Produto")" target="_self"><i class="glyphicon glyphicon-th" style="cursor: pointer"></i> Cadastrar Produto</a></li>
+                                            <li><a href="@Url.Action("Cadastro", "Loja")" target="_self"><i class="glyphicon glyphicon-home" style="cursor: pointer"></i> Cadastrar Loja</a></li>
+                                            <li><a href="@Url.Action("Cadastro", "Consultor")" target="_self"><i class="glyphicon glyphicon-user" style="cursor: pointer"></i> Cadastrar Consultor</a></li>
                                                     <li><a href="@Url.Action("Cadastro", "Medida")" target="_self"><i class="glyphicon glyphicon-remove" style="cursor: pointer"></i> Cadastrar Medida</a></li>
                                                     <li><a href="@Url.Action("Cadastro", "Categoria")" target="_self"><i class="glyphicon glyphicon-tags" style="cursor: pointer"></i> Cadastrar Categoria</a></li>
                                                     <li><a href="@Url.Action("Cadastro", "Orcamento")" target="_self"><i class="glyphicon glyphicon-time" style="cursor: pointer"></i> Tirar Orçamento</a></li>
@@ -453,7 +550,7 @@
                                         {
                                             <li><a href="@Url.Action("Cadastro", "Cliente")" target="_self"><i class="glyphicon glyphicon-user" style="cursor: pointer"></i> Cadastrar Cliente</a></li>
                                             <li><a href="@Url.Action("Cadastro", "Pedido")" target="_self"><i class="glyphicon glyphicon-ok" style="cursor: pointer"></i> Tirar Pedido</a></li>
-                                                    <li><a href="@Url.Action("Cadastro", "Orcamento")" target="_self"><i class="glyphicon glyphicon-time" style="cursor: pointer"></i> Tirar Orçamento</a></li>
+                                            <li><a href="@Url.Action("Cadastro", "Orcamento")" target="_self"><i class="glyphicon glyphicon-time" style="cursor: pointer"></i> Tirar Orçamento</a></li>
                                         }
                                     }
                                 }
@@ -471,9 +568,9 @@
                                         {
                                             <li><a href="@Url.Action("Lista", "Loja")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Lojas</a></li>
                                             <li><a href="@Url.Action("Lista", "Consultor")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Consultores</a></li>
-                                                    <li><a href="@Url.Action("Lista", "Medida")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Medidas</a></li>
-                                                    <li><a href="@Url.Action("Lista", "Categoria")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Categorias</a></li>
-                                                    <li><a href="@Url.Action("Lista", "Orcamento")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Orçamentos</a></li>
+                                            <li><a href="@Url.Action("Lista", "Medida")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Medidas</a></li>
+                                            <li><a href="@Url.Action("Lista", "Categoria")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Categorias</a></li>
+                                            <li><a href="@Url.Action("Lista", "Orcamento")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Orçamentos</a></li>
                                         }
                                         else if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)TipoUsuarioDao.ETipoUsuario.Vendedor)
                                         {
@@ -492,9 +589,9 @@
                                         {
                                             <li><a href="@Url.Action("Transferencia", "Produto")" target="_self"><i class="glyphicon glyphicon-resize-full" style="cursor: pointer"></i> Transferência de Produto entre Lojas</a></li>
                                             <li><a href="@Url.Action("Cadastro", "NotaFiscal")" target="_self"><i class="glyphicon glyphicon-triangle-right" style="cursor: pointer"></i> Entrada de NFe</a></li>
-                                                    <li><a href="@Url.Action("Index", "MovimentoDeCaixa")" target="_self"><i class="glyphicon glyphicon-usd" style="cursor: pointer"></i> Movimento de Caixa</a></li>
-                                                    <li><a href="@Url.Action("CalendarioDeEntrega", "Pedido")" target="_self"><i class="glyphicon glyphicon-calendar" style="cursor: pointer"></i> Calendário de Entrega</a></li>
-                                                    <li><a href="@Url.Action("Lista", "Usuario")" target="_self"><i class="glyphicon glyphicon-pencil" style="cursor: pointer"></i> Alterar Senha de Usuário</a></li>
+                                            <li><a href="@Url.Action("Index", "MovimentoDeCaixa")" target="_self"><i class="glyphicon glyphicon-usd" style="cursor: pointer"></i> Movimento de Caixa</a></li>
+                                            <li><a href="@Url.Action("CalendarioDeEntrega", "Pedido")" target="_self"><i class="glyphicon glyphicon-calendar" style="cursor: pointer"></i> Calendário de Entrega</a></li>
+                                            <li><a href="@Url.Action("Lista", "Usuario")" target="_self"><i class="glyphicon glyphicon-pencil" style="cursor: pointer"></i> Alterar Senha de Usuário</a></li>
                                         }
                                         else if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)TipoUsuarioDao.ETipoUsuario.Vendedor)
                                         {
