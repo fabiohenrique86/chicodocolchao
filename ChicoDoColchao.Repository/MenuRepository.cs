@@ -28,6 +28,7 @@ namespace ChicoDoColchao.Repository
                                           join ptp in chicoDoColchaoEntities.PedidoTipoPagamento on p.PedidoID equals ptp.PedidoID
                                           join l in chicoDoColchaoEntities.Loja on p.LojaID equals l.LojaID
                                           where p.DataPedido.Month == DateTime.Now.Month && p.DataPedido.Year == DateTime.Now.Year
+                                          && p.PedidoStatusID != (int)PedidoStatusDao.EPedidoStatus.Cancelado
                                           group ptp by new { l.LojaID, l.NomeFantasia } into g1
                                           select new FaturamentoLojaMes()
                                           {
@@ -40,6 +41,7 @@ namespace ChicoDoColchao.Repository
                                                    join ptp in chicoDoColchaoEntities.PedidoTipoPagamento on p.PedidoID equals ptp.PedidoID
                                                    join tp in chicoDoColchaoEntities.TipoPagamento on ptp.TipoPagamentoID equals tp.TipoPagamentoID
                                                    where p.DataPedido.Month == DateTime.Now.Month && p.DataPedido.Year == DateTime.Now.Year
+                                                   && p.PedidoStatusID != (int)PedidoStatusDao.EPedidoStatus.Cancelado
                                                    group ptp by new { ptp.TipoPagamentoID, tp.Descricao } into g1
                                                    select new FaturamentoTipoPagamentoMes()
                                                    {
@@ -67,6 +69,7 @@ namespace ChicoDoColchao.Repository
                                join ptp in chicoDoColchaoEntities.PedidoTipoPagamento on p.PedidoID equals ptp.PedidoID
                                join f in chicoDoColchaoEntities.Funcionario on p.FuncionarioID equals f.FuncionarioID
                                where p.DataPedido.Month == DateTime.Now.Month && p.DataPedido.Year == DateTime.Now.Year
+                               && p.PedidoStatusID != (int)PedidoStatusDao.EPedidoStatus.Cancelado
                                group ptp by new { f.FuncionarioID, f.Nome } into g1
                                select new FaturamentoConsultorMes()
                                {
