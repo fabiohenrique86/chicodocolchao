@@ -67,6 +67,7 @@ namespace ChicoDoColchao.Controllers
             }
         }
 
+        [HttpGet]
         public JsonResult Listar(ConsultorDao consultorDao)
         {
             List<ConsultorDao> consultores = new List<ConsultorDao>();

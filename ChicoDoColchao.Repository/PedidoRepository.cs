@@ -89,7 +89,7 @@ namespace ChicoDoColchao.Repository
                 query = query.Where(x => x.PedidoStatusID == pedido.PedidoStatusID);
             }
 
-            if (top)
+            if (top && take > 0)
             {
                 var lista = query.Include(x => x.Cliente.Estado)
                     .Include(x => x.Funcionario)

@@ -47,7 +47,7 @@ namespace ChicoDoColchao.Controllers
                 {
                     DataPedido = Convert.ToDateTime(data),
                     LojaDao = new List<LojaDao>() { new LojaDao() { LojaID = lojaId } }
-                });
+                }, false, 0);
 
                 if (pedidosDao == null || pedidosDao.Count() <= 0)
                 {

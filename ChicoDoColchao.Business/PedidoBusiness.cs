@@ -268,11 +268,11 @@ namespace ChicoDoColchao.Business
             }
         }
 
-        public List<PedidoDao> Listar(PedidoDao pedidoDao)
+        public List<PedidoDao> Listar(PedidoDao pedidoDao, bool top, int take)
         {
             try
             {
-                return pedidoRepository.Listar(pedidoDao.ToBd(), true, 50).Select(x => x.ToApp()).ToList();
+                return pedidoRepository.Listar(pedidoDao.ToBd(), top, take).Select(x => x.ToApp()).ToList();
             }
             catch (BusinessException ex)
             {

@@ -247,6 +247,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ds_cliente.xsd</DependentUpon>
     </Compile>
+    <Compile Include="ds_comissao.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ds_comissao.xsd</DependentUpon>
+    </Compile>
     <Compile Include="ds_estoque.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -266,6 +271,16 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ds_tipo_pagamento.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="ds_venda_consultor.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ds_venda_consultor.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="ds_venda_loja.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ds_venda_loja.xsd</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -401,6 +416,17 @@
     <Content Include="ds_estoque.xsc">
       <DependentUpon>ds_estoque.xsd</DependentUpon>
     </Content>
+    <Content Include="ds_comissao.xsc">
+      <DependentUpon>ds_comissao.xsd</DependentUpon>
+    </Content>
+    <None Include="ds_comissao.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ds_comissao.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="ds_comissao.xss">
+      <DependentUpon>ds_comissao.xsd</DependentUpon>
+    </Content>
     <None Include="ds_estoque.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>ds_estoque.Designer.cs</LastGenOutput>
@@ -439,6 +465,28 @@
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="fonts\FontAwesome.otf" />
     <Content Include="Planilhas\cdc-produtos.xlsx" />
+    <Content Include="ds_venda_consultor.xsc">
+      <DependentUpon>ds_venda_consultor.xsd</DependentUpon>
+    </Content>
+    <None Include="ds_venda_consultor.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ds_venda_consultor.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="ds_venda_consultor.xss">
+      <DependentUpon>ds_venda_consultor.xsd</DependentUpon>
+    </Content>
+    <Content Include="ds_venda_loja.xsc">
+      <DependentUpon>ds_venda_loja.xsd</DependentUpon>
+    </Content>
+    <None Include="ds_venda_loja.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ds_venda_loja.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="ds_venda_loja.xss">
+      <DependentUpon>ds_venda_loja.xsd</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\ChicoDoColchao-Release.pubxml" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.dataTables-1.10.12.min.js" />
@@ -501,6 +549,9 @@
     <Content Include="Views\Shared\_ModalFuncionarioAlterar.cshtml" />
     <Content Include="Views\Relatorio\Estoque.cshtml" />
     <Content Include="Views\Shared\_ModalLojaAlterar.cshtml" />
+    <Content Include="Views\Relatorio\Comissao.cshtml" />
+    <Content Include="Views\Relatorio\VendaConsultor.cshtml" />
+    <Content Include="Views\Relatorio\VendaLoja.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -526,6 +577,15 @@
     <Content Include="Reports\OrcamentoComanda.rdlc" />
     <Content Include="Reports\Estoque.rdlc" />
     <Content Include="Reports\PedidoComanda.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\Comissao.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\VendaLoja.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\VendaConsultor.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

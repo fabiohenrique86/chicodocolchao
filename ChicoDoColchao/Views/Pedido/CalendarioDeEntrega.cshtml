@@ -34,7 +34,7 @@
         $(document).ready(function () {
 
             var events = [];
-            $.getJSON("/Pedido/Listar", { 'PedidoStatusDao[0].PedidoStatusID': '@PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega.GetHashCode()' },
+            $.getJSON("/Pedido/Listar", { 'PedidoStatusDao[0].PedidoStatusID': '@PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega.GetHashCode()', top: false, take: 0 },
             function (data)
             {
                 $(data).each(function (idxPedido, pedido)

@@ -104,8 +104,7 @@
                     type: "POST",
                     url: "/Pedido/DarBaixa",
                     data: { pedidoDao: pedidoDao },
-                    success: function (data)
-                    {
+                    success: function (data) {
                         if (!data.Sucesso) {
                             alert(data.Mensagem);
                             return;
@@ -155,7 +154,7 @@
 
         $(document).ready(function () {
 
-            $.getJSON("/Pedido/Listar", function (data) {
+            $.getJSON("/Pedido/Listar", { top: true, take: 50 }, function (data) {
                 tbPedido.clear();
                 tbPedido.rows.add(data).draw();
             });
@@ -220,8 +219,7 @@
                     { "data": "LojaDao[0].NomeFantasia", "className": "text-center" },
                     { "data": "LojaSaidaDao[0].NomeFantasia", "className": "text-center" },
                     {
-                        "data": function (data, type, row)
-                        {
+                        "data": function (data, type, row) {
                             var comanda = "<a href='" + window.location.origin + "/Pedido/Comanda?PedidoID=" + data["PedidoID"] + "' target='_blank'><i class='glyphicon glyphicon-print' title='Imprimir Pedido' style='cursor: pointer; color: #333'></i></a>";
                             var cancelamento = "<i class='glyphicon glyphicon-remove' title='Cancelar Pedido' style='cursor: pointer' onclick='cancelarPedido(" + data["PedidoID"] + ", this)'></i>";
                             var comandaPorEmail = "<i class='glyphicon glyphicon-envelope' title='Enviar Comanda Por E-mail' style='cursor: pointer' onclick='enviarComandaPorEmail(" + data["PedidoID"] + ")'></i>";
@@ -297,81 +295,63 @@
                     { "data": "Quantidade", "className": "text-center" },
                     { "data": "ProdutoDao.CategoriaDao[0].Descricao", "className": "text-center" },
                     {
-                        "data": function (data, type, row)
-                        {
+                        "data": function (data, type, row) {
                             var pedidoStatusId = $("#lblPedidoStatusID").text();
                             var calendario = "<i class='glyphicon glyphicon-calendar' title='Alterar Data Entrega' style='cursor: pointer' onclick='modalAlterarDataEntrega(" + JSON.stringify(data) + ")'></i>";
                             var programada = "Programada para " + moment(data.DataEntrega).format("DD/MM/YYYY");
 
-                            if (pedidoStatusId == '@PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega.GetHashCode()')
-                            {
-                                if (data.UsuarioEntregaDao == null || data.UsuarioEntregaDao.UsuarioID <= 0)
-                                {
+                            if (pedidoStatusId == '@PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega.GetHashCode()') {
+                                if (data.UsuarioEntregaDao == null || data.UsuarioEntregaDao.UsuarioID <= 0) {
                                     return calendario;
                                 }
-                                else
-                                {
-                                    if (data.UsuarioBaixaDao == null || data.UsuarioBaixaDao.UsuarioID <= 0)
-                                    {
+                                else {
+                                    if (data.UsuarioBaixaDao == null || data.UsuarioBaixaDao.UsuarioID <= 0) {
                                         return programada + " " + calendario;
                                     }
-                                    else
-                                    {
+                                    else {
                                         return programada;
                                     }
                                 }
                             }
-                            else if (pedidoStatusId == '@PedidoStatusDao.EPedidoStatus.RetiradoNaLoja.GetHashCode()')
-                            {
-                                if (data.DataEntrega != null)
-                                {
+                            else if (pedidoStatusId == '@PedidoStatusDao.EPedidoStatus.RetiradoNaLoja.GetHashCode()') {
+                                if (data.DataEntrega != null) {
                                     return moment(data.DataEntrega).format("DD/MM/YYYY");
                                 }
-                                
+
                                 return "";
                             }
-                            else if (pedidoStatusId == '@PedidoStatusDao.EPedidoStatus.Entregue.GetHashCode()')
-                            {
+                            else if (pedidoStatusId == '@PedidoStatusDao.EPedidoStatus.Entregue.GetHashCode()') {
                                 return programada;
                             }
-                            else
-                            {
+                            else {
                                 return "";
                             }
                         },
                         "className": "text-center"
                     },
                     {
-                        "data": function (data, type, row)
-                        {
+                        "data": function (data, type, row) {
                             var pedidoStatusId = $("#lblPedidoStatusID").text();
 
-                            if (pedidoStatusId == '@PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega.GetHashCode()')
-                            {
-                                if (data.UsuarioBaixaDao == null || data.UsuarioBaixaDao.UsuarioID <= 0)
-                                {
+                            if (pedidoStatusId == '@PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega.GetHashCode()') {
+                                if (data.UsuarioBaixaDao == null || data.UsuarioBaixaDao.UsuarioID <= 0) {
                                     return "<i class='glyphicon glyphicon-ok' title='Dar Baixa Produto' style='cursor: pointer' onclick='darBaixaProduto(" + JSON.stringify(data) + ")'></i>";
                                 }
-                                else
-                                {
+                                else {
                                     return moment(data.DataBaixa).format("DD/MM/YYYY HH:mm");
                                 }
                             }
-                            else if (pedidoStatusId == '@PedidoStatusDao.EPedidoStatus.RetiradoNaLoja.GetHashCode()')
-                            {
-                                if (data.DataBaixa != null)
-                                {
+                            else if (pedidoStatusId == '@PedidoStatusDao.EPedidoStatus.RetiradoNaLoja.GetHashCode()') {
+                                if (data.DataBaixa != null) {
                                     return moment(data.DataBaixa).format("DD/MM/YYYY HH:mm");
                                 }
 
                                 return "";
                             }
-                            else if (pedidoStatusId == '@PedidoStatusDao.EPedidoStatus.Entregue.GetHashCode()')
-                            {
+                            else if (pedidoStatusId == '@PedidoStatusDao.EPedidoStatus.Entregue.GetHashCode()') {
                                 return moment(data.DataBaixa).format("DD/MM/YYYY HH:mm");
                             }
-                            else
-                            {
+                            else {
                                 return "";
                             }
                         },
@@ -422,8 +402,7 @@
                     type: "POST",
                     url: "/Pedido/Atualizar/",
                     data: { pedidoDao: pedidoDao },
-                    success: function (data)
-                    {
+                    success: function (data) {
                         if (!data.Sucesso) {
                             alert(data.Mensagem);
                             return;

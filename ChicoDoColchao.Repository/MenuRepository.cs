@@ -65,22 +65,25 @@ namespace ChicoDoColchao.Repository
                                                         Where(x => x.DataNotaFiscal.Month == DateTime.Now.Month && x.DataNotaFiscal.Year == DateTime.Now.Year).
                                                         Count();
 
-            var consultores = (from p in chicoDoColchaoEntities.Pedido
-                               join ptp in chicoDoColchaoEntities.PedidoTipoPagamento on p.PedidoID equals ptp.PedidoID
-                               join f in chicoDoColchaoEntities.Funcionario on p.FuncionarioID equals f.FuncionarioID
-                               where p.DataPedido.Month == DateTime.Now.Month && p.DataPedido.Year == DateTime.Now.Year
-                               && p.PedidoStatusID != (int)PedidoStatusDao.EPedidoStatus.Cancelado
-                               group ptp by new { f.FuncionarioID, f.Nome } into g1
-                               select new FaturamentoConsultorMes()
-                               {
-                                   funcionarioID = g1.Key.FuncionarioID,
-                                   nome = g1.Key.Nome,
-                                   venda = g1.Sum(x => x.ValorPago),
-                                   qtdPedido = g1.Select(x => x.PedidoID).Distinct().Count()
-                               }).OrderBy(x => x.venda).ToList();
+            var faturamentoConsultorMes = (from p in chicoDoColchaoEntities.Pedido
+                                           join ptp in chicoDoColchaoEntities.PedidoTipoPagamento on p.PedidoID equals ptp.PedidoID
+                                           join f in chicoDoColchaoEntities.Funcionario on p.FuncionarioID equals f.FuncionarioID
+                                           where p.DataPedido.Month == DateTime.Now.Month && p.DataPedido.Year == DateTime.Now.Year
+                                           && p.PedidoStatusID != (int)PedidoStatusDao.EPedidoStatus.Cancelado
+                                           group ptp by new { f.FuncionarioID, f.Nome } into g1
+                                           select new FaturamentoConsultorMes()
+                                           {
+                                               funcionarioID = g1.Key.FuncionarioID,
+                                               nome = g1.Key.Nome,
+                                               venda = g1.Sum(x => x.ValorPago),
+                                               qtdPedido = g1.Select(x => x.PedidoID).Distinct().Count()
+                                           }).OrderBy(x => x.venda).ToList();
 
-            menuDao.FaturamentoConsultorMes.Add(consultores.FirstOrDefault());
-            menuDao.FaturamentoConsultorMes.Add(consultores.LastOrDefault());
+            if (faturamentoConsultorMes != null && faturamentoConsultorMes.Count() > 0)
+            {
+                menuDao.FaturamentoConsultorMes.Add(faturamentoConsultorMes.FirstOrDefault());
+                menuDao.FaturamentoConsultorMes.Add(faturamentoConsultorMes.LastOrDefault());
+            }
 
             return menuDao;
         }

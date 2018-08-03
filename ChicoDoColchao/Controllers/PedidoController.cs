@@ -114,7 +114,7 @@ namespace ChicoDoColchao.Controllers
                 return null;
             }
 
-            var pedidoDao = pedidoBusiness.Listar(new PedidoDao() { PedidoID = pedidoId }).FirstOrDefault();
+            var pedidoDao = pedidoBusiness.Listar(new PedidoDao() { PedidoID = pedidoId }, false, 0).FirstOrDefault();
 
             if (pedidoDao == null)
             {
@@ -157,7 +157,7 @@ namespace ChicoDoColchao.Controllers
                 pedidoBusiness.Cancelar(pedidoDao);
 
                 // obtém somente o pedido cancelado
-                var pedido = pedidoBusiness.Listar(new PedidoDao() { PedidoID = pedidoDao.PedidoID }).FirstOrDefault();
+                var pedido = pedidoBusiness.Listar(new PedidoDao() { PedidoID = pedidoDao.PedidoID }, false, 0).FirstOrDefault();
 
                 return Json(new { Sucesso = true, Mensagem = "Pedido cancelado com sucesso!", Pedido = pedido }, JsonRequestBehavior.AllowGet);
             }
@@ -179,7 +179,7 @@ namespace ChicoDoColchao.Controllers
                 pedidoBusiness.Atualizar(pedidoDao);
 
                 // obtém somente o pedido dado baixa
-                var pedido = pedidoBusiness.Listar(new PedidoDao() { PedidoID = pedidoDao.PedidoID }).FirstOrDefault();
+                var pedido = pedidoBusiness.Listar(new PedidoDao() { PedidoID = pedidoDao.PedidoID }, false, 0).FirstOrDefault();
 
                 return Json(new { Sucesso = true, Mensagem = "Pedido alterado com sucesso!", Pedido = pedido }, JsonRequestBehavior.AllowGet);
             }
@@ -204,7 +204,7 @@ namespace ChicoDoColchao.Controllers
                 pedidoBusiness.DarBaixa(pedidoDao);
 
                 // obtém somente o pedido dado baixa
-                var pedido = pedidoBusiness.Listar(new PedidoDao() { PedidoID = pedidoDao.PedidoID }).FirstOrDefault();
+                var pedido = pedidoBusiness.Listar(new PedidoDao() { PedidoID = pedidoDao.PedidoID }, false, 0).FirstOrDefault();
 
                 return Json(new { Sucesso = true, Mensagem = "Produto baixado com sucesso!", Pedido = pedido }, JsonRequestBehavior.AllowGet);
             }
@@ -245,7 +245,7 @@ namespace ChicoDoColchao.Controllers
             }
         }
 
-        public JsonResult Listar(PedidoDao pedidoDao)
+        public JsonResult Listar(PedidoDao pedidoDao, bool top = false, int take = 0)
         {
             List<PedidoDao> pedidos = new List<PedidoDao>();
 
@@ -258,7 +258,7 @@ namespace ChicoDoColchao.Controllers
                     if (loja != null) { pedidoDao.LojaDao.Clear(); pedidoDao.LojaDao.Add(new LojaDao() { LojaID = loja.LojaID }); }
                 }
 
-                pedidos = pedidoBusiness.Listar(pedidoDao);
+                pedidos = pedidoBusiness.Listar(pedidoDao, top, take);
 
                 return Json(pedidos, JsonRequestBehavior.AllowGet);
             }

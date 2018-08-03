@@ -1,0 +1,63 @@
+﻿@{
+    ViewBag.Title = "Relatório - Venda - Consultor";
+}
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+        
+            $("#btnGerar").click(function () {
+
+                $.ajax({
+                    dataType: "json",
+                    type: "GET",
+                    url: "/Relatorio/ListarVendaConsultor",
+                    data: { funcionarioId: $("#FuncionarioID").val(), dataInicio: $("#DataInicio").val(), dataFim: $("#DataFim").val() },
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            console.info(data.Erro);
+                            alert(data.Mensagem);
+                            return;
+                        }
+
+                        window.location.href = '@Url.Action("Download", "Base")' + "?caminho=" + data.Caminho + "&arquivo=" + data.Arquivo + "&tipo=" + data.Tipo;
+                    }
+                });
+
+            });
+
+        });
+    </script>
+}
+<div class="container" style="padding-bottom: 20px;">
+    <h2><i class="glyphicon glyphicon-stats" style="color: #0f3456" title="Estoque"></i> Relatório - Venda - Consultor</h2>
+    <hr />
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="form-group">
+                @Html.DropDownList("FuncionarioID", new SelectList(ViewBag.ConsultoresDao, "FuncionarioID", "Nome"), "Consultor", new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-2">
+            <div class="form-group">
+                <input id="DataInicio" name="Data" type="text" class="form-control data datepicker" placeholder="Data Início" />
+            </div>
+        </div>
+        <div class="col-lg-2">
+            <div class="form-group">
+                <input id="DataFim" name="Data" type="text" class="form-control data datepicker" placeholder="Data Fim" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="form-group">
+                <button id="btnGerar" type="button" class="btn btn-info">Gerar</button>
+            </div>
+        </div>
+    </div>
+</div>
