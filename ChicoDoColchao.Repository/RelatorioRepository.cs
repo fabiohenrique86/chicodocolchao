@@ -1,5 +1,7 @@
 ﻿using ChicoDoColchao.Dao;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Objects;
 using System.Linq;
 
 namespace ChicoDoColchao.Repository
@@ -46,12 +48,14 @@ namespace ChicoDoColchao.Repository
                          && (vendaDao.FuncionarioID > 0 ? p.FuncionarioID == vendaDao.FuncionarioID : 1 == 1)
                          && f.Ativo == true
                          && p.PedidoStatusID != (int)PedidoStatusDao.EPedidoStatus.Cancelado
-                         group ptp by new { f.FuncionarioID, f.Nome } into g1
+                         group ptp by new { f.FuncionarioID, f.Nome, DataInicio = System.Data.Entity.DbFunctions.TruncateTime(p.DataPedido) } into g1
                          select new VendaConsultorDao()
                          {
                              FuncionarioID = g1.Key.FuncionarioID,
-                             Nome = g1.Key.Nome
-                         }).ToList();
+                             Nome = g1.Key.Nome,
+                             VendaDia = g1.Sum(x => x.ValorPago),
+                             DataInicio = g1.Key.DataInicio
+                         }).OrderBy(x => x.DataInicio).ThenBy(x => x.VendaDia).ToList();
 
             return query;
         }
