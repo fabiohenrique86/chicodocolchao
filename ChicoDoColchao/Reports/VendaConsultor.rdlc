@@ -6,10 +6,13 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>13.18845cm</Width>
+              <Width>11.71872cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.60083cm</Width>
+              <Width>2.71cm</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>2.71cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -69,6 +72,40 @@
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox51</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox2">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>Venda Acumulada</Value>
+                              <Style>
+                                <FontSize>8pt</FontSize>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox2</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -153,21 +190,16 @@
                     </Textbox>
                   </CellContents>
                 </TablixCell>
-              </TablixCells>
-            </TablixRow>
-            <TablixRow>
-              <Height>0.6cm</Height>
-              <TablixCells>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox5">
+                    <Textbox Name="Textbox3">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>="Venda Acumulada do dia " &amp; Format(Fields!DataInicio.Value, "dd/MM/yyyy") &amp; " : " &amp; FormatCurrency(Sum(Fields!VendaDia.Value),2)</Value>
+                              <Value>=FormatCurrency(Fields!VendaAcumulada.Value, 2)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -178,7 +210,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox5</rd:DefaultName>
+                      <rd:DefaultName>Textbox3</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -190,10 +222,8 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <ColSpan>2</ColSpan>
                   </CellContents>
                 </TablixCell>
-                <TablixCell />
               </TablixCells>
             </TablixRow>
           </TablixRows>
@@ -202,13 +232,14 @@
           <TablixMembers>
             <TablixMember />
             <TablixMember />
+            <TablixMember />
           </TablixMembers>
         </TablixColumnHierarchy>
         <TablixRowHierarchy>
           <TablixMembers>
             <TablixMember>
               <TablixHeader>
-                <Size>2.14722cm</Size>
+                <Size>1.81208cm</Size>
                 <CellContents>
                   <Textbox Name="Textbox60">
                     <CanGrow>true</CanGrow>
@@ -257,7 +288,7 @@
                 </SortExpression>
               </SortExpressions>
               <TablixHeader>
-                <Size>2.14722cm</Size>
+                <Size>1.81208cm</Size>
                 <CellContents>
                   <Textbox Name="DataInicio">
                     <CanGrow>true</CanGrow>
@@ -296,16 +327,13 @@
                 <TablixMember>
                   <Group Name="Details" />
                 </TablixMember>
-                <TablixMember>
-                  <KeepWithGroup>Before</KeepWithGroup>
-                </TablixMember>
               </TablixMembers>
             </TablixMember>
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>ds_venda_consultor</DataSetName>
-        <Height>1.8cm</Height>
-        <Width>18.9365cm</Width>
+        <Height>1.2cm</Height>
+        <Width>18.95081cm</Width>
         <Style>
           <Border>
             <Style>None</Style>

@@ -41,9 +41,9 @@ namespace ChicoDoColchao.Repository
 
         public List<VendaConsultorDao> VendaConsultor(VendaConsultorDao vendaDao)
         {
-            var query = (from p in chicoDoColchaoEntities.Pedido
+            var query = (from f in chicoDoColchaoEntities.Funcionario                         
+                         join p in chicoDoColchaoEntities.Pedido on f.FuncionarioID equals p.FuncionarioID
                          join ptp in chicoDoColchaoEntities.PedidoTipoPagamento on p.PedidoID equals ptp.PedidoID
-                         join f in chicoDoColchaoEntities.Funcionario on p.FuncionarioID equals f.FuncionarioID
                          where p.DataPedido >= vendaDao.DataInicio && p.DataPedido <= vendaDao.DataFim
                          && (vendaDao.FuncionarioID > 0 ? p.FuncionarioID == vendaDao.FuncionarioID : 1 == 1)
                          && f.Ativo == true
@@ -54,6 +54,18 @@ namespace ChicoDoColchao.Repository
                              FuncionarioID = g1.Key.FuncionarioID,
                              Nome = g1.Key.Nome,
                              VendaDia = g1.Sum(x => x.ValorPago),
+                             VendaAcumulada = (from f2 in chicoDoColchaoEntities.Funcionario
+                                               join p2 in chicoDoColchaoEntities.Pedido on f2.FuncionarioID equals p2.FuncionarioID
+                                               join ptp2 in chicoDoColchaoEntities.PedidoTipoPagamento on p2.PedidoID equals ptp2.PedidoID
+                                               where f2.FuncionarioID == g1.Key.FuncionarioID
+                                               && p2.DataPedido >= vendaDao.DataInicio && p2.DataPedido <= vendaDao.DataFim
+                                               && (vendaDao.FuncionarioID > 0 ? p2.FuncionarioID == vendaDao.FuncionarioID : 1 == 1)
+                                               && f2.Ativo == true
+                                               && p2.PedidoStatusID != (int)PedidoStatusDao.EPedidoStatus.Cancelado
+                                               && System.Data.Entity.DbFunctions.TruncateTime(g1.Key.DataInicio) >= System.Data.Entity.DbFunctions.TruncateTime(p2.DataPedido)
+                                               group ptp2 by f2.FuncionarioID into g2
+                                               select g2.Sum(x => x.ValorPago)
+                                              ).FirstOrDefault(),
                              DataInicio = g1.Key.DataInicio
                          }).OrderBy(x => x.DataInicio).ThenBy(x => x.VendaDia).ToList();
 
