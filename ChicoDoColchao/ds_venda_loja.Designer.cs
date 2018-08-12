@@ -287,6 +287,8 @@ namespace ChicoDoColchao {
             
             private global::System.Data.DataColumn columnVendaAcumulada;
             
+            private global::System.Data.DataColumn columnDataInicio;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public ds_venda_lojaDataTable() {
@@ -354,6 +356,14 @@ namespace ChicoDoColchao {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn DataInicioColumn {
+                get {
+                    return this.columnDataInicio;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -389,13 +399,14 @@ namespace ChicoDoColchao {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ds_venda_lojaRow Addds_venda_lojaRow(string LojaID, string NomeFantasia, string VendaDia, string VendaAcumulada) {
+            public ds_venda_lojaRow Addds_venda_lojaRow(string LojaID, string NomeFantasia, string VendaDia, string VendaAcumulada, string DataInicio) {
                 ds_venda_lojaRow rowds_venda_lojaRow = ((ds_venda_lojaRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         LojaID,
                         NomeFantasia,
                         VendaDia,
-                        VendaAcumulada};
+                        VendaAcumulada,
+                        DataInicio};
                 rowds_venda_lojaRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowds_venda_lojaRow);
                 return rowds_venda_lojaRow;
@@ -422,6 +433,7 @@ namespace ChicoDoColchao {
                 this.columnNomeFantasia = base.Columns["NomeFantasia"];
                 this.columnVendaDia = base.Columns["VendaDia"];
                 this.columnVendaAcumulada = base.Columns["VendaAcumulada"];
+                this.columnDataInicio = base.Columns["DataInicio"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -435,6 +447,8 @@ namespace ChicoDoColchao {
                 base.Columns.Add(this.columnVendaDia);
                 this.columnVendaAcumulada = new global::System.Data.DataColumn("VendaAcumulada", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnVendaAcumulada);
+                this.columnDataInicio = new global::System.Data.DataColumn("DataInicio", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnDataInicio);
                 this.ExtendedProperties.Add("Generator_TablePropName", "_ds_venda_loja");
                 this.ExtendedProperties.Add("Generator_UserTableName", "ds_venda_loja");
             }
@@ -643,6 +657,22 @@ namespace ChicoDoColchao {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string DataInicio {
+                get {
+                    try {
+                        return ((string)(this[this.tableds_venda_loja.DataInicioColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'DataInicio\' in table \'ds_venda_loja\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableds_venda_loja.DataInicioColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsLojaIDNull() {
                 return this.IsNull(this.tableds_venda_loja.LojaIDColumn);
             }
@@ -687,6 +717,18 @@ namespace ChicoDoColchao {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetVendaAcumuladaNull() {
                 this[this.tableds_venda_loja.VendaAcumuladaColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsDataInicioNull() {
+                return this.IsNull(this.tableds_venda_loja.DataInicioColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetDataInicioNull() {
+                this[this.tableds_venda_loja.DataInicioColumn] = global::System.Convert.DBNull;
             }
         }
         

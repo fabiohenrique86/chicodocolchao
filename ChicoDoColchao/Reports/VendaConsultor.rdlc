@@ -333,7 +333,7 @@
         </TablixRowHierarchy>
         <DataSetName>ds_venda_consultor</DataSetName>
         <Height>1.2cm</Height>
-        <Width>18.95081cm</Width>
+        <Width>18.9508cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -341,7 +341,7 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>0.81988in</Height>
+    <Height>0.56294in</Height>
     <Style />
   </Body>
   <Width>19cm</Width>
