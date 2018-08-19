@@ -552,6 +552,7 @@
     <Content Include="Views\Relatorio\Comissao.cshtml" />
     <Content Include="Views\Relatorio\VendaConsultor.cshtml" />
     <Content Include="Views\Relatorio\VendaLoja.cshtml" />
+    <Content Include="Views\Shared\_ModalPedidoFiltro.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

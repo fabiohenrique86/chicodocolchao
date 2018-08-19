@@ -52,7 +52,7 @@ namespace ChicoDoColchao.Repository
             return pedido.PedidoID;
         }
 
-        public List<Pedido> Listar(Pedido pedido, bool top, int take)
+        public List<Pedido> Listar(Pedido pedido, bool top, int take, string dataPedidoInicio = null, string dataPedidoFim = null)
         {
             IQueryable<Pedido> query = chicoDoColchaoEntities.Pedido;
 
@@ -64,6 +64,11 @@ namespace ChicoDoColchao.Repository
             if (pedido.ClienteID > 0)
             {
                 query = query.Where(x => x.ClienteID == pedido.ClienteID);
+            }
+
+            if (pedido.FuncionarioID > 0)
+            {
+                query = query.Where(x => x.FuncionarioID == pedido.FuncionarioID);
             }
 
             if (pedido.DataPedido != DateTime.MinValue)
@@ -79,6 +84,15 @@ namespace ChicoDoColchao.Repository
             {
                 query = query.Where(x => x.LojaOrigem.LojaID == pedido.LojaID);
             }
+            
+            if (pedido.LojaSaida != null && pedido.LojaSaida.LojaID > 0)
+            {
+                query = query.Where(x => x.LojaSaida.LojaID == pedido.LojaSaida.LojaID);
+            }
+            else if (pedido.LojaSaidaID > 0)
+            {
+                query = query.Where(x => x.LojaSaida.LojaID == pedido.LojaSaidaID);
+            }
 
             if (pedido.PedidoStatus != null && pedido.PedidoStatus.PedidoStatusID > 0)
             {
@@ -87,6 +101,17 @@ namespace ChicoDoColchao.Repository
             else if (pedido.PedidoStatusID > 0)
             {
                 query = query.Where(x => x.PedidoStatusID == pedido.PedidoStatusID);
+            }
+
+            if (!string.IsNullOrEmpty(dataPedidoInicio) && !string.IsNullOrEmpty(dataPedidoFim))
+            {
+                DateTime dtInicio;
+                DateTime.TryParse(dataPedidoInicio, out dtInicio);
+
+                DateTime dtFim;
+                DateTime.TryParse(dataPedidoFim, out dtFim);
+
+                query = query.Where(x => x.DataPedido >= dtInicio && x.DataPedido <= dtFim);
             }
 
             if (top && take > 0)
@@ -122,7 +147,7 @@ namespace ChicoDoColchao.Repository
                     .Include(x => x.PedidoProduto.Select(w => w.UsuarioEntrega))
                     .Include(x => x.PedidoStatus)
                     .Include(x => x.PedidoTipoPagamento.Select(w => w.TipoPagamento))
-                    .Include(x => x.PedidoTipoPagamento.Select(w => w.Parcela))                    
+                    .Include(x => x.PedidoTipoPagamento.Select(w => w.Parcela))
                     .Include(x => x.UsuarioPedido)
                     .Include(x => x.UsuarioCancelamento)
                     .OrderByDescending(x => x.PedidoID)

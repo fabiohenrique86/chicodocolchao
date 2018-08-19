@@ -272,7 +272,7 @@ namespace ChicoDoColchao.Business
         {
             try
             {
-                return pedidoRepository.Listar(pedidoDao.ToBd(), top, take).Select(x => x.ToApp()).ToList();
+                return pedidoRepository.Listar(pedidoDao.ToBd(), top, take, pedidoDao.DataPedidoInicio, pedidoDao.DataPedidoFim).Select(x => x.ToApp()).ToList();
             }
             catch (BusinessException ex)
             {

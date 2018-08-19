@@ -39,5 +39,8 @@ namespace ChicoDoColchao.Dao
         public virtual ICollection<OrcamentoDao> OrcamentoDao { get; set; }
         public virtual UsuarioDao UsuarioPedidoDao { get; set; }
         public virtual UsuarioDao UsuarioCancelamentoDao { get; set; }
+
+        public string DataPedidoInicio { get; set; }
+        public string DataPedidoFim { get; set; }
     }
 }

@@ -1,6 +1,8 @@
 ﻿@using ChicoDoColchao.Dao;
 @using Newtonsoft.Json;
 
+@model PedidoDao
+
 @{
     ViewBag.Title = "Pedido - Lista";
 
@@ -10,6 +12,11 @@
         usuarioDao = JsonConvert.DeserializeObject<UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value);
     }
 }
+<style type="text/css">
+    .ui-autocomplete {
+        z-index: 2147483647;
+    }
+</style>
 @section scripts
 {
     <script type="text/javascript">
@@ -161,6 +168,7 @@
 
             var tbPedido = $("#tbPedido").DataTable({
                 "ordering": false,
+                "bFilter": false,
                 "pageLength": 10,
                 "language": {
                     "lengthMenu": "_MENU_ registros por página",
@@ -422,8 +430,102 @@
 
                         $("#txtDataEntregaNova").val("");
                         $('#modalAlterarDataEntrega').modal('hide');
+                    }
+                });
+            });
 
-                        //alert(data.Mensagem);
+            $("#btnFiltro").click(function () {
+                $('#modalpedidofiltro').modal('show');
+            });
+
+            $("#txtCliente").autocomplete({
+                minLength: 3,
+                source: function (request, response) {
+                    $.getJSON("/Cliente/ListarAutocomplete", { term: request.term }, function (data, status, xhr) {
+
+                        // se não houver cliente cadastrado, retorna mensagem ao usuário
+                        if (data == null || data.length <= 0) { data.push({ ClienteID: 0, Nome: "Cliente não cadastrado" }); }
+
+                        response($.map(data, function (cliente) {
+                            var nome = cliente.Nome;
+
+                            if (nome == null || nome == "") {
+                                nome = cliente.NomeFantasia;
+                            }
+
+                            return { label: nome, value: cliente.ClienteID }
+                        }));
+                    });
+                },
+                select: function (event, ui) {
+
+                    // apaga a pesquisa do cliente selecionado
+                    if (ui.item.label == "Cliente não cadastrado") {
+                        ui.item.label = "";
+                        ui.item.value = "";
+                        return;
+                    }
+
+                    $("#ClienteID").val(ui.item.value);
+
+                    ui.item.label = ui.item.label;
+                    ui.item.value = ui.item.label;
+                },
+                change: function (event, ui) {
+                    if (ui == null || ui.item == undefined || ui.item == null) {
+                        $("#ClienteID").val("");
+                    }
+                }
+            });
+
+            // modal pedido filtro
+            $("#btnLimparFiltro").click(function () {
+                $("#PedidoID").val("");
+                $("#LojaOrigemID").val("");
+                $("#LojaID").val("");
+                $("#FuncionarioID").val("");
+                $("#txtCliente").val("");
+                $("#ClienteID").val("");
+                $("#DataPedidoInicio").val("");
+                $("#DataPedidoFim").val("");
+                $("#PedidoStatusID").val("");
+            });
+
+            // modal pedido filtro
+            $("#btnFiltrarPedido").click(function () {
+
+                var pedidoId = $("#PedidoID").val();
+                var lojaOrigemId = $("#LojaOrigemID").val();
+                var lojaId = $("#LojaID").val();
+                var funcionarioId = $("#FuncionarioID").val();
+                var clienteId = $("#ClienteID").val();
+                var dataPedidoInicio = $("#DataPedidoInicio").val();
+                var dataPedidoFim = $("#DataPedidoFim").val();
+                var pedidoStatusId = $("#PedidoStatusID").val();
+
+                if (pedidoId == "" &&
+                    lojaOrigemId == "" &&
+                    lojaId == "" &&
+                    funcionarioId == "" &&
+                    clienteId == "" &&
+                    dataPedidoInicio == "" &&
+                    dataPedidoFim == "" &&
+                    pedidoStatusId == "")
+                {
+                    alert('Informe algum critério de pesquisa para filtrar.');
+                    return;
+                }
+
+                $.ajax({
+                    dataType: "json",
+                    type: "GET",
+                    url: "/Pedido/Listar?PedidoID=" + pedidoId + "&ClienteDao[0].ClienteID=" + clienteId + "&ConsultorDao[0].FuncionarioID=" + funcionarioId + "&LojaDao[0].LojaID=" + lojaOrigemId + "&LojaSaidaDao[0].LojaID=" + lojaId + "&PedidoStatusDao[0].PedidoStatusID=" + pedidoStatusId + "&DataPedidoInicio=" + dataPedidoInicio + "&DataPedidoFim=" + dataPedidoFim,
+                    success: function (data) {
+
+                        $("#tbPedido").DataTable().clear();
+                        $("#tbPedido").DataTable().rows.add(data).draw();
+
+                        $('#modalpedidofiltro').modal('hide');
                     }
                 });
             });
@@ -434,6 +536,13 @@
 <div class="container">
     <h2><i class="glyphicon glyphicon-list" style="color: #0f3456" title="Pedido"></i> Lista de Pedidos</h2>
     <hr />
+    <div class="form-group">
+        <div class="row">
+            <div class="col-lg-12">
+                <button id="btnFiltro" type="button" class="btn btn-warning">Filtros</button>
+            </div>
+        </div>
+    </div>
     <div class="form-group">
         <div class="table-responsive">
             <table id="tbPedido" class="table nowrap">
@@ -565,4 +674,5 @@
             </div>
         </div>
     </div>
+    @Html.Partial("_ModalPedidoFiltro", Model)
 </div>

@@ -95,7 +95,7 @@ namespace ChicoDoColchao.Business.Tradutors
 
                 pedido.PedidoTipoPagamento.Add(pedidoTipoPagamento);
             }
-
+            
             return pedido;
         }
 

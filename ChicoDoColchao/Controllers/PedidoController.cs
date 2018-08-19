@@ -55,6 +55,7 @@ namespace ChicoDoColchao.Controllers
                 pedidoDao.ConsultorDao = consultorBusiness.Listar(consultorDao);
 
                 var lojasDao = lojaBusiness.Listar(new LojaDao() { Ativo = true });
+
                 pedidoDao.LojaSaidaDao = lojasDao;
                 pedidoDao.LojaDao = lojasDao;
 
@@ -90,7 +91,26 @@ namespace ChicoDoColchao.Controllers
                 return null;
             }
 
-            return View();
+            var pedidoDao = new PedidoDao();
+            
+            pedidoDao.PedidoStatusDao = pedidoStatusBusiness.Listar(new PedidoStatusDao() { Ativo = true }).ToList();
+
+            // filtra os consultores por loja logada, se existir
+            var consultorDao = new ConsultorDao();
+            if (Request.Cookies.Get("ChicoDoColchao_Loja") != null)
+            {
+                var lojaDao = JsonConvert.DeserializeObject<LojaDao>(Request.Cookies.Get("ChicoDoColchao_Loja").Value);
+                consultorDao.LojaDao.Clear();
+                consultorDao.LojaDao.Add(new LojaDao() { LojaID = lojaDao.LojaID });
+            }
+            pedidoDao.ConsultorDao = consultorBusiness.Listar(consultorDao);
+
+            var lojasDao = lojaBusiness.Listar(new LojaDao() { Ativo = true });
+
+            pedidoDao.LojaSaidaDao = lojasDao;
+            pedidoDao.LojaDao = lojasDao;
+
+            return View(pedidoDao);
         }
 
         public ActionResult CalendarioDeEntrega()
@@ -247,7 +267,7 @@ namespace ChicoDoColchao.Controllers
 
         public JsonResult Listar(PedidoDao pedidoDao, bool top = false, int take = 0)
         {
-            List<PedidoDao> pedidos = new List<PedidoDao>();
+            var pedidos = new List<PedidoDao>();
 
             try
             {
