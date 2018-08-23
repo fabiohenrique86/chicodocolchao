@@ -162,8 +162,14 @@
         $(document).ready(function () {
 
             $.getJSON("/Pedido/Listar", { top: true, take: 50 }, function (data) {
+                if (!data.Sucesso) {
+                    console.info(data.Erro);
+                    alert(data.Mensagem);
+                    return;
+                }
+
                 tbPedido.clear();
-                tbPedido.rows.add(data).draw();
+                tbPedido.rows.add(data.Pedidos).draw();
             });
 
             var tbPedido = $("#tbPedido").DataTable({
@@ -510,8 +516,7 @@
                     clienteId == "" &&
                     dataPedidoInicio == "" &&
                     dataPedidoFim == "" &&
-                    pedidoStatusId == "")
-                {
+                    pedidoStatusId == "") {
                     alert('Informe algum critério de pesquisa para filtrar.');
                     return;
                 }
@@ -522,8 +527,14 @@
                     url: "/Pedido/Listar?PedidoID=" + pedidoId + "&ClienteDao[0].ClienteID=" + clienteId + "&ConsultorDao[0].FuncionarioID=" + funcionarioId + "&LojaDao[0].LojaID=" + lojaOrigemId + "&LojaSaidaDao[0].LojaID=" + lojaId + "&PedidoStatusDao[0].PedidoStatusID=" + pedidoStatusId + "&DataPedidoInicio=" + dataPedidoInicio + "&DataPedidoFim=" + dataPedidoFim,
                     success: function (data) {
 
+                        if (!data.Sucesso) {
+                            console.info(data.Erro);
+                            alert(data.Mensagem);
+                            return;
+                        }
+
                         $("#tbPedido").DataTable().clear();
-                        $("#tbPedido").DataTable().rows.add(data).draw();
+                        $("#tbPedido").DataTable().rows.add(data.Pedidos).draw();
 
                         $('#modalpedidofiltro').modal('hide');
                     }

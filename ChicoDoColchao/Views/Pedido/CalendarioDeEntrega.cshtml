@@ -37,7 +37,13 @@
             $.getJSON("/Pedido/Listar", { 'PedidoStatusDao[0].PedidoStatusID': '@PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega.GetHashCode()', top: false, take: 0 },
             function (data)
             {
-                $(data).each(function (idxPedido, pedido)
+                if (!data.Sucesso) {
+                    console.info(data.Erro);
+                    alert(data.Mensagem);
+                    return;
+                }
+
+                $(data.Pedidos).each(function (idxPedido, pedido)
                 {
                     $(pedido.PedidoProdutoDao).each(function (idxPedidoProduto, pedidoProduto)
                     {

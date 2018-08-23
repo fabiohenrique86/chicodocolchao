@@ -92,7 +92,7 @@ namespace ChicoDoColchao.Controllers
             }
 
             var pedidoDao = new PedidoDao();
-            
+
             pedidoDao.PedidoStatusDao = pedidoStatusBusiness.Listar(new PedidoStatusDao() { Ativo = true }).ToList();
 
             // filtra os consultores por loja logada, se existir
@@ -280,15 +280,20 @@ namespace ChicoDoColchao.Controllers
 
                 pedidos = pedidoBusiness.Listar(pedidoDao, top, take);
 
-                return Json(pedidos, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = true, Mensagem = string.Empty, Pedidos = pedidos }, JsonRequestBehavior.AllowGet);
+
+                // return Json(pedidos, JsonRequestBehavior.AllowGet);
             }
             catch (BusinessException ex)
             {
-                return Json(pedidos, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = ex.Message, Erro = ex.Message }, JsonRequestBehavior.AllowGet);
+                // return Json(pedidos, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                return Json(pedidos, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = ex.Message, Erro = ex.ToString() }, JsonRequestBehavior.AllowGet);
+
+                // return Json(pedidos, JsonRequestBehavior.AllowGet);
             }
         }
     }

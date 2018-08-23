@@ -128,7 +128,7 @@ namespace ChicoDoColchao.Business
             foreach (var pedidoTipoPagamentoDao in pedidoDao.PedidoTipoPagamentoDao.Where(x => !string.IsNullOrEmpty(x.CV)))
             {
                 var ptp = pedidoTipoPagamentoRepository.Listar(new PedidoTipoPagamento() { CV = pedidoTipoPagamentoDao.CV });
-                
+
                 if (ptp != null && ptp.Count() > 0)
                 {
                     throw new BusinessException(string.Format("CV {0} já cadastrado", pedidoTipoPagamentoDao.CV));
@@ -268,11 +268,43 @@ namespace ChicoDoColchao.Business
             }
         }
 
+        private void ValidarListar(PedidoDao pedidoDao, out DateTime dtInicio, out DateTime dtFim)
+        {
+            dtInicio = DateTime.MinValue;
+            dtFim = DateTime.MinValue;
+
+            if (pedidoDao != null)
+            {
+                if (!string.IsNullOrEmpty(pedidoDao.DataPedidoInicio))
+                {
+                    bool inicio = DateTime.TryParse(pedidoDao.DataPedidoInicio, out dtInicio);
+                    if (!inicio)
+                    {
+                        throw new BusinessException("Data de pedido inicial inválida");
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(pedidoDao.DataPedidoFim))
+                {
+                    bool fim = DateTime.TryParse(pedidoDao.DataPedidoInicio, out dtFim);
+                    if (!fim)
+                    {
+                        throw new BusinessException("Data de pedido final inválida");
+                    }
+                }
+            }
+        }
+
         public List<PedidoDao> Listar(PedidoDao pedidoDao, bool top, int take)
         {
             try
             {
-                return pedidoRepository.Listar(pedidoDao.ToBd(), top, take, pedidoDao.DataPedidoInicio, pedidoDao.DataPedidoFim).Select(x => x.ToApp()).ToList();
+                DateTime dtInicio = DateTime.MinValue;
+                DateTime dtFim = DateTime.MinValue;
+
+                ValidarListar(pedidoDao, out dtInicio, out dtFim);
+
+                return pedidoRepository.Listar(pedidoDao.ToBd(), top, take, dtInicio, dtFim).Select(x => x.ToApp()).ToList();
             }
             catch (BusinessException ex)
             {

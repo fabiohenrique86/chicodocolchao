@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Data.Entity;
 using System;
+using System.Data.Entity.Core.Objects;
 
 namespace ChicoDoColchao.Repository
 {
@@ -52,7 +53,7 @@ namespace ChicoDoColchao.Repository
             return pedido.PedidoID;
         }
 
-        public List<Pedido> Listar(Pedido pedido, bool top, int take, string dataPedidoInicio = null, string dataPedidoFim = null)
+        public List<Pedido> Listar(Pedido pedido, bool top, int take, DateTime? dataPedidoInicio = null, DateTime? dataPedidoFim = null)
         {
             IQueryable<Pedido> query = chicoDoColchaoEntities.Pedido;
 
@@ -84,7 +85,7 @@ namespace ChicoDoColchao.Repository
             {
                 query = query.Where(x => x.LojaOrigem.LojaID == pedido.LojaID);
             }
-            
+
             if (pedido.LojaSaida != null && pedido.LojaSaida.LojaID > 0)
             {
                 query = query.Where(x => x.LojaSaida.LojaID == pedido.LojaSaida.LojaID);
@@ -103,15 +104,20 @@ namespace ChicoDoColchao.Repository
                 query = query.Where(x => x.PedidoStatusID == pedido.PedidoStatusID);
             }
 
-            if (!string.IsNullOrEmpty(dataPedidoInicio) && !string.IsNullOrEmpty(dataPedidoFim))
+            if (dataPedidoInicio.GetValueOrDefault() != DateTime.MinValue && dataPedidoFim.GetValueOrDefault() != DateTime.MinValue)
             {
-                DateTime dtInicio;
-                DateTime.TryParse(dataPedidoInicio, out dtInicio);
+                //DateTime dtInicio;
+                //DateTime dtFim;
+                //bool inicio = false;
+                //bool fim = false;
 
-                DateTime dtFim;
-                DateTime.TryParse(dataPedidoFim, out dtFim);
+                //inicio = DateTime.TryParse(dataPedidoInicio, out dtInicio);
+                //fim = DateTime.TryParse(dataPedidoFim, out dtFim);
 
-                query = query.Where(x => x.DataPedido >= dtInicio && x.DataPedido <= dtFim);
+                //if (inicio && fim)
+                //{
+                query = query.Where(x => EntityFunctions.TruncateTime(x.DataPedido) >= EntityFunctions.TruncateTime(dataPedidoInicio) && EntityFunctions.TruncateTime(x.DataPedido) <= EntityFunctions.TruncateTime(dataPedidoFim));
+                //}
             }
 
             if (top && take > 0)
