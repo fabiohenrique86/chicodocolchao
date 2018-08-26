@@ -10,38 +10,42 @@ namespace ChicoDoColchao.Business.Tradutors
     {
         public static Pedido ToBd(this PedidoDao pedidoDao)
         {
-            Pedido pedido = new Pedido();
+            var pedido = new Pedido();
 
             pedido.PedidoID = pedidoDao.PedidoID;
 
-            if (pedidoDao.ClienteDao.FirstOrDefault() != null)
+            var clienteDao = pedidoDao.ClienteDao.FirstOrDefault();
+            if (clienteDao != null && clienteDao.ClienteID > 0)
             {
-                pedido.ClienteID = pedidoDao.ClienteDao.FirstOrDefault().ClienteID;
+                pedido.ClienteID = clienteDao.ClienteID;
             }
 
             pedido.DataPedido = pedidoDao.DataPedido;
             pedido.DataCancelamento = pedidoDao.DataCancelamento;
 
-            if (pedidoDao.ConsultorDao.FirstOrDefault() != null)
+            var consultorDao = pedidoDao.ConsultorDao.FirstOrDefault();
+            if (consultorDao != null && consultorDao.FuncionarioID > 0)
             {
-                pedido.FuncionarioID = pedidoDao.ConsultorDao.FirstOrDefault().FuncionarioID;
+                pedido.FuncionarioID = consultorDao.FuncionarioID;
             }
 
-            if (pedidoDao.LojaDao.FirstOrDefault() != null)
+            var lojaDao = pedidoDao.LojaDao.FirstOrDefault();
+            if (lojaDao != null && lojaDao.LojaID > 0)
             {
-                pedido.LojaID = pedidoDao.LojaDao.FirstOrDefault().LojaID;
+                pedido.LojaID = lojaDao.LojaID;
             }
 
-            if (pedidoDao.LojaSaidaDao.FirstOrDefault() != null)
+            var lojaSaidaDao = pedidoDao.LojaSaidaDao.FirstOrDefault();
+            if (lojaSaidaDao != null && lojaSaidaDao.LojaID > 0)
             {
-                pedido.LojaSaidaID = pedidoDao.LojaSaidaDao.FirstOrDefault().LojaID;
+                pedido.LojaSaidaID = lojaSaidaDao.LojaID;
             }
 
             if (pedidoDao.UsuarioPedidoDao != null && pedidoDao.UsuarioPedidoDao.UsuarioID > 0)
             {
                 pedido.UsuarioPedidoID = pedidoDao.UsuarioPedidoDao.UsuarioID;
             }
-            
+
             if (pedidoDao.UsuarioCancelamentoDao != null && pedidoDao.UsuarioCancelamentoDao.UsuarioID > 0)
             {
                 pedido.UsuarioCancelamentoID = pedidoDao.UsuarioCancelamentoDao.UsuarioID;
@@ -52,14 +56,15 @@ namespace ChicoDoColchao.Business.Tradutors
             pedido.Observacao = pedidoDao.Observacao;
             pedido.Desconto = pedidoDao.Desconto;
 
-            if (pedidoDao.PedidoStatusDao.FirstOrDefault() != null)
+            var pedidoStatusDao = pedidoDao.PedidoStatusDao.FirstOrDefault();
+            if (pedidoStatusDao != null && pedidoStatusDao.PedidoStatusID > 0)
             {
-                pedido.PedidoStatusID = pedidoDao.PedidoStatusDao.FirstOrDefault().PedidoStatusID;
+                pedido.PedidoStatusID = pedidoStatusDao.PedidoStatusID;
             }
 
             foreach (var pedidoProdutoDao in pedidoDao.PedidoProdutoDao)
             {
-                PedidoProduto pedidoProduto = new PedidoProduto();
+                var pedidoProduto = new PedidoProduto();
 
                 pedidoProduto.PedidoID = pedidoProdutoDao.PedidoID;
                 pedidoProduto.ProdutoID = pedidoProdutoDao.ProdutoID;
@@ -85,7 +90,7 @@ namespace ChicoDoColchao.Business.Tradutors
 
             foreach (var pedidoTipoPagamentoDao in pedidoDao.PedidoTipoPagamentoDao)
             {
-                PedidoTipoPagamento pedidoTipoPagamento = new PedidoTipoPagamento();
+                var pedidoTipoPagamento = new PedidoTipoPagamento();
 
                 pedidoTipoPagamento.PedidoID = pedidoTipoPagamentoDao.PedidoID;
                 pedidoTipoPagamento.TipoPagamentoID = pedidoTipoPagamentoDao.TipoPagamentoDao.TipoPagamentoID;
@@ -95,13 +100,13 @@ namespace ChicoDoColchao.Business.Tradutors
 
                 pedido.PedidoTipoPagamento.Add(pedidoTipoPagamento);
             }
-            
+
             return pedido;
         }
 
         public static PedidoDao ToApp(this Pedido pedido)
         {
-            PedidoDao pedidoDao = new PedidoDao();
+            var pedidoDao = new PedidoDao();
 
             pedidoDao.PedidoID = pedido.PedidoID;
             pedidoDao.ClienteDao.Add(new ClienteDao()
@@ -131,12 +136,12 @@ namespace ChicoDoColchao.Business.Tradutors
             pedidoDao.DataCancelamento = pedido.DataCancelamento;
             pedidoDao.ValorFrete = pedido.ValorFrete;
             pedidoDao.Desconto = pedido.Desconto;
-            
+
             if (pedido.UsuarioPedido != null)
             {
                 pedidoDao.UsuarioPedidoDao = new UsuarioDao() { UsuarioID = pedido.UsuarioPedido.UsuarioID, Login = pedido.UsuarioPedido.Login };
             }
-            
+
             if (pedido.UsuarioCancelamento != null)
             {
                 pedidoDao.UsuarioCancelamentoDao = new UsuarioDao() { UsuarioID = pedido.UsuarioCancelamento.UsuarioID, Login = pedido.UsuarioCancelamento.Login };
@@ -180,7 +185,7 @@ namespace ChicoDoColchao.Business.Tradutors
 
             foreach (var pedidoProduto in pedido.PedidoProduto)
             {
-                PedidoProdutoDao pedidoProdutoDao = new PedidoProdutoDao();
+                var pedidoProdutoDao = new PedidoProdutoDao();
 
                 pedidoProdutoDao.PedidoID = pedidoProduto.PedidoID;
                 pedidoProdutoDao.ProdutoID = pedidoProduto.ProdutoID;
@@ -222,7 +227,7 @@ namespace ChicoDoColchao.Business.Tradutors
 
             foreach (var pedidoTipoPagamento in pedido.PedidoTipoPagamento)
             {
-                PedidoTipoPagamentoDao pedidoTipoPagamentoDao = new PedidoTipoPagamentoDao();
+                var pedidoTipoPagamentoDao = new PedidoTipoPagamentoDao();
 
                 pedidoTipoPagamentoDao.PedidoID = pedidoTipoPagamento.PedidoID;
                 pedidoTipoPagamentoDao.TipoPagamentoDao = new TipoPagamentoDao()

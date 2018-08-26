@@ -286,7 +286,7 @@ namespace ChicoDoColchao.Business
 
                 if (!string.IsNullOrEmpty(pedidoDao.DataPedidoFim))
                 {
-                    bool fim = DateTime.TryParse(pedidoDao.DataPedidoInicio, out dtFim);
+                    bool fim = DateTime.TryParse(pedidoDao.DataPedidoFim, out dtFim);
                     if (!fim)
                     {
                         throw new BusinessException("Data de pedido final inválida");
@@ -299,8 +299,8 @@ namespace ChicoDoColchao.Business
         {
             try
             {
-                DateTime dtInicio = DateTime.MinValue;
-                DateTime dtFim = DateTime.MinValue;
+                var dtInicio = DateTime.MinValue;
+                var dtFim = DateTime.MinValue;
 
                 ValidarListar(pedidoDao, out dtInicio, out dtFim);
 
