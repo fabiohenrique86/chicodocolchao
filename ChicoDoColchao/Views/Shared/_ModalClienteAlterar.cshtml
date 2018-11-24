@@ -1,0 +1,144 @@
+﻿@model List<ChicoDoColchao.Dao.EstadoDao>
+        
+<div class="modal fade" id="modalclientealterar" tabindex="-1" role="dialog" aria-labelledby="ModalClienteAlterar" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
+                <h4 class="modal-title" id="myModalLabel">Alterar Cliente <label id="lblCpf"></label><label id="lblCnpj"></label></h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="ClienteID" />
+                <input type="hidden" id="RowIdx" />
+                <div class="form-group clientePF">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <input id="Nome" name="Nome" type="text" class="form-control" placeholder="Nome" maxlength="100" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group clientePF">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <input id="Cpf" name="Cpf" type="text" class="form-control cpf" placeholder="Cpf" maxlength="11" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group clientePF">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <input id="DataNascimento" name="DataNascimento" type="text" class="form-control data datepicker" placeholder="Data Nascimento" maxlength="10" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group clientePJ">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <input id="NomeFantasia" type="text" class="form-control" placeholder="Nome Fantasia da Empresa" maxlength="100" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group clientePJ">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <input id="Cnpj" type="text" class="form-control cnpj" placeholder="Cnpj" maxlength="18" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group clientePJ">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <input id="RazaoSocial" type="text" class="form-control" placeholder="Razão Social" maxlength="150" />
+                        </div>
+                    </div>
+                </div>                
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <input id="Email" class="form-control" placeholder="E-mail" maxlength="200" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <input id="TelefoneResidencial" class="form-control fixo" placeholder="Telefone Residencial/Empresarial" />
+                        </div>
+                        <div class="col-lg-6">
+                            <input id="TelefoneResidencial2" class="form-control fixo" placeholder="Telefone Residencial/Empresarial 2" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <input id="TelefoneCelular" class="form-control celular" placeholder="Telefone Celular" />
+                        </div>
+                        <div class="col-lg-6">
+                            <input id="TelefoneCelular2" class="form-control celular" placeholder="Telefone Celular 2" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <input id="Cep" class="form-control cep" placeholder="CEP" maxlength="9" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            @Html.DropDownListFor(x => x.FirstOrDefault().EstadoID, new SelectList(Model, "EstadoID", "Nome"), "Estado", new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <input id="Cidade" class="form-control" placeholder="Cidade" maxlength="100" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <input id="Logradouro" class="form-control" placeholder="Logradouro" maxlength="100" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <input id="Bairro" class="form-control" placeholder="Bairro" maxlength="75" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <input id="Numero" class="form-control" placeholder="Número" maxlength="7" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <input id="Complemento" class="form-control" placeholder="Complemento" maxlength="100" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <input id="PontoReferencia" class="form-control" placeholder="Ponto Referência" maxlength="150" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnAlterarCliente" type="button" class="btn btn-warning">Alterar</button>
+            </div>
+        </div>
+    </div>
+</div>

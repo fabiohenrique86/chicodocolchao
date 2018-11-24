@@ -282,6 +282,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ds_venda_loja.xsd</DependentUpon>
     </Compile>
+    <Compile Include="ds_venda_produto.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ds_venda_produto.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -487,6 +492,17 @@
     <Content Include="ds_venda_loja.xss">
       <DependentUpon>ds_venda_loja.xsd</DependentUpon>
     </Content>
+    <Content Include="ds_venda_produto.xsc">
+      <DependentUpon>ds_venda_produto.xsd</DependentUpon>
+    </Content>
+    <None Include="ds_venda_produto.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ds_venda_produto.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="ds_venda_produto.xss">
+      <DependentUpon>ds_venda_produto.xsd</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\ChicoDoColchao-Release.pubxml" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.dataTables-1.10.12.min.js" />
@@ -553,6 +569,10 @@
     <Content Include="Views\Relatorio\VendaConsultor.cshtml" />
     <Content Include="Views\Relatorio\VendaLoja.cshtml" />
     <Content Include="Views\Shared\_ModalPedidoFiltro.cshtml" />
+    <Content Include="Views\Relatorio\VendaProduto.cshtml" />
+    <Content Include="Views\Pedido\Troca.cshtml" />
+    <Content Include="Views\Shared\_ModalClienteAlterar.cshtml" />
+    <Content Include="Views\Shared\_ModalCliente.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -587,6 +607,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Reports\VendaConsultor.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\VendaProduto.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

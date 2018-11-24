@@ -54,5 +54,10 @@ namespace ChicoDoColchao.Repository
             chicoDoColchaoEntities.Entry(cliente).State = EntityState.Added;
             chicoDoColchaoEntities.SaveChanges();
         }
+
+        public void Alterar(Cliente cliente)
+        {
+            chicoDoColchaoEntities.SaveChanges();
+        }
     }
 }

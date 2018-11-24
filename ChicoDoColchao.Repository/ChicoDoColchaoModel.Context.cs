@@ -39,7 +39,6 @@ namespace ChicoDoColchao.Repository
         public virtual DbSet<Orcamento> Orcamento { get; set; }
         public virtual DbSet<OrcamentoProduto> OrcamentoProduto { get; set; }
         public virtual DbSet<Parcela> Parcela { get; set; }
-        public virtual DbSet<Pedido> Pedido { get; set; }
         public virtual DbSet<PedidoProduto> PedidoProduto { get; set; }
         public virtual DbSet<PedidoStatus> PedidoStatus { get; set; }
         public virtual DbSet<Produto> Produto { get; set; }
@@ -50,5 +49,6 @@ namespace ChicoDoColchao.Repository
         public virtual DbSet<Usuario> Usuario { get; set; }
         public virtual DbSet<OrcamentoHistorico> OrcamentoHistorico { get; set; }
         public virtual DbSet<PedidoTipoPagamento> PedidoTipoPagamento { get; set; }
+        public virtual DbSet<Pedido> Pedido { get; set; }
     }
 }

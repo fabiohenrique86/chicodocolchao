@@ -8,7 +8,7 @@
         function modalOrcamento(orcamentoDao) {
 
             $("#lblOrcamentoID_O").text(orcamentoDao.OrcamentoID);
-            
+
             $("#txtObservacao").text(orcamentoDao.Observacao == null ? "" : orcamentoDao.Observacao);
 
             $("#tbProduto").DataTable().clear();
@@ -48,10 +48,8 @@
                     "sSearch": "Pesquisar",
                     "oPaginate": { "sNext": "Próximo", "sPrevious": "Anterior", "sFirst": "Primeiro", "sLast": "Último" }
                 },
-                "rowCallback": function (row, data, index)
-                {
-                    if (data.PedidoDao != null)
-                    {
+                "rowCallback": function (row, data, index) {
+                    if (data.PedidoDao != null) {
                         $('td', row).addClass('bg-success');
                     }
                 },
@@ -78,19 +76,16 @@
                         "className": "text-center"
                     },
                     {
-                        "data": function (data, type, row)
-                        {
+                        "data": function (data, type, row) {
                             var historico = "<i class='glyphicon glyphicon-list' title='Histórico' style='cursor: pointer' onclick='modalOrcamentoHistorico(" + JSON.stringify(data) + ")'></i>";
                             var gerarVenda = "<a style='color: #333' href='/Pedido/Cadastro?orcamentoID=" + data.OrcamentoID + "'><i class='glyphicon glyphicon-share-alt' title='Gerar Venda' style='cursor: pointer'></i></a>";
                             var comanda = "<a href='" + window.location.origin + "/Orcamento/Comanda?OrcamentoID=" + data["OrcamentoID"] + "' target='_blank'><i class='glyphicon glyphicon-print' title='Imprimir Orçamento' style='cursor: pointer; color: #333'></i></a>";
 
                             // se orçamento foi convertido em venda, não é possível converter novamente
-                            if (data.PedidoDao == null)
-                            {
+                            if (data.PedidoDao == null) {
                                 return comanda + " " + historico + " " + gerarVenda;
                             }
-                            else
-                            {
+                            else {
                                 return comanda + " " + historico;
                             }
                         },
@@ -207,7 +202,9 @@
             </table>
         </div>
     </div>
-    <button id="btnCadastrar" type="button" class="btn btn-info">Cadastrar Novo Orçamento</button>
+    <div class="form-group">
+        <button id="btnCadastrar" type="button" class="btn btn-info">Cadastrar Novo Orçamento</button>
+    </div>
     <div class="modal fade" id="modalorcamento" tabindex="-1" role="dialog" aria-labelledby="ModalOrcamento" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">

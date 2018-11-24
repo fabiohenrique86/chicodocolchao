@@ -20,7 +20,8 @@ namespace ChicoDoColchao.Dao
             PrevisaoDeEntrega = 1,
             RetiradoNaLoja = 2,
             Cancelado = 3,
-            Entregue = 4
+            Entregue = 4,
+            Trocado = 5
         }
     }
 }

@@ -71,6 +71,24 @@ namespace ChicoDoColchao.Business
             }
         }
 
+        private void ValidarVendaProduto(VendaProdutoDao vendaProdutoDao)
+        {
+            if (vendaProdutoDao == null)
+            {
+                throw new BusinessException("VendaProdutoDao é obrigatório");
+            }
+
+            if (vendaProdutoDao.DataInicio == DateTime.MinValue)
+            {
+                throw new BusinessException("Data início é obrigatório");
+            }
+
+            if (vendaProdutoDao.DataFim == DateTime.MinValue)
+            {
+                throw new BusinessException("Data fim é obrigatório");
+            }
+        }
+
         public List<ComissaoDao> Comissao(ComissaoDao comissaoDao)
         {
             try
@@ -120,6 +138,27 @@ namespace ChicoDoColchao.Business
                 ValidarVendaLoja(vendaLojaDao);
 
                 return relatorioRepository.VendaLoja(vendaLojaDao);
+            }
+            catch (BusinessException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                // inclui o log do erro
+                logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
+
+                throw ex;
+            }
+        }
+
+        public List<VendaProdutoDao> VendaProduto(VendaProdutoDao vendaProdutoDao)
+        {
+            try
+            {
+                ValidarVendaProduto(vendaProdutoDao);
+
+                return relatorioRepository.VendaProduto(vendaProdutoDao);
             }
             catch (BusinessException ex)
             {

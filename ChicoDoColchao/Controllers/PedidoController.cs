@@ -17,6 +17,7 @@ namespace ChicoDoColchao.Controllers
         private LojaBusiness lojaBusiness;
         private TipoPagamentoBusiness tipoPagamentoBusiness;
         private OrcamentoBusiness orcamentoBusiness;
+        private ParcelaBusiness parcelaBusiness;
 
         public PedidoController()
         {
@@ -26,6 +27,7 @@ namespace ChicoDoColchao.Controllers
             lojaBusiness = new LojaBusiness();
             tipoPagamentoBusiness = new TipoPagamentoBusiness();
             orcamentoBusiness = new OrcamentoBusiness();
+            parcelaBusiness = new ParcelaBusiness();
         }
 
         public ActionResult Cadastro(string orcamentoID = null)
@@ -61,7 +63,7 @@ namespace ChicoDoColchao.Controllers
 
                 pedidoDao.TipoPagamentoDao = tipoPagamentoBusiness.Listar(new TipoPagamentoDao());
 
-                if (!string.IsNullOrEmpty(orcamentoID))
+                if (!string.IsNullOrEmpty(orcamentoID)) // orçamento
                 {
                     var orcamentoDao = orcamentoBusiness.Listar(new OrcamentoDao() { OrcamentoID = Convert.ToInt32(orcamentoID) }).FirstOrDefault();
 
@@ -78,6 +80,67 @@ namespace ChicoDoColchao.Controllers
             {
 
             }
+
+            ViewBag.ParcelaDao = parcelaBusiness.Listar(new ParcelaDao());
+
+            return View(pedidoDao);
+        }
+
+        public ActionResult Troca(string pedidoId = null)
+        {
+            var pedidoDao = new PedidoDao();
+
+            try
+            {
+                string tela = "";
+                if (!SessaoAtivaEPerfilValidado(out tela))
+                {
+                    Response.Redirect(tela, true);
+                    return null;
+                }
+
+                int id = 0;
+                int.TryParse(pedidoId, out id);
+
+                if (id <= 0)
+                {
+                    return RedirectToAction("Index", "Menu");
+                }
+
+                // lista somente os status "Previsão de entrega" e "Retirado na Loja"
+                pedidoDao.PedidoStatusDao = pedidoStatusBusiness.Listar(new PedidoStatusDao()).Where(x => x.PedidoStatusID == (int)PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega || x.PedidoStatusID == (int)PedidoStatusDao.EPedidoStatus.RetiradoNaLoja).ToList();
+
+                // filtra os consultores por loja logada, se existir
+                var consultorDao = new ConsultorDao();
+                if (Request.Cookies.Get("ChicoDoColchao_Loja") != null)
+                {
+                    var lojaDao = JsonConvert.DeserializeObject<LojaDao>(Request.Cookies.Get("ChicoDoColchao_Loja").Value);
+                    consultorDao.LojaDao.Clear();
+                    consultorDao.LojaDao.Add(new LojaDao() { LojaID = lojaDao.LojaID });
+                }
+                pedidoDao.ConsultorDao = consultorBusiness.Listar(consultorDao);
+
+                var lojasDao = lojaBusiness.Listar(new LojaDao() { Ativo = true });
+
+                pedidoDao.LojaSaidaDao = lojasDao;
+                pedidoDao.LojaDao = lojasDao;
+
+                pedidoDao.TipoPagamentoDao = tipoPagamentoBusiness.Listar(new TipoPagamentoDao());
+                
+                var p = pedidoBusiness.Listar(new PedidoDao() { PedidoID = id }, false, 0).FirstOrDefault();
+                if (p == null)
+                {
+                    return RedirectToAction("Index", "Menu");
+                }
+
+                ViewBag.PedidoDao = p;
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            ViewBag.ParcelaDao = parcelaBusiness.Listar(new ParcelaDao());
 
             return View(pedidoDao);
         }
@@ -281,19 +344,33 @@ namespace ChicoDoColchao.Controllers
                 pedidos = pedidoBusiness.Listar(pedidoDao, top, take);
 
                 return Json(new { Sucesso = true, Mensagem = string.Empty, Pedidos = pedidos }, JsonRequestBehavior.AllowGet);
-
-                // return Json(pedidos, JsonRequestBehavior.AllowGet);
             }
             catch (BusinessException ex)
             {
                 return Json(new { Sucesso = false, Mensagem = ex.Message, Erro = ex.Message }, JsonRequestBehavior.AllowGet);
-                // return Json(pedidos, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
                 return Json(new { Sucesso = false, Mensagem = ex.Message, Erro = ex.ToString() }, JsonRequestBehavior.AllowGet);
+            }
+        }
 
-                // return Json(pedidos, JsonRequestBehavior.AllowGet);
+        [HttpPost]
+        public JsonResult Trocar(PedidoDao pedidoDao)
+        {
+            try
+            {
+                int pedidoID = pedidoBusiness.Trocar(pedidoDao);
+
+                return Json(new { Sucesso = true, Mensagem = string.Format("Pedido {0} trocado com sucesso!", pedidoID) }, JsonRequestBehavior.AllowGet);
+            }
+            catch (BusinessException ex)
+            {
+                return Json(new { Sucesso = false, Mensagem = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Pedido não trocado. Tente novamente." }, JsonRequestBehavior.AllowGet);
             }
         }
     }

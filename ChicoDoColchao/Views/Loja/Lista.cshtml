@@ -14,8 +14,7 @@
 {
     <script type="text/javascript">
 
-        function limpar()
-        {
+        function limpar() {
             $("#lblCnpj").text("");
             $("#LojaID").val("");
             $("#Cnpj").val("");
@@ -31,10 +30,8 @@
             $("#modallojaalterar").modal('show');
         }
 
-        function excluirLoja(lojaId, cnpj, obj)
-        {
-            if (confirm("Deseja realmente excluir loja " + cnpj + "?"))
-            {
+        function excluirLoja(lojaId, cnpj, obj) {
+            if (confirm("Deseja realmente excluir loja " + cnpj + "?")) {
                 var lojaDao = {};
 
                 lojaDao.LojaID = lojaId;
@@ -46,8 +43,7 @@
                     type: "POST",
                     url: "/Loja/Excluir",
                     data: { lojaDao: lojaDao },
-                    success: function (data)
-                    {
+                    success: function (data) {
 
                         if (!data.Sucesso) {
                             console.info(data.Erro);
@@ -89,11 +85,9 @@
                     { "data": "Telefone", "className": "text-center" },
                     { "data": "Bairro", "className": "text-center" },
                     {
-                        "data": function (data, type, row)
-                        {
+                        "data": function (data, type, row) {
                             // não pode alterar a loja "depósito"
-                            if (data["Deposito"] == true)
-                            {
+                            if (data["Deposito"] == true) {
                                 return "";
                             }
 
@@ -177,6 +171,8 @@
             </table>
         </div>
     </div>
-    <button id="btnCadastrar" type="button" class="btn btn-info">Cadastrar Nova Loja</button>
+    <div class="form-group">
+        <button id="btnCadastrar" type="button" class="btn btn-info">Cadastrar Nova Loja</button>
+    </div>
 </div>
 @Html.Partial("_ModalLojaAlterar")

@@ -17,9 +17,11 @@ namespace ChicoDoColchao.Repository
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Usuario()
         {
-            this.Pedido1 = new HashSet<Pedido>();
             this.PedidoProduto = new HashSet<PedidoProduto>();
             this.PedidoProduto1 = new HashSet<PedidoProduto>();
+            this.PedidoProduto2 = new HashSet<PedidoProduto>();
+            this.Pedido = new HashSet<Pedido>();
+            this.Pedido1 = new HashSet<Pedido>();
         }
     
         public int UsuarioID { get; set; }
@@ -29,11 +31,15 @@ namespace ChicoDoColchao.Repository
         public int TipoUsuarioID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Pedido> Pedido1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PedidoProduto> PedidoProduto { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PedidoProduto> PedidoProduto1 { get; set; }
         public virtual TipoUsuario TipoUsuario { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PedidoProduto> PedidoProduto2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Pedido> Pedido { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Pedido> Pedido1 { get; set; }
     }
 }

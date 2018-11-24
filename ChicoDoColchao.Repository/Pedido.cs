@@ -17,8 +17,9 @@ namespace ChicoDoColchao.Repository
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Pedido()
         {
-            this.PedidoProduto = new HashSet<PedidoProduto>();
             this.Orcamento = new HashSet<Orcamento>();
+            this.PedidoTroca = new HashSet<Pedido>();
+            this.PedidoProduto = new HashSet<PedidoProduto>();
             this.PedidoTipoPagamento = new HashSet<PedidoTipoPagamento>();
         }
     
@@ -36,18 +37,22 @@ namespace ChicoDoColchao.Repository
         public Nullable<int> UsuarioPedidoID { get; set; }
         public Nullable<System.DateTime> DataCancelamento { get; set; }
         public Nullable<int> UsuarioCancelamentoID { get; set; }
+        public Nullable<int> PedidoTrocaID { get; set; }
     
         public virtual Cliente Cliente { get; set; }
         public virtual Funcionario Funcionario { get; set; }
         public virtual Loja LojaOrigem { get; set; }
         public virtual Loja LojaSaida { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Orcamento> Orcamento { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Pedido> PedidoTroca { get; set; }
+        public virtual Pedido Pedido2 { get; set; }
         public virtual PedidoStatus PedidoStatus { get; set; }
         public virtual Usuario UsuarioCancelamento { get; set; }
         public virtual Usuario UsuarioPedido { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PedidoProduto> PedidoProduto { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Orcamento> Orcamento { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PedidoTipoPagamento> PedidoTipoPagamento { get; set; }
     }

@@ -55,6 +55,7 @@ namespace ChicoDoColchao.Business.Tradutors
             pedido.ValorFrete = pedidoDao.ValorFrete;
             pedido.Observacao = pedidoDao.Observacao;
             pedido.Desconto = pedidoDao.Desconto;
+            pedido.PedidoTrocaID = pedidoDao.PedidoTrocaID;
 
             var pedidoStatusDao = pedidoDao.PedidoStatusDao.FirstOrDefault();
             if (pedidoStatusDao != null && pedidoStatusDao.PedidoStatusID > 0)
@@ -69,20 +70,25 @@ namespace ChicoDoColchao.Business.Tradutors
                 pedidoProduto.PedidoID = pedidoProdutoDao.PedidoID;
                 pedidoProduto.ProdutoID = pedidoProdutoDao.ProdutoID;
                 pedidoProduto.Quantidade = pedidoProdutoDao.Quantidade;
-                pedidoProduto.Medida = pedidoProdutoDao.Medida;
-                pedidoProduto.DataEntrega = pedidoProdutoDao.DataEntrega;
+                pedidoProduto.Medida = pedidoProdutoDao.Medida;                
                 pedidoProduto.Preco = pedidoProdutoDao.Preco;
 
+                pedidoProduto.DataEntrega = pedidoProdutoDao.DataEntrega;
                 if (pedidoProdutoDao.UsuarioEntregaDao != null && pedidoProdutoDao.UsuarioEntregaDao.UsuarioID > 0)
                 {
                     pedidoProduto.UsuarioEntregaID = pedidoProdutoDao.UsuarioEntregaDao.UsuarioID;
                 }
 
                 pedidoProduto.DataBaixa = pedidoProdutoDao.DataBaixa;
-
                 if (pedidoProdutoDao.UsuarioBaixaDao != null && pedidoProdutoDao.UsuarioBaixaDao.UsuarioID > 0)
                 {
                     pedidoProduto.UsuarioBaixaID = pedidoProdutoDao.UsuarioBaixaDao.UsuarioID;
+                }
+
+                pedidoProduto.DataTroca = pedidoProdutoDao.DataTroca;
+                if (pedidoProdutoDao.UsuarioTrocaDao != null && pedidoProdutoDao.UsuarioTrocaDao.UsuarioID > 0)
+                {
+                    pedidoProduto.UsuarioTrocaID = pedidoProdutoDao.UsuarioTrocaDao.UsuarioID;
                 }
 
                 pedido.PedidoProduto.Add(pedidoProduto);
@@ -136,6 +142,7 @@ namespace ChicoDoColchao.Business.Tradutors
             pedidoDao.DataCancelamento = pedido.DataCancelamento;
             pedidoDao.ValorFrete = pedido.ValorFrete;
             pedidoDao.Desconto = pedido.Desconto;
+            pedidoDao.PedidoTrocaID = pedido.PedidoTrocaID;
 
             if (pedido.UsuarioPedido != null)
             {
@@ -193,6 +200,7 @@ namespace ChicoDoColchao.Business.Tradutors
                 pedidoProdutoDao.Medida = pedidoProduto.Medida;
                 pedidoProdutoDao.DataEntrega = pedidoProduto.DataEntrega;
                 pedidoProdutoDao.DataBaixa = pedidoProduto.DataBaixa;
+                pedidoProdutoDao.DataTroca = pedidoProduto.DataTroca;
                 pedidoProdutoDao.Preco = pedidoProduto.Preco;
 
                 if (pedidoProduto.UsuarioEntrega != null)
@@ -203,6 +211,11 @@ namespace ChicoDoColchao.Business.Tradutors
                 if (pedidoProduto.UsuarioBaixa != null)
                 {
                     pedidoProdutoDao.UsuarioBaixaDao = new UsuarioDao() { UsuarioID = pedidoProduto.UsuarioBaixa.UsuarioID, Login = pedidoProduto.UsuarioBaixa.Login };
+                }
+
+                if (pedidoProduto.UsuarioTroca != null)
+                {
+                    pedidoProdutoDao.UsuarioTrocaDao = new UsuarioDao() { UsuarioID = pedidoProduto.UsuarioTroca.UsuarioID, Login = pedidoProduto.UsuarioTroca.Login };
                 }
 
                 pedidoProdutoDao.ProdutoDao = new ProdutoDao()

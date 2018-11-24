@@ -98,8 +98,7 @@
                     { "data": "CategoriaDao[0].Descricao", "className": "text-center" },
                     { "data": "MedidaDao.Descricao", "className": "text-center" },
                     {
-                        "data": function (data, type, row)
-                        {
+                        "data": function (data, type, row) {
                             var quantidadeEstoque = 0;
                             $(data.LojaProdutoDao).each(function (i, e) {
                                 quantidadeEstoque += e.Quantidade;
@@ -123,67 +122,66 @@
                         "visible": '@usuarioDao.TipoUsuarioDao.TipoUsuarioID' == '@TipoUsuarioDao.ETipoUsuario.Gerencial.GetHashCode()' ? true : false
                     },*@
                     {
-                        "data": function (data, type, row)
-                        {
+                        "data": function (data, type, row) {
                             return "<i class='glyphicon glyphicon-remove' title='Excluir Produto' style='cursor: pointer' onclick='excluirProduto(" + data["ProdutoID"] + "," + data["Numero"] + ")'></i>";
                         },
                         "className": "text-center",
                         "visible": '@usuarioDao.TipoUsuarioDao.TipoUsuarioID' == '@TipoUsuarioDao.ETipoUsuario.Gerencial.GetHashCode()' ? true : false
                     }
-            ]
-        });
+                ]
+            });
 
-        var tbLojaProduto = $("#tbLojaProduto").DataTable({
-            "paging": false,
-            "ordering": false,
-            "info": false,
-            "searching": false,
-            "language": {
-                "lengthMenu": "_MENU_ registros por página",
-                "zeroRecords": "Sem registros a serem exibidos",
-                "info": "Página _PAGE_ de _PAGES_",
-                "infoEmpty": "Sem registros a serem exibidos",
-                "infoFiltered": "(filtrados de _MAX_ total de registros)",
-                "sSearch": "Pesquisar",
-                "oPaginate": { "sNext": "Próximo", "sPrevious": "Anterior", "sFirst": "Primeiro", "sLast": "Último" }
-            },
-            "columns":
-            [
-                { "data": "LojaDao.NomeFantasia", "className": "text-center" },
-                { "data": "Quantidade", "className": "text-center" }
-            ]
-        });
+            var tbLojaProduto = $("#tbLojaProduto").DataTable({
+                "paging": false,
+                "ordering": false,
+                "info": false,
+                "searching": false,
+                "language": {
+                    "lengthMenu": "_MENU_ registros por página",
+                    "zeroRecords": "Sem registros a serem exibidos",
+                    "info": "Página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Sem registros a serem exibidos",
+                    "infoFiltered": "(filtrados de _MAX_ total de registros)",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": { "sNext": "Próximo", "sPrevious": "Anterior", "sFirst": "Primeiro", "sLast": "Último" }
+                },
+                "columns":
+                [
+                    { "data": "LojaDao.NomeFantasia", "className": "text-center" },
+                    { "data": "Quantidade", "className": "text-center" }
+                ]
+            });
 
-        var tbProdutoPreco = $("#tbProdutoPreco").DataTable({
-            "paging": false,
-            "ordering": false,
-            "info": false,
-            "searching": false,
-            "language": {
-                "lengthMenu": "_MENU_ registros por página",
-                "zeroRecords": "Sem registros a serem exibidos",
-                "info": "Página _PAGE_ de _PAGES_",
-                "infoEmpty": "Sem registros a serem exibidos",
-                "infoFiltered": "(filtrados de _MAX_ total de registros)",
-                "sSearch": "Pesquisar",
-                "oPaginate": { "sNext": "Próximo", "sPrevious": "Anterior", "sFirst": "Primeiro", "sLast": "Último" }
-            },
-            "columns":
-            [
-                { "data": "ProdutoID", "visible": false },
-                { "data": "Descricao", "className": "text-center" },
-                { "data": "Preco", "className": "text-center" }
-            ]
-        });
+            var tbProdutoPreco = $("#tbProdutoPreco").DataTable({
+                "paging": false,
+                "ordering": false,
+                "info": false,
+                "searching": false,
+                "language": {
+                    "lengthMenu": "_MENU_ registros por página",
+                    "zeroRecords": "Sem registros a serem exibidos",
+                    "info": "Página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Sem registros a serem exibidos",
+                    "infoFiltered": "(filtrados de _MAX_ total de registros)",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": { "sNext": "Próximo", "sPrevious": "Anterior", "sFirst": "Primeiro", "sLast": "Último" }
+                },
+                "columns":
+                [
+                    { "data": "ProdutoID", "visible": false },
+                    { "data": "Descricao", "className": "text-center" },
+                    { "data": "Preco", "className": "text-center" }
+                ]
+            });
 
-        $.getJSON("/Produto/Listar", function (data) {
-            tbProduto.clear();
-            tbProduto.rows.add(data).draw();
-        });
+            $.getJSON("/Produto/Listar", function (data) {
+                tbProduto.clear();
+                tbProduto.rows.add(data).draw();
+            });
 
-        $("#btnCadastrar").click(function () {
-            window.location.href = "/Produto/Cadastro";
-        });
+            $("#btnCadastrar").click(function () {
+                window.location.href = "/Produto/Cadastro";
+            });
 
         });
     </script>
@@ -208,6 +206,8 @@
             </table>
         </div>
     </div>
-    <button id="btnCadastrar" type="button" class="btn btn-info">Cadastrar Novo Produto</button>
+    <div class="form-group">
+        <button id="btnCadastrar" type="button" class="btn btn-info">Cadastrar Novo Produto</button>
+    </div>
     @Html.Partial("_ModalProdutoPreco")
 </div>

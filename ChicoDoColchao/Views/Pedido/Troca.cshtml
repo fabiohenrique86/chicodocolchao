@@ -4,7 +4,7 @@
 @model PedidoDao
 
 @{
-    ViewBag.Title = "Pedido - Tirar";
+    ViewBag.Title = "Pedido - Troca";
 
     UsuarioDao usuarioDao = null;
     if (Request.Cookies.Get("ChicoDoColchao_Usuario") != null)
@@ -31,6 +31,12 @@
 
         #tbProdutoPreco tbody tr {
             cursor: pointer;
+        }
+
+        .titulo {
+            font-size: 18px;
+            margin-bottom: 10px;
+            font-weight: normal;
         }
     </style>
 }
@@ -112,41 +118,65 @@
 
         function calcularTotalPedido() {
 
-            var totalPedido = 0;
-            var tbProdutos = $("#tbProduto").DataTable();
+            var quantidadeEntrada = 0;
+            var quantidadeSaida = 0;
+            var totalEntrada = 0;
+            var totalSaida = 0;
+            var totalAPagar = 0;
 
-            if (tbProdutos.rows().count() <= 0) {
-                $("#lblTotalPedido").html(Globalize.format(totalPedido, "n2"));
+            var tbProdutos = $("#tbProduto").DataTable();
+            if (tbProdutos.rows().count() <= 0)
+            {
+                $("#lblTotalEntrada").html(Globalize.format(totalEntrada, "n2"));
+                $("#lblTotalSaida").html(Globalize.format(totalSaida, "n2"));
+                $("#lblTotalAPagar").html(Globalize.format(totalAPagar, "n2"));
+
                 return;
             }
 
-            $(".quantidade").each(function (index, element)
-            {
-                var quantidade = $(element).val();
-                var tr = $(element).parents("tr");
-                var preco = Globalize.parseFloat($(tr).children().eq(4).text().trim());
-                if (isNaN(preco)) {
-                    preco = 0;
-                }
-                totalPedido += parseInt(quantidade) * preco;
+            tbProdutos.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                var data = this.data();
 
-                var dataEntrega = "<input type='text' class='form-control data datepicker dataEntrega text-center' value='" + $($($(".dataEntrega")[index]).parents("tr").children().eq(5)).children().val() + "' />";
-                if ($("#PedidoStatusID").val() == '@PedidoStatusDao.EPedidoStatus.RetiradoNaLoja.GetHashCode()')
+                quantidadeEntrada = data.QtdEntrada;
+
+                if (isNaN(quantidadeEntrada) || quantidadeEntrada == '' || quantidadeEntrada == 'undefined') {
+                    quantidadeEntrada = 0;
+                }
+
+                precoEntrada = Globalize.parseFloat(data.PrecoEntrada);
+
+                if (isNaN(precoEntrada))
                 {
-                    dataEntrega = "<input type='text' class='form-control data datepicker dataEntrega text-center' value='" + $($($(".dataEntrega")[index]).parents("tr").children().eq(5)).children().val() + "' disabled='disabled' />";
+                    precoEntrada = 0;
                 }
-                tbProdutos.row(index).data().DataEntrega = dataEntrega;
-                tbProdutos.row(index).data().Quantidade = "<input type='text' class='form-control quantidade text-center' min='0' onblur='calcularTotalPedido()' value='" + quantidade + "' />";
-                tbProdutos.row(index).invalidate();
-            });
 
-            tbProdutos.draw();
+                totalEntrada += parseInt(quantidadeEntrada) * precoEntrada;
+
+                quantidadeSaida = data.QtdSaida;
+
+                if (isNaN(quantidadeSaida) || quantidadeSaida == '' || quantidadeSaida == 'undefined') {
+                    quantidadeSaida = 0;
+                }
+
+                precoSaida = Globalize.parseFloat(data.PrecoSaida);
+
+                if (isNaN(precoSaida))
+                {
+                    precoSaida = 0;
+                }
+
+                totalSaida += parseInt(quantidadeSaida) * precoSaida;
+            });
 
             var totalDesconto = Globalize.parseFloat($("#lblTotalDesconto").text());
 
-            if (!isNaN(totalPedido)) {
-                $("#lblTotalPedido").html(Globalize.format((totalPedido - totalDesconto), "n2"));
-            }
+            $("#lblTotalSaida").html(Globalize.format(totalSaida, "n2"));
+            $("#lblTotalDesconto").html(Globalize.format(totalDesconto, "n2"));
+            $("#lblTotalEntrada").html(Globalize.format(totalEntrada, "n2"));
+
+            totalAPagar = totalSaida - totalDesconto - totalEntrada;
+
+            $("#lblTotalAPagar").html(Globalize.format(totalAPagar, "n2"));
         }
 
         var parcelas;
@@ -162,33 +192,189 @@
             return p;
         }
 
+        function changeProduto()
+        {
+            $(".produtoId").change(function ()
+            {
+                var quantidade = "";
+                var preco = "";
+                var dtEntrega = "";
+                var produtoId = $(this).val();
+
+                var tbProduto = $("#tbProduto").DataTable();
+
+                var idx = tbProduto.row($(this).parents('tr')).index();
+
+                if (produtoId != "")
+                {
+                    var pedido = @Html.Raw(Json.Encode(ViewBag.PedidoDao));
+
+                    quantidade = "<select class='form-control qtdEntrada' onchange='changeQtdEntrada(this); calcularTotalPedido()'>"
+                    $(pedido.PedidoProdutoDao).each(function (i, e)
+                    {
+                        if (e.ProdutoDao.ProdutoID == produtoId)
+                        {
+                            quantidade += "<option value='0'>0</option>";
+                            for (var i = 1; i <= e.Quantidade; i++)
+                            {
+                                quantidade += "<option value='" + i + "'>" + i + "</option>";
+                            }
+
+                            preco = Globalize.format(e.Preco, "n2");
+                            dtEntrega = moment(e.DataEntrega).format("DD/MM/YYYY");
+                        }
+                    });
+                    quantidade += "</select>";
+                }
+
+                tbProduto.row(idx).data().ProdutoIDEntrada = produtoId;
+                tbProduto.row(idx).data().QuantidadeEntrada = quantidade;
+                tbProduto.row(idx).data().QtdEntrada = 0;
+                tbProduto.row(idx).data().PrecoEntrada = preco;
+                tbProduto.row(idx).data().DataEntregaEntrada = "<span style='vertical-align: sub'>" + dtEntrega + "</span>";
+
+                tbProduto.cells(idx,1).invalidate();
+                tbProduto.cells(idx,2).invalidate();
+                tbProduto.cells(idx,3).invalidate();
+                tbProduto.cells(idx,4).invalidate();
+                tbProduto.cells(idx,5).invalidate();
+
+                tbProduto.draw();
+
+                autocompleteProduto();
+
+                calcularTotalPedido();
+            });
+        }
+
+        function autocompleteProduto()
+        {
+            var tbProduto = $("#tbProduto").DataTable();
+
+            $(".produto").autocomplete({
+                minLength: 3,
+                source: function (request, response) {
+                    $.getJSON("/Produto/ListarAutocomplete", { term: request.term }, function (data, status, xhr) {
+                        response($.map(data, function (produto) {
+
+                            // verifica se o produto tem algum preço cadastrado
+                            if (produto.Preco == undefined || produto.Preco <= 0) { return { label: "Produto " + produto.Numero + " não tem preço cadastrado", value: 0 }; }
+
+                            return { label: produto.Numero + ' | ' + produto.Descricao + ' | ' + produto.MedidaDao.Descricao + ' | ' + Globalize.format(produto.PrecoNormal, "n2"), value: produto.ProdutoID }
+                        }));
+                    });
+                },
+                select: function (event, ui) {
+
+                    var produto = ui.item.label.split("|");
+                    var produtoAdicionadoAoPedido = false;
+                    var idx = tbProduto.row($(this).parents('tr')).index();
+
+                    // verifica se o produto selecionado já existe no pedido
+                    tbProduto.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                        var data = this.data();
+                        if (data.ProdutoIDSaida == ui.item.value) {
+                            produtoAdicionadoAoPedido = true;
+                        }
+                    });
+
+                    if (produtoAdicionadoAoPedido) {
+                        ui.item.label = "";
+                        ui.item.value = "";
+                        alert('Produto ' + produto[0].trim() + ' já adicionado a troca.');
+                        return;
+                    }
+
+                    var dataEntrega = "<input type='text' class='form-control data datepicker dataEntrega text-center' value='' />";
+                    if ($("#PedidoStatusID").val() == '@PedidoStatusDao.EPedidoStatus.RetiradoNaLoja.GetHashCode()')
+                    {
+                        dataEntrega = "<input type='text' class='form-control data datepicker dataEntrega text-center' value='' disabled='disabled' />";
+                    }
+
+                    tbProduto.row(idx).data().ProdutoIDSaida = ui.item.value;
+                    tbProduto.row(idx).data().NumeroSaida = "<a href='#' style='vertical-align: sub' onclick='modalPreco(" + ui.item.value + ",\"" + Globalize.format(parseFloat(produto[3].trim().replace(".", "").replace(",", ".")), "n2") + "\")'>" + produto[0].trim() + "</a>";
+                    tbProduto.row(idx).data().QuantidadeSaida = "<input type='text' class='form-control quantidade text-center' min='0' onblur='changeQtdSaida(this); calcularTotalPedido()' />";
+                    tbProduto.row(idx).data().QtdSaida = 0;
+                    tbProduto.row(idx).data().PrecoSaida = Globalize.format(parseFloat(produto[3].trim().replace(".", "").replace(",", ".")), "n2");
+                    tbProduto.row(idx).data().DataEntregaSaida = dataEntrega;
+
+                    tbProduto.cells(idx,7).invalidate();
+                    tbProduto.cells(idx,8).invalidate();
+                    tbProduto.cells(idx,9).invalidate();
+                    tbProduto.cells(idx,10).invalidate();
+                    tbProduto.cells(idx,11).invalidate();
+                    tbProduto.cells(idx,12).invalidate();
+
+                    tbProduto.draw();
+
+                    calcularTotalPedido();
+
+                    // apaga a pesquisa do produto selecionado
+                    ui.item.label = "";
+                    ui.item.value = "";
+                }
+            });
+        }
+
+        function changeQtdEntrada(element)
+        {
+            var idx = $(element).closest('tr').index();
+
+            var tbProduto = $("#tbProduto").DataTable();
+
+            tbProduto.row(idx).data().QtdEntrada = $(element).val() == "" ? 0 : $(element).val();
+            tbProduto.cells(idx,3).invalidate();
+
+            tbProduto.draw();
+        }
+
+        function changeQtdSaida(element)
+        {
+            var idx = $(element).closest('tr').index();
+
+            var tbProduto = $("#tbProduto").DataTable();
+
+            tbProduto.row(idx).data().QtdSaida = $(element).val() == "" ? 0 : $(element).val();
+            tbProduto.cells(idx,10).invalidate();
+
+            tbProduto.draw();
+        }
+
         $(document).ready(function () {
 
             parcelas = obterParcelas(@Html.Raw(Json.Encode(ViewBag.ParcelaDao)));
 
-            $("#btnAdicionarDesconto").click(function () {
+            $("#btnAdicionarDesconto").click(function ()
+            {
                 var totalDesconto = Globalize.parseFloat($("#lblTotalDesconto").text());
                 var valorDesconto = Globalize.parseFloat($("#ValorDesconto").val());
-                var totalPedido = Globalize.parseFloat($("#lblTotalPedido").text());
+                var totalEntrada = Globalize.parseFloat($("#lblTotalEntrada").text());
+                var totalSaida = Globalize.parseFloat($("#lblTotalSaida").text());
 
                 if (isNaN(valorDesconto)) {
                     alert('Informe o valor do desconto');
                     return;
                 }
 
-                $("#lblTotalDesconto").text(Globalize.format((totalDesconto + valorDesconto), "n2"));
-                $("#lblTotalPedido").text(Globalize.format((totalPedido - valorDesconto), "n2"));
+                totalDesconto = totalDesconto + valorDesconto;
+
+                $("#lblTotalDesconto").text(Globalize.format(totalDesconto, "n2"));
+                $("#lblTotalAPagar").text(Globalize.format((totalSaida - totalDesconto - totalEntrada), "n2"));
+
                 $("#ValorDesconto").val("");
 
                 $('#modaldesconto').modal('hide');
             });
 
-            $("#btnRetirarDesconto").click(function () {
-                var totalDesconto = Globalize.parseFloat($("#lblTotalDesconto").text());
-                var totalPedido = Globalize.parseFloat($("#lblTotalPedido").text());
+            $("#btnRetirarDesconto").click(function ()
+            {
+                var totalDesconto = 0;
+                var totalEntrada = Globalize.parseFloat($("#lblTotalEntrada").text());
+                var totalSaida = Globalize.parseFloat($("#lblTotalSaida").text());
 
                 $("#lblTotalDesconto").text(Globalize.format(0, "n2"));
-                $("#lblTotalPedido").text(Globalize.format((totalPedido + totalDesconto), "n2"));
+
+                $("#lblTotalAPagar").text(Globalize.format((totalSaida - totalDesconto - totalEntrada), "n2"));
 
                 $("#ValorDesconto").val("");
                 $('#modaldesconto').modal('hide');
@@ -199,8 +385,11 @@
             {
                 var index = $(this).closest('tr').index();
 
-                $("#tbProduto").DataTable().row(index).data().DataEntrega = "<input type='text' class='form-control data datepicker dataEntrega text-center' value='" + $(this).val() + "' />";
-                $("#tbProduto").DataTable().row(index).invalidate();
+                var tbProduto = $("#tbProduto").DataTable();
+
+                tbProduto.row(index).data().DataEntregaSaida = "<input type='text' class='form-control data datepicker dataEntrega text-center' value='" + $(this).val() + "' />";
+                tbProduto.cells(index, 12).invalidate();
+                tbProduto.draw();
 
                 $(".dataEntrega").datepicker({
                     dateFormat: 'dd/mm/yy',
@@ -223,14 +412,11 @@
                 if (pedidoStatusId == '@PedidoStatusDao.EPedidoStatus.RetiradoNaLoja.GetHashCode()') {
                     $(".dataEntrega").attr("disabled", "disabled");
                     $(".dataEntrega").val("");
-                    //$("#NomeCarreto").attr("disabled", "disabled");
-                    //$("#NomeCarreto").val("");
                     $("#ValorFrete").attr("disabled", "disabled");
                     $("#ValorFrete").val("");
                 }
                 else {
                     $(".dataEntrega").removeAttr("disabled");
-                    //$("#NomeCarreto").removeAttr("disabled");
                     $("#ValorFrete").removeAttr("disabled");
                 }
             });
@@ -315,68 +501,6 @@
                 }
             });
 
-            $("#txtProduto").autocomplete({
-                minLength: 3,
-                source: function (request, response) {
-                    $.getJSON("/Produto/ListarAutocomplete", { term: request.term }, function (data, status, xhr) {
-                        response($.map(data, function (produto) {
-
-                            // verifica se o produto tem algum preço cadastrado
-                            if (produto.Preco == undefined || produto.Preco <= 0) { return { label: "Produto " + produto.Numero + " não tem preço cadastrado", value: 0 }; }
-
-                            return { label: produto.Numero + ' | ' + produto.Descricao + ' | ' + produto.MedidaDao.Descricao + ' | ' + Globalize.format(produto.PrecoNormal, "n2"), value: produto.ProdutoID }
-                        }));
-                    });
-                },
-                select: function (event, ui) {
-
-                    var produto = ui.item.label.split("|");
-                    var produtoAdicionadoAoPedido = false;
-                    var idx = 0;
-
-                    // verifica se o produto selecionado já existe no pedido
-                    tbProduto.rows().every(function (rowIdx, tableLoop, rowLoop) {
-                        var data = this.data();
-                        if (data.ProdutoID == ui.item.value) {
-                            produtoAdicionadoAoPedido = true;
-                        }
-                    });
-
-                    if (produtoAdicionadoAoPedido) {
-                        ui.item.label = "";
-                        ui.item.value = "";
-                        alert('Produto ' + produto[0].trim() + ' já adicionado ao pedido.');
-                        return;
-                    }
-
-                    var dataEntrega = "<input type='text' class='form-control data datepicker dataEntrega text-center' value='' />";
-                    if ($("#PedidoStatusID").val() == '@PedidoStatusDao.EPedidoStatus.RetiradoNaLoja.GetHashCode()')
-                    {
-                        dataEntrega = "<input type='text' class='form-control data datepicker dataEntrega text-center' value='' disabled='disabled' />";
-                    }
-
-                    // adiciona o produto ao pedido
-                    tbProduto.rows.add([
-                    {
-                        "ProdutoID": ui.item.value,
-                        "Numero": produto[0].trim(),
-                        "Descricao": produto[1].trim(),
-                        "MedidaDao": { "Descricao": produto[2].trim() },
-                        "Quantidade": "<input type='text' class='form-control quantidade text-center' min='0' onblur='calcularTotalPedido()' value='1' />",
-                        "Preco": "<span class='preco'>" + Globalize.format(parseFloat(produto[3].trim().replace(".", "").replace(",", ".")), "n2") + "</span>",
-                        "DataEntrega": dataEntrega,
-                        "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir Produto' style='cursor: pointer; vertical-align: middle'></i>"
-                    }]).draw();
-
-                    // atualiza o total do pedido
-                    calcularTotalPedido();
-
-                    // apaga a pesquisa do produto selecionado
-                    ui.item.label = "";
-                    ui.item.value = "";
-                }
-            });
-
             var tbProduto = $("#tbProduto").DataTable({
                 "paging": false,
                 "ordering": false,
@@ -407,18 +531,19 @@
                 },
                 "columns":
                 [
-                    {
-                        "data": function (data, type, row)
-                        {
-                            return "<a href='#' onclick='modalPreco(" + data["ProdutoID"] + ",\"" + $(data.Preco).text().trim() + "\")'>" + data["Numero"] + "</a>";
-                        },
-                        "className": "text-center"
-                    },
-                    { "data": "Descricao", "className": "text-left" },
-                    { "data": "MedidaDao.Descricao", "className": "text-center" },
-                    { "data": "Quantidade", "className": "text-center" },
-                    { "data": "Preco", "className": "text-center" },
-                    { "data": "DataEntrega", "className": "text-center" },
+                    { "data": "DescricaoEntrada", "className": "text-left" },
+                    { "data": "ProdutoIDEntrada", "className": "text-center", "visible": false  },
+                    { "data": "QuantidadeEntrada", "className": "text-center" },
+                    { "data": "QtdEntrada", "className": "text-center", "visible": false  },
+                    { "data": "PrecoEntrada", "className": "text-center" },
+                    { "data": "DataEntregaEntrada", "className": "text-center" },
+                    { "data": "DescricaoSaida", "className": "text-left" },
+                    { "data": "ProdutoIDSaida", "className": "text-left", "visible": false },
+                    { "data": "NumeroSaida", "className": "text-center" },
+                    { "data": "QuantidadeSaida", "className": "text-center" },
+                    { "data": "QtdSaida", "className": "text-center", "visible": false  },
+                    { "data": "PrecoSaida", "className": "text-center" },
+                    { "data": "DataEntregaSaida", "className": "text-center" },
                     { "data": "Acao", "className": "text-center" }
                 ]
             });
@@ -443,7 +568,6 @@
                     { "data": "CV", "className": "text-center" },
                     { "data": "ValorPago", "className": "text-center" },
                     { "data": "Acao", "className": "text-center" }
-
                 ]
             });
 
@@ -490,17 +614,17 @@
                 ]
             });
 
-            // botão excluir produto do pedido
+            // botão excluir produto da troca
             $('#tbProduto tbody').on('click', 'i.glyphicon-remove', function () {
-                if (confirm("Deseja realmente excluir produto do pedido?")) {
+                if (confirm("Deseja realmente excluir produto da troca?")) {
                     tbProduto.row($(this).parents('tr')).remove().draw();
                     calcularTotalPedido();
                 }
             });
 
-            // botão excluir tipo pagamento do pedido
+            // botão excluir tipo pagamento da troca
             $('#tbTipoPagamento tbody').on('click', 'i.glyphicon-remove', function () {
-                if (confirm("Deseja realmente excluir tipo de pagamento do pedido?")) {
+                if (confirm("Deseja realmente excluir tipo de pagamento da troca?")) {
                     tbTipoPagamento.row($(this).parents('tr')).remove().draw();
                     calcularTotalPago();
                 }
@@ -511,12 +635,16 @@
                 var dataProdutoPreco = tbProdutoPreco.row(this).data();
                 var row = $(this);
                 if (!row.hasClass('selected')) { row.addClass('selected').siblings().removeClass('selected'); }
-                tbProduto.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                tbProduto.rows().every(function (rowIdx, tableLoop, rowLoop)
+                {
                     var dataProduto = this.data();
-                    if (dataProduto.ProdutoID == dataProdutoPreco.ProdutoID)
+                    if (dataProduto.ProdutoIDSaida == dataProdutoPreco.ProdutoID)
                     {
-                        dataProduto.Preco = "<span class='preco'>" + dataProdutoPreco.Preco + "</span>";
-                        this.invalidate();
+                        dataProduto.NumeroSaida = "<a href='#' style='vertical-align: sub' onclick='modalPreco(" + dataProdutoPreco.ProdutoID + ",\"" + Globalize.format(parseFloat(dataProdutoPreco.Preco.replace(".", "").replace(",", ".")), "n2") + "\")'>" + $(dataProduto.NumeroSaida).text() + "</a>";
+                        dataProduto.PrecoSaida = dataProdutoPreco.Preco;
+
+                        this.cells(rowIdx,8).invalidate();
+                        this.cells(rowIdx,11).invalidate();
                     }
                 });
                 tbProduto.draw();
@@ -555,17 +683,31 @@
                 pedidoDao.UsuarioPedidoDao = { UsuarioID: '@usuarioDao.UsuarioID' };
 
                 // produtos
-                tbProduto.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                tbProduto.rows().every(function (rowIdx, tableLoop, rowLoop)
+                {
                     var data = this.data();
-                    var dtEntrega = $($($(".dataEntrega")[rowIdx]).parents("tr").children().eq(5)).children().val();
+
+                    var dtEntrega = $(data.DataEntregaSaida).val();
+
+                    // entrada
                     pedidoProdutoDao.push
                     ({
-                        "ProdutoID": data.ProdutoID,
-                        "ProdutoDao.Descricao": data.Descricao,
-                        "Quantidade": Globalize.parseInt($($($(".quantidade")[rowIdx]).parents("tr").children().eq(3)).children().val()),
-                        "Preco": $($($(".preco")[rowIdx]).parents("tr").children().eq(4)).text(),
+                        "ProdutoID": data.ProdutoIDEntrada,
+                        "Quantidade": Globalize.parseInt(data.QtdEntrada),
+                        "Preco": data.PrecoEntrada,
+                        "Tipo": '@PedidoProdutoDao.ETipo.Entrada.GetHashCode()',
+                        "UsuarioTrocaDao.UsuarioID": '@usuarioDao.UsuarioID',
+                    });
+
+                    // saída
+                    pedidoProdutoDao.push
+                    ({
+                        "ProdutoID": data.ProdutoIDSaida,
+                        "Quantidade": Globalize.parseInt(data.QtdSaida),
+                        "Preco": data.PrecoSaida,
                         "DataEntrega": dtEntrega,
-                        "UsuarioEntregaDao.UsuarioID": dtEntrega == '' ? 0 : '@usuarioDao.UsuarioID'
+                        "UsuarioEntregaDao.UsuarioID": dtEntrega == '' || dtEntrega == 'undefined' ? 0 : '@usuarioDao.UsuarioID',
+                        "Tipo": '@PedidoProdutoDao.ETipo.Saida.GetHashCode()'
                     });
                 });
 
@@ -596,19 +738,17 @@
 
                 pedidoDao.PedidoTipoPagamentoDao = pedidoTipoPagamento;
 
-                // verifica se existe um orçamento associado ao pedido
-                if ('@ViewBag.OrcamentoDao' != '')
+                // verifica se existe uma troca associado ao pedido
+                if ('@ViewBag.PedidoDao' != '')
                 {
-                    var orcamentoDao = @Html.Raw(Json.Encode(ViewBag.OrcamentoDao));
-
-                    pedidoDao.OrcamentoDao = [];
-                    pedidoDao.OrcamentoDao.push({ OrcamentoID: orcamentoDao.OrcamentoID });
+                    var pedido = @Html.Raw(Json.Encode(ViewBag.PedidoDao));
+                    pedidoDao.PedidoID = pedido.PedidoID;
                 }
 
                 $.ajax({
                     dataType: "json",
                     type: "POST",
-                    url: "/Pedido/Incluir",
+                    url: "/Pedido/Trocar",
                     data: { pedidoDao: pedidoDao },
                     success: function (data) {
 
@@ -621,64 +761,118 @@
                         tbProduto.clear().draw();
                         tbTipoPagamento.clear().draw();
                         $("#ValorFrete").val("");
-                        $("#lblTotalPedido").html("0,00");
-                        $("#lblTotalPago").html("0,00");
+
+                        $("#lblTotalEntrada").html("0,00");
                         $("#lblTotalDesconto").html("0,00");
+                        $("#lblTotalSaida").html("0,00");
+                        $("#lblTotalAPagar").html("0,00");
+                        $("#lblTotalPago").html("0,00");
+
                         $("#ClienteID").val("");
                         $("#ValorFrete").removeAttr("disabled");
 
                         alert(data.Mensagem);
+
+                        window.location.href = "/Pedido/Lista";
                     }
                 });
             });
 
-            if ('@ViewBag.OrcamentoDao' != '')
+            if ('@ViewBag.PedidoDao' != '')
             {
-                var orcamentoDao = @Html.Raw(Json.Encode(ViewBag.OrcamentoDao));
+                var pedidoDao = @Html.Raw(Json.Encode(ViewBag.PedidoDao));
 
-                $("#txtCliente").val(orcamentoDao.ClienteDao.Nome);
-                $("#ClienteID").val(orcamentoDao.ClienteDao.ClienteID);
-                $("#FuncionarioID").val(orcamentoDao.ConsultorDao[0].FuncionarioID);
-                $("#LojaOrigemID").val(orcamentoDao.LojaDao[0].LojaID);
+                $("#txtCliente").val(pedidoDao.ClienteDao[0].Nome);
+                $("#ClienteID").val(pedidoDao.ClienteDao[0].ClienteID);
+                $("#FuncionarioID").val(pedidoDao.ConsultorDao[0].FuncionarioID);
+                $("#LojaOrigemID").val(pedidoDao.LojaDao[0].LojaID);
+                $("#LojaID").val(pedidoDao.LojaSaidaDao[0].LojaID);
+                //$("#PedidoStatusID").val(pedidoDao.PedidoStatusDao[0].PedidoStatusID);
+                //$("#ValorFrete").val(Globalize.format(pedidoDao.ValorFrete, "n2"));
+                //$("#Observacao").val(Globalize.format(pedidoDao.Observacao, "n2"));
 
-                $("#lblTotalDesconto").text(Globalize.format(orcamentoDao.Desconto, "n2"));
+                //$("#lblTotalDesconto").text(Globalize.format(pedidoDao.Desconto, "n2"));
 
-                $(orcamentoDao.OrcamentoProdutoDao).each(function (index, element) {
-
-                    // adiciona o produto ao pedido
-                    tbProduto.rows.add([
-                    {
-                        "ProdutoID": element.ProdutoID,
-                        "Numero": element.ProdutoDao.Numero,
-                        "Descricao": element.ProdutoDao.Descricao,
-                        "MedidaDao": { "Descricao": element.ProdutoDao.MedidaDao.Descricao },
-                        "Quantidade": "<input type='text' class='form-control quantidade text-center' min='0' onblur='calcularTotalPedido()' value='" + element.Quantidade + "' />",
-                        "Preco": "<span class='preco'>" + Globalize.format(element.Preco, "n2") + "</span>",
-                        "DataEntrega": "<input type='text' class='form-control data datepicker dataEntrega text-center' value='' />",
-                        "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir Produto' style='cursor: pointer; vertical-align: middle'></i>"
-                    }]).draw();
+                var selectProduto = "<select name='ProdutoID' class='form-control produtoId'>"
+                selectProduto += "<option value=''>Selecione</option>";
+                $(pedidoDao.PedidoProdutoDao).each(function (i, e) {
+                    selectProduto += "<option value='" + e.ProdutoID + "'>" + e.ProdutoDao.Numero + " - " + e.ProdutoDao.Descricao + " - " + e.ProdutoDao.MedidaDao.Descricao + "</option>";
                 });
+                selectProduto += '</select>';
 
-                // atualiza o total do pedido
-                calcularTotalPedido();
+                // adiciona o produto ao pedido
+                tbProduto.rows.add([
+                {
+                    "DescricaoEntrada": selectProduto,
+                    "ProdutoIDEntrada": "",
+                    "QuantidadeEntrada": "",
+                    "QtdEntrada": "",
+                    "PrecoEntrada": "",
+                    "DataEntregaEntrada": "",
+                    "DescricaoSaida": "<input type='text' class='form-control produto' placeholder='Produtos (Mínimo de 3 letras)' />",
+                    "ProdutoIDSaida": "",
+                    "NumeroSaida": "",
+                    "QuantidadeSaida": "",
+                    "QtdSaida": "",
+                    "PrecoSaida": "",
+                    "DataEntregaSaida": "",
+                    "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir Produto' style='cursor: pointer; vertical-align: bottom'></i>"
+                }]).draw();
             }
+
+            changeProduto();
+            autocompleteProduto();
+
+            $("#btnAdicionarProduto").click(function()
+            {
+                // adiciona o produto ao pedido
+                tbProduto.rows.add([
+                {
+                    "DescricaoEntrada": selectProduto,
+                    "ProdutoIDEntrada": "",
+                    "QuantidadeEntrada": "",
+                    "QtdEntrada": "",
+                    "PrecoEntrada": "",
+                    "DataEntregaEntrada": "",
+                    "DescricaoSaida": "<input type='text' class='form-control produto' placeholder='Produtos (Mínimo de 3 letras)' />",
+                    "ProdutoIDSaida": "",
+                    "NumeroSaida": "",
+                    "QuantidadeSaida": "",
+                    "QtdSaida": "",
+                    "PrecoSaida": "",
+                    "DataEntregaSaida": "",
+                    "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir Produto' style='cursor: pointer; vertical-align: bottom'></i>"
+                }]).draw();
+
+                autocompleteProduto();
+                changeProduto();
+            });
 
         });
     </script>
 }
 <div class="container">
-    <h2><i class="glyphicon glyphicon-ok" style="color: #0f3456" title="Pedido"></i> Tirar Pedido</h2>
+    <h2><i class="glyphicon glyphicon-retweet" style="color: #0f3456" title="Pedido"></i> Trocar Pedido</h2>
     <hr />
     <form id="PedidoForm" name="PedidoForm">
         <div class="row">
-            <div class="col-lg-4">
+            <div class="col-lg-12">
                 <div class="form-group">
+                    <h4>Pedido @ViewBag.PedidoDao.PedidoID</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label>Consultor</label>
                     @Html.DropDownListFor(x => x.ConsultorDao.FirstOrDefault().FuncionarioID, new SelectList(Model.ConsultorDao, "FuncionarioID", "Nome"), "Consultor", new { @class = "form-control" })
                 </div>
                 <div class="form-group">
+                    <label>Cliente</label>
                     <div class="row">
                         <div class="col-xs-10 col-lg-10">
-                            <input id="txtCliente" name="txtCliente" type="text" class="form-control" placeholder="CPF/CNPJ do cliente (Mínimo de 3 letras)" />
+                            <input id="txtCliente" name="txtCliente" type="text" class="form-control" placeholder="CPF/CNPJ do cliente (Mínimo de 3 letras)" disabled="disabled" />
                             <input type="hidden" name="ClienteID" id="ClienteID" />
                         </div>
                         <div class="col-xs-2 col-lg-2">
@@ -690,63 +884,110 @@
                     if (lojaDao.LojaID <= 0)
                     {
                         <div class="form-group">
+                            <label>Loja de Origem</label>
                             @Html.DropDownListFor(x => x.LojaDao.FirstOrDefault().LojaID, new SelectList(Model.LojaDao, "LojaID", "NomeFantasia"), "Loja de origem dos produtos", new { @class = "form-control", @id = "LojaOrigemID" })
                         </div>
                     }
                 }
+            </div>
+            <div class="col-lg-6">
                 <div class="form-group">
+                    <label>Loja de Saída</label>
                     @Html.DropDownListFor(x => x.LojaSaidaDao.FirstOrDefault().LojaID, new SelectList(Model.LojaSaidaDao, "LojaID", "NomeFantasia"), "Loja de saída dos produtos", new { @class = "form-control" })
                 </div>
                 <div class="form-group">
+                    <label>Status do pedido</label>
                     @Html.DropDownListFor(x => x.PedidoStatusDao.FirstOrDefault().PedidoStatusID, new SelectList(Model.PedidoStatusDao, "PedidoStatusID", "Descricao"), "Status do pedido", new { @class = "form-control" })
                 </div>
                 <div class="form-group">
+                    <label>Valor do frete</label>
                     @Html.TextBoxFor(x => x.ValorFrete, new { @class = "form-control valor text-right", @placeholder = "Valor do frete (Opcional)" })
                 </div>
             </div>
-            <div class="col-lg-8">
-                <label style="font-size: 18px; margin-bottom: 10px; font-weight: normal">Produtos</label>
-                <input id="txtProduto" name="txtProduto" type="text" class="form-control" placeholder="Produtos (Mínimo de 3 letras)" />
-                <div class="table-responsive">
-                    <table id="tbProduto" class="table table-striped table-responsive table-condensed">
-                        <thead>
-                            <tr>
-                                <td class="text-center" style="width: 10%"><b>Número</b></td>
-                                <td class="text-left" style="width: 35%"><b>Descrição</b></td>
-                                <td class="text-center" style="width: 10%"><b>Medida</b></td>
-                                <td class="text-center" style="width: 10%"><b>Qtd</b></td>
-                                <td class="text-center" style="width: 10%"><b>Preço</b></td>
-                                <td class="text-center" style="width: 20%"><b>Data Entrega</b></td>
-                                <td class="text-center" style="width: 5%"><b>Ação</b></td>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <div class="col-xs-6 col-lg-6">
+                    <h4>Produtos</h4>
                 </div>
-                <div style="margin-top: 10px; margin-bottom: 10px">
-                    <div class="col-lg-12 text-right" style="font-size: 18px; padding: 0">Total Pedido: <span style="color: seagreen">R$ </span><label id="lblTotalPedido" style="color: seagreen">0,00</label></div>
+                <div class="col-xs-6 col-lg-6 text-right">
+                    <i id="btnAdicionarProduto" class="glyphicon glyphicon-plus" style="color: #5cb85c; font-size: 20px; cursor: pointer" title="Adicionar Produto"></i>
                 </div>
-                <div style="margin-top: 10px; margin-bottom: 10px">
-                    <div class="col-lg-12 text-right" style="font-size: 18px; padding: 0"><a href="#" data-toggle="modal" data-target="#modaldesconto">Desconto Autorizado</a>: <span style="color: darkorange">R$ </span><label id="lblTotalDesconto" style="color: darkorange; font-size: 18px">0,00</label></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <div class="table-responsive">
+                        <table id="tbProduto" class="table table-striped table-responsive table-condensed">
+                            <thead>
+                                <tr>
+                                    <td class="text-left" style="width: 15%"><b>Produto Entrada</b></td>
+                                    <td></td>
+                                    <td class="text-center" style="width: 40px"><b>Qtd</b></td>
+                                    <td></td>
+                                    <td class="text-center" style="width: 7.5%"><b>Preço</b></td>
+                                    <td class="text-center" style="width: 7.5%"><b>Entrega</b></td>
+                                    <td class="text-left" style="width: 25%"><b>Produto Saída</b></td>
+                                    <td></td>
+                                    <td class="text-center" style="width: 7.5%"><b>Número</b></td>
+                                    <td class="text-center" style="width: 5%"><b>Qtd</b></td>
+                                    <td></td>
+                                    <td class="text-center" style="width: 7.5%"><b>Preço</b></td>
+                                    <td class="text-center" style="width: 10%"><b>Entrega</b></td>
+                                    <td class="text-center" style="width: 5%"><b>Ação</b></td>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div style="margin-top: 10px; margin-bottom: 10px">
+                        <div class="col-lg-12" style="font-size: 17px; padding: 0">
+                            <div class="col-xs-12 col-lg-3 text-center">
+                                Total Entrada: <span style="color: #808080">R$ </span><label id="lblTotalEntrada" style="color: #808080">0,00</label>
+                            </div>
+                            <div class="col-xs-12 col-lg-3 text-center">
+                                <a href="#" data-toggle="modal" data-target="#modaldesconto">Desconto Autorizado</a>: <span style="color: darkorange">R$ </span><label id="lblTotalDesconto" style="color: darkorange;">0,00</label>
+                            </div>
+                            <div class="col-xs-12 col-lg-3 text-center">
+                                Total Saída: <span style="color: #808080">R$ </span><label id="lblTotalSaida" style="color: #808080">0,00</label>
+                            </div>
+                            <div class="col-xs-12 col-lg-3 text-center">
+                                Diferença a Pagar: <span style="color: seagreen">R$ </span><label id="lblTotalAPagar" style="color: seagreen">0,00</label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <h4>Pagamentos</h4>
-                @Html.DropDownListFor(x => x.TipoPagamentoDao.FirstOrDefault().TipoPagamentoID, new SelectList(Model.TipoPagamentoDao, "TipoPagamentoID", "Descricao"), "Tipo de pagamento", new { @class = "form-control" })
-                <div class="table-responsive">
-                    <table id="tbTipoPagamento" class="table table-striped table-responsive table-condensed">
-                        <thead>
-                            <tr>
-                                <td></td>
-                                <td class="text-left" style="width: 30%"><b>Descrição</b></td>
-                                <td class="text-center" style="width: 10%"><b>Parcelas</b></td>
-                                <td class="text-center" style="width: 30%"><b>CV</b></td>
-                                <td class="text-center" style="width: 20%"><b>Valor Pago</b></td>
-                                <td class="text-center" style="width: 10%"><b>Ação</b></td>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <div class="col-lg-12">
+                    <h4>Pagamentos</h4>
                 </div>
-                <h4 class="text-right">Total Pago: <span style="color: seagreen">R$ </span><label id="lblTotalPago" style="color: seagreen">0,00</label></h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-group">
+                    @Html.DropDownListFor(x => x.TipoPagamentoDao.FirstOrDefault().TipoPagamentoID, new SelectList(Model.TipoPagamentoDao, "TipoPagamentoID", "Descricao"), "Tipo de pagamento", new { @class = "form-control" })
+                    <div class="table-responsive">
+                        <table id="tbTipoPagamento" class="table table-striped table-responsive table-condensed">
+                            <thead>
+                                <tr>
+                                    <td></td>
+                                    <td class="text-left" style="width: 30%"><b>Descrição</b></td>
+                                    <td class="text-center" style="width: 10%"><b>Parcelas</b></td>
+                                    <td class="text-center" style="width: 30%"><b>CV</b></td>
+                                    <td class="text-center" style="width: 20%"><b>Valor Pago</b></td>
+                                    <td class="text-center" style="width: 10%"><b>Ação</b></td>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <h4 class="text-right">Total Pago: <span style="color: seagreen">R$ </span><label id="lblTotalPago" style="color: seagreen">0,00</label></h4>
+                </div>
             </div>
         </div>
         <div class="form-group">

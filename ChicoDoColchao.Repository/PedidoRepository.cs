@@ -19,8 +19,7 @@ namespace ChicoDoColchao.Repository
         {
             chicoDoColchaoEntities.Entry(pedido).State = EntityState.Added;
 
-            // se status do pedido for "Retirado na Loja", afeta o estoque
-            if (pedido.PedidoStatusID == 2)
+            if (pedido.PedidoStatusID == Dao.PedidoStatusDao.EPedidoStatus.RetiradoNaLoja.GetHashCode()) // se status do pedido for "Retirado na Loja", afeta o estoque
             {
                 // atualiza o estoque da loja de saída
                 foreach (var pedidoProduto in pedido.PedidoProduto)
@@ -106,18 +105,7 @@ namespace ChicoDoColchao.Repository
 
             if (dataPedidoInicio.GetValueOrDefault() != DateTime.MinValue && dataPedidoFim.GetValueOrDefault() != DateTime.MinValue)
             {
-                //DateTime dtInicio;
-                //DateTime dtFim;
-                //bool inicio = false;
-                //bool fim = false;
-
-                //inicio = DateTime.TryParse(dataPedidoInicio, out dtInicio);
-                //fim = DateTime.TryParse(dataPedidoFim, out dtFim);
-
-                //if (inicio && fim)
-                //{
                 query = query.Where(x => EntityFunctions.TruncateTime(x.DataPedido) >= EntityFunctions.TruncateTime(dataPedidoInicio) && EntityFunctions.TruncateTime(x.DataPedido) <= EntityFunctions.TruncateTime(dataPedidoFim));
-                //}
             }
 
             if (top && take > 0)
@@ -198,6 +186,115 @@ namespace ChicoDoColchao.Repository
                 pedido.PedidoStatusID = pedidoStatusId;
                 chicoDoColchaoEntities.SaveChanges();
             }
+        }
+
+        public int Trocar(Dao.PedidoDao pedidoDao)
+        {
+            var pedido = new Pedido();
+
+            pedido.DataPedido = DateTime.Now;
+            pedido.ClienteID = pedidoDao.ClienteDao.FirstOrDefault().ClienteID;
+            pedido.FuncionarioID = pedidoDao.ConsultorDao.FirstOrDefault().FuncionarioID;
+            pedido.LojaID = pedidoDao.LojaDao.FirstOrDefault().LojaID;
+            pedido.LojaSaidaID = pedidoDao.LojaSaidaDao.FirstOrDefault().LojaID;
+            pedido.UsuarioPedidoID = pedidoDao.UsuarioPedidoDao.UsuarioID;
+            pedido.NomeCarreto = pedidoDao.NomeCarreto;
+            pedido.ValorFrete = pedidoDao.ValorFrete;
+            pedido.Observacao = pedidoDao.Observacao;
+            pedido.Desconto = pedidoDao.Desconto;
+            pedido.PedidoStatusID = pedidoDao.PedidoStatusDao.FirstOrDefault().PedidoStatusID;
+            pedido.PedidoTrocaID = pedidoDao.PedidoID;
+
+            var pedidoOriginal = chicoDoColchaoEntities.Pedido.Include(x => x.PedidoProduto).FirstOrDefault(x => x.PedidoID == pedidoDao.PedidoID);
+
+            // produtos de entrada
+            if (pedidoOriginal != null)
+            {
+                pedidoOriginal.PedidoStatusID = Dao.PedidoStatusDao.EPedidoStatus.Trocado.GetHashCode(); // muda o status do pedido original para 'Trocado'
+
+                foreach (var pp in pedidoDao.PedidoProdutoDao.Where(x => x.Tipo == Dao.PedidoProdutoDao.ETipo.Entrada.GetHashCode())) // produtos devolvidos ao estoque da loja do pedido original
+                {
+                    var pedidoProduto = pedidoOriginal.PedidoProduto.FirstOrDefault(x => x.ProdutoID == pp.ProdutoID);
+
+                    if (pedidoProduto != null)
+                    {
+                        // muda o status do produto original para 'Trocado'
+                        pedidoProduto.UsuarioTrocaID = pp.UsuarioTrocaDao.UsuarioID;
+                        pedidoProduto.DataTroca = pedido.DataPedido;
+
+                        // só volta para o estoque os produtos que já saíram do estoque, ou seja, que foram dados baixas
+                        if (pedidoProduto.UsuarioBaixaID > 0)
+                        {
+                            var lp = chicoDoColchaoEntities.LojaProduto.FirstOrDefault(x => x.ProdutoID == pp.ProdutoID && x.LojaID == pedidoOriginal.LojaSaidaID);
+
+                            if (lp != null)
+                            {
+                                lp.Quantidade = Convert.ToInt16(lp.Quantidade + pp.Quantidade);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // produtos de saída
+            foreach (var pedidoProdutoDao in pedidoDao.PedidoProdutoDao.Where(x => x.Tipo == Dao.PedidoProdutoDao.ETipo.Saida.GetHashCode()))
+            {
+                var pedidoProduto = new PedidoProduto();
+
+                pedidoProduto.PedidoID = pedidoProdutoDao.PedidoID;
+                pedidoProduto.ProdutoID = pedidoProdutoDao.ProdutoID;
+                pedidoProduto.Quantidade = pedidoProdutoDao.Quantidade;
+                pedidoProduto.Preco = pedidoProdutoDao.Preco;
+                pedidoProduto.UsuarioEntregaID = pedido.UsuarioPedidoID;
+                pedidoProduto.DataEntrega = pedidoProdutoDao.DataEntrega;
+
+                // se status do pedido for "Retirado na Loja", afeta o estoque
+                if (pedidoDao.PedidoStatusDao.FirstOrDefault().PedidoStatusID == Dao.PedidoStatusDao.EPedidoStatus.RetiradoNaLoja.GetHashCode())
+                {
+                    pedidoProduto.UsuarioEntregaID = pedido.UsuarioPedidoID;
+                    pedidoProduto.DataEntrega = pedido.DataPedido;
+                    pedidoProduto.UsuarioBaixaID = pedido.UsuarioPedidoID;
+                    pedidoProduto.DataBaixa = pedido.DataPedido;
+
+                    var lojaSaidaId = pedidoDao.LojaSaidaDao.FirstOrDefault().LojaID;
+                    var lojaProduto = chicoDoColchaoEntities.LojaProduto.FirstOrDefault(x => x.ProdutoID == pedidoProdutoDao.ProdutoID && x.LojaID == lojaSaidaId);
+
+                    if (lojaProduto != null)
+                    {
+                        lojaProduto.Quantidade = Convert.ToInt16(lojaProduto.Quantidade - pedidoProdutoDao.Quantidade);
+                    }
+                }
+
+                pedido.PedidoProduto.Add(pedidoProduto);
+            }
+
+            // pagamentos
+            foreach (var pedidoTipoPagamentoDao in pedidoDao.PedidoTipoPagamentoDao)
+            {
+                var pedidoTipoPagamento = new PedidoTipoPagamento();
+
+                pedidoTipoPagamento.PedidoID = pedidoTipoPagamentoDao.PedidoID;
+                pedidoTipoPagamento.TipoPagamentoID = pedidoTipoPagamentoDao.TipoPagamentoDao.TipoPagamentoID;
+                pedidoTipoPagamento.ParcelaID = pedidoTipoPagamentoDao.ParcelaDao.ParcelaID;
+                pedidoTipoPagamento.ValorPago = pedidoTipoPagamentoDao.ValorPago;
+                pedidoTipoPagamento.CV = pedidoTipoPagamentoDao.CV;
+
+                pedido.PedidoTipoPagamento.Add(pedidoTipoPagamento);
+            }
+
+            chicoDoColchaoEntities.Entry(pedido).State = EntityState.Added;
+
+            if (pedido.Cliente != null) { chicoDoColchaoEntities.Entry(pedido.Cliente).State = EntityState.Detached; }
+            if (pedido.Funcionario != null) { chicoDoColchaoEntities.Entry(pedido.Funcionario).State = EntityState.Detached; }
+            if (pedido.PedidoStatus != null) { chicoDoColchaoEntities.Entry(pedido.PedidoStatus).State = EntityState.Detached; }
+            if (pedido.LojaOrigem != null) { chicoDoColchaoEntities.Entry(pedido.LojaOrigem).State = EntityState.Detached; }
+            if (pedido.LojaSaida != null) { chicoDoColchaoEntities.Entry(pedido.LojaSaida).State = EntityState.Detached; }
+            if (pedido.UsuarioPedido != null) { chicoDoColchaoEntities.Entry(pedido.UsuarioPedido).State = EntityState.Detached; }
+            if (pedido.UsuarioCancelamento != null) { chicoDoColchaoEntities.Entry(pedido.UsuarioCancelamento).State = EntityState.Detached; }
+
+            chicoDoColchaoEntities.SaveChanges();
+
+            return pedido.PedidoID;
         }
     }
 }

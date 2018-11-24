@@ -24,10 +24,13 @@ namespace ChicoDoColchao.Repository
         public Nullable<System.DateTime> DataBaixa { get; set; }
         public Nullable<int> UsuarioBaixaID { get; set; }
         public double Preco { get; set; }
+        public Nullable<System.DateTime> DataTroca { get; set; }
+        public Nullable<int> UsuarioTrocaID { get; set; }
     
-        public virtual Pedido Pedido { get; set; }
         public virtual Produto Produto { get; set; }
         public virtual Usuario UsuarioBaixa { get; set; }
         public virtual Usuario UsuarioEntrega { get; set; }
+        public virtual Usuario UsuarioTroca { get; set; }
+        public virtual Pedido Pedido { get; set; }
     }
 }

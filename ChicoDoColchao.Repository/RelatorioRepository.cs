@@ -1,7 +1,5 @@
 ﻿using ChicoDoColchao.Dao;
-using System;
 using System.Collections.Generic;
-using System.Data.Entity.Core.Objects;
 using System.Linq;
 
 namespace ChicoDoColchao.Repository
@@ -103,6 +101,63 @@ namespace ChicoDoColchao.Repository
                          }).OrderBy(x => x.DataInicio).ThenBy(x => x.VendaDia).ToList();
 
             return query;
+        }
+
+        public List<VendaProdutoDao> VendaProduto(VendaProdutoDao vendaProdutoDao)
+        {
+            if (vendaProdutoDao.ProdutoDao != null && vendaProdutoDao.ProdutoDao.Count() > 0)
+            {
+                return (from pr in chicoDoColchaoEntities.Produto
+                        join me in chicoDoColchaoEntities.Medida on pr.MedidaID equals me.MedidaID
+                        join pp in chicoDoColchaoEntities.PedidoProduto on pr.ProdutoID equals pp.ProdutoID
+                        join ptp in chicoDoColchaoEntities.PedidoTipoPagamento on pp.PedidoID equals ptp.PedidoID
+                        join pe in chicoDoColchaoEntities.Pedido on ptp.PedidoID equals pe.PedidoID
+                        join l in chicoDoColchaoEntities.Loja on pe.LojaID equals l.LojaID
+                        where pe.DataPedido >= vendaProdutoDao.DataInicio
+                        && pe.DataPedido <= vendaProdutoDao.DataFim
+                        && pr.Ativo == true
+                        && me.Ativo == true
+                        && l.Ativo == true
+                        && vendaProdutoDao.ProdutoDao.Any(x => x == pr.ProdutoID)
+                        && pe.PedidoStatusID != (int)PedidoStatusDao.EPedidoStatus.Cancelado
+                        group new { pr.ProdutoID, pr.Numero, Produto = pr.Descricao, me.MedidaID, Medida = me.Descricao, pp.Quantidade, ptp.ValorPago } by new { pr.ProdutoID, pr.Numero, Produto = pr.Descricao, me.MedidaID, Medida = me.Descricao } into g1
+                        select new VendaProdutoDao()
+                        {
+                            ProdutoID = g1.Key.ProdutoID,
+                            Numero = g1.Key.Numero,
+                            Produto = g1.Key.Produto,
+                            MedidaID = g1.Key.MedidaID,
+                            Medida = g1.Key.Medida,
+                            Venda = g1.Sum(x => x.ValorPago),
+                            Quantidade = g1.Sum(x => x.Quantidade)
+                        }).OrderByDescending(x => x.Venda).ToList();
+            }
+            else
+            {
+                return (from pr in chicoDoColchaoEntities.Produto
+                        join me in chicoDoColchaoEntities.Medida on pr.MedidaID equals me.MedidaID
+                        join pp in chicoDoColchaoEntities.PedidoProduto on pr.ProdutoID equals pp.ProdutoID
+                        join ptp in chicoDoColchaoEntities.PedidoTipoPagamento on pp.PedidoID equals ptp.PedidoID
+                        join pe in chicoDoColchaoEntities.Pedido on ptp.PedidoID equals pe.PedidoID
+                        join l in chicoDoColchaoEntities.Loja on pe.LojaID equals l.LojaID
+                        where pe.DataPedido >= vendaProdutoDao.DataInicio
+                        && pe.DataPedido <= vendaProdutoDao.DataFim
+                        && pr.Ativo == true
+                        && me.Ativo == true
+                        && l.Ativo == true
+                        && pe.PedidoStatusID != (int)PedidoStatusDao.EPedidoStatus.Cancelado
+                        group new { pr.ProdutoID, pr.Numero, Produto = pr.Descricao, me.MedidaID, Medida = me.Descricao, pp.Quantidade, ptp.ValorPago } by new { pr.ProdutoID, pr.Numero, Produto = pr.Descricao, me.MedidaID, Medida = me.Descricao } into g1
+                        select new VendaProdutoDao()
+                        {
+                            ProdutoID = g1.Key.ProdutoID,
+                            Numero = g1.Key.Numero,
+                            Produto = g1.Key.Produto,
+                            MedidaID = g1.Key.MedidaID,
+                            Medida = g1.Key.Medida,
+                            Venda = g1.Sum(x => x.ValorPago),
+                            Quantidade = g1.Sum(x => x.Quantidade)
+                        }).OrderByDescending(x => x.Venda).ToList();
+            }
         }
     }
 }

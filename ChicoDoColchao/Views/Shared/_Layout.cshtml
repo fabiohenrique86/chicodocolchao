@@ -110,6 +110,12 @@
             background-color: #777;
             border-color: #777;
         }
+
+        .bg-secondary{
+            background-color: #ccc!important;
+        }
+
+        table { font-size: 13px;}
     </style>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -507,7 +513,94 @@
                 });
             });
 
+            $(".cep").change(function () {
+                var cep = $(this).val().replace("-", "");
+
+                // verificação cep
+                if (cep == null || cep == "") { return; }
+
+                $.ajax({
+                    dataType: "json",
+                    type: "GET",
+                    url: "https://viacep.com.br/ws/" + cep + "/json/",
+                    success: function (data)
+                    {
+                        // verificação erro de cep não encontrado
+                        if (data == null || data.erro) { return; }
+
+                        var estadoID = $('#EstadoID option').filter(function () { return $(this).html() == obterNomeEstado(data.uf); }).val();
+                        $("#EstadoID").val(estadoID);
+                        $("#Cidade").val(data.localidade);
+                        $("#Logradouro").val(data.logradouro);
+                        $("#Complemento").val(data.complemento);
+                        $("#Bairro").val(data.bairro);
+                    }
+                });
+
+            });
+
         });
+
+        function obterNomeEstado(uf) {
+            switch (uf) {
+                case "AC":
+                    return "Acre";
+                case "AL":
+                    return "Alagoas";
+                case "AM":
+                    return "Amazonas";
+                case "AP":
+                    return "Amapá";
+                case "BA":
+                    return "Bahia";
+                case "CE":
+                    return "Ceará";
+                case "DF":
+                    return "Distrito Federal";
+                case "ES":
+                    return "Espírito Santo";
+                case "GO":
+                    return "Goiás";
+                case "MA":
+                    return "Maranhão";
+                case "MG":
+                    return "Minas Gerais";
+                case "MS":
+                    return "Mato Grosso do Sul";
+                case "MT":
+                    return "Mato Grosso";
+                case "PA":
+                    return "Pará";
+                case "PB":
+                    return "Paraíba";
+                case "PE":
+                    return "Pernambuco";
+                case "PI":
+                    return "Piauí";
+                case "PR":
+                    return "Paraná";
+                case "RJ":
+                    return "Rio de Janeiro";
+                case "RN":
+                    return "Rio Grande do Norte";
+                case "RO":
+                    return "Rondônia";
+                case "RR":
+                    return "Roraima";
+                case "RG":
+                    return "Rio Grande do Sul";
+                case "SC":
+                    return "Santa Catarina";
+                case "SE":
+                    return "Sergipe";
+                case "SP":
+                    return "São Paulo";
+                case "TO":
+                    return "Tocantis";
+                default:
+                    return "";
+            }
+        }
 
         $.ajaxSetup({
             beforeSend: function () { $.blockUI({ message: '<h4>Aguarde...</h4>' }); },

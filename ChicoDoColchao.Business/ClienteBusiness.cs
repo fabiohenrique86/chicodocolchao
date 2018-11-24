@@ -105,6 +105,26 @@ namespace ChicoDoColchao.Business
             }
         }
 
+        private void ValidarAtualizar(ClienteDao clienteDao, out Cliente cliente)
+        {
+            if (clienteDao == null)
+            {
+                throw new BusinessException("Cliente é obrigatório");
+            }
+
+            if (clienteDao.ClienteID <= 0)
+            {
+                throw new BusinessException("ClienteID é obrigatório");
+            }
+
+            cliente = clienteRepository.Listar(new Cliente() { ClienteID = clienteDao.ClienteID }).FirstOrDefault();
+
+            if (cliente == null)
+            {
+                throw new BusinessException(string.Format("Cliente {0} não encontrado", clienteDao.ClienteID));
+            }
+        }
+
         public List<ClienteDao> Listar(ClienteDao clienteDao)
         {
             try
@@ -150,6 +170,124 @@ namespace ChicoDoColchao.Business
                 ValidarIncluir(clienteDao);
 
                 clienteRepository.Incluir(clienteDao.ToBd());
+            }
+            catch (BusinessException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                // inclui o log do erro
+                logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
+
+                throw ex;
+            }
+        }
+
+        public void Atualizar(ClienteDao clienteDao)
+        {
+            try
+            {
+                Cliente cliente;
+
+                ValidarAtualizar(clienteDao, out cliente);
+
+                if (!string.IsNullOrEmpty(cliente.Cpf))
+                {
+                    if (!string.IsNullOrEmpty(clienteDao.Nome))
+                    {
+                        cliente.Nome = clienteDao.Nome.Trim();
+                    }
+
+                    if (!string.IsNullOrEmpty(clienteDao.Cpf))
+                    {
+                        cliente.Cpf = clienteDao.Cpf.Replace(".", "").Replace("-", "");
+                    }
+
+                    if (clienteDao.DataNascimento.GetValueOrDefault() != DateTime.MinValue)
+                    {
+                        cliente.DataNascimento = clienteDao.DataNascimento.GetValueOrDefault();
+                    }
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(clienteDao.NomeFantasia))
+                    {
+                        cliente.NomeFantasia = clienteDao.NomeFantasia.Trim();
+                    }
+
+                    if (!string.IsNullOrEmpty(clienteDao.Cnpj))
+                    {
+                        cliente.Cnpj = clienteDao.Cnpj.Replace(".", "").Replace("-", "").Replace("/", "");
+                    }
+
+                    if (!string.IsNullOrEmpty(clienteDao.RazaoSocial))
+                    {
+                        cliente.RazaoSocial = clienteDao.RazaoSocial.Trim();
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(clienteDao.Email))
+                {
+                    cliente.Email = clienteDao.Email.Trim();
+                }
+
+                if (!string.IsNullOrEmpty(clienteDao.TelefoneResidencial))
+                {
+                    cliente.TelefoneResidencial = clienteDao.TelefoneResidencial.Trim().Replace(".", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace(" ", "");
+                }
+
+                if (!string.IsNullOrEmpty(clienteDao.TelefoneResidencial2))
+                {
+                    cliente.TelefoneResidencial2 = clienteDao.TelefoneResidencial2.Trim().Replace(".", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace(" ", "");
+                }
+
+                if (!string.IsNullOrEmpty(clienteDao.TelefoneCelular))
+                {
+                    cliente.TelefoneCelular = clienteDao.TelefoneCelular.Trim().Replace(".", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace(" ", "");
+                }
+
+                if (!string.IsNullOrEmpty(clienteDao.TelefoneCelular2))
+                {
+                    cliente.TelefoneCelular2 = clienteDao.TelefoneCelular2.Trim().Replace(".", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace(" ", "");
+                }
+
+                if (!string.IsNullOrEmpty(clienteDao.Cep))
+                {
+                    cliente.Cep = clienteDao.Cep.Trim().Replace(".", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace(" ", "");
+                }
+
+                if (clienteDao.EstadoDao != null && clienteDao.EstadoDao.FirstOrDefault() != null && clienteDao.EstadoDao.FirstOrDefault().EstadoID > 0)
+                {
+                    cliente.EstadoID = clienteDao.EstadoDao.FirstOrDefault().EstadoID;
+                }
+
+                if (!string.IsNullOrEmpty(clienteDao.Cidade))
+                {
+                    cliente.Cidade = clienteDao.Cidade.Trim();
+                }
+
+                if (!string.IsNullOrEmpty(clienteDao.Logradouro))
+                {
+                    cliente.Logradouro = clienteDao.Logradouro.Trim();
+                }
+
+                if (!string.IsNullOrEmpty(clienteDao.Bairro))
+                {
+                    cliente.Bairro = clienteDao.Bairro.Trim();
+                }
+
+                if (clienteDao.Numero.GetValueOrDefault() > 0)
+                {
+                    cliente.Numero = clienteDao.Numero.GetValueOrDefault();
+                }
+
+                if (!string.IsNullOrEmpty(clienteDao.Complemento))
+                {
+                    cliente.Complemento = clienteDao.Complemento.Trim();
+                }
+
+                clienteRepository.Alterar(cliente);
             }
             catch (BusinessException ex)
             {

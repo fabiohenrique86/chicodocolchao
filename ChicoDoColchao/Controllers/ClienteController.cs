@@ -3,6 +3,7 @@ using ChicoDoColchao.Business.Exceptions;
 using ChicoDoColchao.Dao;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace ChicoDoColchao.Controllers
@@ -62,6 +63,8 @@ namespace ChicoDoColchao.Controllers
                 return null;
             }
 
+            ViewBag.EstadoDao = estadoBusiness.Listar(new EstadoDao());
+
             return View();
         }
 
@@ -109,6 +112,28 @@ namespace ChicoDoColchao.Controllers
             catch (Exception ex)
             {
                 return Json(clientes, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult Atualizar(ClienteDao clienteDao)
+        {
+            try
+            {
+                clienteBusiness.Atualizar(clienteDao);
+
+                // obtém somente o cliente atualizado
+                var cliente = clienteBusiness.Listar(new ClienteDao() { ClienteID = clienteDao.ClienteID }).FirstOrDefault();
+
+                return Json(new { Sucesso = true, Mensagem = "Cliente atualizado com sucesso!", Cliente = cliente }, JsonRequestBehavior.AllowGet);
+            }
+            catch (BusinessException ex)
+            {
+                return Json(new { Sucesso = false, Mensagem = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro. Cliente não atualizado. Tente novamente.", Erro = ex.ToString() }, JsonRequestBehavior.AllowGet);
             }
         }
     }

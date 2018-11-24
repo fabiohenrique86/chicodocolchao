@@ -8,7 +8,7 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
-            
+
             var tbProduto = $("#tbProduto").DataTable({
                 "paging": false,
                 "ordering": false,
@@ -70,10 +70,10 @@
                         {
                             "Descricao": produto[2].trim()
                         },
-                        "Quantidade": "<input type='text' class='form-control quantidade' min='0' value='1' />",
+                        "Quantidade": "<input type='text' class='form-control quantidade text-center' min='0' value='1' />",
                         "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir Produto' style='cursor: pointer'></i>"
                     }]).draw();
-                    
+
                     // apaga a pesquisa do produto selecionado
                     ui.item.label = "";
                     ui.item.value = "";
@@ -91,12 +91,11 @@
                 transferir();
             });
 
-            function transferir()
-            {
+            function transferir() {
                 if (confirm("Deseja realmente transferir o(s) produto(s) selecionados?")) {
 
                     var produtos = [];
-                    
+
                     // produtos
                     tbProduto.rows().every(function (rowIdx, tableLoop, rowLoop) {
                         var data = this.data();
@@ -172,5 +171,7 @@
             </div>
         </div>
     </div>
-    <button id="btnTransferir" type="button" class="btn btn-success">Transferir Produtos</button>
+    <div class="form-group">
+        <button id="btnTransferir" type="button" class="btn btn-success">Transferir Produtos</button>
+    </div>
 </div>

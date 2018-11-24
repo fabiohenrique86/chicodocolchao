@@ -1,6 +1,7 @@
 ﻿@{
     ViewBag.Title = "Cliente - Lista";
 }
+
 @section scripts
 {
     <script type="text/javascript">
@@ -9,6 +10,7 @@
 
             $("#lblCliente").text(cliente.Cpf != null ? cliente.Cpf : cliente.Cnpj);
 
+            $("#lblEmail").text((cliente.Email == null ? "" : cliente.Email));
             $("#lblTelefoneResidencial").text((cliente.TelefoneResidencial == null ? "" : cliente.TelefoneResidencial));
             $("#lblTelefoneResidencial2").text((cliente.TelefoneResidencial2 == null ? "" : cliente.TelefoneResidencial2));
             $("#lblTelefoneCelular").text((cliente.TelefoneCelular == null ? "" : cliente.TelefoneCelular));
@@ -21,6 +23,40 @@
             $("#lblBairro").text((cliente.Bairro == null ? "" : cliente.Bairro));
 
             $('#modalcliente').modal('show');
+        }
+
+        function alterarCliente(clienteDao, obj)
+        {
+            $("#modalclientealterar input").val("");
+            $("#modalclientealterar select").val("");
+
+            $("#ClienteID").val(clienteDao.ClienteID);
+            $("#RowIdx").val($(obj).closest('tr').index());
+                        
+            if (clienteDao.Cpf != null && clienteDao.Cpf != "")
+            {
+                $("#lblCpf").text(clienteDao.Cpf);
+                $("#lblCpf").show();
+
+                $("#lblCnpj").text("");
+                $("#lblCnpj").hide();
+
+                $(".clientePF").show();
+                $(".clientePJ").hide();
+            }
+            else
+            {
+                $("#lblCnpj").text(clienteDao.Cnpj);
+                $("#lblCnpj").show();
+
+                $("#lblCpf").text("");
+                $("#lblCpf").hide();
+
+                $(".clientePJ").show();
+                $(".clientePF").hide();
+            }
+
+            $("#modalclientealterar").modal('show');
         }
 
         $(document).ready(function () {
@@ -59,7 +95,15 @@
                         "className": "text-center"
                     },
                     { "data": "EstadoDao[0].Nome", "className": "text-center" },
-                    { "data": "Cidade", "className": "text-center" }
+                    { "data": "Cidade", "className": "text-center" },
+                    {
+                        "data": function (data, type, row) {
+
+                            var alterar = "<i class='glyphicon glyphicon-edit' title='Editar Cliente' style='cursor: pointer' onclick='alterarCliente(" + JSON.stringify(data) + ", this)'></i>";
+                            return alterar;
+                        },
+                        "className": "text-center"
+                    }
                 ]
             });
 
@@ -68,8 +112,51 @@
                 tbCliente.rows.add(data).draw();
             });
 
-            $("#btnCadastrar").click(function () {
-                window.location.href = "/Cliente/Cadastro";
+            $("#btnAlterarCliente").click(function () {
+
+                var clienteDao = {};
+
+                clienteDao.ClienteID = $("#ClienteID").val();
+                clienteDao.Nome = $("#Nome").val().trim();
+                clienteDao.Email = $("#Email").val().trim();
+                clienteDao.Cpf = $("#Cpf").val().trim();
+                clienteDao.DataNascimento = $("#DataNascimento").val().trim();
+                clienteDao.NomeFantasia = $("#NomeFantasia").val().trim();
+                clienteDao.Cnpj = $("#Cnpj").val().trim();
+                clienteDao.RazaoSocial = $("#RazaoSocial").val().trim();
+                clienteDao.TelefoneResidencial = $("#TelefoneResidencial").val().trim();
+                clienteDao.TelefoneResidencial2 = $("#TelefoneResidencial2").val().trim();
+                clienteDao.TelefoneCelular = $("#TelefoneCelular").val().trim();
+                clienteDao.TelefoneCelular2 = $("#TelefoneCelular2").val().trim();
+                clienteDao.Cep = $("#Cep").val().trim();
+                clienteDao.EstadoDao = [];
+                clienteDao.EstadoDao.push({ EstadoID: $("#EstadoID option:selected").val() });
+                clienteDao.Cidade = $("#Cidade").val().trim();
+                clienteDao.Logradouro = $("#Logradouro").val().trim();
+                clienteDao.Bairro = $("#Bairro").val().trim();
+                clienteDao.Numero = $("#Numero").val().trim();
+                clienteDao.Complemento = $("#Complemento").val().trim();
+                clienteDao.PontoReferencia = $("#PontoReferencia").val().trim();
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Cliente/Atualizar",
+                    data: { clienteDao: clienteDao },
+                    success: function (data) {
+
+                        if (!data.Sucesso)
+                        {
+                            console.info(data.Erro);
+                            alert(data.Mensagem);
+                            return;
+                        }
+
+                        $("#tbCliente").DataTable().row($("#RowIdx").val()).invalidate().data(data.Cliente).draw();
+                        $("#modalclientealterar").modal('hide');
+                    }
+                });
+
             });
 
         });
@@ -78,82 +165,27 @@
 <div class="container">
     <h2><i class="glyphicon glyphicon-list" style="color: #0f3456" title="Cliente"></i> Lista de Clientes</h2>
     <hr />
-    <div class="table-responsive">
-        <table id="tbCliente" class="table nowrap">
-            <thead>
-                <tr>
-                    <td class="text-center" style="width: 20%"><b>CPF/CNPJ</b></td>
-                    <td class="text-center" style="width: 20%"><b>Nome/Nome Fantasia</b></td>
-                    <td class="text-center" style="width: 20%"><b>Razão Social</b></td>
-                    <td class="text-center" style="width: 10%"><b>Data Nascimento</b></td>
-                    <td class="text-center" style="width: 15%"><b>Estado</b></td>
-                    <td class="text-center" style="width: 15%"><b>Cidade</b></td>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-    <button id="btnCadastrar" type="button" class="btn btn-info">Cadastrar Novo Cliente</button>
-    <div class="modal fade" id="modalcliente" tabindex="-1" role="dialog" aria-labelledby="ModalCliente" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Cliente <label id="lblCliente"></label></h4>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            Telefone Residencial: <label id="lblTelefoneResidencial"></label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            Telefone Residencial2: <label id="lblTelefoneResidencial2"></label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            Telefone Celular: <label id="lblTelefoneCelular"></label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            Telefone Celular2: <label id="lblTelefoneCelular2"></label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            Cep: <label id="lblCep"></label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            Logradouro: <label id="lblLogradouro"></label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            Número: <label id="lblNumero"></label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            Complemento: <label id="lblComplemento"></label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            Bairro: <label id="lblBairro"></label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            Ponto Referência: <label id="lblPontoReferencia"></label>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="form-group">
+        <div class="table-responsive">
+            <table id="tbCliente" class="table nowrap">
+                <thead>
+                    <tr>
+                        <td class="text-center" style="width: 20%"><b>CPF/CNPJ</b></td>
+                        <td class="text-center" style="width: 20%"><b>Nome/Nome Fantasia</b></td>
+                        <td class="text-center" style="width: 20%"><b>Razão Social</b></td>
+                        <td class="text-center" style="width: 10%"><b>Data Nascimento</b></td>
+                        <td class="text-center" style="width: 10%"><b>Estado</b></td>
+                        <td class="text-center" style="width: 15%"><b>Cidade</b></td>
+                        <td class="text-center" style="width: 5%"><b>Ação</b></td>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
     </div>
+    <div class="form-group">
+        <button id="btnCadastrar" type="button" class="btn btn-info" onclick="window.location.href='@Url.Action("Cadastro", "Cliente")'">Cadastrar Novo Cliente</button>
+    </div>
 </div>
+@Html.Partial("_ModalCliente")
+@Html.Partial("_ModalClienteAlterar", (List<ChicoDoColchao.Dao.EstadoDao>)ViewBag.EstadoDao)

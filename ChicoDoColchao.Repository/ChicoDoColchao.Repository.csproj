@@ -115,10 +115,10 @@
     <Compile Include="Parcela.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="RelatorioRepository.cs" />
     <Compile Include="Pedido.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RelatorioRepository.cs" />
     <Compile Include="PedidoProduto.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>

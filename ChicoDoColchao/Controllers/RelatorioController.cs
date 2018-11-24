@@ -96,6 +96,18 @@ namespace ChicoDoColchao.Controllers
             return View();
         }
 
+        public ActionResult VendaProduto()
+        {
+            string tela = "";
+            if (!SessaoAtivaEPerfilValidado(out tela))
+            {
+                Response.Redirect(tela, true);
+                return null;
+            }
+
+            return View();
+        }
+
         public ActionResult Comissao()
         {
             var consultoresDao = new List<ConsultorDao>();
@@ -321,6 +333,61 @@ namespace ChicoDoColchao.Controllers
                 viewer.LocalReport.SetParameters(parametros);
 
                 viewer.LocalReport.DataSources.Add(new ReportDataSource("ds_venda_loja", vendaDao));
+
+                viewer.LocalReport.Refresh();
+
+                var bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out filenameExtension, out streamIds, out warnings);
+
+                System.IO.File.WriteAllBytes(caminho, bytes);
+
+                return Json(new { Sucesso = true, Mensagem = "Relatório gerado com sucesso", Arquivo = arquivo, Caminho = caminho, Tipo = tipo }, JsonRequestBehavior.AllowGet);
+            }
+            catch (BusinessException ex)
+            {
+                return Json(new { Sucesso = false, Mensagem = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Sucesso = false, Mensagem = "Ocorreu um erro ao gerar relatório. Tente novamente", Erro = ex.ToString() }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult ListarVendaProduto(string dataInicio = null, string dataFim = null, List<int> produtosDao = null)
+        {
+            try
+            {
+                Warning[] warnings;
+                string mimeType;
+                string[] streamIds;
+                string encoding;
+                string filenameExtension;
+
+                var arquivo = string.Format("relatorio_venda_produto_{0}.pdf", DateTime.Now.ToString("dd_MM_yyyy_HH_mm"));
+                var caminho = string.Format(Server.MapPath("~") + arquivo);
+                var tipo = "application/pdf";
+
+                var viewer = new ReportViewer();
+
+                viewer.ProcessingMode = ProcessingMode.Local;
+                viewer.LocalReport.ReportPath = Server.MapPath("~/Reports/VendaProduto.rdlc");
+
+                DateTime dtInicio;
+                DateTime.TryParse(dataInicio, out dtInicio);
+
+                DateTime dtFim;
+                DateTime.TryParse(dataFim, out dtFim);
+
+                var vendaProdutoDao = relatorioBusiness.VendaProduto(new VendaProdutoDao() { DataInicio = dtInicio, DataFim = dtFim, ProdutoDao = produtosDao });
+
+                var parametros = new List<ReportParameter>();
+
+                parametros.Add(new ReportParameter("p_data_inicio", dataInicio));
+                parametros.Add(new ReportParameter("p_data_fim", dataFim));
+
+                viewer.LocalReport.SetParameters(parametros);
+
+                viewer.LocalReport.DataSources.Add(new ReportDataSource("ds_venda_produto", vendaProdutoDao));
 
                 viewer.LocalReport.Refresh();
 

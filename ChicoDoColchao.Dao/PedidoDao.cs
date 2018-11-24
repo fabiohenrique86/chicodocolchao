@@ -27,6 +27,7 @@ namespace ChicoDoColchao.Dao
         public string NomeCarreto { get; set; }
         public double? ValorFrete { get; set; }
         public double Desconto { get; set; }
+        public int? PedidoTrocaID { get; set; }
 
         public virtual ICollection<ClienteDao> ClienteDao { get; set; }
         public virtual ICollection<ConsultorDao> ConsultorDao { get; set; }
@@ -39,7 +40,7 @@ namespace ChicoDoColchao.Dao
         public virtual ICollection<OrcamentoDao> OrcamentoDao { get; set; }
         public virtual UsuarioDao UsuarioPedidoDao { get; set; }
         public virtual UsuarioDao UsuarioCancelamentoDao { get; set; }
-
+        
         public string DataPedidoInicio { get; set; }
         public string DataPedidoFim { get; set; }
     }

@@ -22,7 +22,7 @@ namespace ChicoDoColchao.Repository
         public string CV { get; set; }
     
         public virtual Parcela Parcela { get; set; }
-        public virtual Pedido Pedido { get; set; }
         public virtual TipoPagamento TipoPagamento { get; set; }
+        public virtual Pedido Pedido { get; set; }
     }
 }
