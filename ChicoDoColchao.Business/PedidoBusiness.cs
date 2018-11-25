@@ -109,21 +109,21 @@ namespace ChicoDoColchao.Business
 
                 if (pedidoStatusDao.PedidoStatusID == PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega.GetHashCode())
                 {
-                    if (pedidoProdutoDao.DataEntrega != null && pedidoProdutoDao.DataEntrega != DateTime.MinValue)
+                    if (pedidoProdutoDao.DataEntrega.GetValueOrDefault() != DateTime.MinValue)
                     {
                         if (pedidoProdutoDao.DataEntrega.GetValueOrDefault().Date < DateTime.Now.Date)
                         {
                             throw new BusinessException(string.Format("Data da entrega do produto {0} não pode ser menor que hoje", pedidoProdutoDao.ProdutoDao.Descricao));
                         }
 
-                        if (pedidoProdutoDao.UsuarioEntregaDao != null && pedidoProdutoDao.UsuarioEntregaDao.UsuarioID <= 0)
+                        if (pedidoProdutoDao.UsuarioEntregaDao == null || pedidoProdutoDao.UsuarioEntregaDao.UsuarioID <= 0)
                         {
                             throw new BusinessException("Usuário de entrega é obrigatório");
                         }
                     }
                 }
             }
-            
+
             foreach (var pedidoTipoPagamentoDao in pedidoDao.PedidoTipoPagamentoDao)
             {
                 if (pedidoTipoPagamentoDao.TipoPagamentoDao == null || pedidoTipoPagamentoDao.TipoPagamentoDao.TipoPagamentoID <= 0)
@@ -358,6 +358,16 @@ namespace ChicoDoColchao.Business
                 throw new BusinessException("Produto do pedido é obrigatório");
             }
 
+            if (pedidoDao.PedidoProdutoDao.Count(x => x.Tipo == PedidoProdutoDao.ETipo.Entrada.GetHashCode()) <= 0)
+            {
+                throw new BusinessException("Pelo menos um produto de entrada é obrigatório");
+            }
+
+            if (pedidoDao.PedidoProdutoDao.Count(x => x.Tipo == PedidoProdutoDao.ETipo.Saida.GetHashCode()) <= 0)
+            {
+                throw new BusinessException("Pelo menos um produto de saída é obrigatório");
+            }
+
             // verifica se o total do pedido é igual ao total pago
             var totalPedidoEntrada = Math.Round(pedidoDao.PedidoProdutoDao.Where(w => w.Tipo == PedidoProdutoDao.ETipo.Entrada.GetHashCode()).Sum(x => x.Preco * x.Quantidade), 2);
             var totalPedidoSaida = Math.Round(pedidoDao.PedidoProdutoDao.Where(w => w.Tipo == PedidoProdutoDao.ETipo.Saida.GetHashCode()).Sum(x => x.Preco * x.Quantidade), 2);
@@ -368,9 +378,27 @@ namespace ChicoDoColchao.Business
             {
                 throw new BusinessException("Total do pedido deve ser igual ao total pago");
             }
+            
+            var pedidoOriginal = pedidoRepository.Listar(new Pedido() { PedidoID = pedidoDao.PedidoID }, false, 0).FirstOrDefault();
+            if (pedidoOriginal == null)
+            {
+                throw new BusinessException($"Pedido {pedidoDao.PedidoID} não encontrado");
+            }
+
+            // verifica quantidade de produto entre o pedido original e o pedido de troca
+            foreach (var pedidoProdutoDao in pedidoDao.PedidoProdutoDao.Where(x => x.Tipo == PedidoProdutoDao.ETipo.Entrada.GetHashCode() && x.ProdutoID > 0 && x.Quantidade > 0).GroupBy(x => x.ProdutoID))
+            {
+                var qtdEntradaPedidoOriginal = pedidoOriginal.PedidoProduto.FirstOrDefault(x => x.ProdutoID == pedidoProdutoDao.Key).Quantidade;
+                var qtdEntradaPedidoTroca = pedidoProdutoDao.Where(x => x.Tipo == PedidoProdutoDao.ETipo.Entrada.GetHashCode() && x.ProdutoID == pedidoProdutoDao.Key).Sum(x => x.Quantidade);
+
+                if (qtdEntradaPedidoTroca > qtdEntradaPedidoOriginal)
+                {
+                    throw new BusinessException($"Quantidade do produto {pedidoOriginal.PedidoProduto.FirstOrDefault(x => x.ProdutoID == pedidoProdutoDao.Key).Produto.Numero} no pedido de troca excede a quantidade do produto no pedido original");
+                }
+            }
 
             // verifica se o produto existe na loja de saída
-            foreach (var pedidoProdutoDao in pedidoDao.PedidoProdutoDao.Where(x => x.Tipo == PedidoProdutoDao.ETipo.Saida.GetHashCode()))
+            foreach (var pedidoProdutoDao in pedidoDao.PedidoProdutoDao.Where(x => x.Tipo == PedidoProdutoDao.ETipo.Saida.GetHashCode() && x.ProdutoID > 0 && x.Quantidade > 0))
             {
                 var produto = produtoBusiness.Listar(new ProdutoDao() { ProdutoID = pedidoProdutoDao.ProdutoID, Ativo = true }, lojaDestinoId: lojaSaidaDao.LojaID).FirstOrDefault();
 
@@ -381,21 +409,21 @@ namespace ChicoDoColchao.Business
 
                 if (pedidoStatusDao.PedidoStatusID == PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega.GetHashCode())
                 {
-                    if (pedidoProdutoDao.DataEntrega != null && pedidoProdutoDao.DataEntrega != DateTime.MinValue)
+                    if (pedidoProdutoDao.DataEntrega.GetValueOrDefault() != DateTime.MinValue)
                     {
                         if (pedidoProdutoDao.DataEntrega.GetValueOrDefault().Date < DateTime.Now.Date)
                         {
                             throw new BusinessException(string.Format("Data da entrega do produto {0} não pode ser menor que hoje", pedidoProdutoDao.ProdutoDao.Descricao));
                         }
 
-                        if (pedidoProdutoDao.UsuarioEntregaDao != null && pedidoProdutoDao.UsuarioEntregaDao.UsuarioID <= 0)
+                        if (pedidoProdutoDao.UsuarioEntregaDao == null || pedidoProdutoDao.UsuarioEntregaDao.UsuarioID <= 0)
                         {
                             throw new BusinessException("Usuário de entrega é obrigatório");
                         }
                     }
                 }
             }
-            
+
             if (pedidoDao.PedidoTipoPagamentoDao != null && pedidoDao.PedidoTipoPagamentoDao.Count() > 0)
             {
                 foreach (var pedidoTipoPagamentoDao in pedidoDao.PedidoTipoPagamentoDao)
@@ -512,7 +540,7 @@ namespace ChicoDoColchao.Business
                 }
 
                 var mensagem = $"Olá {pedidoDao.ClienteDao.FirstOrDefault().Nome.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).FirstOrDefault()}.<br /><br />";
-                mensagem += $"Seu pedido {pedidoDao.PedidoID} foi recebido com sucesso!<br /><br />";
+                mensagem += (pedidoDao.PedidoTrocaID > 0 ? "Seu Pedido de Troca " : "Seu Pedido ") + pedidoDao.PedidoID + " foi recebido com sucesso!<br /><br />";
                 mensagem += "Em anexo, segue todos os detalhes do seu pedido.<br /><br />";
                 mensagem += "A Chico do Colchão agradece a preferência!";
 
@@ -522,11 +550,11 @@ namespace ChicoDoColchao.Business
                 var emailDao = new EmailDao();
 
                 emailDao.Titulo = "Chico do Colchão";
-                emailDao.Assunto = $"Pedido {pedidoDao.PedidoID}";
+                emailDao.Assunto = pedidoDao.PedidoTrocaID > 0 ? $"Pedido de Troca {pedidoDao.PedidoID}" : $"Pedido {pedidoDao.PedidoID}";
                 emailDao.Remetente = "contato@chicodocolchao.com.br";
                 emailDao.Destinatario = pedidoDao.ClienteDao.FirstOrDefault().Email;
                 emailDao.Mensagem = mensagem;
-                emailDao.Anexo.Add(new Attachment(stream, $"Pedido {pedidoDao.PedidoID}", "application/pdf"));
+                emailDao.Anexo.Add(new Attachment(stream, pedidoDao.PedidoTrocaID > 0 ? $"Pedido de Troca {pedidoDao.PedidoID}" : $"Pedido {pedidoDao.PedidoID}", "application/pdf"));
 
                 emailBusiness.Enviar(emailDao);
 

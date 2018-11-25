@@ -75,7 +75,8 @@ namespace ChicoDoColchao.Repository
             var query = (from l in chicoDoColchaoEntities.Loja
                          join p in chicoDoColchaoEntities.Pedido on l.LojaID equals p.LojaID
                          join ptp in chicoDoColchaoEntities.PedidoTipoPagamento on p.PedidoID equals ptp.PedidoID
-                         where p.DataPedido >= vendaLojaDao.DataInicio && p.DataPedido <= vendaLojaDao.DataFim
+                         where p.DataPedido >= vendaLojaDao.DataInicio 
+                         && p.DataPedido <= vendaLojaDao.DataFim
                          && (vendaLojaDao.LojaID > 0 ? p.LojaID == vendaLojaDao.LojaID : 1 == 1)
                          && l.Ativo == true
                          && p.PedidoStatusID != (int)PedidoStatusDao.EPedidoStatus.Cancelado

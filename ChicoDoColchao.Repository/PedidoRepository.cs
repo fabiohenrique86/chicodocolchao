@@ -212,18 +212,18 @@ namespace ChicoDoColchao.Repository
             {
                 pedidoOriginal.PedidoStatusID = Dao.PedidoStatusDao.EPedidoStatus.Trocado.GetHashCode(); // muda o status do pedido original para 'Trocado'
 
-                foreach (var pp in pedidoDao.PedidoProdutoDao.Where(x => x.Tipo == Dao.PedidoProdutoDao.ETipo.Entrada.GetHashCode())) // produtos devolvidos ao estoque da loja do pedido original
+                foreach (var pp in pedidoDao.PedidoProdutoDao.Where(x => x.Tipo == Dao.PedidoProdutoDao.ETipo.Entrada.GetHashCode() && x.ProdutoID > 0 && x.Quantidade > 0)) // produtos devolvidos ao estoque da loja do pedido original
                 {
-                    var pedidoProduto = pedidoOriginal.PedidoProduto.FirstOrDefault(x => x.ProdutoID == pp.ProdutoID);
+                    var pedidoProdutoOriginal = pedidoOriginal.PedidoProduto.FirstOrDefault(x => x.ProdutoID == pp.ProdutoID);
 
-                    if (pedidoProduto != null)
+                    if (pedidoProdutoOriginal != null)
                     {
                         // muda o status do produto original para 'Trocado'
-                        pedidoProduto.UsuarioTrocaID = pp.UsuarioTrocaDao.UsuarioID;
-                        pedidoProduto.DataTroca = pedido.DataPedido;
+                        pedidoProdutoOriginal.UsuarioTrocaID = pp.UsuarioTrocaDao.UsuarioID;
+                        pedidoProdutoOriginal.DataTroca = pedido.DataPedido;
 
                         // só volta para o estoque os produtos que já saíram do estoque, ou seja, que foram dados baixas
-                        if (pedidoProduto.UsuarioBaixaID > 0)
+                        if (pedidoProdutoOriginal.UsuarioBaixaID > 0)
                         {
                             var lp = chicoDoColchaoEntities.LojaProduto.FirstOrDefault(x => x.ProdutoID == pp.ProdutoID && x.LojaID == pedidoOriginal.LojaSaidaID);
 
@@ -237,7 +237,7 @@ namespace ChicoDoColchao.Repository
             }
 
             // produtos de saída
-            foreach (var pedidoProdutoDao in pedidoDao.PedidoProdutoDao.Where(x => x.Tipo == Dao.PedidoProdutoDao.ETipo.Saida.GetHashCode()))
+            foreach (var pedidoProdutoDao in pedidoDao.PedidoProdutoDao.Where(x => x.Tipo == Dao.PedidoProdutoDao.ETipo.Saida.GetHashCode() && x.ProdutoID > 0 && x.Quantidade > 0))
             {
                 var pedidoProduto = new PedidoProduto();
 

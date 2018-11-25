@@ -688,27 +688,33 @@
                     var data = this.data();
 
                     var dtEntrega = $(data.DataEntregaSaida).val();
-
+                    
                     // entrada
-                    pedidoProdutoDao.push
-                    ({
-                        "ProdutoID": data.ProdutoIDEntrada,
-                        "Quantidade": Globalize.parseInt(data.QtdEntrada),
-                        "Preco": data.PrecoEntrada,
-                        "Tipo": '@PedidoProdutoDao.ETipo.Entrada.GetHashCode()',
-                        "UsuarioTrocaDao.UsuarioID": '@usuarioDao.UsuarioID',
-                    });
+                    if (data.ProdutoIDEntrada > 0 && data.QtdEntrada > 0)
+                    {
+                        pedidoProdutoDao.push
+                        ({
+                            "ProdutoID": data.ProdutoIDEntrada,
+                            "Quantidade": Globalize.parseInt(data.QtdEntrada),
+                            "Preco": data.PrecoEntrada,
+                            "Tipo": '@PedidoProdutoDao.ETipo.Entrada.GetHashCode()',
+                            "UsuarioTrocaDao.UsuarioID": '@usuarioDao.UsuarioID',
+                        });
+                    }
 
                     // saída
-                    pedidoProdutoDao.push
-                    ({
-                        "ProdutoID": data.ProdutoIDSaida,
-                        "Quantidade": Globalize.parseInt(data.QtdSaida),
-                        "Preco": data.PrecoSaida,
-                        "DataEntrega": dtEntrega,
-                        "UsuarioEntregaDao.UsuarioID": dtEntrega == '' || dtEntrega == 'undefined' ? 0 : '@usuarioDao.UsuarioID',
-                        "Tipo": '@PedidoProdutoDao.ETipo.Saida.GetHashCode()'
-                    });
+                    if (data.ProdutoIDSaida > 0 && data.QtdSaida > 0)
+                    {
+                        pedidoProdutoDao.push
+                        ({
+                            "ProdutoID": data.ProdutoIDSaida,
+                            "Quantidade": Globalize.parseInt(data.QtdSaida),
+                            "Preco": data.PrecoSaida,
+                            "DataEntrega": dtEntrega,
+                            "UsuarioEntregaDao.UsuarioID": dtEntrega == '' || dtEntrega == 'undefined' ? 0 : '@usuarioDao.UsuarioID',
+                            "Tipo": '@PedidoProdutoDao.ETipo.Saida.GetHashCode()'
+                        });
+                    }
                 });
 
                 pedidoDao.PedidoProdutoDao = pedidoProdutoDao;
