@@ -53,6 +53,13 @@
                 produtoDao.Descricao = $("#Descricao").val();
                 produtoDao.CategoriaDao = [];
                 produtoDao.CategoriaDao.push({ CategoriaID: $("#CategoriaID option:selected").val() });
+
+                var lojaId = $("#LojaID option:selected").val();
+                if (lojaId > 0) {
+                    produtoDao.LojaProdutoDao = [];
+                    produtoDao.LojaProdutoDao.push({ LojaID: lojaId, Quantidade: $("#Quantidade").val(), Ativo: true });
+                }
+
                 produtoDao.MedidaDao.MedidaID = $("#MedidaID").val();
                 produtoDao.ComissaoFuncionario = $("#ComissaoFuncionario").val();
                 produtoDao.ComissaoFranqueado = $("#ComissaoFranqueado").val();

@@ -26,10 +26,10 @@ namespace ChicoDoColchao.Business
                 throw new BusinessException("Loja é obrigatório");
             }
 
-            if (string.IsNullOrEmpty(lojaDao.Cnpj))
-            {
-                throw new BusinessException("CNPJ é obrigatório");
-            }
+            //if (string.IsNullOrEmpty(lojaDao.Cnpj))
+            //{
+            //    throw new BusinessException("CNPJ é obrigatório");
+            //}
 
             if (string.IsNullOrEmpty(lojaDao.NomeFantasia))
             {
@@ -50,8 +50,9 @@ namespace ChicoDoColchao.Business
             //{
             //    throw new BusinessException("Telefone é obrigatório");
             //}
+            var l = lojaRepository.Listar(new Loja() { Cnpj = string.IsNullOrEmpty(lojaDao.Cnpj) ? string.Empty : lojaDao.Cnpj.Replace(".", "").Replace("-", "").Replace("/", ""), Ativo = true }).FirstOrDefault();
 
-            if (lojaRepository.Listar(new Loja() { Cnpj = string.IsNullOrEmpty(lojaDao.Cnpj) ? string.Empty : lojaDao.Cnpj.Replace(".", "").Replace("-", "").Replace("/", ""), Ativo = true }).FirstOrDefault() != null)
+            if (l != null && !string.IsNullOrEmpty(lojaDao.Cnpj))
             {
                 throw new BusinessException(string.Format("Loja (CNPJ {0}) já cadastrada", lojaDao.Cnpj));
             }
@@ -76,8 +77,8 @@ namespace ChicoDoColchao.Business
                 throw new BusinessException(string.Format("Loja {0} não encontrado", lojaDao.LojaID));
             }
 
-            if (string.IsNullOrEmpty(lojaDao.Cnpj) && 
-                string.IsNullOrEmpty(lojaDao.NomeFantasia) && 
+            if (string.IsNullOrEmpty(lojaDao.Cnpj) &&
+                string.IsNullOrEmpty(lojaDao.NomeFantasia) &&
                 string.IsNullOrEmpty(lojaDao.RazaoSocial) &&
                 string.IsNullOrEmpty(lojaDao.Telefone) &&
                 string.IsNullOrEmpty(lojaDao.Bairro))

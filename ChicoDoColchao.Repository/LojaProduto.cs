@@ -20,7 +20,7 @@ namespace ChicoDoColchao.Repository
         public short Quantidade { get; set; }
         public bool Ativo { get; set; }
     
-        public virtual Loja Loja { get; set; }
         public virtual Produto Produto { get; set; }
+        public virtual Loja Loja { get; set; }
     }
 }

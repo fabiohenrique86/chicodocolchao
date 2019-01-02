@@ -65,9 +65,11 @@ namespace ChicoDoColchao.Business
                 throw new BusinessException("Preço é obrigatório");
             }
 
-            if (produtoRepository.Listar(new Produto() { Numero = produtoDao.Numero.GetValueOrDefault() }).FirstOrDefault() != null)
+            var loja = produtoDao.LojaProdutoDao.FirstOrDefault();
+
+            if (produtoRepository.Listar(new Produto() { Numero = produtoDao.Numero.GetValueOrDefault() }, loja == null ? 0 : loja.LojaID).FirstOrDefault() != null)
             {
-                throw new BusinessException("Produto (Número) já cadastrado");
+                throw new BusinessException($"Produto {produtoDao.Numero.GetValueOrDefault()} já cadastrado");
             }
         }
 

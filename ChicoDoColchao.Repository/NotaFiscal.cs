@@ -27,8 +27,8 @@ namespace ChicoDoColchao.Repository
         public Nullable<int> PedidoMaeID { get; set; }
         public bool Ativo { get; set; }
     
-        public virtual Loja Loja { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<NotaFiscalProduto> NotaFiscalProduto { get; set; }
+        public virtual Loja Loja { get; set; }
     }
 }

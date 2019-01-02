@@ -41,8 +41,6 @@ namespace ChicoDoColchao.Repository
     
         public virtual Cliente Cliente { get; set; }
         public virtual Funcionario Funcionario { get; set; }
-        public virtual Loja LojaOrigem { get; set; }
-        public virtual Loja LojaSaida { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Orcamento> Orcamento { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -55,5 +53,7 @@ namespace ChicoDoColchao.Repository
         public virtual ICollection<PedidoProduto> PedidoProduto { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PedidoTipoPagamento> PedidoTipoPagamento { get; set; }
+        public virtual Loja LojaOrigem { get; set; }
+        public virtual Loja LojaSaida { get; set; }
     }
 }

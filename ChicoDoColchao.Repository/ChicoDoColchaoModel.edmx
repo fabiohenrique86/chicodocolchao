@@ -72,7 +72,7 @@
             <PropertyRef Name="LojaID" />
           </Key>
           <Property Name="LojaID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Cnpj" Type="varchar" MaxLength="14" Nullable="false" />
+          <Property Name="Cnpj" Type="varchar" MaxLength="14" />
           <Property Name="NomeFantasia" Type="varchar" MaxLength="150" />
           <Property Name="RazaoSocial" Type="varchar" MaxLength="150" />
           <Property Name="Telefone" Type="varchar" MaxLength="10" />
@@ -956,9 +956,9 @@
           <Property Name="Telefone" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
           <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Ativo" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Loja" Relationship="Self.FK_Funcionario_Loja" FromRole="Funcionario" ToRole="Loja" />
           <NavigationProperty Name="Orcamento" Relationship="Self.FK_Orcamento_Funcionario" FromRole="Funcionario" ToRole="Orcamento" />
           <NavigationProperty Name="Pedido" Relationship="ChicoDoColchaoModel.FK_Pedido_Funcionario" FromRole="Funcionario" ToRole="Pedido" />
+          <NavigationProperty Name="Loja" Relationship="ChicoDoColchaoModel.FK_Funcionario_Loja" FromRole="Funcionario" ToRole="Loja" />
         </EntityType>
         <EntityType Name="Log">
           <Key>
@@ -967,27 +967,6 @@
           <Property Name="LogID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Descricao" Type="String" MaxLength="8000" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="DataHora" Type="DateTime" Nullable="false" Precision="0" />
-        </EntityType>
-        <EntityType Name="Loja">
-          <Key>
-            <PropertyRef Name="LojaID" />
-          </Key>
-          <Property Name="LojaID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Cnpj" Type="String" MaxLength="14" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="NomeFantasia" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="RazaoSocial" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="Telefone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Ativo" Type="Boolean" Nullable="false" />
-          <Property Name="Deposito" Type="Boolean" Nullable="false" />
-          <Property Name="Bairro" Type="String" MaxLength="75" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Funcionario" Relationship="Self.FK_Funcionario_Loja" FromRole="Loja" ToRole="Funcionario" />
-          <NavigationProperty Name="LojaProduto" Relationship="Self.FK_LojaProduto_Loja" FromRole="Loja" ToRole="LojaProduto" />
-          <NavigationProperty Name="NotaFiscal" Relationship="Self.FK_NotaFiscal_Loja" FromRole="Loja" ToRole="NotaFiscal" />
-          <NavigationProperty Name="Orcamento" Relationship="Self.FK_Orcamento_Loja" FromRole="Loja" ToRole="Orcamento" />
-          <NavigationProperty Name="Transferencia" Relationship="Self.FK_Transferencia_LojaDestino" FromRole="Loja" ToRole="Transferencia" />
-          <NavigationProperty Name="Transferencia1" Relationship="Self.FK_Transferencia_LojaOrigem" FromRole="Loja" ToRole="Transferencia" />
-          <NavigationProperty Name="Pedido" Relationship="ChicoDoColchaoModel.FK_Pedido_Loja" FromRole="Loja" ToRole="Pedido" />
-          <NavigationProperty Name="Pedido1" Relationship="ChicoDoColchaoModel.FK_Pedido_LojaSaida" FromRole="Loja" ToRole="Pedido" />
         </EntityType>
         <EntityType Name="LojaProduto">
           <Key>
@@ -998,8 +977,8 @@
           <Property Name="ProdutoID" Type="Int32" Nullable="false" />
           <Property Name="Quantidade" Type="Int16" Nullable="false" />
           <Property Name="Ativo" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Loja" Relationship="Self.FK_LojaProduto_Loja" FromRole="LojaProduto" ToRole="Loja" />
           <NavigationProperty Name="Produto" Relationship="Self.FK_LojaProduto_Produto" FromRole="LojaProduto" ToRole="Produto" />
+          <NavigationProperty Name="Loja" Relationship="ChicoDoColchaoModel.FK_LojaProduto_Loja" FromRole="LojaProduto" ToRole="Loja" />
         </EntityType>
         <EntityType Name="Medida">
           <Key>
@@ -1020,8 +999,8 @@
           <Property Name="LojaID" Type="Int32" Nullable="false" />
           <Property Name="PedidoMaeID" Type="Int32" />
           <Property Name="Ativo" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Loja" Relationship="Self.FK_NotaFiscal_Loja" FromRole="NotaFiscal" ToRole="Loja" />
           <NavigationProperty Name="NotaFiscalProduto" Relationship="Self.FK_NotaFiscalProduto_NotaFiscal" FromRole="NotaFiscal" ToRole="NotaFiscalProduto" />
+          <NavigationProperty Name="Loja" Relationship="ChicoDoColchaoModel.FK_NotaFiscal_Loja" FromRole="NotaFiscal" ToRole="Loja" />
         </EntityType>
         <EntityType Name="NotaFiscalProduto">
           <Key>
@@ -1045,7 +1024,6 @@
           <Property Name="Observacao" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
           <Property Name="Ativo" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Funcionario" Relationship="Self.FK_Orcamento_Funcionario" FromRole="Orcamento" ToRole="Funcionario" />
-          <NavigationProperty Name="Loja" Relationship="Self.FK_Orcamento_Loja" FromRole="Orcamento" ToRole="Loja" />
           <NavigationProperty Name="OrcamentoProduto" Relationship="Self.FK_OrcamentoProduto_Orcamento" FromRole="Orcamento" ToRole="OrcamentoProduto" />
           <NavigationProperty Name="Orcamento1" Relationship="ChicoDoColchaoModel.FK_OrcamentoHistorico_Orcamento" FromRole="Orcamento" ToRole="Orcamento1" />
           <NavigationProperty Name="Orcamento2" Relationship="ChicoDoColchaoModel.FK_OrcamentoHistorico_Orcamento" FromRole="Orcamento1" ToRole="Orcamento" />
@@ -1055,6 +1033,7 @@
           <Property Name="Desconto" Type="Double" Nullable="false" />
           <Property Name="PedidoID" Type="Int32" />
           <NavigationProperty Name="Pedido" Relationship="ChicoDoColchaoModel.FK_Orcamento_Pedido" FromRole="Orcamento" ToRole="Pedido" />
+          <NavigationProperty Name="Loja" Relationship="ChicoDoColchaoModel.FK_Orcamento_Loja" FromRole="Orcamento" ToRole="Loja" />
         </EntityType>
         <EntityType Name="OrcamentoProduto">
           <Key>
@@ -1158,9 +1137,9 @@
           <Property Name="DataTransferencia" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Observacao" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Ativo" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Loja" Relationship="Self.FK_Transferencia_LojaDestino" FromRole="Transferencia" ToRole="Loja" />
-          <NavigationProperty Name="Loja1" Relationship="Self.FK_Transferencia_LojaOrigem" FromRole="Transferencia" ToRole="Loja" />
           <NavigationProperty Name="TransferenciaProduto" Relationship="Self.FK_TransferenciaProduto_Transferencia" FromRole="Transferencia" ToRole="TransferenciaProduto" />
+          <NavigationProperty Name="Loja" Relationship="ChicoDoColchaoModel.FK_Transferencia_LojaDestino" FromRole="Transferencia" ToRole="Loja" />
+          <NavigationProperty Name="Loja1" Relationship="ChicoDoColchaoModel.FK_Transferencia_LojaOrigem" FromRole="Transferencia" ToRole="Loja" />
         </EntityType>
         <EntityType Name="TransferenciaProduto">
           <Key>
@@ -1213,18 +1192,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Funcionario_Loja">
-          <End Role="Loja" Type="Self.Loja" Multiplicity="1" />
-          <End Role="Funcionario" Type="Self.Funcionario" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Loja">
-              <PropertyRef Name="LojaID" />
-            </Principal>
-            <Dependent Role="Funcionario">
-              <PropertyRef Name="LojaID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Orcamento_Funcionario">
           <End Role="Funcionario" Type="Self.Funcionario" Multiplicity="1" />
           <End Role="Orcamento" Type="Self.Orcamento" Multiplicity="*" />
@@ -1234,66 +1201,6 @@
             </Principal>
             <Dependent Role="Orcamento">
               <PropertyRef Name="FuncionarioID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_LojaProduto_Loja">
-          <End Role="Loja" Type="Self.Loja" Multiplicity="1" />
-          <End Role="LojaProduto" Type="Self.LojaProduto" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Loja">
-              <PropertyRef Name="LojaID" />
-            </Principal>
-            <Dependent Role="LojaProduto">
-              <PropertyRef Name="LojaID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_NotaFiscal_Loja">
-          <End Role="Loja" Type="Self.Loja" Multiplicity="1" />
-          <End Role="NotaFiscal" Type="Self.NotaFiscal" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Loja">
-              <PropertyRef Name="LojaID" />
-            </Principal>
-            <Dependent Role="NotaFiscal">
-              <PropertyRef Name="LojaID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Orcamento_Loja">
-          <End Role="Loja" Type="Self.Loja" Multiplicity="1" />
-          <End Role="Orcamento" Type="Self.Orcamento" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Loja">
-              <PropertyRef Name="LojaID" />
-            </Principal>
-            <Dependent Role="Orcamento">
-              <PropertyRef Name="LojaID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Transferencia_LojaDestino">
-          <End Role="Loja" Type="Self.Loja" Multiplicity="1" />
-          <End Role="Transferencia" Type="Self.Transferencia" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Loja">
-              <PropertyRef Name="LojaID" />
-            </Principal>
-            <Dependent Role="Transferencia">
-              <PropertyRef Name="LojaDestinoID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Transferencia_LojaOrigem">
-          <End Role="Loja" Type="Self.Loja" Multiplicity="1" />
-          <End Role="Transferencia" Type="Self.Transferencia" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Loja">
-              <PropertyRef Name="LojaID" />
-            </Principal>
-            <Dependent Role="Transferencia">
-              <PropertyRef Name="LojaOrigemID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1447,7 +1354,6 @@
           <EntitySet Name="Estado" EntityType="Self.Estado" />
           <EntitySet Name="Funcionario" EntityType="Self.Funcionario" />
           <EntitySet Name="Log" EntityType="Self.Log" />
-          <EntitySet Name="Loja" EntityType="Self.Loja" />
           <EntitySet Name="LojaProduto" EntityType="Self.LojaProduto" />
           <EntitySet Name="Medida" EntityType="Self.Medida" />
           <EntitySet Name="NotaFiscal" EntityType="Self.NotaFiscal" />
@@ -1471,33 +1377,9 @@
             <End Role="Estado" EntitySet="Estado" />
             <End Role="Cliente" EntitySet="Cliente" />
           </AssociationSet>
-          <AssociationSet Name="FK_Funcionario_Loja" Association="Self.FK_Funcionario_Loja">
-            <End Role="Loja" EntitySet="Loja" />
-            <End Role="Funcionario" EntitySet="Funcionario" />
-          </AssociationSet>
           <AssociationSet Name="FK_Orcamento_Funcionario" Association="Self.FK_Orcamento_Funcionario">
             <End Role="Funcionario" EntitySet="Funcionario" />
             <End Role="Orcamento" EntitySet="Orcamento" />
-          </AssociationSet>
-          <AssociationSet Name="FK_LojaProduto_Loja" Association="Self.FK_LojaProduto_Loja">
-            <End Role="Loja" EntitySet="Loja" />
-            <End Role="LojaProduto" EntitySet="LojaProduto" />
-          </AssociationSet>
-          <AssociationSet Name="FK_NotaFiscal_Loja" Association="Self.FK_NotaFiscal_Loja">
-            <End Role="Loja" EntitySet="Loja" />
-            <End Role="NotaFiscal" EntitySet="NotaFiscal" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Orcamento_Loja" Association="Self.FK_Orcamento_Loja">
-            <End Role="Loja" EntitySet="Loja" />
-            <End Role="Orcamento" EntitySet="Orcamento" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Transferencia_LojaDestino" Association="Self.FK_Transferencia_LojaDestino">
-            <End Role="Loja" EntitySet="Loja" />
-            <End Role="Transferencia" EntitySet="Transferencia" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Transferencia_LojaOrigem" Association="Self.FK_Transferencia_LojaOrigem">
-            <End Role="Loja" EntitySet="Loja" />
-            <End Role="Transferencia" EntitySet="Transferencia" />
           </AssociationSet>
           <AssociationSet Name="FK_LojaProduto_Produto" Association="Self.FK_LojaProduto_Produto">
             <End Role="Produto" EntitySet="Produto" />
@@ -1582,14 +1464,6 @@
             <End Role="Funcionario" EntitySet="Funcionario" />
             <End Role="Pedido" EntitySet="Pedido" />
           </AssociationSet>
-          <AssociationSet Name="FK_Pedido_Loja" Association="ChicoDoColchaoModel.FK_Pedido_Loja">
-            <End Role="Loja" EntitySet="Loja" />
-            <End Role="Pedido" EntitySet="Pedido" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Pedido_LojaSaida" Association="ChicoDoColchaoModel.FK_Pedido_LojaSaida">
-            <End Role="Loja" EntitySet="Loja" />
-            <End Role="Pedido" EntitySet="Pedido" />
-          </AssociationSet>
           <AssociationSet Name="FK_Orcamento_Pedido" Association="ChicoDoColchaoModel.FK_Orcamento_Pedido">
             <End Role="Pedido" EntitySet="Pedido" />
             <End Role="Orcamento" EntitySet="Orcamento" />
@@ -1617,6 +1491,39 @@
           <AssociationSet Name="FK_PedidoTipoPagamento_Pedido" Association="ChicoDoColchaoModel.FK_PedidoTipoPagamento_Pedido">
             <End Role="Pedido" EntitySet="Pedido" />
             <End Role="PedidoTipoPagamento" EntitySet="PedidoTipoPagamento" />
+          </AssociationSet>
+          <EntitySet Name="Loja" EntityType="ChicoDoColchaoModel.Loja" />
+          <AssociationSet Name="FK_Funcionario_Loja" Association="ChicoDoColchaoModel.FK_Funcionario_Loja">
+            <End Role="Loja" EntitySet="Loja" />
+            <End Role="Funcionario" EntitySet="Funcionario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LojaProduto_Loja" Association="ChicoDoColchaoModel.FK_LojaProduto_Loja">
+            <End Role="Loja" EntitySet="Loja" />
+            <End Role="LojaProduto" EntitySet="LojaProduto" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NotaFiscal_Loja" Association="ChicoDoColchaoModel.FK_NotaFiscal_Loja">
+            <End Role="Loja" EntitySet="Loja" />
+            <End Role="NotaFiscal" EntitySet="NotaFiscal" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orcamento_Loja" Association="ChicoDoColchaoModel.FK_Orcamento_Loja">
+            <End Role="Loja" EntitySet="Loja" />
+            <End Role="Orcamento" EntitySet="Orcamento" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Pedido_Loja" Association="ChicoDoColchaoModel.FK_Pedido_Loja">
+            <End Role="Loja" EntitySet="Loja" />
+            <End Role="Pedido" EntitySet="Pedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Pedido_LojaSaida" Association="ChicoDoColchaoModel.FK_Pedido_LojaSaida">
+            <End Role="Loja" EntitySet="Loja" />
+            <End Role="Pedido" EntitySet="Pedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transferencia_LojaDestino" Association="ChicoDoColchaoModel.FK_Transferencia_LojaDestino">
+            <End Role="Loja" EntitySet="Loja" />
+            <End Role="Transferencia" EntitySet="Transferencia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transferencia_LojaOrigem" Association="ChicoDoColchaoModel.FK_Transferencia_LojaOrigem">
+            <End Role="Loja" EntitySet="Loja" />
+            <End Role="Transferencia" EntitySet="Transferencia" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="OrcamentoHistorico">
@@ -1736,8 +1643,6 @@
           <Property Name="PedidoTrocaID" Type="Int32" />
           <NavigationProperty Name="Cliente" Relationship="ChicoDoColchaoModel.FK_Pedido_Cliente" FromRole="Pedido" ToRole="Cliente" />
           <NavigationProperty Name="Funcionario" Relationship="ChicoDoColchaoModel.FK_Pedido_Funcionario" FromRole="Pedido" ToRole="Funcionario" />
-          <NavigationProperty Name="LojaOrigem" Relationship="ChicoDoColchaoModel.FK_Pedido_Loja" FromRole="Pedido" ToRole="Loja" />
-          <NavigationProperty Name="LojaSaida" Relationship="ChicoDoColchaoModel.FK_Pedido_LojaSaida" FromRole="Pedido" ToRole="Loja" />
           <NavigationProperty Name="Orcamento" Relationship="ChicoDoColchaoModel.FK_Orcamento_Pedido" FromRole="Pedido" ToRole="Orcamento" />
           <NavigationProperty Name="PedidoTroca" Relationship="ChicoDoColchaoModel.FK_Pedido_Pedido" FromRole="Pedido" ToRole="Pedido1" />
           <NavigationProperty Name="Pedido2" Relationship="ChicoDoColchaoModel.FK_Pedido_Pedido" FromRole="Pedido1" ToRole="Pedido" />
@@ -1746,6 +1651,8 @@
           <NavigationProperty Name="UsuarioPedido" Relationship="ChicoDoColchaoModel.FK_Pedido_Usuario_Pedido" FromRole="Pedido" ToRole="Usuario" />
           <NavigationProperty Name="PedidoProduto" Relationship="ChicoDoColchaoModel.FK_PedidoProduto_Pedido" FromRole="Pedido" ToRole="PedidoProduto" />
           <NavigationProperty Name="PedidoTipoPagamento" Relationship="ChicoDoColchaoModel.FK_PedidoTipoPagamento_Pedido" FromRole="Pedido" ToRole="PedidoTipoPagamento" />
+          <NavigationProperty Name="LojaOrigem" Relationship="ChicoDoColchaoModel.FK_Pedido_Loja" FromRole="Pedido" ToRole="Loja" />
+          <NavigationProperty Name="LojaSaida" Relationship="ChicoDoColchaoModel.FK_Pedido_LojaSaida" FromRole="Pedido" ToRole="Loja" />
         </EntityType>
         <Association Name="FK_Pedido_Cliente">
           <End Type="ChicoDoColchaoModel.Cliente" Role="Cliente" Multiplicity="1" />
@@ -1768,30 +1675,6 @@
             </Principal>
             <Dependent Role="Pedido">
               <PropertyRef Name="FuncionarioID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Pedido_Loja">
-          <End Type="ChicoDoColchaoModel.Loja" Role="Loja" Multiplicity="1" />
-          <End Type="ChicoDoColchaoModel.Pedido" Role="Pedido" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Loja">
-              <PropertyRef Name="LojaID" />
-            </Principal>
-            <Dependent Role="Pedido">
-              <PropertyRef Name="LojaID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Pedido_LojaSaida">
-          <End Type="ChicoDoColchaoModel.Loja" Role="Loja" Multiplicity="1" />
-          <End Type="ChicoDoColchaoModel.Pedido" Role="Pedido" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Loja">
-              <PropertyRef Name="LojaID" />
-            </Principal>
-            <Dependent Role="Pedido">
-              <PropertyRef Name="LojaSaidaID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1879,6 +1762,123 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Loja">
+          <Key>
+            <PropertyRef Name="LojaID" />
+          </Key>
+          <Property Name="LojaID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Cnpj" Type="String" MaxLength="14" FixedLength="false" Unicode="false" />
+          <Property Name="NomeFantasia" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="RazaoSocial" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Telefone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Ativo" Type="Boolean" Nullable="false" />
+          <Property Name="Deposito" Type="Boolean" Nullable="false" />
+          <Property Name="Bairro" Type="String" Nullable="false" MaxLength="75" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Funcionario" Relationship="ChicoDoColchaoModel.FK_Funcionario_Loja" FromRole="Loja" ToRole="Funcionario" />
+          <NavigationProperty Name="LojaProduto" Relationship="ChicoDoColchaoModel.FK_LojaProduto_Loja" FromRole="Loja" ToRole="LojaProduto" />
+          <NavigationProperty Name="NotaFiscal" Relationship="ChicoDoColchaoModel.FK_NotaFiscal_Loja" FromRole="Loja" ToRole="NotaFiscal" />
+          <NavigationProperty Name="Orcamento" Relationship="ChicoDoColchaoModel.FK_Orcamento_Loja" FromRole="Loja" ToRole="Orcamento" />
+          <NavigationProperty Name="Pedido" Relationship="ChicoDoColchaoModel.FK_Pedido_Loja" FromRole="Loja" ToRole="Pedido" />
+          <NavigationProperty Name="Pedido1" Relationship="ChicoDoColchaoModel.FK_Pedido_LojaSaida" FromRole="Loja" ToRole="Pedido" />
+          <NavigationProperty Name="Transferencia" Relationship="ChicoDoColchaoModel.FK_Transferencia_LojaDestino" FromRole="Loja" ToRole="Transferencia" />
+          <NavigationProperty Name="Transferencia1" Relationship="ChicoDoColchaoModel.FK_Transferencia_LojaOrigem" FromRole="Loja" ToRole="Transferencia" />
+        </EntityType>
+        <Association Name="FK_Funcionario_Loja">
+          <End Type="ChicoDoColchaoModel.Loja" Role="Loja" Multiplicity="1" />
+          <End Type="ChicoDoColchaoModel.Funcionario" Role="Funcionario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Loja">
+              <PropertyRef Name="LojaID" />
+            </Principal>
+            <Dependent Role="Funcionario">
+              <PropertyRef Name="LojaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LojaProduto_Loja">
+          <End Type="ChicoDoColchaoModel.Loja" Role="Loja" Multiplicity="1" />
+          <End Type="ChicoDoColchaoModel.LojaProduto" Role="LojaProduto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Loja">
+              <PropertyRef Name="LojaID" />
+            </Principal>
+            <Dependent Role="LojaProduto">
+              <PropertyRef Name="LojaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NotaFiscal_Loja">
+          <End Type="ChicoDoColchaoModel.Loja" Role="Loja" Multiplicity="1" />
+          <End Type="ChicoDoColchaoModel.NotaFiscal" Role="NotaFiscal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Loja">
+              <PropertyRef Name="LojaID" />
+            </Principal>
+            <Dependent Role="NotaFiscal">
+              <PropertyRef Name="LojaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orcamento_Loja">
+          <End Type="ChicoDoColchaoModel.Loja" Role="Loja" Multiplicity="1" />
+          <End Type="ChicoDoColchaoModel.Orcamento" Role="Orcamento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Loja">
+              <PropertyRef Name="LojaID" />
+            </Principal>
+            <Dependent Role="Orcamento">
+              <PropertyRef Name="LojaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Pedido_Loja">
+          <End Type="ChicoDoColchaoModel.Loja" Role="Loja" Multiplicity="1" />
+          <End Type="ChicoDoColchaoModel.Pedido" Role="Pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Loja">
+              <PropertyRef Name="LojaID" />
+            </Principal>
+            <Dependent Role="Pedido">
+              <PropertyRef Name="LojaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Pedido_LojaSaida">
+          <End Type="ChicoDoColchaoModel.Loja" Role="Loja" Multiplicity="1" />
+          <End Type="ChicoDoColchaoModel.Pedido" Role="Pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Loja">
+              <PropertyRef Name="LojaID" />
+            </Principal>
+            <Dependent Role="Pedido">
+              <PropertyRef Name="LojaSaidaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transferencia_LojaDestino">
+          <End Type="ChicoDoColchaoModel.Loja" Role="Loja" Multiplicity="1" />
+          <End Type="ChicoDoColchaoModel.Transferencia" Role="Transferencia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Loja">
+              <PropertyRef Name="LojaID" />
+            </Principal>
+            <Dependent Role="Transferencia">
+              <PropertyRef Name="LojaDestinoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transferencia_LojaOrigem">
+          <End Type="ChicoDoColchaoModel.Loja" Role="Loja" Multiplicity="1" />
+          <End Type="ChicoDoColchaoModel.Transferencia" Role="Transferencia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Loja">
+              <PropertyRef Name="LojaID" />
+            </Principal>
+            <Dependent Role="Transferencia">
+              <PropertyRef Name="LojaOrigemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1949,20 +1949,6 @@
                 <ScalarProperty Name="LogID" ColumnName="LogID" />
                 <ScalarProperty Name="Descricao" ColumnName="Descricao" />
                 <ScalarProperty Name="DataHora" ColumnName="DataHora" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Loja">
-            <EntityTypeMapping TypeName="ChicoDoColchaoModel.Loja">
-              <MappingFragment StoreEntitySet="Loja">
-                <ScalarProperty Name="LojaID" ColumnName="LojaID" />
-                <ScalarProperty Name="Cnpj" ColumnName="Cnpj" />
-                <ScalarProperty Name="NomeFantasia" ColumnName="NomeFantasia" />
-                <ScalarProperty Name="RazaoSocial" ColumnName="RazaoSocial" />
-                <ScalarProperty Name="Telefone" ColumnName="Telefone" />
-                <ScalarProperty Name="Ativo" ColumnName="Ativo" />
-                <ScalarProperty Name="Deposito" ColumnName="Deposito" />
-                <ScalarProperty Name="Bairro" ColumnName="Bairro" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2177,6 +2163,20 @@
                 <ScalarProperty Name="DataPedido" ColumnName="DataPedido" />
                 <ScalarProperty Name="FuncionarioID" ColumnName="FuncionarioID" />
                 <ScalarProperty Name="PedidoID" ColumnName="PedidoID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Loja">
+            <EntityTypeMapping TypeName="ChicoDoColchaoModel.Loja">
+              <MappingFragment StoreEntitySet="Loja">
+                <ScalarProperty Name="Bairro" ColumnName="Bairro" />
+                <ScalarProperty Name="Deposito" ColumnName="Deposito" />
+                <ScalarProperty Name="Ativo" ColumnName="Ativo" />
+                <ScalarProperty Name="Telefone" ColumnName="Telefone" />
+                <ScalarProperty Name="RazaoSocial" ColumnName="RazaoSocial" />
+                <ScalarProperty Name="NomeFantasia" ColumnName="NomeFantasia" />
+                <ScalarProperty Name="Cnpj" ColumnName="Cnpj" />
+                <ScalarProperty Name="LojaID" ColumnName="LojaID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

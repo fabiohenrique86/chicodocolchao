@@ -578,7 +578,7 @@
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
           <Height>0.9175cm</Height>
-          <Width>8.95583cm</Width>
+          <Width>12.9cm</Width>
           <Style>
             <Border>
               <Style>None</Style>
@@ -596,7 +596,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>="CNPJ: " &amp; Parameters!Cnpj.Value</Value>
+                  <Value>="Razão Social: " &amp; Parameters!RazaoSocial.Value &amp; " / CNPJ: " &amp; Parameters!Cnpj.Value</Value>
                   <Style />
                 </TextRun>
               </TextRuns>
@@ -606,7 +606,7 @@
           <rd:DefaultName>Textbox2</rd:DefaultName>
           <Top>0.9175cm</Top>
           <Height>0.6cm</Height>
-          <Width>8.95583cm</Width>
+          <Width>12.9cm</Width>
           <ZIndex>1</ZIndex>
           <Style>
             <Border>
@@ -626,9 +626,7 @@
               <TextRuns>
                 <TextRun>
                   <Value>="Data: " &amp; Parameters!Data.Value</Value>
-                  <Style>
-                    <FontSize>8pt</FontSize>
-                  </Style>
+                  <Style />
                 </TextRun>
               </TextRuns>
               <Style />
@@ -637,7 +635,7 @@
           <rd:DefaultName>Textbox3</rd:DefaultName>
           <Top>1.5175cm</Top>
           <Height>0.6cm</Height>
-          <Width>8.95583cm</Width>
+          <Width>12.9cm</Width>
           <ZIndex>2</ZIndex>
           <Style>
             <Border>
@@ -926,6 +924,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox19</rd:DefaultName>
+          <Top>0cm</Top>
           <Left>8.30536cm</Left>
           <Height>7.94998cm</Height>
           <Width>10.69464cm</Width>
@@ -1698,6 +1697,11 @@
     <ReportParameter Name="TotalFrete">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="RazaoSocial">
+      <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>

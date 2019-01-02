@@ -32,7 +32,6 @@ namespace ChicoDoColchao.Repository
         public Nullable<int> PedidoID { get; set; }
     
         public virtual Funcionario Funcionario { get; set; }
-        public virtual Loja Loja { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrcamentoProduto> OrcamentoProduto { get; set; }
         public virtual Orcamento Orcamento1 { get; set; }
@@ -41,5 +40,6 @@ namespace ChicoDoColchao.Repository
         public virtual ICollection<OrcamentoHistorico> OrcamentoHistorico { get; set; }
         public virtual Cliente Cliente { get; set; }
         public virtual Pedido Pedido { get; set; }
+        public virtual Loja Loja { get; set; }
     }
 }

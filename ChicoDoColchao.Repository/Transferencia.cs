@@ -27,9 +27,9 @@ namespace ChicoDoColchao.Repository
         public string Observacao { get; set; }
         public bool Ativo { get; set; }
     
-        public virtual Loja Loja { get; set; }
-        public virtual Loja Loja1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TransferenciaProduto> TransferenciaProduto { get; set; }
+        public virtual Loja Loja { get; set; }
+        public virtual Loja Loja1 { get; set; }
     }
 }

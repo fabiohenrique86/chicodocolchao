@@ -47,7 +47,7 @@ namespace ChicoDoColchao.Controllers
                 {
                     DataPedido = Convert.ToDateTime(data),
                     LojaDao = new List<LojaDao>() { new LojaDao() { LojaID = lojaId } }
-                }, false, 0);
+                }, false, 0).Where(x => x.PedidoStatusDao.FirstOrDefault().PedidoStatusID != PedidoStatusDao.EPedidoStatus.Cancelado.GetHashCode()).ToList();
 
                 if (pedidosDao == null || pedidosDao.Count() <= 0)
                 {
@@ -68,7 +68,7 @@ namespace ChicoDoColchao.Controllers
 
                 viewer.ProcessingMode = ProcessingMode.Local;
                 viewer.LocalReport.ReportPath = Server.MapPath("~/Reports/MovimentoDeCaixa.rdlc");
-                
+
                 double dinheiro = 0,
                 cartaoBancoDoBrasilMasterCard = 0,
                 cartaoBancoDoBrasilVisa = 0,
@@ -98,7 +98,7 @@ namespace ChicoDoColchao.Controllers
                 cartaoBradescoAmericanExpress = 0,
                 cartaoSantanderAmericanExpress = 0,
                 cartaoOutros = 0,
-                totalRecebido = 0, 
+                totalRecebido = 0,
                 totalFrete = 0;
 
                 foreach (var item in pedidosDao)
@@ -154,7 +154,8 @@ namespace ChicoDoColchao.Controllers
                 var parametros = new List<ReportParameter>();
 
                 parametros.Add(new ReportParameter("Cnpj", pedidosDao.FirstOrDefault().LojaDao.FirstOrDefault().Cnpj));
-                parametros.Add(new ReportParameter("Data", string.Format("{0} {1}:{2}", data, DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString())));
+                parametros.Add(new ReportParameter("RazaoSocial", pedidosDao.FirstOrDefault().LojaDao.FirstOrDefault().RazaoSocial));
+                parametros.Add(new ReportParameter("Data", DateTime.Now.ToString("dd/MM/yyyy HH:mm")));
                 parametros.Add(new ReportParameter("Dinheiro", dinheiro.ToString()));
                 parametros.Add(new ReportParameter("CartaoVisa", (cartaoBancoDoBrasilVisa + cartaoCaixaEconomicaVisa + cartaoItauVisa + cartaoBradescoVisa + cartaoSantanderVisa).ToString()));
                 parametros.Add(new ReportParameter("CartaoMaster", (cartaoBancoDoBrasilMasterCard + cartaoCaixaEconomicaMasterCard + cartaoItauMasterCard + cartaoBradescoMasterCard + cartaoSantanderMasterCard).ToString()));

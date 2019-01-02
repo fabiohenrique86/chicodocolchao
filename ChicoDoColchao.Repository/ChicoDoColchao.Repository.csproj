@@ -54,6 +54,9 @@
     <Compile Include="Categoria.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Loja.cs">
+      <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="MenuRepository.cs" />
     <Compile Include="ChicoDoColchaoModel.Context.cs">
       <AutoGen>True</AutoGen>
@@ -83,9 +86,6 @@
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
     <Compile Include="LogRepository.cs" />
-    <Compile Include="Loja.cs">
-      <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="LojaProduto.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
