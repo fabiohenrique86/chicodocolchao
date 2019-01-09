@@ -60,7 +60,7 @@ namespace ChicoDoColchao.Controllers
                 string encoding;
                 string filenameExtension;
 
-                var arquivo = string.Format("relatorio_movimento_de_caixa_{0}.pdf", DateTime.Now.ToString("dd_MM_yyyy_HH_mm"));
+                var arquivo = string.Format("relatorio_movimento_de_caixa_{0}.pdf", pedidosDao.FirstOrDefault().DataPedido.ToString("dd_MM_yyyy_HH_mm"));
                 var caminho = string.Format(Server.MapPath("~") + arquivo);
                 var tipo = "application/pdf";
 
@@ -154,8 +154,7 @@ namespace ChicoDoColchao.Controllers
                 var parametros = new List<ReportParameter>();
 
                 parametros.Add(new ReportParameter("Cnpj", pedidosDao.FirstOrDefault().LojaDao.FirstOrDefault().Cnpj));
-                parametros.Add(new ReportParameter("RazaoSocial", pedidosDao.FirstOrDefault().LojaDao.FirstOrDefault().RazaoSocial));
-                parametros.Add(new ReportParameter("Data", DateTime.Now.ToString("dd/MM/yyyy HH:mm")));
+                parametros.Add(new ReportParameter("Data", pedidosDao.FirstOrDefault().DataPedido.ToString("dd/MM/yyyy")));
                 parametros.Add(new ReportParameter("Dinheiro", dinheiro.ToString()));
                 parametros.Add(new ReportParameter("CartaoVisa", (cartaoBancoDoBrasilVisa + cartaoCaixaEconomicaVisa + cartaoItauVisa + cartaoBradescoVisa + cartaoSantanderVisa).ToString()));
                 parametros.Add(new ReportParameter("CartaoMaster", (cartaoBancoDoBrasilMasterCard + cartaoCaixaEconomicaMasterCard + cartaoItauMasterCard + cartaoBradescoMasterCard + cartaoSantanderMasterCard).ToString()));
@@ -166,6 +165,7 @@ namespace ChicoDoColchao.Controllers
                 parametros.Add(new ReportParameter("CartaoAmericanExpress", (cartaoBancoDoBrasilAmericanExpress + cartaoCaixaEconomicaAmericanExpress + cartaoItauAmericanExpress + cartaoBradescoAmericanExpress + cartaoSantanderAmericanExpress).ToString()));
                 parametros.Add(new ReportParameter("Crediario", crediario.ToString()));
                 parametros.Add(new ReportParameter("TotalFrete", totalFrete.ToString()));
+                parametros.Add(new ReportParameter("RazaoSocial", pedidosDao.FirstOrDefault().LojaDao.FirstOrDefault().RazaoSocial ?? pedidosDao.FirstOrDefault().LojaDao.FirstOrDefault().NomeFantasia));
 
                 viewer.LocalReport.SetParameters(parametros);
 
