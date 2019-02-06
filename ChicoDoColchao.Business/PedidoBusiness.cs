@@ -174,6 +174,11 @@ namespace ChicoDoColchao.Business
                 throw new BusinessException("Usuário é obrigatório");
             }
 
+            if (pedidoDao.UsuarioCancelamentoDao.TipoUsuarioDao == null || pedidoDao.UsuarioCancelamentoDao.TipoUsuarioDao.TipoUsuarioID != TipoUsuarioDao.ETipoUsuario.Gerencial.GetHashCode())
+            {
+                throw new BusinessException("Usuário não está autorizado a cancelar pedido");
+            }
+
             pedido = pedidoRepository.Listar(new Pedido() { PedidoID = pedidoDao.PedidoID }, true, 1).FirstOrDefault();
 
             if (pedido == null)
@@ -378,7 +383,7 @@ namespace ChicoDoColchao.Business
             {
                 throw new BusinessException("Total do pedido deve ser igual ao total pago");
             }
-            
+
             var pedidoOriginal = pedidoRepository.Listar(new Pedido() { PedidoID = pedidoDao.PedidoID }, false, 0).FirstOrDefault();
             if (pedidoOriginal == null)
             {
@@ -715,6 +720,12 @@ namespace ChicoDoColchao.Business
             parametros.Add(new ReportParameter("PontoReferencia", pedidoDao.ClienteDao.FirstOrDefault().PontoReferencia));
             parametros.Add(new ReportParameter("TotalPedido", Math.Round(pedidoDao.PedidoProdutoDao.Sum(x => x.Preco * x.Quantidade), 2).ToString()));
             parametros.Add(new ReportParameter("PedidoTrocaID", pedidoDao.PedidoTrocaID.GetValueOrDefault().ToString()));
+
+            parametros.Add(new ReportParameter("LogradouroLoja", pedidoDao.LojaDao.FirstOrDefault().Logradouro));
+            parametros.Add(new ReportParameter("NumeroLoja", pedidoDao.LojaDao.FirstOrDefault().Numero.HasValue ? pedidoDao.LojaDao.FirstOrDefault().Numero.ToString() : string.Empty));
+            parametros.Add(new ReportParameter("ComplementoLoja", pedidoDao.LojaDao.FirstOrDefault().Complemento));
+            parametros.Add(new ReportParameter("CepLoja", pedidoDao.LojaDao.FirstOrDefault().Cep));
+            parametros.Add(new ReportParameter("BairroLoja", pedidoDao.LojaDao.FirstOrDefault().Bairro));
 
             viewer.LocalReport.SetParameters(parametros);
 

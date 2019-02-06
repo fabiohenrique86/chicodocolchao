@@ -22,6 +22,10 @@ namespace ChicoDoColchao.Dao
         public bool Ativo { get; set; }
         public bool Deposito { get; set; }
         public string Bairro { get; set; }
+        public string Logradouro { get; set; }
+        public short? Numero { get; set; }
+        public string Complemento { get; set; }
+        public string Cep { get; set; }
 
         public string FantasiaBairro { get { return string.Format("{0} - {1}", NomeFantasia, Bairro); } }
 

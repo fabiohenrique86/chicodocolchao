@@ -9,19 +9,25 @@
               <Width>3.09972cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.87042cm</Width>
+              <Width>2.5cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.28834cm</Width>
+              <Width>1.55cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.39417cm</Width>
+              <Width>2.5cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.44708cm</Width>
+              <Width>1.55cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>5.90027cm</Width>
+              <Width>2.5cm</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>1.55cm</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>3.71853cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -59,9 +65,11 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <ColSpan>6</ColSpan>
+                    <ColSpan>8</ColSpan>
                   </CellContents>
                 </TablixCell>
+                <TablixCell />
+                <TablixCell />
                 <TablixCell />
                 <TablixCell />
                 <TablixCell />
@@ -87,7 +95,9 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox3</rd:DefaultName>
@@ -143,30 +153,27 @@
                 <TablixCell />
                 <TablixCell />
                 <TablixCell />
-              </TablixCells>
-            </TablixRow>
-            <TablixRow>
-              <Height>0.6cm</Height>
-              <TablixCells>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox9">
+                    <Textbox Name="Textbox32">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value EvaluationMode="Constant">CPF/CNPJ</Value>
+                              <Value>CPF/CNPJ</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox9</rd:DefaultName>
+                      <rd:DefaultName>Textbox32</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -182,7 +189,7 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Cpf">
+                    <Textbox Name="Textbox45">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -196,11 +203,11 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Left</TextAlign>
+                            <TextAlign>Center</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Cpf</rd:DefaultName>
+                      <rd:DefaultName>Textbox45</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -212,13 +219,8 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <ColSpan>5</ColSpan>
                   </CellContents>
                 </TablixCell>
-                <TablixCell />
-                <TablixCell />
-                <TablixCell />
-                <TablixCell />
               </TablixCells>
             </TablixRow>
             <TablixRow>
@@ -239,7 +241,9 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox18</rd:DefaultName>
@@ -272,7 +276,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Left</TextAlign>
+                            <TextAlign>Center</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -288,21 +292,13 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <ColSpan>5</ColSpan>
+                    <ColSpan>2</ColSpan>
                   </CellContents>
                 </TablixCell>
                 <TablixCell />
-                <TablixCell />
-                <TablixCell />
-                <TablixCell />
-              </TablixCells>
-            </TablixRow>
-            <TablixRow>
-              <Height>0.6cm</Height>
-              <TablixCells>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox15">
+                    <Textbox Name="Textbox84">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -315,10 +311,12 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox15</rd:DefaultName>
+                      <rd:DefaultName>Textbox84</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -334,7 +332,7 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Email">
+                    <Textbox Name="Email1">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -348,11 +346,11 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Left</TextAlign>
+                            <TextAlign>Center</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Email</rd:DefaultName>
+                      <rd:DefaultName>Email1</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -364,10 +362,9 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <ColSpan>5</ColSpan>
+                    <ColSpan>4</ColSpan>
                   </CellContents>
                 </TablixCell>
-                <TablixCell />
                 <TablixCell />
                 <TablixCell />
                 <TablixCell />
@@ -391,7 +388,9 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox12</rd:DefaultName>
@@ -492,7 +491,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Left</TextAlign>
+                            <TextAlign>Center</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -508,19 +507,11 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <ColSpan>3</ColSpan>
                   </CellContents>
                 </TablixCell>
-                <TablixCell />
-                <TablixCell />
-              </TablixCells>
-            </TablixRow>
-            <TablixRow>
-              <Height>0.6cm</Height>
-              <TablixCells>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox25">
+                    <Textbox Name="Textbox23">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -533,10 +524,12 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox25</rd:DefaultName>
+                      <rd:DefaultName>Textbox23</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -552,7 +545,7 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="TelefoneCelular">
+                    <Textbox Name="TelefoneCelular1">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -570,7 +563,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>TelefoneCelular</rd:DefaultName>
+                      <rd:DefaultName>TelefoneCelular1</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -586,7 +579,7 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox34">
+                    <Textbox Name="Textbox42">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -604,7 +597,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox34</rd:DefaultName>
+                      <rd:DefaultName>Textbox42</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -620,7 +613,7 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="TelefoneCelular2">
+                    <Textbox Name="TelefoneCelular21">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -634,11 +627,11 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Left</TextAlign>
+                            <TextAlign>Center</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>TelefoneCelular2</rd:DefaultName>
+                      <rd:DefaultName>TelefoneCelular21</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -650,17 +643,16 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <ColSpan>3</ColSpan>
                   </CellContents>
                 </TablixCell>
-                <TablixCell />
-                <TablixCell />
               </TablixCells>
             </TablixRow>
           </TablixRows>
         </TablixBody>
         <TablixColumnHierarchy>
           <TablixMembers>
+            <TablixMember />
+            <TablixMember />
             <TablixMember />
             <TablixMember />
             <TablixMember />
@@ -680,17 +672,15 @@
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
-                <TablixMember />
-                <TablixMember />
-                <TablixMember />
               </TablixMembers>
             </TablixMember>
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>ds_cliente</DataSetName>
         <Top>0.07343cm</Top>
-        <Height>4.2cm</Height>
-        <Width>19cm</Width>
+        <Left>0cm</Left>
+        <Height>2.4cm</Height>
+        <Width>18.96825cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1066,7 +1056,8 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>ds_tipo_pagamento</DataSetName>
-        <Top>8.47668cm</Top>
+        <Top>6.69868cm</Top>
+        <Left>0cm</Left>
         <Height>2.4cm</Height>
         <Width>19cm</Width>
         <ZIndex>1</ZIndex>
@@ -1752,7 +1743,8 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>ds_produto</DataSetName>
-        <Top>5.47343cm</Top>
+        <Top>3.69543cm</Top>
+        <Left>0cm</Left>
         <Height>1.8cm</Height>
         <Width>18.96825cm</Width>
         <ZIndex>2</ZIndex>
@@ -1780,7 +1772,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox45</rd:DefaultName>
-        <Top>4.27343cm</Top>
+        <Top>2.49543cm</Top>
+        <Left>0cm</Left>
         <Height>0.6cm</Height>
         <Width>19cm</Width>
         <ZIndex>3</ZIndex>
@@ -1812,7 +1805,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox45</rd:DefaultName>
-        <Top>4.87343cm</Top>
+        <Top>3.09543cm</Top>
+        <Left>0cm</Left>
         <Height>0.6cm</Height>
         <Width>19cm</Width>
         <ZIndex>4</ZIndex>
@@ -1845,7 +1839,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox45</rd:DefaultName>
-        <Top>10.87668cm</Top>
+        <Top>9.09868cm</Top>
+        <Left>0cm</Left>
         <Height>0.6cm</Height>
         <Width>19cm</Width>
         <ZIndex>5</ZIndex>
@@ -1879,7 +1874,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox45</rd:DefaultName>
-        <Top>11.47668cm</Top>
+        <Top>9.69868cm</Top>
+        <Left>0cm</Left>
         <Height>0.6cm</Height>
         <Width>3.09972cm</Width>
         <ZIndex>6</ZIndex>
@@ -1913,7 +1909,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox45</rd:DefaultName>
-        <Top>12.07668cm</Top>
+        <Top>10.29868cm</Top>
+        <Left>0cm</Left>
         <Height>0.6cm</Height>
         <Width>3.09972cm</Width>
         <ZIndex>7</ZIndex>
@@ -1947,7 +1944,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox45</rd:DefaultName>
-        <Top>12.67668cm</Top>
+        <Top>10.89868cm</Top>
+        <Left>0cm</Left>
         <Height>0.6cm</Height>
         <Width>3.09972cm</Width>
         <ZIndex>8</ZIndex>
@@ -1981,7 +1979,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox45</rd:DefaultName>
-        <Top>11.47668cm</Top>
+        <Top>9.69868cm</Top>
         <Left>3.09972cm</Left>
         <Height>0.6cm</Height>
         <Width>15.90028cm</Width>
@@ -2016,7 +2014,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox45</rd:DefaultName>
-        <Top>12.07668cm</Top>
+        <Top>10.29868cm</Top>
         <Left>3.09972cm</Left>
         <Height>0.6cm</Height>
         <Width>15.90028cm</Width>
@@ -2051,7 +2049,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox45</rd:DefaultName>
-        <Top>12.67668cm</Top>
+        <Top>10.89868cm</Top>
         <Left>3.09972cm</Left>
         <Height>0.6cm</Height>
         <Width>15.90028cm</Width>
@@ -2086,7 +2084,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox45</rd:DefaultName>
-        <Top>13.87668cm</Top>
+        <Top>12.09868cm</Top>
+        <Left>0cm</Left>
         <Height>2.53072cm</Height>
         <Width>19cm</Width>
         <ZIndex>12</ZIndex>
@@ -2119,7 +2118,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox45</rd:DefaultName>
-        <Top>13.27668cm</Top>
+        <Top>11.49868cm</Top>
+        <Left>0cm</Left>
         <Height>0.6cm</Height>
         <Width>19cm</Width>
         <ZIndex>13</ZIndex>
@@ -2151,7 +2151,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox36</rd:DefaultName>
-        <Top>16.4074cm</Top>
+        <Top>14.6294cm</Top>
+        <Left>0cm</Left>
         <Height>5.5cm</Height>
         <Width>3.135cm</Width>
         <ZIndex>14</ZIndex>
@@ -2290,7 +2291,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox36</rd:DefaultName>
-        <Top>16.4074cm</Top>
+        <Top>14.6294cm</Top>
         <Left>3.135cm</Left>
         <Height>5.5cm</Height>
         <Width>15.865cm</Width>
@@ -2326,7 +2327,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox45</rd:DefaultName>
-        <Top>7.27668cm</Top>
+        <Top>5.49868cm</Top>
+        <Left>0cm</Left>
         <Height>0.6cm</Height>
         <Width>16.21778cm</Width>
         <ZIndex>16</ZIndex>
@@ -2360,7 +2362,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox45</rd:DefaultName>
-        <Top>7.87668cm</Top>
+        <Top>6.09868cm</Top>
+        <Left>0cm</Left>
         <Height>0.6cm</Height>
         <Width>16.21778cm</Width>
         <ZIndex>17</ZIndex>
@@ -2394,7 +2397,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox45</rd:DefaultName>
-        <Top>7.27343cm</Top>
+        <Top>5.49543cm</Top>
         <Left>16.21778cm</Left>
         <Height>0.6cm</Height>
         <Width>2.75047cm</Width>
@@ -2429,7 +2432,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox45</rd:DefaultName>
-        <Top>7.86962cm</Top>
+        <Top>6.09162cm</Top>
         <Left>16.21778cm</Left>
         <Height>0.6cm</Height>
         <Width>2.75047cm</Width>
@@ -2446,7 +2449,7 @@
         </Style>
       </Textbox>
     </ReportItems>
-    <Height>8.67218in</Height>
+    <Height>7.94301in</Height>
     <Style />
   </Body>
   <Width>19cm</Width>
@@ -2474,6 +2477,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
+          <Left>0cm</Left>
           <Height>0.79375cm</Height>
           <Width>9.44972cm</Width>
           <Style>
@@ -2493,47 +2497,21 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>="Razão Social: " &amp; Parameters!RazaoSocial.Value</Value>
-                  <Style />
+                  <Value>="Razão Social: " &amp; Parameters!RazaoSocial.Value &amp; " - CNPJ: " &amp; Parameters!Cnpj.Value</Value>
+                  <Style>
+                    <FontSize>8pt</FontSize>
+                  </Style>
                 </TextRun>
               </TextRuns>
               <Style />
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox8</rd:DefaultName>
-          <Top>0.93486cm</Top>
+          <Top>0.87136cm</Top>
+          <Left>0cm</Left>
           <Height>0.5cm</Height>
-          <Width>9.44972cm</Width>
+          <Width>13.49972cm</Width>
           <ZIndex>1</ZIndex>
-          <Style>
-            <Border>
-              <Style>None</Style>
-            </Border>
-            <PaddingLeft>1pt</PaddingLeft>
-            <PaddingRight>1pt</PaddingRight>
-            <PaddingTop>1pt</PaddingTop>
-            <PaddingBottom>1pt</PaddingBottom>
-          </Style>
-        </Textbox>
-        <Textbox Name="Textbox10">
-          <CanGrow>true</CanGrow>
-          <KeepTogether>true</KeepTogether>
-          <Paragraphs>
-            <Paragraph>
-              <TextRuns>
-                <TextRun>
-                  <Value>="CNPJ: " &amp; Parameters!Cnpj.Value</Value>
-                  <Style />
-                </TextRun>
-              </TextRuns>
-              <Style />
-            </Paragraph>
-          </Paragraphs>
-          <rd:DefaultName>Textbox8</rd:DefaultName>
-          <Top>1.43486cm</Top>
-          <Height>0.5cm</Height>
-          <Width>5.02709cm</Width>
-          <ZIndex>2</ZIndex>
           <Style>
             <Border>
               <Style>None</Style>
@@ -2552,7 +2530,9 @@
               <TextRuns>
                 <TextRun>
                   <Value>="Telefone: " &amp; Parameters!Telefone.Value</Value>
-                  <Style />
+                  <Style>
+                    <FontSize>8pt</FontSize>
+                  </Style>
                 </TextRun>
               </TextRuns>
               <Style />
@@ -2560,9 +2540,10 @@
           </Paragraphs>
           <rd:DefaultName>Textbox8</rd:DefaultName>
           <Top>1.93472cm</Top>
+          <Left>0cm</Left>
           <Height>0.5cm</Height>
           <Width>5.02709cm</Width>
-          <ZIndex>3</ZIndex>
+          <ZIndex>2</ZIndex>
           <Style>
             <Border>
               <Style>None</Style>
@@ -2580,7 +2561,7 @@
           <Left>13.56653cm</Left>
           <Height>2.45814cm</Height>
           <Width>5.43347cm</Width>
-          <ZIndex>4</ZIndex>
+          <ZIndex>3</ZIndex>
           <Style>
             <Border>
               <Style>None</Style>
@@ -2595,7 +2576,9 @@
               <TextRuns>
                 <TextRun>
                   <Value>="Data Pedido: " &amp; Parameters!DataPedido.Value</Value>
-                  <Style />
+                  <Style>
+                    <FontSize>8pt</FontSize>
+                  </Style>
                 </TextRun>
               </TextRuns>
               <Style />
@@ -2603,8 +2586,40 @@
           </Paragraphs>
           <rd:DefaultName>Textbox8</rd:DefaultName>
           <Top>2.43472cm</Top>
+          <Left>0cm</Left>
           <Height>0.5cm</Height>
           <Width>5.02709cm</Width>
+          <ZIndex>4</ZIndex>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+            <PaddingLeft>1pt</PaddingLeft>
+            <PaddingRight>1pt</PaddingRight>
+            <PaddingTop>1pt</PaddingTop>
+            <PaddingBottom>1pt</PaddingBottom>
+          </Style>
+        </Textbox>
+        <Textbox Name="Textbox9">
+          <CanGrow>true</CanGrow>
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>="Endereço: " &amp; Parameters!LogradouroLoja.Value &amp; " " &amp; Parameters!NumeroLoja.Value &amp; " " &amp;Parameters!ComplementoLoja.Value &amp; " " &amp; Parameters!BairroLoja.Value &amp; " " &amp; Parameters!CepLoja.Value</Value>
+                  <Style>
+                    <FontSize>8pt</FontSize>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style />
+            </Paragraph>
+          </Paragraphs>
+          <rd:DefaultName>Textbox8</rd:DefaultName>
+          <Top>1.40664cm</Top>
+          <Height>0.5cm</Height>
+          <Width>13.49972cm</Width>
           <ZIndex>5</ZIndex>
           <Style>
             <Border>
@@ -2630,6 +2645,7 @@
       <ReportItems>
         <Line Name="Line1">
           <Top>1.23403cm</Top>
+          <Left>0cm</Left>
           <Height>0cm</Height>
           <Width>7.84458cm</Width>
           <Style>
@@ -3009,6 +3025,38 @@
     </ReportParameter>
     <ReportParameter Name="PedidoTrocaID">
       <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="LogradouroLoja">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="NumeroLoja">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ComplementoLoja">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="CepLoja">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="BairroLoja">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>

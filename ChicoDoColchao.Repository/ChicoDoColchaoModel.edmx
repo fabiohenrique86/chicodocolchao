@@ -79,6 +79,10 @@
           <Property Name="Ativo" Type="bit" Nullable="false" />
           <Property Name="Deposito" Type="bit" Nullable="false" />
           <Property Name="Bairro" Type="varchar" MaxLength="75" Nullable="false" />
+          <Property Name="Logradouro" Type="varchar" MaxLength="300" />
+          <Property Name="Numero" Type="smallint" />
+          <Property Name="Complemento" Type="varchar" MaxLength="100" />
+          <Property Name="Cep" Type="varchar" MaxLength="9" />
         </EntityType>
         <EntityType Name="LojaProduto">
           <Key>
@@ -1140,7 +1144,7 @@
           <NavigationProperty Name="TransferenciaProduto" Relationship="Self.FK_TransferenciaProduto_Transferencia" FromRole="Transferencia" ToRole="TransferenciaProduto" />
           <NavigationProperty Name="Loja" Relationship="ChicoDoColchaoModel.FK_Transferencia_LojaDestino" FromRole="Transferencia" ToRole="Loja" />
           <NavigationProperty Name="Loja1" Relationship="ChicoDoColchaoModel.FK_Transferencia_LojaOrigem" FromRole="Transferencia" ToRole="Loja" />
-        </EntityType>
+          </EntityType>
         <EntityType Name="TransferenciaProduto">
           <Key>
             <PropertyRef Name="TransferenciaProdutoID" />
@@ -1774,6 +1778,10 @@
           <Property Name="Ativo" Type="Boolean" Nullable="false" />
           <Property Name="Deposito" Type="Boolean" Nullable="false" />
           <Property Name="Bairro" Type="String" Nullable="false" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="Logradouro" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="Numero" Type="Int16" />
+          <Property Name="Complemento" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Cep" Type="String" MaxLength="9" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Funcionario" Relationship="ChicoDoColchaoModel.FK_Funcionario_Loja" FromRole="Loja" ToRole="Funcionario" />
           <NavigationProperty Name="LojaProduto" Relationship="ChicoDoColchaoModel.FK_LojaProduto_Loja" FromRole="Loja" ToRole="LojaProduto" />
           <NavigationProperty Name="NotaFiscal" Relationship="ChicoDoColchaoModel.FK_NotaFiscal_Loja" FromRole="Loja" ToRole="NotaFiscal" />
@@ -2169,6 +2177,10 @@
           <EntitySetMapping Name="Loja">
             <EntityTypeMapping TypeName="ChicoDoColchaoModel.Loja">
               <MappingFragment StoreEntitySet="Loja">
+                <ScalarProperty Name="Cep" ColumnName="Cep" />
+                <ScalarProperty Name="Complemento" ColumnName="Complemento" />
+                <ScalarProperty Name="Numero" ColumnName="Numero" />
+                <ScalarProperty Name="Logradouro" ColumnName="Logradouro" />
                 <ScalarProperty Name="Bairro" ColumnName="Bairro" />
                 <ScalarProperty Name="Deposito" ColumnName="Deposito" />
                 <ScalarProperty Name="Ativo" ColumnName="Ativo" />

@@ -70,7 +70,7 @@ namespace ChicoDoColchao.Business.Tradutors
                 pedidoProduto.PedidoID = pedidoProdutoDao.PedidoID;
                 pedidoProduto.ProdutoID = pedidoProdutoDao.ProdutoID;
                 pedidoProduto.Quantidade = pedidoProdutoDao.Quantidade;
-                pedidoProduto.Medida = pedidoProdutoDao.Medida;                
+                pedidoProduto.Medida = pedidoProdutoDao.Medida;
                 pedidoProduto.Preco = pedidoProdutoDao.Preco;
 
                 pedidoProduto.DataEntrega = pedidoProdutoDao.DataEntrega;
@@ -160,7 +160,7 @@ namespace ChicoDoColchao.Business.Tradutors
                 Numero = pedido.Funcionario.Numero,
                 Nome = pedido.Funcionario.Nome,
                 Email = pedido.Funcionario.Email,
-                Telefone = string.IsNullOrEmpty(pedido.Funcionario.Telefone) ? string.Empty : pedido.Funcionario.Telefone.Length > 10 ? Convert.ToInt64(pedido.Funcionario.Telefone).ToString("(##) #####-####") : Convert.ToInt64(pedido.Funcionario.Telefone).ToString("(##) ####-####"),
+                Telefone = string.IsNullOrEmpty(pedido.Funcionario.Telefone) ? string.Empty : pedido.Funcionario.Telefone.Length > 10 ? Convert.ToInt64(pedido.Funcionario.Telefone).ToString("(##) #####-####") : Convert.ToInt64(pedido.Funcionario.Telefone).ToString("(##) ####-####")
             });
 
             pedidoDao.LojaDao.Add(new LojaDao()
@@ -170,6 +170,11 @@ namespace ChicoDoColchao.Business.Tradutors
                 NomeFantasia = pedido.LojaOrigem.NomeFantasia,
                 RazaoSocial = pedido.LojaOrigem.RazaoSocial,
                 Telefone = string.IsNullOrEmpty(pedido.LojaOrigem.Telefone) ? string.Empty : pedido.LojaOrigem.Telefone.Length > 10 ? Convert.ToInt64(pedido.LojaOrigem.Telefone).ToString("(##) #####-####") : Convert.ToInt64(pedido.LojaOrigem.Telefone).ToString("(##) ####-####"),
+                Bairro = string.IsNullOrEmpty(pedido.LojaOrigem.Bairro) ? string.Empty : pedido.LojaOrigem.Bairro,
+                Logradouro = string.IsNullOrEmpty(pedido.LojaOrigem.Logradouro) ? string.Empty : pedido.LojaOrigem.Logradouro,
+                Numero = pedido.LojaOrigem.Numero,
+                Complemento = string.IsNullOrEmpty(pedido.LojaOrigem.Complemento) ? string.Empty : pedido.LojaOrigem.Complemento,
+                Cep = string.IsNullOrEmpty(pedido.LojaOrigem.Cep) ? string.Empty : pedido.LojaOrigem.Cep
             });
 
             pedidoDao.LojaSaidaDao.Add(new LojaDao()
@@ -179,6 +184,11 @@ namespace ChicoDoColchao.Business.Tradutors
                 NomeFantasia = pedido.LojaSaida.NomeFantasia,
                 RazaoSocial = pedido.LojaSaida.RazaoSocial,
                 Telefone = string.IsNullOrEmpty(pedido.LojaSaida.Telefone) ? string.Empty : pedido.LojaSaida.Telefone.Length > 10 ? Convert.ToInt64(pedido.LojaSaida.Telefone).ToString("(##) #####-####") : Convert.ToInt64(pedido.LojaSaida.Telefone).ToString("(##) ####-####"),
+                Bairro = string.IsNullOrEmpty(pedido.LojaSaida.Bairro) ? string.Empty : pedido.LojaOrigem.Bairro,
+                Logradouro = string.IsNullOrEmpty(pedido.LojaSaida.Logradouro) ? string.Empty : pedido.LojaOrigem.Logradouro,
+                Numero = pedido.LojaSaida.Numero,
+                Complemento = string.IsNullOrEmpty(pedido.LojaSaida.Complemento) ? string.Empty : pedido.LojaOrigem.Complemento,
+                Cep = string.IsNullOrEmpty(pedido.LojaSaida.Cep) ? string.Empty : pedido.LojaOrigem.Cep
             });
 
             pedidoDao.NomeCarreto = pedido.NomeCarreto;

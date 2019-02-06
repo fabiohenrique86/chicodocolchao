@@ -35,6 +35,10 @@ namespace ChicoDoColchao.Repository
         public bool Ativo { get; set; }
         public bool Deposito { get; set; }
         public string Bairro { get; set; }
+        public string Logradouro { get; set; }
+        public Nullable<short> Numero { get; set; }
+        public string Complemento { get; set; }
+        public string Cep { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Funcionario> Funcionario { get; set; }

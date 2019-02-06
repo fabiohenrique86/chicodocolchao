@@ -75,7 +75,7 @@
                 var pedidoDao = {};
 
                 pedidoDao.PedidoID = pedidoId;
-                pedidoDao.UsuarioCancelamentoDao = { UsuarioID: '@usuarioDao.UsuarioID' };
+                pedidoDao.UsuarioCancelamentoDao = { UsuarioID: '@usuarioDao.UsuarioID', 'TipoUsuarioDao.TipoUsuarioID': '@usuarioDao.TipoUsuarioDao.TipoUsuarioID' };
                 pedidoDao.PedidoStatusDao = [];
                 pedidoDao.PedidoStatusDao.push({ PedidoStatusID: '@PedidoStatusDao.EPedidoStatus.Cancelado.GetHashCode()' });
 
