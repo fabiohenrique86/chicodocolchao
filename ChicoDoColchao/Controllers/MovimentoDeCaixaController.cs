@@ -166,15 +166,18 @@ namespace ChicoDoColchao.Controllers
                 parametros.Add(new ReportParameter("Crediario", crediario.ToString()));
                 parametros.Add(new ReportParameter("TotalFrete", totalFrete.ToString()));
                 parametros.Add(new ReportParameter("RazaoSocial", pedidosDao.FirstOrDefault().LojaDao.FirstOrDefault().RazaoSocial ?? pedidosDao.FirstOrDefault().LojaDao.FirstOrDefault().NomeFantasia));
+                parametros.Add(new ReportParameter("CartaoOutros", cartaoOutros.ToString()));
 
                 viewer.LocalReport.SetParameters(parametros);
-
-                // pedido
+                
                 var pedidos = new List<dynamic>();
+                var id = 1;
+
                 foreach (var item in pedidosDao)
                 {
                     pedidos.Add(new
                     {
+                        ID = id,
                         PedidoID = item.PedidoID,
                         ValorPago = item.PedidoTipoPagamentoDao.Sum(x => x.ValorPago),
                         Forma = string.Join(",", item.PedidoTipoPagamentoDao.Select(x => x.TipoPagamentoDao.Descricao)),
@@ -183,7 +186,10 @@ namespace ChicoDoColchao.Controllers
                         CV = string.Join(",", item.PedidoTipoPagamentoDao.Select(x => x.CV)),
                         ValorFrete = item.ValorFrete
                     });
+
+                    id++;
                 }
+
                 viewer.LocalReport.DataSources.Add(new ReportDataSource("ds_movimento_caixa", pedidos));
 
                 viewer.LocalReport.Refresh();

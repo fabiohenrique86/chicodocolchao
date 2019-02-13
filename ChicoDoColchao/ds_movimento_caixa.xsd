@@ -14,7 +14,7 @@
   <xs:element name="ds_movimento_caixa" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="True" msprop:Generator_DataSetName="ds_movimento_caixa" msprop:Generator_UserDSName="ds_movimento_caixa">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="ds_movimento_caixa" msprop:Generator_TableClassName="ds_movimento_caixaDataTable" msprop:Generator_TableVarName="tableds_movimento_caixa" msprop:Generator_RowChangedName="ds_movimento_caixaRowChanged" msprop:Generator_TablePropName="_ds_movimento_caixa" msprop:Generator_RowDeletingName="ds_movimento_caixaRowDeleting" msprop:Generator_RowChangingName="ds_movimento_caixaRowChanging" msprop:Generator_RowEvHandlerName="ds_movimento_caixaRowChangeEventHandler" msprop:Generator_RowDeletedName="ds_movimento_caixaRowDeleted" msprop:Generator_RowClassName="ds_movimento_caixaRow" msprop:Generator_UserTableName="ds_movimento_caixa" msprop:Generator_RowEvArgName="ds_movimento_caixaRowChangeEvent">
+        <xs:element name="ds_movimento_caixa" msprop:Generator_TableClassName="ds_movimento_caixaDataTable" msprop:Generator_TableVarName="tableds_movimento_caixa" msprop:Generator_TablePropName="_ds_movimento_caixa" msprop:Generator_RowDeletingName="ds_movimento_caixaRowDeleting" msprop:Generator_RowChangingName="ds_movimento_caixaRowChanging" msprop:Generator_RowEvHandlerName="ds_movimento_caixaRowChangeEventHandler" msprop:Generator_RowDeletedName="ds_movimento_caixaRowDeleted" msprop:Generator_UserTableName="ds_movimento_caixa" msprop:Generator_RowChangedName="ds_movimento_caixaRowChanged" msprop:Generator_RowEvArgName="ds_movimento_caixaRowChangeEvent" msprop:Generator_RowClassName="ds_movimento_caixaRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="PedidoID" msprop:Generator_ColumnVarNameInTable="columnPedidoID" msprop:Generator_ColumnPropNameInRow="PedidoID" msprop:Generator_ColumnPropNameInTable="PedidoIDColumn" msprop:Generator_UserColumnName="PedidoID" type="xs:string" minOccurs="0" />
@@ -24,6 +24,7 @@
               <xs:element name="Observacao" msprop:Generator_ColumnVarNameInTable="columnObservacao" msprop:Generator_ColumnPropNameInRow="Observacao" msprop:Generator_ColumnPropNameInTable="ObservacaoColumn" msprop:Generator_UserColumnName="Observacao" type="xs:string" minOccurs="0" />
               <xs:element name="CV" msprop:Generator_ColumnVarNameInTable="columnCV" msprop:Generator_ColumnPropNameInRow="CV" msprop:Generator_ColumnPropNameInTable="CVColumn" msprop:Generator_UserColumnName="CV" type="xs:string" minOccurs="0" />
               <xs:element name="ValorFrete" msprop:Generator_ColumnVarNameInTable="columnValorFrete" msprop:Generator_ColumnPropNameInRow="ValorFrete" msprop:Generator_ColumnPropNameInTable="ValorFreteColumn" msprop:Generator_UserColumnName="ValorFrete" type="xs:string" minOccurs="0" />
+              <xs:element name="ID" msprop:Generator_ColumnVarNameInTable="columnID" msprop:Generator_ColumnPropNameInRow="ID" msprop:Generator_ColumnPropNameInTable="IDColumn" msprop:Generator_UserColumnName="ID" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
