@@ -678,7 +678,6 @@
         </TablixRowHierarchy>
         <DataSetName>ds_cliente</DataSetName>
         <Top>0.07343cm</Top>
-        <Left>0cm</Left>
         <Height>2.4cm</Height>
         <Width>18.96825cm</Width>
         <Style>
@@ -1057,7 +1056,6 @@
         </TablixRowHierarchy>
         <DataSetName>ds_tipo_pagamento</DataSetName>
         <Top>6.69868cm</Top>
-        <Left>0cm</Left>
         <Height>2.4cm</Height>
         <Width>19cm</Width>
         <ZIndex>1</ZIndex>
@@ -1744,7 +1742,6 @@
         </TablixRowHierarchy>
         <DataSetName>ds_produto</DataSetName>
         <Top>3.69543cm</Top>
-        <Left>0cm</Left>
         <Height>1.8cm</Height>
         <Width>18.96825cm</Width>
         <ZIndex>2</ZIndex>
@@ -1773,7 +1770,6 @@
         </Paragraphs>
         <rd:DefaultName>Textbox45</rd:DefaultName>
         <Top>2.49543cm</Top>
-        <Left>0cm</Left>
         <Height>0.6cm</Height>
         <Width>19cm</Width>
         <ZIndex>3</ZIndex>
@@ -1806,7 +1802,6 @@
         </Paragraphs>
         <rd:DefaultName>Textbox45</rd:DefaultName>
         <Top>3.09543cm</Top>
-        <Left>0cm</Left>
         <Height>0.6cm</Height>
         <Width>19cm</Width>
         <ZIndex>4</ZIndex>
@@ -1840,7 +1835,6 @@
         </Paragraphs>
         <rd:DefaultName>Textbox45</rd:DefaultName>
         <Top>9.09868cm</Top>
-        <Left>0cm</Left>
         <Height>0.6cm</Height>
         <Width>19cm</Width>
         <ZIndex>5</ZIndex>
@@ -1875,7 +1869,6 @@
         </Paragraphs>
         <rd:DefaultName>Textbox45</rd:DefaultName>
         <Top>9.69868cm</Top>
-        <Left>0cm</Left>
         <Height>0.6cm</Height>
         <Width>3.09972cm</Width>
         <ZIndex>6</ZIndex>
@@ -1910,7 +1903,6 @@
         </Paragraphs>
         <rd:DefaultName>Textbox45</rd:DefaultName>
         <Top>10.29868cm</Top>
-        <Left>0cm</Left>
         <Height>0.6cm</Height>
         <Width>3.09972cm</Width>
         <ZIndex>7</ZIndex>
@@ -1945,7 +1937,6 @@
         </Paragraphs>
         <rd:DefaultName>Textbox45</rd:DefaultName>
         <Top>10.89868cm</Top>
-        <Left>0cm</Left>
         <Height>0.6cm</Height>
         <Width>3.09972cm</Width>
         <ZIndex>8</ZIndex>
@@ -2085,7 +2076,6 @@
         </Paragraphs>
         <rd:DefaultName>Textbox45</rd:DefaultName>
         <Top>12.09868cm</Top>
-        <Left>0cm</Left>
         <Height>2.53072cm</Height>
         <Width>19cm</Width>
         <ZIndex>12</ZIndex>
@@ -2119,7 +2109,6 @@
         </Paragraphs>
         <rd:DefaultName>Textbox45</rd:DefaultName>
         <Top>11.49868cm</Top>
-        <Left>0cm</Left>
         <Height>0.6cm</Height>
         <Width>19cm</Width>
         <ZIndex>13</ZIndex>
@@ -2152,7 +2141,6 @@
         </Paragraphs>
         <rd:DefaultName>Textbox36</rd:DefaultName>
         <Top>14.6294cm</Top>
-        <Left>0cm</Left>
         <Height>5.5cm</Height>
         <Width>3.135cm</Width>
         <ZIndex>14</ZIndex>
@@ -2328,7 +2316,6 @@
         </Paragraphs>
         <rd:DefaultName>Textbox45</rd:DefaultName>
         <Top>5.49868cm</Top>
-        <Left>0cm</Left>
         <Height>0.6cm</Height>
         <Width>16.21778cm</Width>
         <ZIndex>16</ZIndex>
@@ -2363,7 +2350,6 @@
         </Paragraphs>
         <rd:DefaultName>Textbox45</rd:DefaultName>
         <Top>6.09868cm</Top>
-        <Left>0cm</Left>
         <Height>0.6cm</Height>
         <Width>16.21778cm</Width>
         <ZIndex>17</ZIndex>
@@ -2477,7 +2463,6 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
-          <Left>0cm</Left>
           <Height>0.79375cm</Height>
           <Width>9.44972cm</Width>
           <Style>
@@ -2497,7 +2482,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>="Razão Social: " &amp; Parameters!RazaoSocial.Value &amp; " - CNPJ: " &amp; Parameters!Cnpj.Value</Value>
+                  <Value>=IIf(Parameters!RazaoSocial.Value &lt;&gt; "","Razão Social: " &amp; Parameters!RazaoSocial.Value,"Nome Fantasia: " &amp; Parameters!NomeFantasiaLoja.Value) &amp; IIf(Parameters!Cnpj.Value &lt;&gt; ""," - CNPJ: " &amp; Parameters!Cnpj.Value,"")</Value>
                   <Style>
                     <FontSize>8pt</FontSize>
                   </Style>
@@ -2508,7 +2493,6 @@
           </Paragraphs>
           <rd:DefaultName>Textbox8</rd:DefaultName>
           <Top>0.87136cm</Top>
-          <Left>0cm</Left>
           <Height>0.5cm</Height>
           <Width>13.49972cm</Width>
           <ZIndex>1</ZIndex>
@@ -2540,7 +2524,6 @@
           </Paragraphs>
           <rd:DefaultName>Textbox8</rd:DefaultName>
           <Top>1.93472cm</Top>
-          <Left>0cm</Left>
           <Height>0.5cm</Height>
           <Width>5.02709cm</Width>
           <ZIndex>2</ZIndex>
@@ -2586,7 +2569,6 @@
           </Paragraphs>
           <rd:DefaultName>Textbox8</rd:DefaultName>
           <Top>2.43472cm</Top>
-          <Left>0cm</Left>
           <Height>0.5cm</Height>
           <Width>5.02709cm</Width>
           <ZIndex>4</ZIndex>
@@ -2645,7 +2627,6 @@
       <ReportItems>
         <Line Name="Line1">
           <Top>1.23403cm</Top>
-          <Left>0cm</Left>
           <Height>0cm</Height>
           <Width>7.84458cm</Width>
           <Style>
@@ -3054,6 +3035,12 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="BairroLoja">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="NomeFantasiaLoja">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>

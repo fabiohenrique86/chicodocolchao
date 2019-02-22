@@ -34,22 +34,20 @@
         $(document).ready(function () {
 
             var events = [];
-            $.getJSON("/Pedido/Listar", { 'PedidoStatusDao[0].PedidoStatusID': '@PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega.GetHashCode()', top: false, take: 0 },
-            function (data)
-            {
+            
+            $.getJSON("/Pedido/Listar", { 'PedidoStatusDao[0].PedidoStatusID': '@PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega.GetHashCode()', 'DataPedidoInicio': moment().startOf('month').format("DD-MM-YYYY"), 'DataPedidoFim': moment().endOf('month').format("DD-MM-YYYY"), top: false, take: 0 },
+
+            function (data) {
                 if (!data.Sucesso) {
                     console.info(data.Erro);
                     alert(data.Mensagem);
                     return;
                 }
 
-                $(data.Pedidos).each(function (idxPedido, pedido)
-                {
-                    $(pedido.PedidoProdutoDao).each(function (idxPedidoProduto, pedidoProduto)
-                    {
+                $(data.Pedidos).each(function (idxPedido, pedido) {
+                    $(pedido.PedidoProdutoDao).each(function (idxPedidoProduto, pedidoProduto) {
                         // tem entrega, mas não tem baixa
-                        if (pedidoProduto.DataEntrega != null && pedidoProduto.DataBaixa == null)
-                        {
+                        if (pedidoProduto.DataEntrega != null && pedidoProduto.DataBaixa == null) {
                             events.push({
                                 id: pedidoProduto.PedidoID + '-' + pedidoProduto.ProdutoID,
                                 title: "Pedido " + pedidoProduto.PedidoID + " - Produto " + pedidoProduto.ProdutoDao.Numero,
@@ -57,7 +55,7 @@
                                 url: window.location.origin + '/Pedido/Comanda?PedidoID=' + pedidoProduto.PedidoID
                             });
                         }
-                    });                    
+                    });
                 });
 
                 $("#calendar").fullCalendar({
@@ -76,10 +74,8 @@
                             return false;
                         }
                     },
-                    eventDrop: function (event, delta, revertFunc)
-                    {
-                        if (confirm("Deseja alterar a data de entrega do " + event.title + " para " + event.start.format("DD/MM/YYYY") + "?"))
-                        {
+                    eventDrop: function (event, delta, revertFunc) {
+                        if (confirm("Deseja alterar a data de entrega do " + event.title + " para " + event.start.format("DD/MM/YYYY") + "?")) {
                             var partesPedido = event.id.split('-');
                             var pedidoDao = { PedidoID: partesPedido[0] };
 
@@ -91,16 +87,14 @@
                             var pedidoProdutoDao = [];
                             pedidoProdutoDao.push({ "ProdutoDao.Numero": numero, "DataEntrega": event.start.format("DD-MM-YYYY"), "UsuarioEntregaDao.UsuarioID": '@usuarioDao.UsuarioID' });
                             pedidoDao.PedidoProdutoDao = pedidoProdutoDao;
-                            
+
                             $.ajax({
                                 dataType: "json",
                                 type: "POST",
                                 url: "/Pedido/Atualizar/",
                                 data: { pedidoDao: pedidoDao },
-                                success: function (data)
-                                {
-                                    if (!data.Sucesso)
-                                    {
+                                success: function (data) {
+                                    if (!data.Sucesso) {
                                         revertFunc();
                                         alert(data.Mensagem);
                                         return;
@@ -108,13 +102,61 @@
                                 }
                             });
                         }
-                        else
-                        {
+                        else {
                             revertFunc();
                         }
                     }
                 });
+
+                $('.fc-prev-button').click(function () {
+                    refreshCalendar();
+                });
+
+                $('.fc-next-button').click(function () {
+                    refreshCalendar();
+                });
+
+                $('.fc-today-button').click(function () {
+                    refreshCalendar();
+                });
             });
+
+        function refreshCalendar() {
+            var d = $('#calendar').fullCalendar('getDate');
+
+            $.ajax({
+                dataType: "json",
+                type: "GET",
+                url: "/Pedido/Listar?PedidoStatusDao[0].PedidoStatusID=" + '@PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega.GetHashCode()' + "&DataPedidoInicio=" + d.startOf('month').format("DD-MM-YYYY") + "&DataPedidoFim=" + d.endOf('month').format("DD-MM-YYYY"),
+                success: function (data)
+                {
+                    if (!data.Sucesso) {
+                        console.info(data.Erro);
+                        alert(data.Mensagem);
+                        return;
+                    }
+
+                    events = [];
+
+                    $(data.Pedidos).each(function (idxPedido, pedido) {
+                        $(pedido.PedidoProdutoDao).each(function (idxPedidoProduto, pedidoProduto) {
+                            // tem entrega, mas não tem baixa
+                            if (pedidoProduto.DataEntrega != null && pedidoProduto.DataBaixa == null) {
+                                events.push({
+                                    id: pedidoProduto.PedidoID + '-' + pedidoProduto.ProdutoID,
+                                    title: "Pedido " + pedidoProduto.PedidoID + " - Produto " + pedidoProduto.ProdutoDao.Numero,
+                                    start: moment(pedidoProduto.DataEntrega).format("YYYY-MM-DD"),
+                                    url: window.location.origin + '/Pedido/Comanda?PedidoID=' + pedidoProduto.PedidoID
+                                });
+                            }
+                        });
+                    });
+
+                    $("#calendar").fullCalendar('removeEvents');
+                    $("#calendar").fullCalendar('addEventSource', events);
+                }
+            });
+        }
 
         });
     </script>

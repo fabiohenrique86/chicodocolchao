@@ -343,7 +343,7 @@ namespace ChicoDoColchao.Controllers
 
                 pedidos = pedidoBusiness.Listar(pedidoDao, top, take);
 
-                return Json(new { Sucesso = true, Mensagem = string.Empty, Pedidos = pedidos }, JsonRequestBehavior.AllowGet);
+                return new JsonResult { Data = new { Sucesso = true, Mensagem = string.Empty, Pedidos = pedidos }, MaxJsonLength = int.MaxValue, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
             }
             catch (BusinessException ex)
             {

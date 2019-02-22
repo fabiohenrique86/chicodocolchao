@@ -482,7 +482,7 @@ namespace ChicoDoColchao.Business
 
                 throw ex;
             }
-        }
+       }
 
         public int Incluir(PedidoDao pedidoDao)
         {
@@ -726,6 +726,7 @@ namespace ChicoDoColchao.Business
             parametros.Add(new ReportParameter("ComplementoLoja", pedidoDao.LojaDao.FirstOrDefault().Complemento));
             parametros.Add(new ReportParameter("CepLoja", pedidoDao.LojaDao.FirstOrDefault().Cep));
             parametros.Add(new ReportParameter("BairroLoja", pedidoDao.LojaDao.FirstOrDefault().Bairro));
+            parametros.Add(new ReportParameter("NomeFantasiaLoja", pedidoDao.LojaDao.FirstOrDefault().NomeFantasia));
 
             viewer.LocalReport.SetParameters(parametros);
 
