@@ -57,6 +57,10 @@
     <Compile Include="Loja.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="MovimentoCaixa.cs">
+      <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MovimentoCaixaRepository.cs" />
     <Compile Include="MenuRepository.cs" />
     <Compile Include="ChicoDoColchaoModel.Context.cs">
       <AutoGen>True</AutoGen>
@@ -91,6 +95,9 @@
     </Compile>
     <Compile Include="LojaProdutoRepository.cs" />
     <Compile Include="Medida.cs">
+      <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MovimentoCaixaStatus.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
     <Compile Include="NotaFiscal.cs">

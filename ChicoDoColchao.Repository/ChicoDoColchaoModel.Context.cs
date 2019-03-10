@@ -50,5 +50,7 @@ namespace ChicoDoColchao.Repository
         public virtual DbSet<PedidoTipoPagamento> PedidoTipoPagamento { get; set; }
         public virtual DbSet<Pedido> Pedido { get; set; }
         public virtual DbSet<Loja> Loja { get; set; }
+        public virtual DbSet<MovimentoCaixaStatus> MovimentoCaixaStatus { get; set; }
+        public virtual DbSet<MovimentoCaixa> MovimentoCaixa { get; set; }
     }
 }

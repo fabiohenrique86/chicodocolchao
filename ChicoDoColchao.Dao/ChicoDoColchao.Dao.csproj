@@ -40,6 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MovimentoCaixaStatusDao.cs" />
+    <Compile Include="MovimentoCaixaDao.cs" />
     <Compile Include="VendaConsultorDao.cs" />
     <Compile Include="VendaProdutoDao.cs" />
     <Compile Include="VendaLojaDao.cs" />

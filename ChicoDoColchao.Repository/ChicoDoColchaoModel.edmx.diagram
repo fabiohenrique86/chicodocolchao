@@ -67,6 +67,11 @@
         <AssociationConnector Association="ChicoDoColchaoModel.FK_Pedido_LojaSaida" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_Transferencia_LojaDestino" />
         <AssociationConnector Association="ChicoDoColchaoModel.FK_Transferencia_LojaOrigem" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.MovimentoCaixaStatus" Width="2.375" PointX="5.25" PointY="33.25" />
+        <EntityTypeShape EntityType="ChicoDoColchaoModel.MovimentoCaixa" Width="2.125" PointX="8.125" PointY="22.25" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_MovimentoCaixa_Loja" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_MovimentoCaixa_MovimentoCaixaStatus" />
+        <AssociationConnector Association="ChicoDoColchaoModel.FK_MovimentoCaixa_Usuario" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

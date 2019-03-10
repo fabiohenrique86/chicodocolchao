@@ -102,6 +102,25 @@
           <Property Name="Descricao" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="Ativo" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="MovimentoCaixa">
+          <Key>
+            <PropertyRef Name="MovimentoCaixaID" />
+          </Key>
+          <Property Name="MovimentoCaixaID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DataMovimento" Type="smalldatetime" Nullable="false" />
+          <Property Name="LojaID" Type="int" Nullable="false" />
+          <Property Name="Valor" Type="float" />
+          <Property Name="MovimentoCaixaStatusID" Type="int" Nullable="false" />
+          <Property Name="DataRecebimento" Type="smalldatetime" />
+          <Property Name="UsuarioRecebimentoID" Type="int" />
+        </EntityType>
+        <EntityType Name="MovimentoCaixaStatus">
+          <Key>
+            <PropertyRef Name="MovimentoCaixaStatusID" />
+          </Key>
+          <Property Name="MovimentoCaixaStatusID" Type="int" Nullable="false" />
+          <Property Name="Descricao" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
         <EntityType Name="NotaFiscal">
           <Key>
             <PropertyRef Name="NotaFiscalID" />
@@ -325,6 +344,42 @@
             </Principal>
             <Dependent Role="LojaProduto">
               <PropertyRef Name="ProdutoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MovimentoCaixa_Loja">
+          <End Role="Loja" Type="Self.Loja" Multiplicity="1" />
+          <End Role="MovimentoCaixa" Type="Self.MovimentoCaixa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Loja">
+              <PropertyRef Name="LojaID" />
+            </Principal>
+            <Dependent Role="MovimentoCaixa">
+              <PropertyRef Name="LojaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MovimentoCaixa_MovimentoCaixaStatus">
+          <End Role="MovimentoCaixaStatus" Type="Self.MovimentoCaixaStatus" Multiplicity="1" />
+          <End Role="MovimentoCaixa" Type="Self.MovimentoCaixa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MovimentoCaixaStatus">
+              <PropertyRef Name="MovimentoCaixaStatusID" />
+            </Principal>
+            <Dependent Role="MovimentoCaixa">
+              <PropertyRef Name="MovimentoCaixaStatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MovimentoCaixa_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+          <End Role="MovimentoCaixa" Type="Self.MovimentoCaixa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="UsuarioID" />
+            </Principal>
+            <Dependent Role="MovimentoCaixa">
+              <PropertyRef Name="UsuarioRecebimentoID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -733,6 +788,8 @@
           <EntitySet Name="Loja" EntityType="Self.Loja" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LojaProduto" EntityType="Self.LojaProduto" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Medida" EntityType="Self.Medida" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MovimentoCaixa" EntityType="Self.MovimentoCaixa" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MovimentoCaixaStatus" EntityType="Self.MovimentoCaixaStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NotaFiscal" EntityType="Self.NotaFiscal" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NotaFiscalProduto" EntityType="Self.NotaFiscalProduto" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Orcamento" EntityType="Self.Orcamento" Schema="dbo" store:Type="Tables" />
@@ -764,6 +821,18 @@
           <AssociationSet Name="FK_LojaProduto_Produto" Association="Self.FK_LojaProduto_Produto">
             <End Role="Produto" EntitySet="Produto" />
             <End Role="LojaProduto" EntitySet="LojaProduto" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MovimentoCaixa_Loja" Association="Self.FK_MovimentoCaixa_Loja">
+            <End Role="Loja" EntitySet="Loja" />
+            <End Role="MovimentoCaixa" EntitySet="MovimentoCaixa" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MovimentoCaixa_MovimentoCaixaStatus" Association="Self.FK_MovimentoCaixa_MovimentoCaixaStatus">
+            <End Role="MovimentoCaixaStatus" EntitySet="MovimentoCaixaStatus" />
+            <End Role="MovimentoCaixa" EntitySet="MovimentoCaixa" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MovimentoCaixa_Usuario" Association="Self.FK_MovimentoCaixa_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="MovimentoCaixa" EntitySet="MovimentoCaixa" />
           </AssociationSet>
           <AssociationSet Name="FK_NotaFiscal_Loja" Association="Self.FK_NotaFiscal_Loja">
             <End Role="Loja" EntitySet="Loja" />
@@ -1171,6 +1240,7 @@
           <NavigationProperty Name="PedidoProduto2" Relationship="ChicoDoColchaoModel.FK_PedidoProduto_Usuario_Troca" FromRole="Usuario" ToRole="PedidoProduto" />
           <NavigationProperty Name="Pedido" Relationship="ChicoDoColchaoModel.FK_Pedido_Usuario_Cancelamento" FromRole="Usuario" ToRole="Pedido" />
           <NavigationProperty Name="Pedido1" Relationship="ChicoDoColchaoModel.FK_Pedido_Usuario_Pedido" FromRole="Usuario" ToRole="Pedido" />
+          <NavigationProperty Name="MovimentoCaixa" Relationship="ChicoDoColchaoModel.FK_MovimentoCaixa_Usuario" FromRole="Usuario" ToRole="MovimentoCaixa" />
         </EntityType>
         <Association Name="FK_Produto_Categoria">
           <End Role="Categoria" Type="Self.Categoria" Multiplicity="1" />
@@ -1529,6 +1599,20 @@
             <End Role="Loja" EntitySet="Loja" />
             <End Role="Transferencia" EntitySet="Transferencia" />
           </AssociationSet>
+          <EntitySet Name="MovimentoCaixaStatus" EntityType="ChicoDoColchaoModel.MovimentoCaixaStatus" />
+          <EntitySet Name="MovimentoCaixa" EntityType="ChicoDoColchaoModel.MovimentoCaixa" />
+          <AssociationSet Name="FK_MovimentoCaixa_Loja" Association="ChicoDoColchaoModel.FK_MovimentoCaixa_Loja">
+            <End Role="Loja" EntitySet="Loja" />
+            <End Role="MovimentoCaixa" EntitySet="MovimentoCaixa" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MovimentoCaixa_MovimentoCaixaStatus" Association="ChicoDoColchaoModel.FK_MovimentoCaixa_MovimentoCaixaStatus">
+            <End Role="MovimentoCaixaStatus" EntitySet="MovimentoCaixaStatus" />
+            <End Role="MovimentoCaixa" EntitySet="MovimentoCaixa" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MovimentoCaixa_Usuario" Association="ChicoDoColchaoModel.FK_MovimentoCaixa_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="MovimentoCaixa" EntitySet="MovimentoCaixa" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="OrcamentoHistorico">
           <Key>
@@ -1790,6 +1874,7 @@
           <NavigationProperty Name="Pedido1" Relationship="ChicoDoColchaoModel.FK_Pedido_LojaSaida" FromRole="Loja" ToRole="Pedido" />
           <NavigationProperty Name="Transferencia" Relationship="ChicoDoColchaoModel.FK_Transferencia_LojaDestino" FromRole="Loja" ToRole="Transferencia" />
           <NavigationProperty Name="Transferencia1" Relationship="ChicoDoColchaoModel.FK_Transferencia_LojaOrigem" FromRole="Loja" ToRole="Transferencia" />
+          <NavigationProperty Name="MovimentoCaixa" Relationship="ChicoDoColchaoModel.FK_MovimentoCaixa_Loja" FromRole="Loja" ToRole="MovimentoCaixa" />
         </EntityType>
         <Association Name="FK_Funcionario_Loja">
           <End Type="ChicoDoColchaoModel.Loja" Role="Loja" Multiplicity="1" />
@@ -1884,6 +1969,65 @@
             </Principal>
             <Dependent Role="Transferencia">
               <PropertyRef Name="LojaOrigemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="MovimentoCaixaStatus">
+          <Key>
+            <PropertyRef Name="MovimentoCaixaStatusID" />
+          </Key>
+          <Property Name="MovimentoCaixaStatusID" Type="Int32" Nullable="false" />
+          <Property Name="Descricao" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="MovimentoCaixa" Relationship="ChicoDoColchaoModel.FK_MovimentoCaixa_MovimentoCaixaStatus" FromRole="MovimentoCaixaStatus" ToRole="MovimentoCaixa" />
+        </EntityType>
+        <EntityType Name="MovimentoCaixa">
+          <Key>
+            <PropertyRef Name="MovimentoCaixaID" />
+          </Key>
+          <Property Name="MovimentoCaixaID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DataMovimento" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="LojaID" Type="Int32" Nullable="false" />
+          <Property Name="Valor" Type="Double" />
+          <Property Name="MovimentoCaixaStatusID" Type="Int32" Nullable="false" />
+          <Property Name="DataRecebimento" Type="DateTime" Precision="0" />
+          <Property Name="UsuarioRecebimentoID" Type="Int32" />
+          <NavigationProperty Name="Loja" Relationship="ChicoDoColchaoModel.FK_MovimentoCaixa_Loja" FromRole="MovimentoCaixa" ToRole="Loja" />
+          <NavigationProperty Name="MovimentoCaixaStatus" Relationship="ChicoDoColchaoModel.FK_MovimentoCaixa_MovimentoCaixaStatus" FromRole="MovimentoCaixa" ToRole="MovimentoCaixaStatus" />
+          <NavigationProperty Name="Usuario" Relationship="ChicoDoColchaoModel.FK_MovimentoCaixa_Usuario" FromRole="MovimentoCaixa" ToRole="Usuario" />
+        </EntityType>
+        <Association Name="FK_MovimentoCaixa_Loja">
+          <End Type="ChicoDoColchaoModel.Loja" Role="Loja" Multiplicity="1" />
+          <End Type="ChicoDoColchaoModel.MovimentoCaixa" Role="MovimentoCaixa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Loja">
+              <PropertyRef Name="LojaID" />
+            </Principal>
+            <Dependent Role="MovimentoCaixa">
+              <PropertyRef Name="LojaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MovimentoCaixa_MovimentoCaixaStatus">
+          <End Type="ChicoDoColchaoModel.MovimentoCaixaStatus" Role="MovimentoCaixaStatus" Multiplicity="1" />
+          <End Type="ChicoDoColchaoModel.MovimentoCaixa" Role="MovimentoCaixa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MovimentoCaixaStatus">
+              <PropertyRef Name="MovimentoCaixaStatusID" />
+            </Principal>
+            <Dependent Role="MovimentoCaixa">
+              <PropertyRef Name="MovimentoCaixaStatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MovimentoCaixa_Usuario">
+          <End Type="ChicoDoColchaoModel.Usuario" Role="Usuario" Multiplicity="0..1" />
+          <End Type="ChicoDoColchaoModel.MovimentoCaixa" Role="MovimentoCaixa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="UsuarioID" />
+            </Principal>
+            <Dependent Role="MovimentoCaixa">
+              <PropertyRef Name="UsuarioRecebimentoID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2189,6 +2333,27 @@
                 <ScalarProperty Name="NomeFantasia" ColumnName="NomeFantasia" />
                 <ScalarProperty Name="Cnpj" ColumnName="Cnpj" />
                 <ScalarProperty Name="LojaID" ColumnName="LojaID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MovimentoCaixaStatus">
+            <EntityTypeMapping TypeName="ChicoDoColchaoModel.MovimentoCaixaStatus">
+              <MappingFragment StoreEntitySet="MovimentoCaixaStatus">
+                <ScalarProperty Name="Descricao" ColumnName="Descricao" />
+                <ScalarProperty Name="MovimentoCaixaStatusID" ColumnName="MovimentoCaixaStatusID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MovimentoCaixa">
+            <EntityTypeMapping TypeName="ChicoDoColchaoModel.MovimentoCaixa">
+              <MappingFragment StoreEntitySet="MovimentoCaixa">
+                <ScalarProperty Name="UsuarioRecebimentoID" ColumnName="UsuarioRecebimentoID" />
+                <ScalarProperty Name="DataRecebimento" ColumnName="DataRecebimento" />
+                <ScalarProperty Name="MovimentoCaixaStatusID" ColumnName="MovimentoCaixaStatusID" />
+                <ScalarProperty Name="Valor" ColumnName="Valor" />
+                <ScalarProperty Name="LojaID" ColumnName="LojaID" />
+                <ScalarProperty Name="DataMovimento" ColumnName="DataMovimento" />
+                <ScalarProperty Name="MovimentoCaixaID" ColumnName="MovimentoCaixaID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

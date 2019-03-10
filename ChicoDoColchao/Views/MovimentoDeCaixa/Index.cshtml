@@ -1,22 +1,50 @@
-﻿@model IEnumerable<ChicoDoColchao.Dao.LojaDao>
+﻿@using ChicoDoColchao.Dao;
+
+@model IEnumerable<LojaDao>
 
 @{
     ViewBag.Title = "Movimento De Caixa";
 }
 
+@{
+    UsuarioDao usuarioDao = null;
+    if (Request.Cookies.Get("ChicoDoColchao_Usuario") != null)
+    {
+        usuarioDao = Newtonsoft.Json.JsonConvert.DeserializeObject<UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value);
+    }
+}
 @section scripts
 {
     <script type="text/javascript">
 
-        $(document).ready(function () {
+        function relatorio(movimentoCaixaId, lojaId, dataMovimento, nomeFantasia) {
+            $.ajax({
+                dataType: "json",
+                type: "GET",
+                url: "/MovimentoDeCaixa/Relatorio",
+                data: { dataMovimento: dataMovimento, lojaId: lojaId, nomeFantasia: nomeFantasia },
+                success: function (data) {
 
-            $("#btnGerar").click(function () {
-                
+                    if (!data.Sucesso) {
+                        console.info(data.Erro);
+                        alert(data.Mensagem);
+                        return;
+                    }
+
+                    window.location.href = '@Url.Action("Download", "Base")' + "?caminho=" + data.Caminho + "&arquivo=" + data.Arquivo + "&tipo=" + data.Tipo;
+                }
+            });
+        }
+
+        function confirmarRecebimento(movimentoCaixaId, lojaId, dataMovimento, nomeFantasia, obj) {
+
+            if (confirm("Deseja confirmar o recebimento do movimento de caixa da loja " + nomeFantasia + " na data " + dataMovimento + "?")) {
+
                 $.ajax({
                     dataType: "json",
-                    type: "GET",
-                    url: "/MovimentoDeCaixa/Gerar",
-                    data: { data: $("#Data").val(), lojaId: $("#LojaID option:selected").val() },
+                    type: "POST",
+                    url: "/MovimentoDeCaixa/Receber",
+                    data: { movimentoCaixaId: movimentoCaixaId, movimentoCaixaStatusId: '@MovimentoCaixaStatusDao.EStatus.Recebido.GetHashCode()', usuarioId: '@usuarioDao.UsuarioID' },
                     success: function (data) {
 
                         if (!data.Sucesso) {
@@ -25,7 +53,125 @@
                             return;
                         }
 
-                        window.location.href = '@Url.Action("Download", "Base")' + "?caminho=" + data.Caminho + "&arquivo=" + data.Arquivo + "&tipo=" + data.Tipo;
+                        $("#tbMovimento").DataTable().row($(obj).parents("tr")).invalidate().data(data.Lista).draw();
+                    }
+                });
+            }
+        }
+
+        $(document).ready(function () {
+
+            var tbMovimento = $("#tbMovimento").DataTable({
+                "ordering": false,
+                "pageLength": 10,
+                "language": {
+                    "lengthMenu": "_MENU_ registros por página",
+                    "zeroRecords": "Sem registros a serem exibidos",
+                    "info": "Página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Sem registros a serem exibidos",
+                    "infoFiltered": "(filtrados de _MAX_ total de registros)",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": { "sNext": "Próximo", "sPrevious": "Anterior", "sFirst": "Primeiro", "sLast": "Último" }
+                },
+                "rowCallback": function (row, data, index) {
+                    var movimentoCaixaStatusId = data.MovimentoCaixaStatusDao.MovimentoCaixaStatusID;
+                    if (movimentoCaixaStatusId == '@MovimentoCaixaStatusDao.EStatus.Gerado.GetHashCode()')
+                        $('td', row).removeClass('bg-success');
+                    else
+                        $('td', row).addClass('bg-success');
+                },
+                "columns":
+                [
+                    { "data": "MovimentoCaixaID", "className": "text-center" },
+                    {
+                        "data": function (data, type, row) {
+                            return moment(data.DataMovimento).format("DD/MM/YYYY HH:mm");
+                        },
+                        "className": "text-center"
+                    },
+                    { "data": "LojaDao.NomeFantasia", "className": "text-center" },
+                    {
+                        "data": function (data, type, row) {
+                            return Globalize.format(data["Valor"], "n2");
+                        },
+                        "className": "text-center"
+                    },
+                    {
+                        "data": function (data, type, row) {
+                            if (data.DataRecebimento == null || data.DataRecebimento == "") {
+                                return "";
+                            }
+
+                            return moment(data.DataRecebimento).format("DD/MM/YYYY HH:mm");
+                        },
+                        "className": "text-center",
+                        "visible": '@usuarioDao.TipoUsuarioDao.TipoUsuarioID' == '@TipoUsuarioDao.ETipoUsuario.Gerencial.GetHashCode()' ? true : false
+                    },
+                    {
+                        "data": function (data, type, row) {
+
+                            var relatorio = "<i class='glyphicon glyphicon-stats' title='Relatório' style='cursor: pointer; color: #777' onclick='relatorio(" + data.MovimentoCaixaID + "," + data.LojaDao.LojaID + ",\"" + moment(data.DataMovimento).format("DD/MM/YYYY") + "\",\"" + data.LojaDao.NomeFantasia + "\", this)'></i>";
+                            var confirmar = "<i class='glyphicon glyphicon-ok' title='Confirmar Recebimento' style='cursor: pointer; color: #5cb85c' onclick='confirmarRecebimento(" + data.MovimentoCaixaID + "," + data.LojaDao.LojaID + ",\"" + moment(data.DataMovimento).format("DD/MM/YYYY") + "\",\"" + data.LojaDao.NomeFantasia + "\", this)'></i>";
+
+                            if ('@usuarioDao.TipoUsuarioDao.TipoUsuarioID' == '@TipoUsuarioDao.ETipoUsuario.Gerencial.GetHashCode()') {
+                                if (data.MovimentoCaixaStatusDao.MovimentoCaixaStatusID == '@MovimentoCaixaStatusDao.EStatus.Recebido.GetHashCode()') {
+                                    return relatorio;
+                                }
+
+                                return relatorio + " " + confirmar;
+                            }
+
+                            return relatorio;
+                        },
+                        "className": "text-center"
+                    }
+                ]
+            });
+
+            $.getJSON("/MovimentoDeCaixa/Listar", { dataMovimento: moment().format("DD/MM/YYYY") }, function (data) {
+                tbMovimento.clear();
+                tbMovimento.rows.add(data.Lista).draw();
+            });
+
+            $("#btnGerar").click(function () {
+
+                $.ajax({
+                    dataType: "json",
+                    type: "GET",
+                    url: "/MovimentoDeCaixa/Gerar",
+                    data: { dataMovimento: $("#Data").val(), lojaId: $("#LojaID option:selected").val(), nomeFantasia: $("#LojaID option:selected").text() },
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            console.info(data.Erro);
+                            alert(data.Mensagem);
+                            return;
+                        }
+
+                        tbMovimento.clear();
+                        tbMovimento.rows.add(data.Lista).draw();
+                    }
+                });
+
+            });
+
+            $("#btnFiltrar").click(function () {
+
+                $.ajax({
+                    dataType: "json",
+                    type: "GET",
+                    url: "/MovimentoDeCaixa/Listar",
+                    data: { dataMovimento: $("#Data").val(), lojaId: $("#LojaID option:selected").val() },
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            console.info(data.Erro);
+                            alert(data.Mensagem);
+                            return;
+                        }
+
+                        tbMovimento.clear();
+                        tbMovimento.rows.add(data.Lista).draw();
                     }
                 });
 
@@ -40,7 +186,7 @@
     <div class="row">
         <div class="col-lg-4">
             <div class="form-group">
-                <input id="Data" name="Data" type="text" class="form-control data datepicker" placeholder="Data" />
+                <input id="Data" name="Data" type="text" class="form-control data datepicker" placeholder="Data Movimento" />
             </div>
         </div>
     </div>
@@ -52,6 +198,24 @@
         </div>
     </div>
     <div class="form-group">
+        <button id="btnFiltrar" type="button" class="btn btn-warning">Filtrar</button>
         <button id="btnGerar" type="button" class="btn btn-info">Gerar</button>
+    </div>
+    <div class="form-group">
+        <div class="table-responsive">
+            <table id="tbMovimento" class="table nowrap">
+                <thead>
+                    <tr>
+                        <td class="text-center" style="width: 5%"><b>Id</b></td>
+                        <td class="text-center" style="width: 20%"><b>Data Movimento</b></td>
+                        <td class="text-center" style="width: 20%"><b>Loja</b></td>
+                        <td class="text-center" style="width: 25%"><b>Total Recebido</b></td>
+                        <td class="text-center" style="width: 20%"><b>Data Recebimento</b></td>
+                        <td class="text-center" style="width: 10%"><b>Ação</b></td>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
 </div>

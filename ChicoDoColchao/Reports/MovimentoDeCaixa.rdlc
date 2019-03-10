@@ -145,7 +145,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Forma</Value>
+                              <Value>Forma de Pagamento</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -668,7 +668,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>="Razão Social: " &amp; Parameters!RazaoSocial.Value &amp; " / CNPJ: " &amp; Parameters!Cnpj.Value</Value>
+                  <Value>=IIf(Parameters!RazaoSocial.Value &lt;&gt; "", "Razão Social: " &amp; Parameters!RazaoSocial.Value, "Nome Fantasia: " &amp; Parameters!NomeFantasia.Value) &amp; " / CNPJ: " &amp; Parameters!Cnpj.Value</Value>
                   <Style />
                 </TextRun>
               </TextRuns>
@@ -1863,6 +1863,12 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="CartaoOutros">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="NomeFantasia">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>

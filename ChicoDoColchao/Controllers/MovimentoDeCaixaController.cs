@@ -13,11 +13,13 @@ namespace ChicoDoColchao.Controllers
     {
         private LojaBusiness lojaBusiness;
         private PedidoBusiness pedidoBusiness;
+        private MovimentoCaixaBusiness movimentoCaixaBusiness;
 
         public MovimentoDeCaixaController()
         {
             lojaBusiness = new LojaBusiness();
             pedidoBusiness = new PedidoBusiness();
+            movimentoCaixaBusiness = new MovimentoCaixaBusiness();
         }
 
         public ActionResult Index()
@@ -34,24 +36,104 @@ namespace ChicoDoColchao.Controllers
             return View(lojasDao);
         }
 
-        public JsonResult Gerar(string data = null, int lojaId = 0)
+        public JsonResult Listar(string dataMovimento, int lojaId = 0)
+        {
+            var lista = new List<MovimentoCaixaDao>();
+
+            try
+            {
+                DateTime dtMovimento;
+                if (!DateTime.TryParse(dataMovimento, out dtMovimento) && !string.IsNullOrEmpty(dataMovimento))
+                {
+                    return Json(new { Sucesso = false, Mensagem = $"Data inválida {dataMovimento}" }, JsonRequestBehavior.AllowGet);
+                }
+
+                lista = movimentoCaixaBusiness.Listar(new MovimentoCaixaDao() { DataMovimento = dtMovimento, LojaDao = new LojaDao() { LojaID = lojaId } });
+
+                return new JsonResult { Data = new { Sucesso = true, Mensagem = string.Empty, Lista = lista }, MaxJsonLength = int.MaxValue, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            }
+            catch (BusinessException ex)
+            {
+                return Json(new { Sucesso = false, Mensagem = ex.Message, Erro = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Sucesso = false, Mensagem = ex.Message, Erro = ex.ToString() }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public JsonResult Gerar(string dataMovimento = null, int lojaId = 0, string nomeFantasia = null)
         {
             try
             {
-                if (data == null || lojaId == 0)
+                var lista = new List<MovimentoCaixaDao>();
+
+                if (string.IsNullOrEmpty(dataMovimento) || lojaId <= 0)
                 {
-                    return Json(new { Sucesso = false, Mensagem = "Informe Data e/ou Loja" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { Sucesso = false, Mensagem = "Informe Data do Movimento e Loja" }, JsonRequestBehavior.AllowGet);
+                }
+
+                DateTime dtMovimento;
+                if (!DateTime.TryParse(dataMovimento, out dtMovimento))
+                {
+                    return Json(new { Sucesso = false, Mensagem = $"Data do Movimento inválida {dataMovimento}" }, JsonRequestBehavior.AllowGet);
                 }
 
                 var pedidosDao = pedidoBusiness.Listar(new PedidoDao()
                 {
-                    DataPedido = Convert.ToDateTime(data),
+                    DataPedido = dtMovimento,
                     LojaDao = new List<LojaDao>() { new LojaDao() { LojaID = lojaId } }
                 }, false, 0).Where(x => x.PedidoStatusDao.FirstOrDefault().PedidoStatusID != PedidoStatusDao.EPedidoStatus.Cancelado.GetHashCode()).ToList();
 
                 if (pedidosDao == null || pedidosDao.Count() <= 0)
                 {
-                    return Json(new { Sucesso = false, Mensagem = "Não existe Movimento de Caixa para data e/ou loja informados" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { Sucesso = false, Mensagem = $"Não existe Movimento de Caixa na data {dataMovimento} para loja {nomeFantasia}" }, JsonRequestBehavior.AllowGet);
+                }
+
+                var valor = pedidosDao.Sum(x => x.PedidoTipoPagamentoDao.Sum(w => w.ValorPago));
+
+                dtMovimento = dtMovimento.AddHours(DateTime.Now.Hour).AddMinutes(DateTime.Now.Minute).AddSeconds(DateTime.Now.Second);
+
+                movimentoCaixaBusiness.Incluir(new MovimentoCaixaDao() { DataMovimento = dtMovimento, LojaDao = new LojaDao() { LojaID = lojaId }, Valor = valor, MovimentoCaixaStatusDao = new MovimentoCaixaStatusDao() { MovimentoCaixaStatusID = (int)MovimentoCaixaStatusDao.EStatus.Gerado } });
+
+                lista = movimentoCaixaBusiness.Listar(new MovimentoCaixaDao() { DataMovimento = dtMovimento });
+
+                return Json(new { Sucesso = true, Mensagem = "Movimento de Caixa gerado com sucesso", Lista = lista }, JsonRequestBehavior.AllowGet);
+            }
+            catch (BusinessException ex)
+            {
+                return Json(new { Sucesso = false, Mensagem = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Sucesso = false, Mensagem = ex.Message, Erro = ex.ToString() }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public JsonResult Relatorio(string dataMovimento = null, int lojaId = 0, string nomeFantasia = null)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(dataMovimento) || lojaId <= 0)
+                {
+                    return Json(new { Sucesso = false, Mensagem = "Informe Data do Movimento e Loja" }, JsonRequestBehavior.AllowGet);
+                }
+
+                DateTime dtMovimento;
+                if (!DateTime.TryParse(dataMovimento, out dtMovimento))
+                {
+                    return Json(new { Sucesso = false, Mensagem = $"Data do Movimento inválida {dataMovimento}" }, JsonRequestBehavior.AllowGet);
+                }
+
+                var pedidosDao = pedidoBusiness.Listar(new PedidoDao()
+                {
+                    DataPedido = dtMovimento,
+                    LojaDao = new List<LojaDao>() { new LojaDao() { LojaID = lojaId } }
+                }, false, 0).Where(x => x.PedidoStatusDao.FirstOrDefault().PedidoStatusID != PedidoStatusDao.EPedidoStatus.Cancelado.GetHashCode()).ToList();
+
+                if (pedidosDao == null || pedidosDao.Count() <= 0)
+                {
+                    return Json(new { Sucesso = false, Mensagem = $"Não existe Movimento de Caixa na data {dataMovimento} para loja {nomeFantasia}" }, JsonRequestBehavior.AllowGet);
                 }
 
                 Warning[] warnings;
@@ -165,11 +247,12 @@ namespace ChicoDoColchao.Controllers
                 parametros.Add(new ReportParameter("CartaoAmericanExpress", (cartaoBancoDoBrasilAmericanExpress + cartaoCaixaEconomicaAmericanExpress + cartaoItauAmericanExpress + cartaoBradescoAmericanExpress + cartaoSantanderAmericanExpress).ToString()));
                 parametros.Add(new ReportParameter("Crediario", crediario.ToString()));
                 parametros.Add(new ReportParameter("TotalFrete", totalFrete.ToString()));
-                parametros.Add(new ReportParameter("RazaoSocial", pedidosDao.FirstOrDefault().LojaDao.FirstOrDefault().RazaoSocial ?? pedidosDao.FirstOrDefault().LojaDao.FirstOrDefault().NomeFantasia));
+                parametros.Add(new ReportParameter("RazaoSocial", pedidosDao.FirstOrDefault().LojaDao.FirstOrDefault().RazaoSocial ?? string.Empty));
+                parametros.Add(new ReportParameter("NomeFantasia", pedidosDao.FirstOrDefault().LojaDao.FirstOrDefault().NomeFantasia ?? string.Empty));
                 parametros.Add(new ReportParameter("CartaoOutros", cartaoOutros.ToString()));
 
                 viewer.LocalReport.SetParameters(parametros);
-                
+
                 var pedidos = new List<dynamic>();
                 var id = 1;
 
@@ -199,6 +282,26 @@ namespace ChicoDoColchao.Controllers
                 System.IO.File.WriteAllBytes(caminho, bytes);
 
                 return Json(new { Sucesso = true, Mensagem = "Relatório gerado com sucesso", Arquivo = arquivo, Caminho = caminho, Tipo = tipo }, JsonRequestBehavior.AllowGet);
+            }
+            catch (BusinessException ex)
+            {
+                return Json(new { Sucesso = false, Mensagem = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Sucesso = false, Mensagem = ex.Message, Erro = ex.ToString() }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public JsonResult Receber(int movimentoCaixaId, int movimentoCaixaStatusId, int usuarioId)
+        {
+            try
+            {
+                movimentoCaixaBusiness.Receber(new MovimentoCaixaDao() { MovimentoCaixaID = movimentoCaixaId, MovimentoCaixaStatusDao = new MovimentoCaixaStatusDao() { MovimentoCaixaStatusID = movimentoCaixaStatusId }, DataRecebimento = DateTime.Now, UsuarioRecebimento = new UsuarioDao() { UsuarioID = usuarioId } });
+
+                var lista = movimentoCaixaBusiness.Listar(new MovimentoCaixaDao() { MovimentoCaixaID = movimentoCaixaId }).FirstOrDefault();
+
+                return Json(new { Sucesso = true, Mensagem = "Recebimento confirmado com sucesso", Lista = lista }, JsonRequestBehavior.AllowGet);
             }
             catch (BusinessException ex)
             {
