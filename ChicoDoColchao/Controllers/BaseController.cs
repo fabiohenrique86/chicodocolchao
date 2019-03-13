@@ -122,7 +122,7 @@ namespace ChicoDoColchao.Controllers
                     {
                         if (controller == "Pedido")
                         {
-                            if (action == "Cadastro" || action == "Lista" || action == "Comanda")
+                            if (action == "Cadastro" || action == "Lista" || action == "Comanda" || action == "Troca")
                             {
                                 return true;
                             }
