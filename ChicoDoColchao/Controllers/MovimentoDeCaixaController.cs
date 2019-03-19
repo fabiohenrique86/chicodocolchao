@@ -230,7 +230,7 @@ namespace ChicoDoColchao.Controllers
                                 cartaoBradescoVisa + cartaoSantanderVisa + cartaoCaixaEconomicaMasterCard + cartaoItauMasterCard + cartaoBradescoMasterCard +
                                 cartaoSantanderMasterCard + cartaoCaixaEconomicaElo + cartaoItauElo + cartaoBradescoElo + cartaoSantanderElo + cartaoCaixaEconomicaHiperCard +
                                 cartaoItauHiperCard + cartaoBradescoHiperCard + cartaoSantanderHiperCard + cartaoCaixaEconomicaAmericanExpress + cartaoItauAmericanExpress +
-                                cartaoBradescoAmericanExpress + cartaoSantanderAmericanExpress + cartaoOutros;
+                                cartaoBradescoAmericanExpress + cartaoSantanderAmericanExpress + cartaoOutros + totalFrete;
 
                 // parâmetros
                 var parametros = new List<ReportParameter>();
