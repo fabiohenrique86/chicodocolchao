@@ -55,10 +55,10 @@ namespace ChicoDoColchao.Controllers
                     Response.Cookies["ChicoDoColchao_Usuario"].Expires = DateTime.Now.AddDays(-1);
                 }
 
-                if (Request.Cookies["ChicoDoColchao_Loja"] != null)
-                {
-                    Response.Cookies["ChicoDoColchao_Loja"].Expires = DateTime.Now.AddDays(-1);
-                }
+                //if (Request.Cookies["ChicoDoColchao_Loja"] != null)
+                //{
+                //    Response.Cookies["ChicoDoColchao_Loja"].Expires = DateTime.Now.AddDays(-1);
+                //}
             }
             catch (Exception)
             {
@@ -66,26 +66,26 @@ namespace ChicoDoColchao.Controllers
             }
         }
 
-        public void SelectStore(LojaDao lojaDao)
-        {
-            try
-            {
-                if (Request.Cookies["ChicoDoColchao_Loja"] != null)
-                {
-                    Response.Cookies["ChicoDoColchao_Loja"].Expires = DateTime.Now.AddDays(-1);
-                }
+        //public void SelectStore(LojaDao lojaDao)
+        //{
+        //    try
+        //    {
+        //        if (Request.Cookies["ChicoDoColchao_Loja"] != null)
+        //        {
+        //            Response.Cookies["ChicoDoColchao_Loja"].Expires = DateTime.Now.AddDays(-1);
+        //        }
 
-                var cookieName = "ChicoDoColchao_Loja";
-                HttpCookie httpCookie = Request.Cookies[cookieName] ?? new HttpCookie(cookieName);
-                httpCookie.Value = JsonConvert.SerializeObject(lojaDao);
-                httpCookie.Expires = DateTime.Now.AddDays(1);
-                Response.Cookies.Add(httpCookie);
-            }
-            catch (Exception)
-            {
+        //        var cookieName = "ChicoDoColchao_Loja";
+        //        HttpCookie httpCookie = Request.Cookies[cookieName] ?? new HttpCookie(cookieName);
+        //        httpCookie.Value = JsonConvert.SerializeObject(lojaDao);
+        //        httpCookie.Expires = DateTime.Now.AddDays(1);
+        //        Response.Cookies.Add(httpCookie);
+        //    }
+        //    catch (Exception)
+        //    {
 
-            }
-        }
+        //    }
+        //}
 
         public bool SessaoAtivaEPerfilValidado(out string tela)
         {
@@ -105,12 +105,12 @@ namespace ChicoDoColchao.Controllers
                     {
                         return true;
                     }
-                    else if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)TipoUsuarioDao.ETipoUsuario.Vendedor && Request.Cookies.Get("ChicoDoColchao_Loja") == null)
-                    {
-                        // verifica se alguma loja está selecionada. Se não, não deve permitir o acesso
-                        tela = "~/Loja/Seleciona";
-                        return false;
-                    }
+                    //else if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)TipoUsuarioDao.ETipoUsuario.Vendedor && Request.Cookies.Get("ChicoDoColchao_Loja") == null)
+                    //{
+                    //    // verifica se alguma loja está selecionada. Se não, não deve permitir o acesso
+                    //    tela = "~/Loja/Seleciona";
+                    //    return false;
+                    //}
 
                     // verifica se está na tela de menu
                     if (controller == "Menu" && action == "Index")

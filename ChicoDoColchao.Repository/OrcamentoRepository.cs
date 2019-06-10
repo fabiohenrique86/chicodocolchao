@@ -61,6 +61,11 @@ namespace ChicoDoColchao.Repository
                 query = query.Where(x => x.Loja.LojaID == orcamento.LojaID);
             }
 
+            if (orcamento.FuncionarioID > 0)
+            {
+                query = query.Where(x => x.FuncionarioID == orcamento.FuncionarioID);
+            }
+
             if (top)
             {
                 return query

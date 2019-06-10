@@ -84,23 +84,23 @@ namespace ChicoDoColchao.Controllers
             }
         }
 
-        public ActionResult Selecionar(LojaDao lojaDao)
-        {
-            try
-            {
-                SelectStore(lojaDao);
+        //public ActionResult Selecionar(LojaDao lojaDao)
+        //{
+        //    try
+        //    {
+        //        SelectStore(lojaDao);
 
-                return RedirectToAction("Index", "Menu");
-            }
-            catch (BusinessException ex)
-            {
-                return RedirectToAction("Login", "Usuario");
-            }
-            catch (Exception ex)
-            {
-                return RedirectToAction("Login", "Usuario");
-            }
-        }
+        //        return RedirectToAction("Index", "Menu");
+        //    }
+        //    catch (BusinessException ex)
+        //    {
+        //        return RedirectToAction("Login", "Usuario");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return RedirectToAction("Login", "Usuario");
+        //    }
+        //}
 
         [HttpPost]
         public JsonResult Alterar(LojaDao lojaDao)

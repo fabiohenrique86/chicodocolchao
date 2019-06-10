@@ -12,11 +12,11 @@
         usuarioDao = JsonConvert.DeserializeObject<UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value);
     }
 
-    LojaDao lojaDao = new LojaDao();
-    if (Request.Cookies.Get("ChicoDoColchao_Loja") != null)
-    {
-        lojaDao = JsonConvert.DeserializeObject<LojaDao>(Request.Cookies.Get("ChicoDoColchao_Loja").Value);
-    }
+    //LojaDao lojaDao = new LojaDao();
+    //if (Request.Cookies.Get("ChicoDoColchao_Loja") != null)
+    //{
+    //    lojaDao = JsonConvert.DeserializeObject<LojaDao>(Request.Cookies.Get("ChicoDoColchao_Loja").Value);
+    //}
 }
 @section styles
 {
@@ -536,14 +536,14 @@
                 pedidoDao.ClienteDao.push({ ClienteID: $("#ClienteID").val() });
 
                 pedidoDao.LojaDao = [];
-                if (@lojaDao.LojaID > 0)
+                @*if (@lojaDao.LojaID > 0)
                 {
                     pedidoDao.LojaDao.push({ LojaID: '@lojaDao.LojaID' });
                 }
                 else
-                {
+                {*@
                     pedidoDao.LojaDao.push({ LojaID: $("#LojaOrigemID option:selected").val() });
-                }
+                //}
 
                 pedidoDao.LojaSaidaDao = [];
                 pedidoDao.LojaSaidaDao.push({ LojaID: $("#LojaID option:selected").val() });
@@ -686,14 +686,14 @@
                         </div>
                     </div>
                 </div>
-                @{
+                @*@{
                     if (lojaDao.LojaID <= 0)
-                    {
+                    {*@
                         <div class="form-group">
                             @Html.DropDownListFor(x => x.LojaDao.FirstOrDefault().LojaID, new SelectList(Model.LojaDao, "LojaID", "NomeFantasia"), "Loja de origem dos produtos", new { @class = "form-control", @id = "LojaOrigemID" })
                         </div>
-                    }
-                }
+                    @*}
+                }*@
                 <div class="form-group">
                     @Html.DropDownListFor(x => x.LojaSaidaDao.FirstOrDefault().LojaID, new SelectList(Model.LojaSaidaDao, "LojaID", "NomeFantasia"), "Loja de saída dos produtos", new { @class = "form-control" })
                 </div>

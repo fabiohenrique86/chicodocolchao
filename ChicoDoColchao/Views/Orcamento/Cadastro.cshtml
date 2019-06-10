@@ -5,12 +5,12 @@
 
 @{
     ViewBag.Title = "Orçamento - Tirar";
-    
-    LojaDao lojaDao = new LojaDao();
-    if (Request.Cookies.Get("ChicoDoColchao_Loja") != null)
-    {
-        lojaDao = JsonConvert.DeserializeObject<LojaDao>(Request.Cookies.Get("ChicoDoColchao_Loja").Value);
-    }
+
+    //LojaDao lojaDao = new LojaDao();
+    //if (Request.Cookies.Get("ChicoDoColchao_Loja") != null)
+    //{
+    //    lojaDao = JsonConvert.DeserializeObject<LojaDao>(Request.Cookies.Get("ChicoDoColchao_Loja").Value);
+    //}
 }
 @section styles
 {
@@ -378,14 +378,14 @@
                 orcamentoDao.ClienteDao = { ClienteID: $("#ClienteID").val() };
 
                 orcamentoDao.LojaDao = [];
-                if (@lojaDao.LojaID > 0)
+                @*if (@lojaDao.LojaID > 0)
                 {
                     orcamentoDao.LojaDao.push({ LojaID: '@lojaDao.LojaID' });
                 }
                 else
-                {
+                {*@
                     orcamentoDao.LojaDao.push({ LojaID: $("#LojaID option:selected").val() });
-                }
+                //}
 
                 orcamentoDao.Observacao = $("#Observacao").val();
                 orcamentoDao.Desconto = $("#lblTotalDesconto").text();
@@ -454,14 +454,14 @@
                         </div>
                     </div>
                 </div>
-                @{
+                @*@{
                     if (lojaDao.LojaID <= 0)
-                    {
+                    {*@
                         <div class="form-group">
                             @Html.DropDownListFor(x => x.LojaDao.FirstOrDefault().LojaID, new SelectList(Model.LojaDao, "LojaID", "NomeFantasia"), "Loja de origem dos produtos", new { @class = "form-control", @id = "LojaID" })
                         </div>
-                    }
-                }                
+                    @*}
+                }*@                
             </div>
             <div class="col-lg-8">
                 <label style="font-size: 18px; margin-bottom: 10px; font-weight: normal">Produtos</label>
