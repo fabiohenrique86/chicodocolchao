@@ -5,18 +5,21 @@ using ChicoDoColchao.Dao;
 using ChicoDoColchao.Repository;
 using ChicoDoColchao.Business.Exceptions;
 using ChicoDoColchao.Business.Tradutors;
+using System.Transactions;
 
 namespace ChicoDoColchao.Business
 {
     public class ConsultorBusiness
     {
         ConsultorRepository consultorRepository;
+        UsuarioBusiness usuarioBusiness;
         LogRepository logRepository;
 
         public ConsultorBusiness()
         {
             consultorRepository = new ConsultorRepository();
-            logRepository = new LogRepository();
+            usuarioBusiness = new UsuarioBusiness();
+            logRepository = new LogRepository();            
         }
 
         private void ValidarIncluir(ConsultorDao consultorDao)
@@ -112,7 +115,26 @@ namespace ChicoDoColchao.Business
             {
                 ValidarIncluir(consultorDao);
 
-                consultorRepository.Incluir(consultorDao.ToBd());
+                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions() { Timeout = TimeSpan.FromMinutes(10) }))
+                {
+                    var funcionarioId = consultorRepository.Incluir(consultorDao.ToBd());
+
+                    var nomes = consultorDao.Nome.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                    var login = string.Empty;
+
+                    if (nomes.Length == 1)
+                    {
+                        login = nomes.FirstOrDefault().ToLower();
+                    }
+                    else if (nomes.Length > 1)
+                    {
+                        login = nomes.FirstOrDefault().ToLower() + "." + nomes.LastOrDefault().ToLower();
+                    }
+
+                    usuarioBusiness.Incluir(new UsuarioDao() { Ativo = true, Senha = "123456", TipoUsuarioID = (int)TipoUsuarioDao.ETipoUsuario.Vendedor, UsuarioID = funcionarioId, Login = login });
+
+                    scope.Complete();
+                }
             }
             catch (BusinessException ex)
             {
@@ -120,9 +142,7 @@ namespace ChicoDoColchao.Business
             }
             catch (Exception ex)
             {
-                // inclui o log do erro
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
-
                 throw ex;
             }
         }
@@ -139,7 +159,7 @@ namespace ChicoDoColchao.Business
             }
             catch (Exception ex)
             {
-                // inclui o log do erro
+                
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
 
                 throw ex;
@@ -162,7 +182,7 @@ namespace ChicoDoColchao.Business
             }
             catch (Exception ex)
             {
-                // inclui o log do erro
+                
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
 
                 throw ex;
@@ -205,7 +225,7 @@ namespace ChicoDoColchao.Business
             }
             catch (Exception ex)
             {
-                // inclui o log do erro
+                
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
 
                 throw ex;

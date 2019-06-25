@@ -66,7 +66,7 @@ namespace ChicoDoColchao.Business
             }
             catch (Exception ex)
             {
-                // inclui o log do erro
+                
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
 
                 throw ex;

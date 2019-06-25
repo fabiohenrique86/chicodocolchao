@@ -44,6 +44,41 @@ namespace ChicoDoColchao.Business
             }
         }
 
+        private void ValidarIncluir(UsuarioDao usuarioDao)
+        {
+            if (usuarioDao == null)
+            {
+                throw new BusinessException("Usuário é obrigatório");
+            }
+
+            if (usuarioDao.UsuarioID <= 0)
+            {
+                throw new BusinessException("UsuarioID é obrigatório");
+            }
+
+            if (string.IsNullOrEmpty(usuarioDao.Login))
+            {
+                throw new BusinessException("Login é obrigatório");
+            }
+
+            if (string.IsNullOrEmpty(usuarioDao.Senha))
+            {
+                throw new BusinessException("Senha é obrigatório");
+            }
+
+            if (usuarioDao.TipoUsuarioID <= 0)
+            {
+                throw new BusinessException("TipoUsuarioID é obrigatório");
+            }
+
+            var usuario = usuarioRepository.Listar(new Usuario() { Login = usuarioDao.Login }).FirstOrDefault();
+
+            if (usuario != null)
+            {
+                throw new BusinessException(string.Format("Usuário {0} já cadastrado", usuarioDao.Login));
+            }
+        }
+
         private void ValidarLogin(UsuarioDao usuarioDao)
         {
             if (usuarioDao == null)
@@ -76,7 +111,7 @@ namespace ChicoDoColchao.Business
             }
             catch (Exception ex)
             {
-                // inclui o log do erro
+                
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
 
                 throw ex;
@@ -101,7 +136,28 @@ namespace ChicoDoColchao.Business
             }
             catch (Exception ex)
             {
-                // inclui o log do erro
+                
+                logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
+
+                throw ex;
+            }
+        }
+
+        public void Incluir(UsuarioDao usuarioDao)
+        {
+            try
+            {
+                ValidarIncluir(usuarioDao);
+                
+                usuarioRepository.Incluir(new Usuario() { UsuarioID = usuarioDao.UsuarioID, Login = usuarioDao.Login, Senha = usuarioDao.Senha, Ativo = usuarioDao.Ativo, TipoUsuarioID = usuarioDao.TipoUsuarioID });
+            }
+            catch (BusinessException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
 
                 throw ex;
@@ -120,7 +176,7 @@ namespace ChicoDoColchao.Business
             }
             catch (Exception ex)
             {
-                // inclui o log do erro
+                
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
 
                 throw ex;

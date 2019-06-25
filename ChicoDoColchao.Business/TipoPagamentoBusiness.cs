@@ -25,8 +25,7 @@ namespace ChicoDoColchao.Business
                 return tipoPagamentoRepository.Listar(tipoPagamentoDao.ToBd()).Select(x => x.ToApp()).ToList();
             }
             catch (Exception ex)
-            {
-                // inclui o log do erro
+            {                
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
 
                 throw ex;

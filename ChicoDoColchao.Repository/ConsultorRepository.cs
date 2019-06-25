@@ -13,7 +13,7 @@ namespace ChicoDoColchao.Repository
             chicoDoColchaoEntities = new ChicoDoColchaoEntities();
         }
 
-        public void Incluir(Funcionario funcionario)
+        public int Incluir(Funcionario funcionario)
         {
             funcionario.Ativo = true;
 
@@ -21,6 +21,8 @@ namespace ChicoDoColchao.Repository
             chicoDoColchaoEntities.Entry(funcionario.Loja).State = EntityState.Detached;
 
             chicoDoColchaoEntities.SaveChanges();
+
+            return funcionario.FuncionarioID;
         }
 
         public List<Funcionario> Listar(Funcionario funcionario)

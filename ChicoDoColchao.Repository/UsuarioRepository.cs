@@ -42,5 +42,15 @@ namespace ChicoDoColchao.Repository
             chicoDoColchaoEntities.Entry(usuario).State = EntityState.Modified;
             chicoDoColchaoEntities.SaveChanges();
         }
+
+        public void Incluir(Usuario usuario)
+        {
+            chicoDoColchaoEntities.Entry(usuario).State = EntityState.Added;
+
+            if (usuario.TipoUsuario != null)
+                chicoDoColchaoEntities.Entry(usuario.TipoUsuario).State = EntityState.Detached;
+            
+            chicoDoColchaoEntities.SaveChanges();
+        }
     }
 }
