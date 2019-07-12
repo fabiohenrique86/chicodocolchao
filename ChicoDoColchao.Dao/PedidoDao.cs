@@ -43,5 +43,8 @@ namespace ChicoDoColchao.Dao
         
         public string DataPedidoInicio { get; set; }
         public string DataPedidoFim { get; set; }
+
+        public string DataEntregaInicio { get; set; }
+        public string DataEntregaFim { get; set; }
     }
 }

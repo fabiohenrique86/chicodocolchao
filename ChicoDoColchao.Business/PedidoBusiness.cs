@@ -289,16 +289,18 @@ namespace ChicoDoColchao.Business
             }
         }
 
-        private void ValidarListar(PedidoDao pedidoDao, out DateTime dtInicio, out DateTime dtFim)
+        private void ValidarListar(PedidoDao pedidoDao, out DateTime dtPedidoInicio, out DateTime dtPedidoFim, out DateTime dtEntregaInicio, out DateTime dtEntregaFim)
         {
-            dtInicio = DateTime.MinValue;
-            dtFim = DateTime.MinValue;
+            dtPedidoInicio = DateTime.MinValue;
+            dtPedidoFim = DateTime.MinValue;
+            dtEntregaInicio = DateTime.MinValue;
+            dtEntregaFim = DateTime.MinValue;
 
             if (pedidoDao != null)
             {
                 if (!string.IsNullOrEmpty(pedidoDao.DataPedidoInicio))
                 {
-                    bool inicio = DateTime.TryParse(pedidoDao.DataPedidoInicio, out dtInicio);
+                    bool inicio = DateTime.TryParse(pedidoDao.DataPedidoInicio, out dtPedidoInicio);
                     if (!inicio)
                     {
                         throw new BusinessException("Data de pedido inicial inválida");
@@ -307,10 +309,28 @@ namespace ChicoDoColchao.Business
 
                 if (!string.IsNullOrEmpty(pedidoDao.DataPedidoFim))
                 {
-                    bool fim = DateTime.TryParse(pedidoDao.DataPedidoFim, out dtFim);
+                    bool fim = DateTime.TryParse(pedidoDao.DataPedidoFim, out dtPedidoFim);
                     if (!fim)
                     {
                         throw new BusinessException("Data de pedido final inválida");
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(pedidoDao.DataEntregaInicio))
+                {
+                    bool inicio = DateTime.TryParse(pedidoDao.DataEntregaInicio, out dtEntregaInicio);
+                    if (!inicio)
+                    {
+                        throw new BusinessException("Data de entrega inicial inválida");
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(pedidoDao.DataEntregaFim))
+                {
+                    bool fim = DateTime.TryParse(pedidoDao.DataEntregaFim, out dtEntregaFim);
+                    if (!fim)
+                    {
+                        throw new BusinessException("Data de entrega final inválida");
                     }
                 }
             }
@@ -464,12 +484,14 @@ namespace ChicoDoColchao.Business
         {
             try
             {
-                var dtInicio = DateTime.MinValue;
-                var dtFim = DateTime.MinValue;
+                var dtPedidoInicio = DateTime.MinValue;
+                var dtPedidoFim = DateTime.MinValue;
+                var dtEntregaInicio = DateTime.MinValue;
+                var dtEntregaFim = DateTime.MinValue;
 
-                ValidarListar(pedidoDao, out dtInicio, out dtFim);
+                ValidarListar(pedidoDao, out dtPedidoInicio, out dtPedidoFim, out dtEntregaInicio, out dtEntregaFim);
 
-                return pedidoRepository.Listar(pedidoDao.ToBd(), top, take, dtInicio, dtFim).Select(x => x.ToApp()).ToList();
+                return pedidoRepository.Listar(pedidoDao.ToBd(), top, take, dtPedidoInicio, dtPedidoFim, dtEntregaInicio, dtEntregaFim).Select(x => x.ToApp()).ToList();
             }
             catch (BusinessException ex)
             {

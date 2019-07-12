@@ -52,7 +52,7 @@ namespace ChicoDoColchao.Repository
             return pedido.PedidoID;
         }
 
-        public List<Pedido> Listar(Pedido pedido, bool top, int take, DateTime? dataPedidoInicio = null, DateTime? dataPedidoFim = null)
+        public List<Pedido> Listar(Pedido pedido, bool top, int take, DateTime? dataPedidoInicio = null, DateTime? dataPedidoFim = null, DateTime? dataEntregaInicio = null, DateTime? dataEntregaFim = null)
         {
             IQueryable<Pedido> query = chicoDoColchaoEntities.Pedido;
 
@@ -106,6 +106,11 @@ namespace ChicoDoColchao.Repository
             if (dataPedidoInicio.GetValueOrDefault() != DateTime.MinValue && dataPedidoFim.GetValueOrDefault() != DateTime.MinValue)
             {
                 query = query.Where(x => EntityFunctions.TruncateTime(x.DataPedido) >= EntityFunctions.TruncateTime(dataPedidoInicio) && EntityFunctions.TruncateTime(x.DataPedido) <= EntityFunctions.TruncateTime(dataPedidoFim));
+            }
+
+            if (dataEntregaInicio.GetValueOrDefault() != DateTime.MinValue && dataEntregaFim.GetValueOrDefault() != DateTime.MinValue)
+            {
+                query = query.Where(x => x.PedidoProduto.Any(w => EntityFunctions.TruncateTime(w.DataEntrega) >= EntityFunctions.TruncateTime(dataEntregaInicio) && EntityFunctions.TruncateTime(w.DataEntrega) <= EntityFunctions.TruncateTime(dataEntregaFim)));
             }
 
             if (top && take > 0)

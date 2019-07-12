@@ -35,7 +35,7 @@
 
             var events = [];
             
-            $.getJSON("/Pedido/Listar", { 'PedidoStatusDao[0].PedidoStatusID': '@PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega.GetHashCode()', 'DataPedidoInicio': moment().startOf('month').format("DD-MM-YYYY"), 'DataPedidoFim': moment().endOf('month').format("DD-MM-YYYY"), top: false, take: 0 },
+            $.getJSON("/Pedido/Listar", { 'PedidoStatusDao[0].PedidoStatusID': '@PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega.GetHashCode()', 'DataEntregaInicio': moment().startOf('month').format("DD-MM-YYYY"), 'DataEntregaFim': moment().endOf('month').format("DD-MM-YYYY"), top: false, take: 0 },
 
             function (data) {
                 if (!data.Sucesso) {
@@ -43,14 +43,14 @@
                     alert(data.Mensagem);
                     return;
                 }
-
+                                
                 $(data.Pedidos).each(function (idxPedido, pedido) {
                     $(pedido.PedidoProdutoDao).each(function (idxPedidoProduto, pedidoProduto) {
                         // tem entrega, mas não tem baixa
                         if (pedidoProduto.DataEntrega != null && pedidoProduto.DataBaixa == null) {
                             events.push({
                                 id: pedidoProduto.PedidoID + '-' + pedidoProduto.ProdutoID,
-                                title: "Pedido " + pedidoProduto.PedidoID + " - Produto " + pedidoProduto.ProdutoDao.Numero,
+                                title: "Ped " + pedidoProduto.PedidoID + " - Prod " + pedidoProduto.ProdutoDao.Numero,
                                 start: moment(pedidoProduto.DataEntrega).format("YYYY-MM-DD"),
                                 url: window.location.origin + '/Pedido/Comanda?PedidoID=' + pedidoProduto.PedidoID
                             });
@@ -127,7 +127,7 @@
             $.ajax({
                 dataType: "json",
                 type: "GET",
-                url: "/Pedido/Listar?PedidoStatusDao[0].PedidoStatusID=" + '@PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega.GetHashCode()' + "&DataPedidoInicio=" + d.startOf('month').format("DD-MM-YYYY") + "&DataPedidoFim=" + d.endOf('month').format("DD-MM-YYYY"),
+                url: "/Pedido/Listar?PedidoStatusDao[0].PedidoStatusID=" + '@PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega.GetHashCode()' + "&DataEntregaInicio=" + d.startOf('month').format("DD-MM-YYYY") + "&DataEntregaFim=" + d.endOf('month').format("DD-MM-YYYY"),
                 success: function (data)
                 {
                     if (!data.Sucesso) {
@@ -144,7 +144,7 @@
                             if (pedidoProduto.DataEntrega != null && pedidoProduto.DataBaixa == null) {
                                 events.push({
                                     id: pedidoProduto.PedidoID + '-' + pedidoProduto.ProdutoID,
-                                    title: "Pedido " + pedidoProduto.PedidoID + " - Produto " + pedidoProduto.ProdutoDao.Numero,
+                                    title: "Ped " + pedidoProduto.PedidoID + " - Prod " + pedidoProduto.ProdutoDao.Numero,
                                     start: moment(pedidoProduto.DataEntrega).format("YYYY-MM-DD"),
                                     url: window.location.origin + '/Pedido/Comanda?PedidoID=' + pedidoProduto.PedidoID
                                 });
