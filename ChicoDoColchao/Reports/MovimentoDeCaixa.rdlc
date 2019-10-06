@@ -636,7 +636,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>Movimento de Caixa</Value>
+                  <Value>="Movimento de Caixa - " &amp; Parameters!MovimentoCaixaID.Value</Value>
                   <Style>
                     <FontSize>18pt</FontSize>
                     <FontWeight>Bold</FontWeight>
@@ -1869,6 +1869,12 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="NomeFantasia">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="MovimentoCaixaID">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>

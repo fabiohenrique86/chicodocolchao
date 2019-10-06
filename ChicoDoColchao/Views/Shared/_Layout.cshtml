@@ -212,21 +212,30 @@
                     <li class="dropdown">
                         <a style="color: #fff" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Colchões <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a style="color: #fff" href="#">Molas Ensacadas</a></li>
-                            <li><a style="color: #fff" href="#">Molas Superlastic</a></li>
-                            <li><a style="color: #fff" href="#">MiraCoil</a></li>
-                            <li><a style="color: #fff" href="#">Espuma</a></li>
-                            <li><a style="color: #fff" href="#">Ortopédico</a></li>
+                            <li><a style="color: #fff" href="#" onclick="mostrarModalProduto('normal', 'Colchão Baby', '@Url.Content("~/img/max-saude-selada-baby.png")')">Baby</a></li>                            
+                            <li><a style="color: #fff" href="#" onclick="mostrarModalProduto('normal', 'Colchão Gold Flex Máxima', '@Url.Content("~/img/gold-flex-maxima.png")')">Gold Flex Máxima</a></li>
+                            <li><a style="color: #fff" href="#" onclick="mostrarModalProduto('grande', 'Colchão Max Saúde Selada D28 / D33 / D45', '@Url.Content("~/img/max-saude-selada-d28-d33-d45.png")')">Max Saúde Selada D28 / D33 / D45</a></li>
+                            <li><a style="color: #fff" href="#" onclick="mostrarModalProduto('grande', 'Colchão Max Saúde Premium D33 / D45', '@Url.Content("~/img/max-saude-premium-d33-d45.png")')">Max Saúde Premium D33 / D45</a></li>
+                            <li><a style="color: #fff" href="#" onclick="mostrarModalProduto('grande', 'Colchão Evolution Molas Ensacadas', '@Url.Content("~/img/evolution-molas-ensacadas.png")')">Evolution Molas Ensacadas</a></li>
+                            <li><a style="color: #fff" href="#" onclick="mostrarModalProduto('grande', 'Colchão Comfort Molas Miracoil', '@Url.Content("~/img/comfort-molas-miracoil.png")')">Miracoil Molas Ensacadas</a></li>
+                            <li><a style="color: #fff" href="#" onclick="mostrarModalProduto('grande', 'Colchão Minerale Super Miracoil', '@Url.Content("~/img/minerale-super-miracoil.png")')">Minerale Super Miracoil</a></li>
+                            <li><a style="color: #fff" href="#" onclick="mostrarModalProduto('grande', 'Colchão Salute Molas Miracoil', '@Url.Content("~/img/salute-molas-miracoil.png")')">Salute Molas Miracoil</a></li>
+                            <li><a style="color: #fff" href="#" onclick="mostrarModalProduto('grande', 'Colchão Imperial Látex Gel', '@Url.Content("~/img/imperial-latex-gel.png")')">Imperial Látex Gel</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
                         <a style="color: #fff" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Travesseiros <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a style="color: #fff" href="#">Visco Cervical</a></li>
-                            <li><a style="color: #fff" href="#">Visco Gel</a></li>
-                            <li><a style="color: #fff" href="#">Visco Elástico</a></li>
-                            <li><a style="color: #fff" href="#">Soft Látex</a></li>
-                            <li><a style="color: #fff" href="#">Toque de Pluma</a></li>
+                            <li><a style="color: #fff" href="#" onclick="mostrarModalProduto('normal', 'Travesseiro Soft Body', '@Url.Content("~/img/travesseiro-soft-body.png")')">Soft Body</a></li>
+                            <li><a style="color: #fff" href="#" onclick="mostrarModalProduto('normal', 'Travesseiro Soft Evolution Latex', '@Url.Content("~/img/travesseiro-soft-evolution-latex.png")')">Soft Evolution Latex</a></li>
+                            <li><a style="color: #fff" href="#" onclick="mostrarModalProduto('normal', 'Travesseiro Soft Evolution Light', '@Url.Content("~/img/travesseiro-soft-evolution-light.png")')">Soft Evolution Light</a></li>                            
+                            <li><a style="color: #fff" href="#" onclick="mostrarModalProduto('normal', 'Travesseiro Soft Evolution Visco', '@Url.Content("~/img/travesseiro-soft-evolution-visco.png")')">Soft Evolution Visco</a></li>
+                            <li><a style="color: #fff" href="#" onclick="mostrarModalProduto('normal', 'Travesseiro Soft Evolution Visco Cervical', '@Url.Content("~/img/travesseiro-soft-evolution-visco-cervical.png")')">Soft Evolution Visco Cervical</a></li>
+                            <li><a style="color: #fff" href="#" onclick="mostrarModalProduto('normal', 'Travesseiro Soft Evolution Silver', '@Url.Content("~/img/travesseiro-soft-evolution-silver.png")')">Soft Evolution Silver</a></li>
+                            <li><a style="color: #fff" href="#" onclick="mostrarModalProduto('normal', 'Travesseiro Soft Evolution Gold', '@Url.Content("~/img/travesseiro-soft-evolution-gold.png")')">Soft Evolution Gold</a></li>
+                            <li><a style="color: #fff" href="#" onclick="mostrarModalProduto('normal', 'Travesseiro Visco Gel Fresh', '@Url.Content("~/img/travesseiro-visco-gel-fresh.png")')">Visco Gel Fresh</a></li>
+                            <li><a style="color: #fff" href="#" onclick="mostrarModalProduto('normal', 'Travesseiro Visco Elástico Nasa', '@Url.Content("~/img/travesseiro-viscoelastico-nasa.png")')">Visco Elástico Nasa</a></li>
+                            <li><a style="color: #fff" href="#" onclick="mostrarModalProduto('normal', 'Travesseiro Massageador Nasa', '@Url.Content("~/img/travesseiro-massageador-nasa.png")')">Massageador Nasa</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -304,6 +313,7 @@
         @RenderBody()
         @Html.Partial("_ModalLoja")
     </div>
+    @Html.Partial("_ModalProduto")
     @{
         // verifica quais tela deve exibir o rodapé
         if
@@ -405,6 +415,19 @@
     @Scripts.Render("~/bundles/blockUI")
     @Scripts.Render("~/bundles/fullcalendar")
     <script type="text/javascript">
+
+        function mostrarModalProduto(tamanho, descricao, imagem)
+        {
+            if (tamanho == "grande")
+                $("#mp_dialog").addClass("modal-lg");
+            else
+                $("#mp_dialog").removeClass("modal-lg");
+
+            $("#mp_descricao").text(descricao);
+            $("#mp_imagem").attr("src", imagem);
+
+            $('#modalproduto').modal('show');
+        }
 
         $(document).ready(function () {
 

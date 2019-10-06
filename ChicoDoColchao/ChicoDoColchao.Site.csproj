@@ -340,9 +340,17 @@
     <Content Include="img\banner-5.png" />
     <Content Include="img\banner-6.png" />
     <Content Include="img\cama-bau.png" />
+    <Content Include="img\comfort-molas-miracoil.png" />
+    <Content Include="img\evolution-molas-ensacadas.png" />
+    <Content Include="img\gold-flex-maxima.png" />
     <Content Include="img\imediata.png" />
+    <Content Include="img\imperial-latex-gel.png" />
     <Content Include="img\logo-sem-fundo.png" />
     <Content Include="img\logo.png" />
+    <Content Include="img\max-saude-premium-d33-d45.png" />
+    <Content Include="img\max-saude-selada-baby.png" />
+    <Content Include="img\max-saude-selada-d28-d33-d45.png" />
+    <Content Include="img\minerale-super-miracoil.png" />
     <Content Include="img\natal-2017.jpg" />
     <Content Include="img\old\banner-1-old.png" />
     <Content Include="img\old\banner-1.png" />
@@ -368,8 +376,19 @@
     <Content Include="img\pituba-parque-center.jpg" />
     <Content Include="img\pituba.jpg" />
     <Content Include="img\quadro-cdc.jpg" />
+    <Content Include="img\salute-molas-miracoil.png" />
     <Content Include="img\shop-piedade.jpg" />
     <Content Include="img\shopping-guarajuba.jpg" />
+    <Content Include="img\travesseiro-massageador-nasa.png" />
+    <Content Include="img\travesseiro-soft-body.png" />
+    <Content Include="img\travesseiro-soft-evolution-gold.png" />
+    <Content Include="img\travesseiro-soft-evolution-latex.png" />
+    <Content Include="img\travesseiro-soft-evolution-light.png" />
+    <Content Include="img\travesseiro-soft-evolution-silver.png" />
+    <Content Include="img\travesseiro-soft-evolution-visco-cervical.png" />
+    <Content Include="img\travesseiro-soft-evolution-visco.png" />
+    <Content Include="img\travesseiro-visco-gel-fresh.png" />
+    <Content Include="img\travesseiro-viscoelastico-nasa.png" />
     <Content Include="Scripts\bootstrap-3.3.6.min.js" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -573,6 +592,7 @@
     <Content Include="Views\Pedido\Troca.cshtml" />
     <Content Include="Views\Shared\_ModalClienteAlterar.cshtml" />
     <Content Include="Views\Shared\_ModalCliente.cshtml" />
+    <Content Include="Views\Shared\_ModalProduto.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
