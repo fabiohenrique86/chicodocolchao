@@ -70,15 +70,11 @@ namespace ChicoDoColchao.Controllers
 
         public JsonResult Listar()
         {
-            var clientes = new List<ClienteDao>();
-
             try
             {
-                var clienteDao = new ClienteDao();
-                
-                clientes = clienteBusiness.Listar(clienteDao);
+                var clientes = clienteBusiness.Listar(new ClienteDao());
 
-                return Json(clientes, JsonRequestBehavior.AllowGet);
+                return new JsonResult { Data = new { Sucesso = true, Mensagem = string.Empty, Clientes = clientes }, MaxJsonLength = int.MaxValue, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
             }
             catch (BusinessException ex)
             {
@@ -97,13 +93,13 @@ namespace ChicoDoColchao.Controllers
             try
             {
                 var clienteDao = new ClienteDao();
-                
+
                 clienteDao.Cpf = term;
                 clienteDao.Cnpj = term;
 
                 clientes = clienteBusiness.ListarAutocomplete(clienteDao);
 
-                return Json(clientes, JsonRequestBehavior.AllowGet);
+                return new JsonResult { Data = clientes, MaxJsonLength = int.MaxValue, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
             }
             catch (BusinessException ex)
             {

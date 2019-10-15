@@ -339,6 +339,9 @@
     <Content Include="img\banner-4.png" />
     <Content Include="img\banner-5.png" />
     <Content Include="img\banner-6.png" />
+    <Content Include="img\box-3em1.png" />
+    <Content Include="img\box-bipartido.png" />
+    <Content Include="img\box-casal.png" />
     <Content Include="img\cama-bau.png" />
     <Content Include="img\comfort-molas-miracoil.png" />
     <Content Include="img\evolution-molas-ensacadas.png" />

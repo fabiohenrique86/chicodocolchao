@@ -129,7 +129,9 @@ namespace ChicoDoColchao.Business
                     if (movimentoCaixa != null)
                     {
                         movimentoCaixaDao.MovimentoCaixaID = movimentoCaixa.MovimentoCaixaID;
+
                         Excluir(movimentoCaixaDao);
+
                         movimentoCaixaDao.MovimentoCaixaID = 0;
                     }
 

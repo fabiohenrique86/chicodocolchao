@@ -18,5 +18,6 @@ namespace ChicoDoColchao.Dao
         public MovimentoCaixaStatusDao MovimentoCaixaStatusDao { get; set; }
         public DateTime? DataRecebimento { get; set; }
         public UsuarioDao UsuarioRecebimento { get; set; }
+        public int? NumeroSequencial { get; set; }
     }
 }

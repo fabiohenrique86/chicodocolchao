@@ -249,7 +249,7 @@ namespace ChicoDoColchao.Controllers
                 parametros.Add(new ReportParameter("RazaoSocial", pedidosDao.FirstOrDefault().LojaDao.FirstOrDefault().RazaoSocial ?? string.Empty));
                 parametros.Add(new ReportParameter("NomeFantasia", pedidosDao.FirstOrDefault().LojaDao.FirstOrDefault().NomeFantasia ?? string.Empty));
                 parametros.Add(new ReportParameter("CartaoOutros", cartaoOutros.ToString()));
-                parametros.Add(new ReportParameter("MovimentoCaixaID", movimentoCaixa.MovimentoCaixaID.ToString()));
+                parametros.Add(new ReportParameter("NumeroSequencial", movimentoCaixa.NumeroSequencial.GetValueOrDefault().ToString()));
 
                 viewer.LocalReport.SetParameters(parametros);
 

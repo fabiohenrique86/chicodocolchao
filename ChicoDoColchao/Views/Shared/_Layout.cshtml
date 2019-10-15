@@ -54,13 +54,13 @@
 
         .carousel-inner > .item > img, .carousel-inner > .item > a > img {
             display: block;
-            height: 100%;
+            /*height: 100%;*/
             line-height: 1;
             margin: 0 auto;
-            max-width: 100%;
+            max-width: 80%;
             padding: 1%;
         }
-
+        
         .dropdown-menu {
             background-color: #0f3456;
         }
@@ -202,6 +202,9 @@
                     <li class="dropdown">
                         <a style="color: #fff;" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Camas <span class="caret"></span></a>
                         <ul class="dropdown-menu">
+                            <li><a style="color: #fff" href="#" onclick="mostrarModalProduto('grande', 'Box 3 em 1', '@Url.Content("~/img/box-3em1.png")')">Box 3 em 1</a></li>
+                            <li><a style="color: #fff" href="#" onclick="mostrarModalProduto('grande', 'Box Bipartido', '@Url.Content("~/img/box-bipartido.png")')">Box Bipartido</a></li>
+                            <li><a style="color: #fff" href="#" onclick="mostrarModalProduto('grande', 'Box Casal', '@Url.Content("~/img/box-casal.png")')">Box Casal</a></li>
                             <li><a style="color: #fff;" href="#">Solteiro</a></li>
                             <li><a style="color: #fff;" href="#">Viúva</a></li>
                             <li><a style="color: #fff;" href="#">Casal</a></li>
@@ -212,7 +215,7 @@
                     <li class="dropdown">
                         <a style="color: #fff" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Colchões <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a style="color: #fff" href="#" onclick="mostrarModalProduto('normal', 'Colchão Baby', '@Url.Content("~/img/max-saude-selada-baby.png")')">Baby</a></li>                            
+                            <li><a style="color: #fff" href="#" onclick="mostrarModalProduto('normal', 'Colchão Baby', '@Url.Content("~/img/max-saude-selada-baby.png")')">Baby</a></li>
                             <li><a style="color: #fff" href="#" onclick="mostrarModalProduto('normal', 'Colchão Gold Flex Máxima', '@Url.Content("~/img/gold-flex-maxima.png")')">Gold Flex Máxima</a></li>
                             <li><a style="color: #fff" href="#" onclick="mostrarModalProduto('grande', 'Colchão Max Saúde Selada D28 / D33 / D45', '@Url.Content("~/img/max-saude-selada-d28-d33-d45.png")')">Max Saúde Selada D28 / D33 / D45</a></li>
                             <li><a style="color: #fff" href="#" onclick="mostrarModalProduto('grande', 'Colchão Max Saúde Premium D33 / D45', '@Url.Content("~/img/max-saude-premium-d33-d45.png")')">Max Saúde Premium D33 / D45</a></li>
@@ -273,32 +276,32 @@
                 </ol>
                 <div class="carousel-inner">
                     <div class="item active">
-                        <img src="~/img/banner-1.png">
+                        <img src="~/img/imperial-latex-gel.png">
                     </div>
                     <div class="item">
-                        <img src="~/img/banner-2.png">
+                        <img src="~/img/minerale-super-miracoil.png">
                     </div>
                     <div class="item">
-                        <img src="~/img/banner-3.png">
+                        <img src="~/img/comfort-molas-miracoil.png">
+                    </div>   
+                    <div class="item">
+                        <img src="~/img/evolution-molas-ensacadas.png">
+                    </div>                                     
+                    <div class="item">
+                        <img src="~/img/salute-molas-miracoil.png">
+                    </div>                    
+                    <div class="item">
+                        <img src="~/img/max-saude-selada-baby.png">
                     </div>
                     <div class="item">
-                        <img src="~/img/banner-4.png">
+                        <img src="~/img/gold-flex-maxima.png">
                     </div>
                     <div class="item">
-                        <img src="~/img/banner-5.png">
+                        <img src="~/img/max-saude-selada-d28-d33-d45.png">
                     </div>
                     <div class="item">
-                        <img src="~/img/banner-6.png">
-                    </div>
-                    <div class="item">
-                        <img src="~/img/cama-bau.png">
-                    </div>
-                    <div class="item">
-                        <img src="~/img/quadro-cdc.jpg">
-                    </div>
-                    <div class="item">
-                        <img src="~/img/imediata.png">
-                    </div>
+                        <img src="~/img/max-saude-premium-d33-d45.png">
+                    </div>                    
                 </div>
                 <a class="left carousel-control" href="#myCarousel" data-slide="prev">
                     <span class="glyphicon glyphicon-chevron-left"></span>
@@ -362,28 +365,16 @@
                             <i class="glyphicon glyphicon-map-marker" style="color: #c9302c"></i>&nbsp;Av. ACM, 1034 - Pituba Parque Center - Itaigara<br />
                             <i class="glyphicon glyphicon-earphone" style="color: #ec971f"></i>&nbsp;(71) 3035-5509
                         </div>*@
-                        <div class="col-lg-4 text-center">
+                        @*<div class="col-lg-6 text-center">
                             <img class="img-responsive" src="~/img/av-sete.jpg" style="border-radius: 5%" />
                             <i class="glyphicon glyphicon-map-marker" style="color: #c9302c"></i>&nbsp;Av. Sete de Setembro, 1020 - Dois de Julho<br />
                             <i class="glyphicon glyphicon-earphone" style="color: #ec971f"></i>&nbsp;(71) 99975-9491
-                        </div>
+                        </div>*@
                         <div class="col-lg-4 text-center">
                             <img class="img-responsive" src="~/img/pituba.jpg" style="border-radius: 5%" />
                             <i class="glyphicon glyphicon-map-marker" style="color: #c9302c"></i>&nbsp;Av. Manoel Dias da Silva, 2.364 - Pituba<br />
                             <i class="glyphicon glyphicon-earphone" style="color: #ec971f"></i>&nbsp;(71) 99959-8296
                         </div>
-                        <div class="col-lg-4 text-center">
-                            <img class="img-responsive" src="~/img/piata.jpg" style="border-radius: 5%" />
-                            <i class="glyphicon glyphicon-map-marker" style="color: #c9302c"></i>&nbsp;Av. Orlando Gomes, 1296 Loja 07 - Piatã<br />
-                            <i class="glyphicon glyphicon-earphone" style="color: #ec971f"></i>&nbsp; (71) 99659-5758
-                        </div>
-                    </div>
-                    <div class="row" style="padding-top: 15px">
-                        @*<div class="col-lg-4 text-center">
-                            <img class="img-responsive" src="~/img/shop-piedade.jpg" style="border-radius: 5%" />
-                            <i class="glyphicon glyphicon-map-marker" style="color: #c9302c"></i>&nbsp;Shopping Piedade 1º Piso - Centro<br />
-                            <i class="glyphicon glyphicon-earphone" style="color: #ec971f"></i>&nbsp; (71) 3043-8982
-                        </div>*@
                         <div class="col-lg-4 text-center">
                             <img class="img-responsive" src="~/img/av-manoel-dias.jpg" style="border-radius: 5%" />
                             <i class="glyphicon glyphicon-map-marker" style="color: #c9302c"></i>&nbsp;Av. Manoel Dias da Silva, 1.896 - Pituba<br />
@@ -394,7 +385,19 @@
                             <i class="glyphicon glyphicon-map-marker" style="color: #c9302c"></i>&nbsp;Rodovia BA 099, S/N, Km 42.5 - Estrada do Coco<br />
                             <i class="glyphicon glyphicon-earphone" style="color: #ec971f"></i>&nbsp;(71) 3674-1818
                         </div>
+                        @*<div class="col-lg-4 text-center">
+                            <img class="img-responsive" src="~/img/piata.jpg" style="border-radius: 5%" />
+                            <i class="glyphicon glyphicon-map-marker" style="color: #c9302c"></i>&nbsp;Av. Orlando Gomes, 1296 Loja 07 - Piatã<br />
+                            <i class="glyphicon glyphicon-earphone" style="color: #ec971f"></i>&nbsp; (71) 99659-5758
+                        </div>*@
                     </div>
+                    @*<div class="row" style="padding-top: 15px">
+                        <div class="col-lg-4 text-center">
+                            <img class="img-responsive" src="~/img/shop-piedade.jpg" style="border-radius: 5%" />
+                            <i class="glyphicon glyphicon-map-marker" style="color: #c9302c"></i>&nbsp;Shopping Piedade 1º Piso - Centro<br />
+                            <i class="glyphicon glyphicon-earphone" style="color: #ec971f"></i>&nbsp; (71) 3043-8982
+                        </div>                        
+                    </div>*@
                     <div class="row text-center" style="margin-top: 30px;">
                         <div class="col-lg-12">
                             Ainda com dúvidas? Entre em <a href="@Url.Content("~/Contato")">contato@chicodocolchao.com.br</a>

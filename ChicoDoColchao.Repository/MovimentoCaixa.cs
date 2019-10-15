@@ -21,6 +21,7 @@ namespace ChicoDoColchao.Repository
         public int MovimentoCaixaStatusID { get; set; }
         public Nullable<System.DateTime> DataRecebimento { get; set; }
         public Nullable<int> UsuarioRecebimentoID { get; set; }
+        public Nullable<int> NumeroSequencial { get; set; }
     
         public virtual Loja Loja { get; set; }
         public virtual MovimentoCaixaStatus MovimentoCaixaStatus { get; set; }

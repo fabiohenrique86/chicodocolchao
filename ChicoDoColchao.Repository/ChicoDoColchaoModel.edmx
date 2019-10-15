@@ -113,6 +113,7 @@
           <Property Name="MovimentoCaixaStatusID" Type="int" Nullable="false" />
           <Property Name="DataRecebimento" Type="smalldatetime" />
           <Property Name="UsuarioRecebimentoID" Type="int" />
+          <Property Name="NumeroSequencial" Type="int" />
         </EntityType>
         <EntityType Name="MovimentoCaixaStatus">
           <Key>
@@ -293,11 +294,11 @@
           <Key>
             <PropertyRef Name="UsuarioID" />
           </Key>
-          <Property Name="UsuarioID" Type="int" StoreGeneratedPattern="None" Nullable="false" />
           <Property Name="Login" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Senha" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Ativo" Type="bit" Nullable="false" />
           <Property Name="TipoUsuarioID" Type="int" Nullable="false" />
+          <Property Name="UsuarioID" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="FK_Cliente_Estado">
           <End Role="Estado" Type="Self.Estado" Multiplicity="1" />
@@ -1994,6 +1995,7 @@
           <NavigationProperty Name="Loja" Relationship="ChicoDoColchaoModel.FK_MovimentoCaixa_Loja" FromRole="MovimentoCaixa" ToRole="Loja" />
           <NavigationProperty Name="MovimentoCaixaStatus" Relationship="ChicoDoColchaoModel.FK_MovimentoCaixa_MovimentoCaixaStatus" FromRole="MovimentoCaixa" ToRole="MovimentoCaixaStatus" />
           <NavigationProperty Name="Usuario" Relationship="ChicoDoColchaoModel.FK_MovimentoCaixa_Usuario" FromRole="MovimentoCaixa" ToRole="Usuario" />
+          <Property Name="NumeroSequencial" Type="Int32" />
         </EntityType>
         <Association Name="FK_MovimentoCaixa_Loja">
           <End Type="ChicoDoColchaoModel.Loja" Role="Loja" Multiplicity="1" />
@@ -2347,6 +2349,7 @@
           <EntitySetMapping Name="MovimentoCaixa">
             <EntityTypeMapping TypeName="ChicoDoColchaoModel.MovimentoCaixa">
               <MappingFragment StoreEntitySet="MovimentoCaixa">
+                <ScalarProperty Name="NumeroSequencial" ColumnName="NumeroSequencial" />
                 <ScalarProperty Name="UsuarioRecebimentoID" ColumnName="UsuarioRecebimentoID" />
                 <ScalarProperty Name="DataRecebimento" ColumnName="DataRecebimento" />
                 <ScalarProperty Name="MovimentoCaixaStatusID" ColumnName="MovimentoCaixaStatusID" />

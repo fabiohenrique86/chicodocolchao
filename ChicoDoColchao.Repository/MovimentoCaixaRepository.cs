@@ -17,6 +17,10 @@ namespace ChicoDoColchao.Repository
 
         public int Incluir(MovimentoCaixa movimentoCaixa)
         {
+            var numeroSequencial = chicoDoColchaoEntities.MovimentoCaixa.Where(x => x.LojaID == movimentoCaixa.LojaID).Select(x => x.NumeroSequencial).OrderByDescending(x => x.Value).FirstOrDefault();
+
+            movimentoCaixa.NumeroSequencial = numeroSequencial.GetValueOrDefault() + 1;
+
             chicoDoColchaoEntities.Entry(movimentoCaixa).State = EntityState.Added;
             chicoDoColchaoEntities.SaveChanges();
 
@@ -51,23 +55,15 @@ namespace ChicoDoColchao.Repository
             IQueryable<MovimentoCaixa> query = chicoDoColchaoEntities.MovimentoCaixa;
 
             if (movimentoCaixa.MovimentoCaixaID > 0)
-            {
                 query = query.Where(x => x.MovimentoCaixaID == movimentoCaixa.MovimentoCaixaID);
-            }
 
             if (movimentoCaixa.Loja != null && movimentoCaixa.Loja.LojaID > 0)
-            {
                 query = query.Where(x => x.LojaID == movimentoCaixa.Loja.LojaID);
-            }
             else if (movimentoCaixa.LojaID > 0)
-            {
                 query = query.Where(x => x.LojaID == movimentoCaixa.LojaID);
-            }
 
             if (movimentoCaixa.DataMovimento != DateTime.MinValue)
-            {
                 query = query.Where(x => EntityFunctions.TruncateTime(x.DataMovimento) == EntityFunctions.TruncateTime(movimentoCaixa.DataMovimento));
-            }
 
             return query
                     .Include(x => x.MovimentoCaixaStatus).Include(x => x.Loja).Include(x => x.Usuario)

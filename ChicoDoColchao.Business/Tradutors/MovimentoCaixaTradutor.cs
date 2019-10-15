@@ -24,6 +24,9 @@ namespace ChicoDoColchao.Business.Tradutors
             if (movimentoCaixaDao.UsuarioRecebimento != null && movimentoCaixaDao.UsuarioRecebimento.UsuarioID > 0)
                 movimentoCaixa.UsuarioRecebimentoID = movimentoCaixaDao.UsuarioRecebimento.UsuarioID;
 
+            if (movimentoCaixaDao.NumeroSequencial.GetValueOrDefault() > 0)
+                movimentoCaixa.NumeroSequencial = movimentoCaixaDao.NumeroSequencial;
+
             return movimentoCaixa;
         }
 
@@ -45,7 +48,9 @@ namespace ChicoDoColchao.Business.Tradutors
             movimentoCaixaDao.DataRecebimento = movimentoCaixa.DataRecebimento;
 
             if (movimentoCaixa.Usuario != null && movimentoCaixa.Usuario.UsuarioID > 0)
-                movimentoCaixa.Usuario = new Usuario() { UsuarioID = movimentoCaixa.Usuario.UsuarioID };
+                movimentoCaixaDao.UsuarioRecebimento = new UsuarioDao() { UsuarioID = movimentoCaixa.Usuario.UsuarioID };
+
+            movimentoCaixaDao.NumeroSequencial = movimentoCaixa.NumeroSequencial;
 
             return movimentoCaixaDao;
         }
