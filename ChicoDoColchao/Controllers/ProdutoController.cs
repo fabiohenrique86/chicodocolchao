@@ -59,7 +59,7 @@ namespace ChicoDoColchao.Controllers
                 return View("Cadastro", produtoDao);
             }
 
-            List<string> retorno = produtoBusiness.Importar(arquivo.InputStream);
+            var retorno = produtoBusiness.Importar(arquivo.InputStream);
 
             if (retorno != null && retorno.Count() > 0)
             {

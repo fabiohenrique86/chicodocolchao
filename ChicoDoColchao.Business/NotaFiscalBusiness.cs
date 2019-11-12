@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Transactions;
 using System.Xml.Linq;
 
 namespace ChicoDoColchao.Business
@@ -38,7 +39,7 @@ namespace ChicoDoColchao.Business
             }
             catch (Exception ex)
             {
-                
+
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
 
                 throw ex;
@@ -62,92 +63,90 @@ namespace ChicoDoColchao.Business
                     return;
                 }
 
-                XNamespace nsNFe = "http://www.portalfiscal.inf.br/nfe";
-
-                foreach (Stream item in notaFiscalDao.Arquivo)
+                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions() { Timeout = TimeSpan.FromMinutes(10) }))
                 {
-                    var todosProdutoAtualizados = true;
-                    string xmlString = string.Empty;
+                    XNamespace nsNFe = "http://www.portalfiscal.inf.br/nfe";
 
-                    using (StreamReader sr = new StreamReader(item))
+                    foreach (Stream item in notaFiscalDao.Arquivo)
                     {
-                        xmlString = sr.ReadToEnd();
-                    }
+                        var todosProdutoAtualizados = true;
+                        string xmlString = string.Empty;
 
-                    if (string.IsNullOrEmpty(xmlString))
-                    {
-                        mensagem.Add("XML está vazio");
-                        continue;
-                    }
+                        using (StreamReader sr = new StreamReader(item))
+                            xmlString = sr.ReadToEnd();
 
-                    XDocument xml = XDocument.Parse(xmlString, LoadOptions.None);
-
-                    IEnumerable<XElement> noNFe = xml.Descendants(nsNFe + "NFe");
-
-                    if (!noNFe.Any())
-                    {
-                        mensagem.Add("XML não é uma NFe");
-                        continue;
-                    }
-
-                    IEnumerable<XElement> NFe = xml.Descendants(nsNFe + "NFe");
-                    IEnumerable<XElement> NFe_infNFe = NFe.Elements(nsNFe + "infNFe");
-                    IEnumerable<XElement> NFe_infNFe_det = NFe_infNFe.Elements(nsNFe + "det");
-
-                    if (NFe_infNFe_det == null || NFe_infNFe_det.Count() <= 0)
-                    {
-                        mensagem.Add("XML não tem produtos");
-                        continue;
-                    }
-
-                    foreach (XElement det in NFe_infNFe_det)
-                    {
-                        XElement NFe_infNFe_det_prod = det.Elements(nsNFe + "prod").FirstOrDefault();
-
-                        if (NFe_infNFe_det_prod == null)
+                        if (string.IsNullOrEmpty(xmlString))
                         {
-                            mensagem.Add("Produto não encontrado no XML");
+                            mensagem.Add("XML está vazio");
                             continue;
                         }
 
-                        XElement NFe_infNFe_det_prod_cProd = NFe_infNFe_det_prod.Elements(nsNFe + "cProd").FirstOrDefault();
-                        XElement NFe_infNFe_det_prod_qCom = NFe_infNFe_det_prod.Elements(nsNFe + "qCom").FirstOrDefault();
+                        XDocument xml = XDocument.Parse(xmlString, LoadOptions.None);
 
-                        long cProd = 0;
-                        short qCom = 0;
+                        IEnumerable<XElement> noNFe = xml.Descendants(nsNFe + "NFe");
 
-                        if (NFe_infNFe_det_prod_cProd != null) { cProd = Convert.ToInt64(NFe_infNFe_det_prod_cProd.Value); }
-                        if (NFe_infNFe_det_prod_qCom != null) { qCom = Convert.ToInt16(Math.Floor(Convert.ToDecimal(NFe_infNFe_det_prod_qCom.Value, new CultureInfo("en-US").NumberFormat))); }
-
-                        if (cProd <= 0)
+                        if (!noNFe.Any())
                         {
-                            mensagem.Add("Código do produto não encontrado no XML");
-                        }
-
-                        if (qCom <= 0)
-                        {
-                            mensagem.Add("Quantidade do produto não encontrado no XML");
-                        }
-
-                        if (cProd <= 0 || qCom <= 0)
-                        {
+                            mensagem.Add("XML não é uma NFe");
                             continue;
                         }
 
-                        // atualiza o estoque do produto
-                        var atualizado = produtoRepository.Atualizar(lojaDao.LojaID, cProd, qCom);
+                        IEnumerable<XElement> NFe = xml.Descendants(nsNFe + "NFe");
+                        IEnumerable<XElement> NFe_infNFe = NFe.Elements(nsNFe + "infNFe");
+                        IEnumerable<XElement> NFe_infNFe_det = NFe_infNFe.Elements(nsNFe + "det");
 
-                        if (!atualizado)
+                        if (NFe_infNFe_det == null || NFe_infNFe_det.Count() <= 0)
                         {
-                            mensagem.Add(string.Format("Produto {0} não está cadastrado na loja do depósito", cProd));
-                            todosProdutoAtualizados = false;
+                            mensagem.Add("XML não tem produtos");
+                            continue;
                         }
+
+                        foreach (XElement det in NFe_infNFe_det)
+                        {
+                            XElement NFe_infNFe_det_prod = det.Elements(nsNFe + "prod").FirstOrDefault();
+
+                            if (NFe_infNFe_det_prod == null)
+                            {
+                                mensagem.Add("Produto não encontrado no XML");
+                                continue;
+                            }
+
+                            XElement NFe_infNFe_det_prod_cProd = NFe_infNFe_det_prod.Elements(nsNFe + "cProd").FirstOrDefault();
+                            XElement NFe_infNFe_det_prod_qCom = NFe_infNFe_det_prod.Elements(nsNFe + "qCom").FirstOrDefault();
+
+                            long cProd = 0;
+                            short qCom = 0;
+
+                            if (NFe_infNFe_det_prod_cProd != null)
+                                cProd = Convert.ToInt64(NFe_infNFe_det_prod_cProd.Value);
+
+                            if (NFe_infNFe_det_prod_qCom != null)
+                                qCom = Convert.ToInt16(Math.Floor(Convert.ToDecimal(NFe_infNFe_det_prod_qCom.Value, new CultureInfo("en-US").NumberFormat)));
+
+                            if (cProd <= 0)
+                                mensagem.Add("Código do produto não encontrado no XML");
+
+                            if (qCom <= 0)
+                                mensagem.Add("Quantidade do produto não encontrado no XML");
+
+                            if (cProd <= 0 || qCom <= 0)
+                                continue;
+
+                            // atualiza o estoque do produto
+                            var atualizado = produtoRepository.Atualizar(lojaDao.LojaID, cProd, qCom);
+
+                            if (!atualizado)
+                            {
+                                mensagem.Add(string.Format("Produto {0} não está cadastrado na loja do depósito", cProd));
+                                todosProdutoAtualizados = false;
+                            }
+                        }
+
+                        if (todosProdutoAtualizados)
+                            qtdNFeImportada++;
                     }
 
-                    if (todosProdutoAtualizados)
-                    {
-                        qtdNFeImportada++;
-                    }
+                    scope.Complete();
                 }
             }
             catch (BusinessException ex)
@@ -156,7 +155,7 @@ namespace ChicoDoColchao.Business
             }
             catch (Exception ex)
             {
-                
+
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
 
                 throw ex;

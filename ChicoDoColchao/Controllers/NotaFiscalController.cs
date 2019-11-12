@@ -27,8 +27,8 @@ namespace ChicoDoColchao.Controllers
             }
 
             int qtdNFeImportada = 0;
-            List<string> mensagem = new List<string>();
-            NotaFiscalDao nfDao = new NotaFiscalDao();
+            var mensagem = new List<string>();
+            var nfDao = new NotaFiscalDao();
 
             try
             {
@@ -43,9 +43,7 @@ namespace ChicoDoColchao.Controllers
                 foreach (var item in arquivos)
                 {
                     if (item == null || item.ContentLength <= 0)
-                    {
                         ok = false;
-                    }
                 }
 
                 if (!ok)
@@ -55,17 +53,13 @@ namespace ChicoDoColchao.Controllers
                     return View("Cadastro", nfDao);
                 }
 
-                NotaFiscalDao notaFiscalDao = new NotaFiscalDao();
+                var notaFiscalDao = new NotaFiscalDao();
 
                 foreach (var arquivo in arquivos)
-                {
                     notaFiscalDao.Arquivo.Add(arquivo.InputStream);
-                }
 
                 if (notaFiscalDao.Arquivo != null && notaFiscalDao.Arquivo.Count > 0)
-                {
                     notaFiscalBusiness.ImportarXML(notaFiscalDao, out mensagem, out qtdNFeImportada);
-                }
 
                 if (mensagem != null && mensagem.Count > 0)
                 {
@@ -76,20 +70,23 @@ namespace ChicoDoColchao.Controllers
 
                 nfDao.Erro = false;
                 nfDao.Mensagem = string.Format("{0} XMLS importados com sucesso", qtdNFeImportada);
+
                 return View("Cadastro", nfDao);
             }
             catch (BusinessException ex)
             {
                 nfDao.Erro = false;
                 nfDao.Mensagem = ex.Message;
+
                 return View("Cadastro", nfDao);
             }
             catch (Exception ex)
             {
                 nfDao.Erro = false;
                 nfDao.Mensagem = "Ocoreu um erro ao importar as NFes. Tente novamente";
+
                 return View("Cadastro", nfDao);
             }
-        }        
+        }
     }
 }

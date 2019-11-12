@@ -36,54 +36,36 @@ namespace ChicoDoColchao.Business
         private void ValidarIncluir(ProdutoDao produtoDao)
         {
             if (produtoDao == null)
-            {
                 throw new BusinessException("Produto é obrigatório");
-            }
 
             if (produtoDao.Numero == null || produtoDao.Numero <= 0)
-            {
                 throw new BusinessException("Número é obrigatório");
-            }
 
             if (string.IsNullOrEmpty(produtoDao.Descricao))
-            {
                 throw new BusinessException("Descrição é obrigatório");
-            }
 
             if (produtoDao.CategoriaDao.FirstOrDefault() == null || produtoDao.CategoriaDao.FirstOrDefault().CategoriaID <= 0)
-            {
                 throw new BusinessException("Categoria é obrigatório");
-            }
 
             if (produtoDao.MedidaDao == null || produtoDao.MedidaDao.MedidaID <= 0)
-            {
                 throw new BusinessException("Medida é obrigatório");
-            }
 
             if (produtoDao.Preco <= 0)
-            {
                 throw new BusinessException("Preço é obrigatório");
-            }
 
             var loja = produtoDao.LojaProdutoDao.FirstOrDefault();
 
             if (produtoRepository.Listar(new Produto() { Numero = produtoDao.Numero.GetValueOrDefault() }, loja == null ? 0 : loja.LojaID).FirstOrDefault() != null)
-            {
                 throw new BusinessException($"Produto {produtoDao.Numero.GetValueOrDefault()} já cadastrado");
-            }
         }
 
         private void ValidarExcluir(ProdutoDao produtoDao)
         {
             if (produtoDao == null)
-            {
                 throw new BusinessException("Produto é obrigatório");
-            }
 
             if (produtoDao.ProdutoID <= 0)
-            {
                 throw new BusinessException("ProdutoID é obrigatório");
-            }
         }
 
         private void ValidarAtualizar(ProdutoDao produtoDao)
@@ -196,7 +178,7 @@ namespace ChicoDoColchao.Business
             }
             catch (Exception ex)
             {
-                
+
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
 
                 throw ex;
@@ -208,7 +190,7 @@ namespace ChicoDoColchao.Business
             try
             {
                 ValidarAtualizar(produtoDao);
-                
+
                 produtoRepository.Atualizar(produtoDao.ToBd());
             }
             catch (BusinessException ex)
@@ -217,7 +199,7 @@ namespace ChicoDoColchao.Business
             }
             catch (Exception ex)
             {
-                
+
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
 
                 throw ex;
@@ -238,7 +220,7 @@ namespace ChicoDoColchao.Business
             }
             catch (Exception ex)
             {
-                
+
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
 
                 throw ex;
@@ -262,7 +244,7 @@ namespace ChicoDoColchao.Business
             }
             catch (Exception ex)
             {
-                
+
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
 
                 throw ex;
@@ -281,7 +263,7 @@ namespace ChicoDoColchao.Business
             }
             catch (Exception ex)
             {
-                
+
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
 
                 throw ex;
@@ -300,7 +282,7 @@ namespace ChicoDoColchao.Business
 
                 if (produtosDao == null || produtosDao.Count() <= 0)
                 {
-                    retorno.Add("Planilha XLSX não possui produtos ou os produtos não estão na formatação correta");
+                    retorno.Add("Planilha XLSX não possui produtos OU os produtos não estão na formatação correta OU a loja não foi encontrada");
                     retorno.Add("Coluna A = Número do Produto, B = Descrição do Produto, C = Categoria do Produto, D = Medida do Produto, E = Quantidade do Produto na Loja, F = Preço de Compra do Produto");
                     return retorno;
                 }
@@ -312,11 +294,6 @@ namespace ChicoDoColchao.Business
                     // caso não exista, cadastra na base de dados
                     foreach (var produtoDao in produtosDao)
                     {
-                        //if (produtoDao.Numero.GetValueOrDefault() == 52843)
-                        //{
-
-                        //}
-
                         var produto = produtoRepository.Listar(new Produto() { Numero = produtoDao.Numero.GetValueOrDefault() }).FirstOrDefault();
 
                         // caso o produto não exista na base de dados
@@ -378,13 +355,9 @@ namespace ChicoDoColchao.Business
                                 var lojaProduto = lojaProdutoBusiness.Listar(new LojaProdutoDao() { LojaID = lojaProdutoDao.LojaID, ProdutoID = produto.ProdutoID }).FirstOrDefault();
 
                                 if (lojaProduto == null)
-                                {
                                     lojaProdutoBusiness.Incluir(new LojaProdutoDao() { LojaID = lojaProdutoDao.LojaID, ProdutoID = produto.ProdutoID, Quantidade = lojaProdutoDao.Quantidade, Ativo = true });
-                                }
                                 else
-                                {
                                     lojaProdutoBusiness.Atualizar(new LojaProdutoDao() { LojaProdutoID = lojaProduto.LojaProdutoID, Quantidade = lojaProdutoDao.Quantidade, Ativo = true });
-                                }
 
                                 produtoRepository.Atualizar(new Produto() { Numero = produtoDao.Numero.GetValueOrDefault(), Preco = produtoDao.Preco });
                             }
@@ -404,7 +377,7 @@ namespace ChicoDoColchao.Business
             }
             catch (Exception ex)
             {
-                
+
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
 
                 throw ex;
@@ -427,6 +400,9 @@ namespace ChicoDoColchao.Business
                 // busca a loja por NomeFantasia
                 var loja = lojaRepository.Listar(new Loja() { NomeFantasia = worksheet.Name.Trim(), Ativo = true }).FirstOrDefault();
 
+                if (loja == null)
+                    continue;
+
                 // cada célula que tem valor
                 foreach (var cellUsed in worksheet.Cells())
                 {
@@ -447,9 +423,7 @@ namespace ChicoDoColchao.Business
                         case "B":
 
                             if (produtoDao.Numero.GetValueOrDefault() <= 0)
-                            {
                                 break;
-                            }
 
                             // B = Descrição
                             string descricao;
@@ -461,9 +435,7 @@ namespace ChicoDoColchao.Business
                         case "C":
 
                             if (produtoDao.Numero.GetValueOrDefault() <= 0)
-                            {
                                 break;
-                            }
 
                             // C = Categoria
                             string categoria;
@@ -477,9 +449,7 @@ namespace ChicoDoColchao.Business
                         case "D":
 
                             if (produtoDao.Numero.GetValueOrDefault() <= 0)
-                            {
                                 break;
-                            }
 
                             // D = Medida
                             string medida;
@@ -491,9 +461,7 @@ namespace ChicoDoColchao.Business
                         case "E":
 
                             if (produtoDao.Numero.GetValueOrDefault() <= 0)
-                            {
                                 break;
-                            }
 
                             // E = Quantidade
                             short quantidade;
@@ -512,24 +480,19 @@ namespace ChicoDoColchao.Business
                         case "F":
 
                             if (produtoDao.Numero.GetValueOrDefault() <= 0)
-                            {
                                 break;
-                            }
 
                             // F = Preço de Compra
                             double preco = 0;
                             if (cellUsed.Value != null)
                             {
                                 double.TryParse(cellUsed.Value.ToString(), System.Globalization.NumberStyles.Currency, new System.Globalization.CultureInfo("pt-BR"), out preco);
+
                                 if (preco > 0)
-                                {
                                     produtoDao.Preco = Math.Round(preco, 2);
-                                }
 
                                 if (produtoDao.Numero > 0)
-                                {
                                     produtosDao.Add(produtoDao);
-                                }
                             }
 
                             break;
