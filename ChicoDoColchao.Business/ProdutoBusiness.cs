@@ -282,7 +282,7 @@ namespace ChicoDoColchao.Business
 
                 if (produtosDao == null || produtosDao.Count() <= 0)
                 {
-                    retorno.Add("Planilha XLSX não possui produtos OU os produtos não estão na formatação correta OU a loja não foi encontrada");
+                    retorno.Add("Planilha XLSX não possui produtos / Os produtos não estão na formatação correta / A loja não foi encontrada");
                     retorno.Add("Coluna A = Número do Produto, B = Descrição do Produto, C = Categoria do Produto, D = Medida do Produto, E = Quantidade do Produto na Loja, F = Preço de Compra do Produto");
                     return retorno;
                 }
@@ -294,7 +294,12 @@ namespace ChicoDoColchao.Business
                     // caso não exista, cadastra na base de dados
                     foreach (var produtoDao in produtosDao)
                     {
-                        var produto = produtoRepository.Listar(new Produto() { Numero = produtoDao.Numero.GetValueOrDefault() }).FirstOrDefault();
+                        if (produtoDao.Numero.GetValueOrDefault() == 52528)
+                        {
+
+                        }
+
+                        var produto = produtoRepository.Listar(0, produtoDao.Numero.GetValueOrDefault());
 
                         // caso o produto não exista na base de dados
                         if (produto == null)
@@ -312,6 +317,7 @@ namespace ChicoDoColchao.Business
                             if (medidaDao == null)
                             {
                                 int medidaId = medidaBusiness.Incluir(produtoDao.MedidaDao);
+
                                 produtoDao.MedidaDao.MedidaID = medidaId;
                                 produtoDao.MedidaDao.Ativo = true;
                             }
@@ -334,6 +340,7 @@ namespace ChicoDoColchao.Business
                             if (categoriaDao == null)
                             {
                                 var categoriaId = categoriaBusiness.Incluir(produtoDao.CategoriaDao.FirstOrDefault());
+
                                 produtoDao.CategoriaDao.FirstOrDefault().CategoriaID = categoriaId;
                                 produtoDao.CategoriaDao.FirstOrDefault().Ativo = true;
                             }
@@ -348,27 +355,31 @@ namespace ChicoDoColchao.Business
                         }
                         else
                         {
-                            // inclui/atualiza o produto na loja
                             var lojaProdutoDao = produtoDao.LojaProdutoDao.FirstOrDefault();
+
                             if (lojaProdutoDao != null)
                             {
                                 var lojaProduto = lojaProdutoBusiness.Listar(new LojaProdutoDao() { LojaID = lojaProdutoDao.LojaID, ProdutoID = produto.ProdutoID }).FirstOrDefault();
 
+                                // inclui/atualiza a quantidade do produto na loja
                                 if (lojaProduto == null)
                                     lojaProdutoBusiness.Incluir(new LojaProdutoDao() { LojaID = lojaProdutoDao.LojaID, ProdutoID = produto.ProdutoID, Quantidade = lojaProdutoDao.Quantidade, Ativo = true });
                                 else
                                     lojaProdutoBusiness.Atualizar(new LojaProdutoDao() { LojaProdutoID = lojaProduto.LojaProdutoID, Quantidade = lojaProdutoDao.Quantidade, Ativo = true });
 
+                                // atualiza o preço do produto
                                 produtoRepository.Atualizar(new Produto() { Numero = produtoDao.Numero.GetValueOrDefault(), Preco = produtoDao.Preco });
+
+                                // ativa o produto
+                                if (!produto.Ativo)
+                                    produtoRepository.Ativar(0, produtoDao.Numero.GetValueOrDefault());
                             }
                         }
                     }
 
                     // se não houveram erros, commit no banco de dados
                     if (retorno == null || retorno.Count() <= 0)
-                    {
                         scope.Complete();
-                    }
                 }
             }
             catch (BusinessException ex)
@@ -377,9 +388,7 @@ namespace ChicoDoColchao.Business
             }
             catch (Exception ex)
             {
-
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
-
                 throw ex;
             }
 
