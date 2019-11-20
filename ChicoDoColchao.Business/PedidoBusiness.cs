@@ -33,59 +33,39 @@ namespace ChicoDoColchao.Business
         private void ValidarIncluir(PedidoDao pedidoDao)
         {
             if (pedidoDao == null)
-            {
                 throw new BusinessException("Pedido é obrigatório");
-            }
 
             var consultorDao = pedidoDao.ConsultorDao.FirstOrDefault();
             if (consultorDao == null || consultorDao.FuncionarioID <= 0)
-            {
                 throw new BusinessException("Consultor é obrigatório");
-            }
 
             var clienteDao = pedidoDao.ClienteDao.FirstOrDefault();
             if (clienteDao == null || clienteDao.ClienteID <= 0)
-            {
                 throw new BusinessException("Cliente (CPF ou CNPJ) é obrigatório");
-            }
 
             var lojaDao = pedidoDao.LojaDao.FirstOrDefault();
             if (lojaDao == null || lojaDao.LojaID <= 0)
-            {
                 throw new BusinessException("Loja de origem é obrigatório");
-            }
 
             var lojaSaidaDao = pedidoDao.LojaSaidaDao.FirstOrDefault();
             if (lojaSaidaDao == null || lojaSaidaDao.LojaID <= 0)
-            {
                 throw new BusinessException("Loja de saída é obrigatório");
-            }
 
             var pedidoStatusDao = pedidoDao.PedidoStatusDao.FirstOrDefault();
             if (pedidoStatusDao == null || pedidoStatusDao.PedidoStatusID <= 0)
-            {
                 throw new BusinessException("Status do pedido é obrigatório");
-            }
 
             if (pedidoDao.UsuarioPedidoDao == null || pedidoDao.UsuarioPedidoDao.UsuarioID <= 0)
-            {
                 throw new BusinessException("Usúario do pedido é obrigatório");
-            }
 
             if (pedidoDao.PedidoProdutoDao == null || pedidoDao.PedidoProdutoDao.Count <= 0)
-            {
                 throw new BusinessException("Produto do pedido é obrigatório");
-            }
 
             if (pedidoDao.PedidoTipoPagamentoDao == null || pedidoDao.PedidoTipoPagamentoDao.Count <= 0)
-            {
                 throw new BusinessException("Tipo de pagamento do pedido é obrigatório");
-            }
 
             if (pedidoDao.DataPedido == null || pedidoDao.DataPedido == DateTime.MinValue)
-            {
                 throw new BusinessException("Data do pedido é obrigatório");
-            }
 
             // verifica se o total do pedido é igual ao total pago
             var totalPedido = Math.Round(pedidoDao.PedidoProdutoDao.Sum(x => x.Preco * x.Quantidade), 2);
@@ -93,9 +73,7 @@ namespace ChicoDoColchao.Business
             var totalDesconto = Math.Round(pedidoDao.Desconto, 2);
 
             if (Math.Round(totalPedido - totalDesconto, 2) != totalPago)
-            {
                 throw new BusinessException("Total do pedido deve ser igual ao total pago");
-            }
 
             // verifica se o produto existe na loja de saída
             foreach (var pedidoProdutoDao in pedidoDao.PedidoProdutoDao)
@@ -103,23 +81,20 @@ namespace ChicoDoColchao.Business
                 var produto = produtoBusiness.Listar(new ProdutoDao() { ProdutoID = pedidoProdutoDao.ProdutoID, Ativo = true }, lojaDestinoId: lojaSaidaDao.LojaID).FirstOrDefault();
 
                 if (produto == null)
-                {
                     throw new BusinessException(string.Format("Produto {0} não cadastrado na loja de saída", pedidoProdutoDao.ProdutoDao.Descricao));
-                }
 
                 if (pedidoStatusDao.PedidoStatusID == PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega.GetHashCode())
                 {
+                    if (pedidoDao.ValorFrete.GetValueOrDefault() <= 0)
+                        throw new BusinessException("Valor do frete é obrigatório");
+
                     if (pedidoProdutoDao.DataEntrega.GetValueOrDefault() != DateTime.MinValue)
                     {
                         if (pedidoProdutoDao.DataEntrega.GetValueOrDefault().Date < DateTime.Now.Date)
-                        {
                             throw new BusinessException(string.Format("Data da entrega do produto {0} não pode ser menor que hoje", pedidoProdutoDao.ProdutoDao.Descricao));
-                        }
 
                         if (pedidoProdutoDao.UsuarioEntregaDao == null || pedidoProdutoDao.UsuarioEntregaDao.UsuarioID <= 0)
-                        {
                             throw new BusinessException("Usuário de entrega é obrigatório");
-                        }
                     }
                 }
             }
@@ -127,16 +102,12 @@ namespace ChicoDoColchao.Business
             foreach (var pedidoTipoPagamentoDao in pedidoDao.PedidoTipoPagamentoDao)
             {
                 if (pedidoTipoPagamentoDao.TipoPagamentoDao == null || pedidoTipoPagamentoDao.TipoPagamentoDao.TipoPagamentoID <= 0)
-                {
                     throw new BusinessException("Tipo de Pagamento é obrigatório");
-                }
 
                 if (pedidoTipoPagamentoDao.TipoPagamentoDao.TipoPagamentoID != TipoPagamentoDao.ETipoPagamento.Dinheiro.GetHashCode())
                 {
                     if (pedidoTipoPagamentoDao.ParcelaDao == null || pedidoTipoPagamentoDao.ParcelaDao.ParcelaID <= 0)
-                    {
                         throw new BusinessException("Parcela de Pagamento é obrigatória");
-                    }
                 }
 
                 // verifica se o cv informado já existe
@@ -145,9 +116,7 @@ namespace ChicoDoColchao.Business
                     var ptp = pedidoTipoPagamentoRepository.Listar(new PedidoTipoPagamento() { CV = pedidoTipoPagamentoDao.CV });
 
                     if (ptp != null && ptp.Count() > 0)
-                    {
                         throw new BusinessException(string.Format("CV {0} já cadastrado", pedidoTipoPagamentoDao.CV));
-                    }
                 }
             }
         }
@@ -155,137 +124,91 @@ namespace ChicoDoColchao.Business
         private void ValidarCancelar(PedidoDao pedidoDao, out Pedido pedido)
         {
             if (pedidoDao == null)
-            {
                 throw new BusinessException("Pedido é obrigatório");
-            }
 
             if (pedidoDao.PedidoID <= 0)
-            {
                 throw new BusinessException("PedidoID é obrigatório");
-            }
 
             if (pedidoDao.DataCancelamento == null || pedidoDao.DataCancelamento == DateTime.MinValue)
-            {
                 throw new BusinessException("Data de cancelamento é obrigatório");
-            }
 
             if (pedidoDao.UsuarioCancelamentoDao == null || pedidoDao.UsuarioCancelamentoDao.UsuarioID <= 0)
-            {
                 throw new BusinessException("Usuário é obrigatório");
-            }
 
             if (pedidoDao.UsuarioCancelamentoDao.TipoUsuarioDao == null || pedidoDao.UsuarioCancelamentoDao.TipoUsuarioDao.TipoUsuarioID != TipoUsuarioDao.ETipoUsuario.Gerencial.GetHashCode())
-            {
                 throw new BusinessException("Usuário não está autorizado a cancelar pedido");
-            }
 
             pedido = pedidoRepository.Listar(new Pedido() { PedidoID = pedidoDao.PedidoID }, true, 1).FirstOrDefault();
 
             if (pedido == null)
-            {
                 throw new BusinessException(string.Format("Pedido {0} não encontrado", pedidoDao.PedidoID));
-            }
         }
 
         private void ValidarDarBaixa(PedidoDao pedidoDao, out Pedido pedido)
         {
             if (pedidoDao == null)
-            {
                 throw new BusinessException("Pedido é obrigatório");
-            }
 
             if (pedidoDao.PedidoID <= 0)
-            {
                 throw new BusinessException("PedidoID é obrigatório");
-            }
 
             var pedidoStatusDao = pedidoDao.PedidoStatusDao.FirstOrDefault();
             if (pedidoStatusDao == null || pedidoStatusDao.PedidoStatusID <= 0)
-            {
                 throw new BusinessException("Status do pedido é obrigatório");
-            }
 
             if (pedidoDao.PedidoProdutoDao == null || pedidoDao.PedidoProdutoDao.Count() <= 0)
-            {
                 throw new BusinessException("Produto é obrigatório");
-            }
 
             foreach (var pedidoProdutoDao in pedidoDao.PedidoProdutoDao)
             {
                 if (pedidoProdutoDao.ProdutoID <= 0)
-                {
                     throw new BusinessException("Produto é obrigatório");
-                }
 
                 if (pedidoProdutoDao.UsuarioBaixaDao == null || pedidoProdutoDao.UsuarioBaixaDao.UsuarioID <= 0)
-                {
                     throw new BusinessException("Usuário da baixa é obrigatório");
-                }
 
                 if (pedidoProdutoDao.DataBaixa == null || pedidoProdutoDao.DataBaixa == DateTime.MinValue)
-                {
                     throw new BusinessException("Data da baixa é obrigatório");
-                }
             }
 
             pedido = pedidoRepository.Listar(new Pedido() { PedidoID = pedidoDao.PedidoID }, true, 10).FirstOrDefault();
 
             if (pedido == null)
-            {
                 throw new BusinessException(string.Format("Pedido {0} não encontrado", pedidoDao.PedidoID));
-            }
         }
 
         private void ValidarAtualizar(PedidoDao pedidoDao, out Pedido pedido)
         {
             if (pedidoDao == null)
-            {
                 throw new BusinessException("Pedido é obrigatório");
-            }
 
             if (pedidoDao.PedidoID <= 0)
-            {
                 throw new BusinessException("PedidoID é obrigatório");
-            }
 
             if (pedidoDao.PedidoProdutoDao == null || pedidoDao.PedidoProdutoDao.Count() <= 0)
-            {
                 throw new BusinessException("Produto é obrigatório");
-            }
 
             pedido = pedidoRepository.Listar(new Pedido() { PedidoID = pedidoDao.PedidoID }, true, 10).FirstOrDefault();
 
             if (pedido == null)
-            {
                 throw new BusinessException(string.Format("Pedido {0} não encontrado", pedidoDao.PedidoID));
-            }
 
             foreach (var pedidoProdutoDao in pedidoDao.PedidoProdutoDao)
             {
                 if (pedidoProdutoDao.ProdutoID <= 0 && (pedidoProdutoDao.ProdutoDao == null || pedidoProdutoDao.ProdutoDao.Numero <= 0))
-                {
                     throw new BusinessException("Produto é obrigatório");
-                }
 
                 if (pedidoProdutoDao.DataEntrega == null || pedidoProdutoDao.DataEntrega == DateTime.MinValue)
-                {
                     throw new BusinessException("Data de entrega é obrigatório");
-                }
 
                 if (pedidoProdutoDao.DataEntrega.GetValueOrDefault().Date < DateTime.Now.Date)
-                {
                     throw new BusinessException("Data de entrega deve ser maior ou igual a data de hoje");
-                }
 
                 if (pedidoProdutoDao.DataEntrega.GetValueOrDefault().Date < pedido.DataPedido.Date)
-                {
                     throw new BusinessException("Data de entrega deve ser maior ou igual a data do pedido");
-                }
 
                 if (pedidoProdutoDao.UsuarioEntregaDao == null || pedidoProdutoDao.UsuarioEntregaDao.UsuarioID <= 0)
-                {
                     throw new BusinessException("Usuário de entrega é obrigatório");
-                }
             }
         }
 
@@ -302,36 +225,28 @@ namespace ChicoDoColchao.Business
                 {
                     bool inicio = DateTime.TryParse(pedidoDao.DataPedidoInicio, out dtPedidoInicio);
                     if (!inicio)
-                    {
                         throw new BusinessException("Data de pedido inicial inválida");
-                    }
                 }
 
                 if (!string.IsNullOrEmpty(pedidoDao.DataPedidoFim))
                 {
                     bool fim = DateTime.TryParse(pedidoDao.DataPedidoFim, out dtPedidoFim);
                     if (!fim)
-                    {
                         throw new BusinessException("Data de pedido final inválida");
-                    }
                 }
 
                 if (!string.IsNullOrEmpty(pedidoDao.DataEntregaInicio))
                 {
                     bool inicio = DateTime.TryParse(pedidoDao.DataEntregaInicio, out dtEntregaInicio);
                     if (!inicio)
-                    {
                         throw new BusinessException("Data de entrega inicial inválida");
-                    }
                 }
 
                 if (!string.IsNullOrEmpty(pedidoDao.DataEntregaFim))
                 {
                     bool fim = DateTime.TryParse(pedidoDao.DataEntregaFim, out dtEntregaFim);
                     if (!fim)
-                    {
                         throw new BusinessException("Data de entrega final inválida");
-                    }
                 }
             }
         }
@@ -339,59 +254,39 @@ namespace ChicoDoColchao.Business
         private void ValidarTroca(PedidoDao pedidoDao)
         {
             if (pedidoDao == null)
-            {
                 throw new BusinessException("Pedido é obrigatório");
-            }
 
             var consultorDao = pedidoDao.ConsultorDao.FirstOrDefault();
             if (consultorDao == null || consultorDao.FuncionarioID <= 0)
-            {
                 throw new BusinessException("Consultor é obrigatório");
-            }
 
             var clienteDao = pedidoDao.ClienteDao.FirstOrDefault();
             if (clienteDao == null || clienteDao.ClienteID <= 0)
-            {
                 throw new BusinessException("Cliente (CPF ou CNPJ) é obrigatório");
-            }
 
             var lojaDao = pedidoDao.LojaDao.FirstOrDefault();
             if (lojaDao == null || lojaDao.LojaID <= 0)
-            {
                 throw new BusinessException("Loja de origem é obrigatório");
-            }
 
             var lojaSaidaDao = pedidoDao.LojaSaidaDao.FirstOrDefault();
             if (lojaSaidaDao == null || lojaSaidaDao.LojaID <= 0)
-            {
                 throw new BusinessException("Loja de saída é obrigatório");
-            }
 
             var pedidoStatusDao = pedidoDao.PedidoStatusDao.FirstOrDefault();
             if (pedidoStatusDao == null || pedidoStatusDao.PedidoStatusID <= 0)
-            {
                 throw new BusinessException("Status do pedido é obrigatório");
-            }
 
             if (pedidoDao.UsuarioPedidoDao == null || pedidoDao.UsuarioPedidoDao.UsuarioID <= 0)
-            {
                 throw new BusinessException("Usúario do pedido é obrigatório");
-            }
 
             if (pedidoDao.PedidoProdutoDao == null || pedidoDao.PedidoProdutoDao.Count <= 0)
-            {
                 throw new BusinessException("Produto do pedido é obrigatório");
-            }
 
             if (pedidoDao.PedidoProdutoDao.Count(x => x.Tipo == PedidoProdutoDao.ETipo.Entrada.GetHashCode()) <= 0)
-            {
                 throw new BusinessException("Pelo menos um produto de entrada é obrigatório");
-            }
 
             if (pedidoDao.PedidoProdutoDao.Count(x => x.Tipo == PedidoProdutoDao.ETipo.Saida.GetHashCode()) <= 0)
-            {
                 throw new BusinessException("Pelo menos um produto de saída é obrigatório");
-            }
 
             // verifica se o total do pedido é igual ao total pago
             var totalPedidoEntrada = Math.Round(pedidoDao.PedidoProdutoDao.Where(w => w.Tipo == PedidoProdutoDao.ETipo.Entrada.GetHashCode()).Sum(x => x.Preco * x.Quantidade), 2);
@@ -400,15 +295,11 @@ namespace ChicoDoColchao.Business
             var totalDesconto = Math.Round(pedidoDao.Desconto, 2);
 
             if (Math.Round(totalPedidoSaida - totalPedidoEntrada - totalDesconto, 2) != totalPago)
-            {
                 throw new BusinessException("Total do pedido deve ser igual ao total pago");
-            }
 
             var pedidoOriginal = pedidoRepository.Listar(new Pedido() { PedidoID = pedidoDao.PedidoID }, false, 0).FirstOrDefault();
             if (pedidoOriginal == null)
-            {
                 throw new BusinessException($"Pedido {pedidoDao.PedidoID} não encontrado");
-            }
 
             // verifica quantidade de produto entre o pedido original e o pedido de troca
             foreach (var pedidoProdutoDao in pedidoDao.PedidoProdutoDao.Where(x => x.Tipo == PedidoProdutoDao.ETipo.Entrada.GetHashCode() && x.ProdutoID > 0 && x.Quantidade > 0).GroupBy(x => x.ProdutoID))
@@ -417,9 +308,7 @@ namespace ChicoDoColchao.Business
                 var qtdEntradaPedidoTroca = pedidoProdutoDao.Where(x => x.Tipo == PedidoProdutoDao.ETipo.Entrada.GetHashCode() && x.ProdutoID == pedidoProdutoDao.Key).Sum(x => x.Quantidade);
 
                 if (qtdEntradaPedidoTroca > qtdEntradaPedidoOriginal)
-                {
                     throw new BusinessException($"Quantidade do produto {pedidoOriginal.PedidoProduto.FirstOrDefault(x => x.ProdutoID == pedidoProdutoDao.Key).Produto.Numero} no pedido de troca excede a quantidade do produto no pedido original");
-                }
             }
 
             // verifica se o produto existe na loja de saída
@@ -428,23 +317,17 @@ namespace ChicoDoColchao.Business
                 var produto = produtoBusiness.Listar(new ProdutoDao() { ProdutoID = pedidoProdutoDao.ProdutoID, Ativo = true }, lojaDestinoId: lojaSaidaDao.LojaID).FirstOrDefault();
 
                 if (produto == null)
-                {
                     throw new BusinessException(string.Format("Produto {0} não cadastrado na loja de saída", pedidoProdutoDao.ProdutoDao.Descricao));
-                }
 
                 if (pedidoStatusDao.PedidoStatusID == PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega.GetHashCode())
                 {
                     if (pedidoProdutoDao.DataEntrega.GetValueOrDefault() != DateTime.MinValue)
                     {
                         if (pedidoProdutoDao.DataEntrega.GetValueOrDefault().Date < DateTime.Now.Date)
-                        {
                             throw new BusinessException(string.Format("Data da entrega do produto {0} não pode ser menor que hoje", pedidoProdutoDao.ProdutoDao.Descricao));
-                        }
 
                         if (pedidoProdutoDao.UsuarioEntregaDao == null || pedidoProdutoDao.UsuarioEntregaDao.UsuarioID <= 0)
-                        {
                             throw new BusinessException("Usuário de entrega é obrigatório");
-                        }
                     }
                 }
             }
@@ -454,16 +337,12 @@ namespace ChicoDoColchao.Business
                 foreach (var pedidoTipoPagamentoDao in pedidoDao.PedidoTipoPagamentoDao)
                 {
                     if (pedidoTipoPagamentoDao.TipoPagamentoDao == null || pedidoTipoPagamentoDao.TipoPagamentoDao.TipoPagamentoID <= 0)
-                    {
                         throw new BusinessException("Tipo de Pagamento é obrigatório");
-                    }
 
                     if (pedidoTipoPagamentoDao.TipoPagamentoDao.TipoPagamentoID != TipoPagamentoDao.ETipoPagamento.Dinheiro.GetHashCode())
                     {
                         if (pedidoTipoPagamentoDao.ParcelaDao == null || pedidoTipoPagamentoDao.ParcelaDao.ParcelaID <= 0)
-                        {
                             throw new BusinessException("Parcela de Pagamento é obrigatória");
-                        }
                     }
 
                     // verifica se o cv informado já existe
@@ -472,9 +351,7 @@ namespace ChicoDoColchao.Business
                         var ptp = pedidoTipoPagamentoRepository.Listar(new PedidoTipoPagamento() { CV = pedidoTipoPagamentoDao.CV });
 
                         if (ptp != null && ptp.Count() > 0)
-                        {
                             throw new BusinessException(string.Format("CV {0} já cadastrado", pedidoTipoPagamentoDao.CV));
-                        }
                     }
                 }
             }
@@ -499,12 +376,11 @@ namespace ChicoDoColchao.Business
             }
             catch (Exception ex)
             {
-                
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
 
                 throw ex;
             }
-       }
+        }
 
         public int Incluir(PedidoDao pedidoDao)
         {
@@ -529,7 +405,6 @@ namespace ChicoDoColchao.Business
             }
             catch (Exception ex)
             {
-                
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
 
                 throw ex;
@@ -591,9 +466,7 @@ namespace ChicoDoColchao.Business
             }
             catch (Exception ex)
             {
-                erro = ex.Message;
-
-                
+                erro = ex.Message;                
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
             }
 
@@ -620,7 +493,6 @@ namespace ChicoDoColchao.Business
             }
             catch (Exception ex)
             {
-                
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
 
                 throw ex;
@@ -650,9 +522,8 @@ namespace ChicoDoColchao.Business
                 // loja saída
                 var ls = pedido.LojaSaida.LojaProduto.FirstOrDefault(x => x.ProdutoID == pedidoProduto.ProdutoID && x.LojaID == pedidoDao.LojaSaidaDao.FirstOrDefault().LojaID);
                 if (ls == null)
-                {
                     throw new BusinessException($"Produto {pedidoProduto.ProdutoID} não cadastrado na loja {pedidoDao.LojaSaidaDao.FirstOrDefault().LojaID}");
-                }
+
                 ls.Quantidade = Convert.ToInt16(ls.Quantidade - pedidoProduto.Quantidade);
 
                 pedidoRepository.DarBaixa(pedido, pedidoDao.PedidoStatusDao.FirstOrDefault().PedidoStatusID);
@@ -663,7 +534,6 @@ namespace ChicoDoColchao.Business
             }
             catch (Exception ex)
             {
-                
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
 
                 throw ex;
@@ -681,9 +551,7 @@ namespace ChicoDoColchao.Business
                 var pedidoProduto = pedido.PedidoProduto.FirstOrDefault(x => (x.ProdutoID == pedidoDao.PedidoProdutoDao.FirstOrDefault().ProdutoID || x.Produto.Numero == pedidoDao.PedidoProdutoDao.FirstOrDefault().ProdutoDao.Numero));
 
                 if (pedidoProduto == null)
-                {
                     throw new BusinessException("Produto não encontrado");
-                }
 
                 pedidoProduto.DataEntrega = pedidoDao.PedidoProdutoDao.FirstOrDefault().DataEntrega;
                 pedidoProduto.UsuarioEntregaID = pedidoDao.PedidoProdutoDao.FirstOrDefault().UsuarioEntregaDao.UsuarioID;
@@ -696,7 +564,6 @@ namespace ChicoDoColchao.Business
             }
             catch (Exception ex)
             {
-                
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
 
                 throw ex;
@@ -706,9 +573,7 @@ namespace ChicoDoColchao.Business
         public byte[] Comanda(PedidoDao pedidoDao)
         {
             if (pedidoDao == null)
-            {
                 return null;
-            }
 
             Warning[] warnings;
             string mimeType;
@@ -742,7 +607,6 @@ namespace ChicoDoColchao.Business
             parametros.Add(new ReportParameter("PontoReferencia", pedidoDao.ClienteDao.FirstOrDefault().PontoReferencia));
             parametros.Add(new ReportParameter("TotalPedido", Math.Round(pedidoDao.PedidoProdutoDao.Sum(x => x.Preco * x.Quantidade), 2).ToString()));
             parametros.Add(new ReportParameter("PedidoTrocaID", pedidoDao.PedidoTrocaID.GetValueOrDefault().ToString()));
-
             parametros.Add(new ReportParameter("LogradouroLoja", pedidoDao.LojaDao.FirstOrDefault().Logradouro));
             parametros.Add(new ReportParameter("NumeroLoja", pedidoDao.LojaDao.FirstOrDefault().Numero.HasValue ? pedidoDao.LojaDao.FirstOrDefault().Numero.ToString() : string.Empty));
             parametros.Add(new ReportParameter("ComplementoLoja", pedidoDao.LojaDao.FirstOrDefault().Complemento));
@@ -842,7 +706,6 @@ namespace ChicoDoColchao.Business
             }
             catch (Exception ex)
             {
-                
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
 
                 throw ex;

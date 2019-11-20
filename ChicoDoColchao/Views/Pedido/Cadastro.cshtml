@@ -701,7 +701,7 @@
                     @Html.DropDownListFor(x => x.PedidoStatusDao.FirstOrDefault().PedidoStatusID, new SelectList(Model.PedidoStatusDao, "PedidoStatusID", "Descricao"), "Status do pedido", new { @class = "form-control" })
                 </div>
                 <div class="form-group">
-                    @Html.TextBoxFor(x => x.ValorFrete, new { @class = "form-control valor text-right", @placeholder = "Valor do frete (Opcional)" })
+                    @Html.TextBoxFor(x => x.ValorFrete, new { @class = "form-control valor text-right", @placeholder = "Valor do frete" })
                 </div>
             </div>
             <div class="col-lg-8">

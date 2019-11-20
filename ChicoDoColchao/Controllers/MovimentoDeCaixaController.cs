@@ -43,10 +43,9 @@ namespace ChicoDoColchao.Controllers
             try
             {
                 DateTime dtMovimento;
+
                 if (!DateTime.TryParse(dataMovimento, out dtMovimento) && !string.IsNullOrEmpty(dataMovimento))
-                {
                     return Json(new { Sucesso = false, Mensagem = $"Data inválida {dataMovimento}" }, JsonRequestBehavior.AllowGet);
-                }
 
                 lista = movimentoCaixaBusiness.Listar(new MovimentoCaixaDao() { DataMovimento = dtMovimento, LojaDao = new LojaDao() { LojaID = lojaId } });
 
@@ -69,15 +68,11 @@ namespace ChicoDoColchao.Controllers
                 var lista = new List<MovimentoCaixaDao>();
 
                 if (string.IsNullOrEmpty(dataMovimento) || lojaId <= 0)
-                {
                     return Json(new { Sucesso = false, Mensagem = "Informe Data do Movimento e Loja" }, JsonRequestBehavior.AllowGet);
-                }
 
                 DateTime dtMovimento;
                 if (!DateTime.TryParse(dataMovimento, out dtMovimento))
-                {
                     return Json(new { Sucesso = false, Mensagem = $"Data do Movimento inválida {dataMovimento}" }, JsonRequestBehavior.AllowGet);
-                }
 
                 var pedidosDao = pedidoBusiness.Listar(new PedidoDao()
                 {
@@ -86,9 +81,7 @@ namespace ChicoDoColchao.Controllers
                 }, false, 0).Where(x => x.PedidoStatusDao.FirstOrDefault().PedidoStatusID != PedidoStatusDao.EPedidoStatus.Cancelado.GetHashCode()).ToList();
 
                 if (pedidosDao == null || pedidosDao.Count() <= 0)
-                {
                     return Json(new { Sucesso = false, Mensagem = $"Não existe Movimento de Caixa na data {dataMovimento} para loja {nomeFantasia}" }, JsonRequestBehavior.AllowGet);
-                }
 
                 var valor = pedidosDao.Sum(x => x.PedidoTipoPagamentoDao.Sum(w => w.ValorPago));
 

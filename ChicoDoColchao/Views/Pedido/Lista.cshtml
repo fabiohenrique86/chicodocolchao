@@ -170,10 +170,8 @@
 
         $(document).ready(function () {
 
-            $.getJSON("/Pedido/Listar", { top: true, take: 50 }, function (data)
+            $.getJSON("/Pedido/Listar", { top: true, take: 30 }, function (data)
             {
-                console.info(data);
-
                 if (!data.Sucesso) {
                     console.info(data.Erro);
                     alert(data.Mensagem);

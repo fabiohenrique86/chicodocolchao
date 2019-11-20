@@ -45,26 +45,14 @@ namespace ChicoDoColchao.Controllers
 
                 // lista somente os status "Previsão de entrega" e "Retirado na Loja"
                 pedidoDao.PedidoStatusDao = pedidoStatusBusiness.Listar(new PedidoStatusDao()).Where(x => x.PedidoStatusID == (int)PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega || x.PedidoStatusID == (int)PedidoStatusDao.EPedidoStatus.RetiradoNaLoja).ToList();
-
-                // filtra os consultores por loja logada, se existir
-                //var consultorDao = new ConsultorDao();
-                //if (Request.Cookies.Get("ChicoDoColchao_Loja") != null)
-                //{
-                //    var lojaDao = JsonConvert.DeserializeObject<LojaDao>(Request.Cookies.Get("ChicoDoColchao_Loja").Value);
-                //    consultorDao.LojaDao.Clear();
-                //    consultorDao.LojaDao.Add(new LojaDao() { LojaID = lojaDao.LojaID });
-                //}
-                //pedidoDao.ConsultorDao = consultorBusiness.Listar(consultorDao);
-
+                
                 // filtra os consultores por usuário
                 var consultorDao = new ConsultorDao();
                 if (Request.Cookies.Get("ChicoDoColchao_Usuario") != null)
                 {
                     var usuarioDao = JsonConvert.DeserializeObject<UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value);
                     if (usuarioDao != null && usuarioDao.TipoUsuarioDao?.TipoUsuarioID == TipoUsuarioDao.ETipoUsuario.Vendedor.GetHashCode())
-                    {
                         consultorDao.FuncionarioID = usuarioDao.UsuarioID;
-                    }
                 }
                 pedidoDao.ConsultorDao = consultorBusiness.Listar(consultorDao);
 
@@ -81,9 +69,7 @@ namespace ChicoDoColchao.Controllers
 
                     // se não existe orçamento ou já virou venda deve ser direcionado para outra página
                     if (orcamentoDao == null || orcamentoDao.PedidoDao != null)
-                    {
                         return View(pedidoDao);
-                    }
 
                     ViewBag.OrcamentoDao = orcamentoDao;
                 }
@@ -115,32 +101,18 @@ namespace ChicoDoColchao.Controllers
                 int.TryParse(pedidoId, out id);
 
                 if (id <= 0)
-                {
                     return RedirectToAction("Index", "Menu");
-                }
 
                 // lista somente os status "Previsão de entrega" e "Retirado na Loja"
                 pedidoDao.PedidoStatusDao = pedidoStatusBusiness.Listar(new PedidoStatusDao()).Where(x => x.PedidoStatusID == (int)PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega || x.PedidoStatusID == (int)PedidoStatusDao.EPedidoStatus.RetiradoNaLoja).ToList();
-
-                //// filtra os consultores por loja logada, se existir
-                //var consultorDao = new ConsultorDao();
-                //if (Request.Cookies.Get("ChicoDoColchao_Loja") != null)
-                //{
-                //    var lojaDao = JsonConvert.DeserializeObject<LojaDao>(Request.Cookies.Get("ChicoDoColchao_Loja").Value);
-                //    consultorDao.LojaDao.Clear();
-                //    consultorDao.LojaDao.Add(new LojaDao() { LojaID = lojaDao.LojaID });
-                //}
-                //pedidoDao.ConsultorDao = consultorBusiness.Listar(consultorDao);
-
+                
                 // filtra os consultores por loja logada, se existir
                 var consultorDao = new ConsultorDao();
                 if (Request.Cookies.Get("ChicoDoColchao_Usuario") != null)
                 {
                     var usuarioDao = JsonConvert.DeserializeObject<UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value);
                     if (usuarioDao != null && usuarioDao.TipoUsuarioDao?.TipoUsuarioID == TipoUsuarioDao.ETipoUsuario.Vendedor.GetHashCode())
-                    {
                         consultorDao.FuncionarioID = usuarioDao.UsuarioID;
-                    }
                 }
                 pedidoDao.ConsultorDao = consultorBusiness.Listar(consultorDao);
 
@@ -152,10 +124,9 @@ namespace ChicoDoColchao.Controllers
                 pedidoDao.TipoPagamentoDao = tipoPagamentoBusiness.Listar(new TipoPagamentoDao());
 
                 var p = pedidoBusiness.Listar(new PedidoDao() { PedidoID = id }, false, 0).FirstOrDefault();
+
                 if (p == null)
-                {
                     return RedirectToAction("Index", "Menu");
-                }
 
                 ViewBag.PedidoDao = p;
             }
@@ -181,26 +152,15 @@ namespace ChicoDoColchao.Controllers
             var pedidoDao = new PedidoDao();
 
             pedidoDao.PedidoStatusDao = pedidoStatusBusiness.Listar(new PedidoStatusDao() { Ativo = true }).ToList();
-
-            // filtra os consultores por loja logada, se existir
-            //var consultorDao = new ConsultorDao();
-            //if (Request.Cookies.Get("ChicoDoColchao_Loja") != null)
-            //{
-            //    var lojaDao = JsonConvert.DeserializeObject<LojaDao>(Request.Cookies.Get("ChicoDoColchao_Loja").Value);
-            //    consultorDao.LojaDao.Clear();
-            //    consultorDao.LojaDao.Add(new LojaDao() { LojaID = lojaDao.LojaID });
-            //}
-            //pedidoDao.ConsultorDao = consultorBusiness.Listar(consultorDao);
-
+            
             // filtra os consultores por usuário logado
             var consultorDao = new ConsultorDao();
             if (Request.Cookies.Get("ChicoDoColchao_Usuario") != null)
             {
                 var usuarioDao = JsonConvert.DeserializeObject<UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value);
+
                 if (usuarioDao != null && usuarioDao.TipoUsuarioDao?.TipoUsuarioID == TipoUsuarioDao.ETipoUsuario.Vendedor.GetHashCode())
-                {
                     consultorDao.FuncionarioID = usuarioDao.UsuarioID;
-                }
             }
             pedidoDao.ConsultorDao = consultorBusiness.Listar(consultorDao);
 
@@ -236,9 +196,7 @@ namespace ChicoDoColchao.Controllers
             var pedidoDao = pedidoBusiness.Listar(new PedidoDao() { PedidoID = pedidoId }, false, 0).FirstOrDefault();
 
             if (pedidoDao == null)
-            {
                 return Content(string.Format("Pedido {0} não encontrado", pedidoId));
-            }
 
             var bytes = pedidoBusiness.Comanda(pedidoDao);
 
@@ -348,9 +306,7 @@ namespace ChicoDoColchao.Controllers
                 var enviado = pedidoBusiness.EnviarComandaPorEmail(pedidoDao.PedidoID, out email, out erro);
 
                 if (!enviado)
-                {
                     return Json(new { Sucesso = false, Mensagem = erro }, JsonRequestBehavior.AllowGet);
-                }
 
                 return Json(new { Sucesso = true, Mensagem = $"Comanda enviada para o email {email} com sucesso!" }, JsonRequestBehavior.AllowGet);
             }
@@ -370,21 +326,13 @@ namespace ChicoDoColchao.Controllers
 
             try
             {
-                // filtra os pedidos por loja selecionada [Loja.LojaID]
-                //if (Request.Cookies.Get("ChicoDoColchao_Loja") != null)
-                //{
-                //    var loja = JsonConvert.DeserializeObject<LojaDao>(Request.Cookies.Get("ChicoDoColchao_Loja").Value);
-                //    if (loja != null) { pedidoDao.LojaDao.Clear(); pedidoDao.LojaDao.Add(new LojaDao() { LojaID = loja.LojaID }); }
-                //}
-
                 // filtra os pedidos por usuário logado
                 if (Request.Cookies.Get("ChicoDoColchao_Usuario") != null)
                 {
                     var usuarioDao = JsonConvert.DeserializeObject<UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value);
+
                     if (usuarioDao != null && usuarioDao.TipoUsuarioDao?.TipoUsuarioID == TipoUsuarioDao.ETipoUsuario.Vendedor.GetHashCode())
-                    {
                         pedidoDao.ConsultorDao.Add(new ConsultorDao() { FuncionarioID = usuarioDao.UsuarioID });
-                    }
                 }
 
                 pedidos = pedidoBusiness.Listar(pedidoDao, top, take);
