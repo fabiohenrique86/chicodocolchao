@@ -87,6 +87,8 @@ namespace ChicoDoColchao.Business
                 {
                     if (pedidoDao.ValorFrete.GetValueOrDefault() <= 0)
                         throw new BusinessException("Valor do frete é obrigatório");
+                    else if (pedidoDao.ValorFrete.GetValueOrDefault() < 30D)
+                        throw new BusinessException("Valor mínimo do frete é R$ 30,00");
 
                     if (pedidoProdutoDao.DataEntrega.GetValueOrDefault() != DateTime.MinValue)
                     {
@@ -466,7 +468,7 @@ namespace ChicoDoColchao.Business
             }
             catch (Exception ex)
             {
-                erro = ex.Message;                
+                erro = ex.Message;
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
             }
 
