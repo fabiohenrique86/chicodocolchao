@@ -37,31 +37,24 @@ namespace ChicoDoColchao.Business.Tradutors
 
             var lojaSaidaDao = pedidoDao.LojaSaidaDao.FirstOrDefault();
             if (lojaSaidaDao != null && lojaSaidaDao.LojaID > 0)
-            {
                 pedido.LojaSaidaID = lojaSaidaDao.LojaID;
-            }
 
             if (pedidoDao.UsuarioPedidoDao != null && pedidoDao.UsuarioPedidoDao.UsuarioID > 0)
-            {
                 pedido.UsuarioPedidoID = pedidoDao.UsuarioPedidoDao.UsuarioID;
-            }
 
             if (pedidoDao.UsuarioCancelamentoDao != null && pedidoDao.UsuarioCancelamentoDao.UsuarioID > 0)
-            {
                 pedido.UsuarioCancelamentoID = pedidoDao.UsuarioCancelamentoDao.UsuarioID;
-            }
 
             pedido.NomeCarreto = pedidoDao.NomeCarreto;
             pedido.ValorFrete = pedidoDao.ValorFrete;
+            pedido.TipoPagamentoFreteID = pedidoDao.TipoPagamentoFreteID;
             pedido.Observacao = pedidoDao.Observacao;
             pedido.Desconto = pedidoDao.Desconto;
             pedido.PedidoTrocaID = pedidoDao.PedidoTrocaID;
 
             var pedidoStatusDao = pedidoDao.PedidoStatusDao.FirstOrDefault();
             if (pedidoStatusDao != null && pedidoStatusDao.PedidoStatusID > 0)
-            {
                 pedido.PedidoStatusID = pedidoStatusDao.PedidoStatusID;
-            }
 
             foreach (var pedidoProdutoDao in pedidoDao.PedidoProdutoDao)
             {
@@ -75,21 +68,15 @@ namespace ChicoDoColchao.Business.Tradutors
 
                 pedidoProduto.DataEntrega = pedidoProdutoDao.DataEntrega;
                 if (pedidoProdutoDao.UsuarioEntregaDao != null && pedidoProdutoDao.UsuarioEntregaDao.UsuarioID > 0)
-                {
                     pedidoProduto.UsuarioEntregaID = pedidoProdutoDao.UsuarioEntregaDao.UsuarioID;
-                }
 
                 pedidoProduto.DataBaixa = pedidoProdutoDao.DataBaixa;
                 if (pedidoProdutoDao.UsuarioBaixaDao != null && pedidoProdutoDao.UsuarioBaixaDao.UsuarioID > 0)
-                {
                     pedidoProduto.UsuarioBaixaID = pedidoProdutoDao.UsuarioBaixaDao.UsuarioID;
-                }
 
                 pedidoProduto.DataTroca = pedidoProdutoDao.DataTroca;
                 if (pedidoProdutoDao.UsuarioTrocaDao != null && pedidoProdutoDao.UsuarioTrocaDao.UsuarioID > 0)
-                {
                     pedidoProduto.UsuarioTrocaID = pedidoProdutoDao.UsuarioTrocaDao.UsuarioID;
-                }
 
                 pedido.PedidoProduto.Add(pedidoProduto);
             }
@@ -141,18 +128,15 @@ namespace ChicoDoColchao.Business.Tradutors
             pedidoDao.DataPedido = pedido.DataPedido;
             pedidoDao.DataCancelamento = pedido.DataCancelamento;
             pedidoDao.ValorFrete = pedido.ValorFrete;
+            pedidoDao.TipoPagamentoFreteID = pedido.TipoPagamentoFreteID;
             pedidoDao.Desconto = pedido.Desconto;
             pedidoDao.PedidoTrocaID = pedido.PedidoTrocaID;
 
             if (pedido.UsuarioPedido != null)
-            {
                 pedidoDao.UsuarioPedidoDao = new UsuarioDao() { UsuarioID = pedido.UsuarioPedido.UsuarioID, Login = pedido.UsuarioPedido.Login };
-            }
 
             if (pedido.UsuarioCancelamento != null)
-            {
                 pedidoDao.UsuarioCancelamentoDao = new UsuarioDao() { UsuarioID = pedido.UsuarioCancelamento.UsuarioID, Login = pedido.UsuarioCancelamento.Login };
-            }
 
             pedidoDao.ConsultorDao.Add(new ConsultorDao()
             {
@@ -214,19 +198,13 @@ namespace ChicoDoColchao.Business.Tradutors
                 pedidoProdutoDao.Preco = pedidoProduto.Preco;
 
                 if (pedidoProduto.UsuarioEntrega != null)
-                {
                     pedidoProdutoDao.UsuarioEntregaDao = new UsuarioDao() { UsuarioID = pedidoProduto.UsuarioEntrega.UsuarioID, Login = pedidoProduto.UsuarioEntrega.Login };
-                }
 
                 if (pedidoProduto.UsuarioBaixa != null)
-                {
                     pedidoProdutoDao.UsuarioBaixaDao = new UsuarioDao() { UsuarioID = pedidoProduto.UsuarioBaixa.UsuarioID, Login = pedidoProduto.UsuarioBaixa.Login };
-                }
 
                 if (pedidoProduto.UsuarioTroca != null)
-                {
                     pedidoProdutoDao.UsuarioTrocaDao = new UsuarioDao() { UsuarioID = pedidoProduto.UsuarioTroca.UsuarioID, Login = pedidoProduto.UsuarioTroca.Login };
-                }
 
                 pedidoProdutoDao.ProdutoDao = new ProdutoDao()
                 {

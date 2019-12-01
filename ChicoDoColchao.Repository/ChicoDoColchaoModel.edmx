@@ -203,6 +203,7 @@
           <Property Name="DataCancelamento" Type="smalldatetime" />
           <Property Name="UsuarioCancelamentoID" Type="int" />
           <Property Name="PedidoTrocaID" Type="int" />
+          <Property Name="TipoPagamentoFreteID" Type="int" />
         </EntityType>
         <EntityType Name="PedidoProduto">
           <Key>
@@ -1742,6 +1743,7 @@
           <NavigationProperty Name="PedidoTipoPagamento" Relationship="ChicoDoColchaoModel.FK_PedidoTipoPagamento_Pedido" FromRole="Pedido" ToRole="PedidoTipoPagamento" />
           <NavigationProperty Name="LojaOrigem" Relationship="ChicoDoColchaoModel.FK_Pedido_Loja" FromRole="Pedido" ToRole="Loja" />
           <NavigationProperty Name="LojaSaida" Relationship="ChicoDoColchaoModel.FK_Pedido_LojaSaida" FromRole="Pedido" ToRole="Loja" />
+          <Property Name="TipoPagamentoFreteID" Type="Int32" />
         </EntityType>
         <Association Name="FK_Pedido_Cliente">
           <End Type="ChicoDoColchaoModel.Cliente" Role="Cliente" Multiplicity="1" />
@@ -2302,6 +2304,7 @@
           <EntitySetMapping Name="Pedido">
             <EntityTypeMapping TypeName="ChicoDoColchaoModel.Pedido">
               <MappingFragment StoreEntitySet="Pedido">
+                <ScalarProperty Name="TipoPagamentoFreteID" ColumnName="TipoPagamentoFreteID" />
                 <ScalarProperty Name="PedidoTrocaID" ColumnName="PedidoTrocaID" />
                 <ScalarProperty Name="UsuarioCancelamentoID" ColumnName="UsuarioCancelamentoID" />
                 <ScalarProperty Name="DataCancelamento" ColumnName="DataCancelamento" />

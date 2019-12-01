@@ -75,6 +75,14 @@ namespace ChicoDoColchao.Business
             if (Math.Round(totalPedido - totalDesconto, 2) != totalPago)
                 throw new BusinessException("Total do pedido deve ser igual ao total pago");
 
+            if (pedidoStatusDao.PedidoStatusID == PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega.GetHashCode() && pedidoDao.TipoPagamentoFreteID.GetValueOrDefault() != (int)PedidoDao.ETipoPagamentoFrete.NaoCobrado)
+            {
+                if (pedidoDao.ValorFrete.GetValueOrDefault() <= 0)
+                    throw new BusinessException("Valor do frete é obrigatório");
+                else if (pedidoDao.ValorFrete.GetValueOrDefault() < 30D)
+                    throw new BusinessException("Valor mínimo do frete é R$ 30,00");
+            }
+
             // verifica se o produto existe na loja de saída
             foreach (var pedidoProdutoDao in pedidoDao.PedidoProdutoDao)
             {
@@ -85,11 +93,6 @@ namespace ChicoDoColchao.Business
 
                 if (pedidoStatusDao.PedidoStatusID == PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega.GetHashCode())
                 {
-                    if (pedidoDao.ValorFrete.GetValueOrDefault() <= 0)
-                        throw new BusinessException("Valor do frete é obrigatório");
-                    else if (pedidoDao.ValorFrete.GetValueOrDefault() < 30D)
-                        throw new BusinessException("Valor mínimo do frete é R$ 30,00");
-
                     if (pedidoProdutoDao.DataEntrega.GetValueOrDefault() != DateTime.MinValue)
                     {
                         if (pedidoProdutoDao.DataEntrega.GetValueOrDefault().Date < DateTime.Now.Date)
@@ -384,7 +387,7 @@ namespace ChicoDoColchao.Business
             }
         }
 
-        public int Incluir(PedidoDao pedidoDao)
+        public int Incluir(PedidoDao pedidoDao, int tipoUsuarioId)
         {
             try
             {
@@ -397,7 +400,7 @@ namespace ChicoDoColchao.Business
 
                 AtualizarOrcamento(pedidoDao.OrcamentoDao.FirstOrDefault(), pedidoId);
 
-                EnviarComandaPorEmail(pedidoId, out email, out erro);
+                EnviarComandaPorEmail(pedidoId, out email, out erro, tipoUsuarioId);
 
                 return pedidoId;
             }
@@ -422,7 +425,7 @@ namespace ChicoDoColchao.Business
             }
         }
 
-        public bool EnviarComandaPorEmail(int pedidoId, out string email, out string erro)
+        public bool EnviarComandaPorEmail(int pedidoId, out string email, out string erro, int tipoUsuarioId)
         {
             email = string.Empty;
             erro = string.Empty;
@@ -448,7 +451,7 @@ namespace ChicoDoColchao.Business
                 mensagem += "Em anexo, segue todos os detalhes do seu pedido.<br /><br />";
                 mensagem += "A Chico do Colchão agradece a preferência!";
 
-                var bytes = Comanda(pedidoDao);
+                var bytes = Comanda(pedidoDao, tipoUsuarioId);
                 var stream = new MemoryStream(bytes);
 
                 var emailDao = new EmailDao();
@@ -572,7 +575,7 @@ namespace ChicoDoColchao.Business
             }
         }
 
-        public byte[] Comanda(PedidoDao pedidoDao)
+        public byte[] Comanda(PedidoDao pedidoDao, int tipoUsuarioId)
         {
             if (pedidoDao == null)
                 return null;
@@ -615,6 +618,8 @@ namespace ChicoDoColchao.Business
             parametros.Add(new ReportParameter("CepLoja", pedidoDao.LojaDao.FirstOrDefault().Cep));
             parametros.Add(new ReportParameter("BairroLoja", pedidoDao.LojaDao.FirstOrDefault().Bairro));
             parametros.Add(new ReportParameter("NomeFantasiaLoja", pedidoDao.LojaDao.FirstOrDefault().NomeFantasia));
+            parametros.Add(new ReportParameter("TipoUsuarioID", tipoUsuarioId.ToString()));
+            parametros.Add(new ReportParameter("ValorFrete", pedidoDao.ValorFrete.ToString()));
 
             viewer.LocalReport.SetParameters(parametros);
 
@@ -687,7 +692,7 @@ namespace ChicoDoColchao.Business
             return bytes;
         }
 
-        public int Trocar(PedidoDao pedidoDao)
+        public int Trocar(PedidoDao pedidoDao, int tipoUsuarioId)
         {
             try
             {
@@ -698,7 +703,7 @@ namespace ChicoDoColchao.Business
 
                 var pedidoId = pedidoRepository.Trocar(pedidoDao);
 
-                EnviarComandaPorEmail(pedidoId, out email, out erro);
+                EnviarComandaPorEmail(pedidoId, out email, out erro, tipoUsuarioId);
 
                 return pedidoId;
             }

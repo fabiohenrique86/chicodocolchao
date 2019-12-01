@@ -11,12 +11,6 @@
     {
         usuarioDao = JsonConvert.DeserializeObject<UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value);
     }
-
-    //LojaDao lojaDao = new LojaDao();
-    //if (Request.Cookies.Get("ChicoDoColchao_Loja") != null)
-    //{
-    //    lojaDao = JsonConvert.DeserializeObject<LojaDao>(Request.Cookies.Get("ChicoDoColchao_Loja").Value);
-    //}
 }
 @section styles
 {
@@ -664,20 +658,15 @@
                 pedidoDao.ClienteDao.push({ ClienteID: $("#ClienteID").val() });
 
                 pedidoDao.LojaDao = [];
-                @*if (@lojaDao.LojaID > 0)
-                {
-                    pedidoDao.LojaDao.push({ LojaID: '@lojaDao.LojaID' });
-                }
-                else
-                {*@
-                    pedidoDao.LojaDao.push({ LojaID: $("#LojaOrigemID option:selected").val() });
-                //}
+                pedidoDao.LojaDao.push({ LojaID: $("#LojaOrigemID option:selected").val() });
 
                 pedidoDao.LojaSaidaDao = [];
                 pedidoDao.LojaSaidaDao.push({ LojaID: $("#LojaID option:selected").val() });
                 pedidoDao.PedidoStatusDao = [];
                 pedidoDao.PedidoStatusDao.push({ PedidoStatusID: $("#PedidoStatusID option:selected").val() });
                 pedidoDao.ValorFrete = $("#ValorFrete").val().trim() != "" ? $("#ValorFrete").val() : 0;
+                pedidoDao.TipoPagamentoFreteID = $("[name='rdbTaxaServico']:checked").val();
+
                 pedidoDao.Observacao = $("#Observacao").val();
                 pedidoDao.Desconto = $("#lblTotalDesconto").text();
                 pedidoDao.UsuarioPedidoDao = { UsuarioID: '@usuarioDao.UsuarioID' };
@@ -688,7 +677,7 @@
                     var data = this.data();
 
                     var dtEntrega = $(data.DataEntregaSaida).val();
-                    
+
                     // entrada
                     if (data.ProdutoIDEntrada > 0 && data.QtdEntrada > 0)
                     {
@@ -793,11 +782,6 @@
                 $("#FuncionarioID").val(pedidoDao.ConsultorDao[0].FuncionarioID);
                 $("#LojaOrigemID").val(pedidoDao.LojaDao[0].LojaID);
                 $("#LojaID").val(pedidoDao.LojaSaidaDao[0].LojaID);
-                //$("#PedidoStatusID").val(pedidoDao.PedidoStatusDao[0].PedidoStatusID);
-                //$("#ValorFrete").val(Globalize.format(pedidoDao.ValorFrete, "n2"));
-                //$("#Observacao").val(Globalize.format(pedidoDao.Observacao, "n2"));
-
-                //$("#lblTotalDesconto").text(Globalize.format(pedidoDao.Desconto, "n2"));
 
                 var selectProduto = "<select name='ProdutoID' class='form-control produtoId'>"
                 selectProduto += "<option value=''>Selecione</option>";
@@ -886,15 +870,10 @@
                         </div>
                     </div>
                 </div>
-                @*@{
-                    if (lojaDao.LojaID <= 0)
-                    {*@
-                        <div class="form-group">
-                            <label>Loja de Origem</label>
-                            @Html.DropDownListFor(x => x.LojaDao.FirstOrDefault().LojaID, new SelectList(Model.LojaDao, "LojaID", "NomeFantasia"), "Loja de origem dos produtos", new { @class = "form-control", @id = "LojaOrigemID" })
-                        </div>
-                    @*}
-                }*@
+                <div class="form-group">
+                    <label>Loja de Origem</label>
+                    @Html.DropDownListFor(x => x.LojaDao.FirstOrDefault().LojaID, new SelectList(Model.LojaDao, "LojaID", "NomeFantasia"), "Loja de origem dos produtos", new { @class = "form-control", @id = "LojaOrigemID" })
+                </div>
             </div>
             <div class="col-lg-6">
                 <div class="form-group">
@@ -906,8 +885,14 @@
                     @Html.DropDownListFor(x => x.PedidoStatusDao.FirstOrDefault().PedidoStatusID, new SelectList(Model.PedidoStatusDao, "PedidoStatusID", "Descricao"), "Status do pedido", new { @class = "form-control" })
                 </div>
                 <div class="form-group">
-                    <label>Valor do frete</label>
-                    @Html.TextBoxFor(x => x.ValorFrete, new { @class = "form-control valor text-right", @placeholder = "Valor do frete (Opcional)" })
+                    <label>Taxa de Serviço:</label>
+                    <label class="radio-inline"><input type="radio" name="rdbTaxaServico" value="@PedidoDao.ETipoPagamentoFrete.NaoCobrado.GetHashCode()">Não Cobrar</label>
+                    <label class="radio-inline"><input type="radio" name="rdbTaxaServico" value="@PedidoDao.ETipoPagamentoFrete.Cartao1x.GetHashCode()">Cartão 1x</label>
+                    <label class="radio-inline"><input type="radio" name="rdbTaxaServico" value="@PedidoDao.ETipoPagamentoFrete.Dinheiro.GetHashCode()">Dinheiro</label>
+                    <label class="radio-inline"><input type="radio" name="rdbTaxaServico" value="@PedidoDao.ETipoPagamentoFrete.Cheque.GetHashCode()">Cheque</label>
+                </div>
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.ValorFrete, new { @class = "form-control valor text-right", @placeholder = "Taxa de Serviço" })
                 </div>
             </div>
         </div>

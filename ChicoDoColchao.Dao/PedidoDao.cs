@@ -28,6 +28,7 @@ namespace ChicoDoColchao.Dao
         public double? ValorFrete { get; set; }
         public double Desconto { get; set; }
         public int? PedidoTrocaID { get; set; }
+        public int? TipoPagamentoFreteID { get; set; }
 
         public virtual ICollection<ClienteDao> ClienteDao { get; set; }
         public virtual ICollection<ConsultorDao> ConsultorDao { get; set; }
@@ -40,11 +41,19 @@ namespace ChicoDoColchao.Dao
         public virtual ICollection<OrcamentoDao> OrcamentoDao { get; set; }
         public virtual UsuarioDao UsuarioPedidoDao { get; set; }
         public virtual UsuarioDao UsuarioCancelamentoDao { get; set; }
-        
+
         public string DataPedidoInicio { get; set; }
         public string DataPedidoFim { get; set; }
 
         public string DataEntregaInicio { get; set; }
         public string DataEntregaFim { get; set; }
+
+        public enum ETipoPagamentoFrete
+        {
+            NaoCobrado = 1,
+            Cartao1x = 2,
+            Dinheiro = 3,
+            Cheque = 4
+        }
     }
 }

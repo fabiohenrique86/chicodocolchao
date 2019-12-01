@@ -54,11 +54,6 @@ namespace ChicoDoColchao.Controllers
                 {
                     Response.Cookies["ChicoDoColchao_Usuario"].Expires = DateTime.Now.AddDays(-1);
                 }
-
-                //if (Request.Cookies["ChicoDoColchao_Loja"] != null)
-                //{
-                //    Response.Cookies["ChicoDoColchao_Loja"].Expires = DateTime.Now.AddDays(-1);
-                //}
             }
             catch (Exception)
             {
@@ -105,12 +100,6 @@ namespace ChicoDoColchao.Controllers
                     {
                         return true;
                     }
-                    //else if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)TipoUsuarioDao.ETipoUsuario.Vendedor && Request.Cookies.Get("ChicoDoColchao_Loja") == null)
-                    //{
-                    //    // verifica se alguma loja está selecionada. Se não, não deve permitir o acesso
-                    //    tela = "~/Loja/Seleciona";
-                    //    return false;
-                    //}
 
                     // verifica se está na tela de menu
                     if (controller == "Menu" && action == "Index")
@@ -123,35 +112,23 @@ namespace ChicoDoColchao.Controllers
                         if (controller == "Pedido")
                         {
                             if (action == "Cadastro" || action == "Lista" || action == "Comanda" || action == "Troca")
-                            {
                                 return true;
-                            }
                             else
-                            {
                                 return false;
-                            }
                         }
                         else if (controller == "Cliente")
                         {
                             if (action == "Cadastro" || action == "Lista")
-                            {
                                 return true;
-                            }
                             else
-                            {
                                 return false;
-                            }
                         }
                         else if (controller == "Produto")
                         {
                             if (action == "Lista")
-                            {
                                 return true;
-                            }
                             else
-                            {
                                 return false;
-                            }
                         }
                         else if (controller == "MovimentoDeCaixa")
                         {
@@ -160,24 +137,16 @@ namespace ChicoDoColchao.Controllers
                         else if (controller == "Orcamento")
                         {
                             if (action == "Cadastro" || action == "Lista" || action == "Comanda")
-                            {
                                 return true;
-                            }
                             else
-                            {
                                 return false;
-                            }
                         }
                         else if (controller == "Relatorio")
                         {
                             if (action == "Estoque")
-                            {
                                 return true;
-                            }
                             else
-                            {
                                 return false;
-                            }
                         }
                         else
                         {
@@ -189,46 +158,30 @@ namespace ChicoDoColchao.Controllers
                         if (controller == "Pedido")
                         {
                             if (action == "Lista" || action == "Comanda" || action == "CalendarioDeEntrega")
-                            {
                                 return true;
-                            }
                             else
-                            {
                                 return false;
-                            }
                         }
                         else if (controller == "Cliente")
                         {
                             if (action == "Lista")
-                            {
                                 return true;
-                            }
                             else
-                            {
                                 return false;
-                            }
                         }
                         else if (controller == "Produto")
                         {
                             if (action == "Lista")
-                            {
                                 return true;
-                            }
                             else
-                            {
                                 return false;
-                            }
                         }
                         else if (controller == "Relatorio")
                         {
                             if (action == "Estoque")
-                            {
                                 return true;
-                            }
                             else
-                            {
                                 return false;
-                            }
                         }
                         else
                         {

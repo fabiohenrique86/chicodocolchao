@@ -39,13 +39,26 @@ namespace ChicoDoColchao.Repository
                 }
             }
 
-            if (pedido.Cliente != null) { chicoDoColchaoEntities.Entry(pedido.Cliente).State = EntityState.Detached; }
-            if (pedido.Funcionario != null) { chicoDoColchaoEntities.Entry(pedido.Funcionario).State = EntityState.Detached; }
-            if (pedido.PedidoStatus != null) { chicoDoColchaoEntities.Entry(pedido.PedidoStatus).State = EntityState.Detached; }
-            if (pedido.LojaOrigem != null) { chicoDoColchaoEntities.Entry(pedido.LojaOrigem).State = EntityState.Detached; }
-            if (pedido.LojaSaida != null) { chicoDoColchaoEntities.Entry(pedido.LojaSaida).State = EntityState.Detached; }
-            if (pedido.UsuarioPedido != null) { chicoDoColchaoEntities.Entry(pedido.UsuarioPedido).State = EntityState.Detached; }
-            if (pedido.UsuarioCancelamento != null) { chicoDoColchaoEntities.Entry(pedido.UsuarioCancelamento).State = EntityState.Detached; }
+            if (pedido.Cliente != null)
+                chicoDoColchaoEntities.Entry(pedido.Cliente).State = EntityState.Detached;
+
+            if (pedido.Funcionario != null)
+                chicoDoColchaoEntities.Entry(pedido.Funcionario).State = EntityState.Detached;
+
+            if (pedido.PedidoStatus != null)
+                chicoDoColchaoEntities.Entry(pedido.PedidoStatus).State = EntityState.Detached;
+
+            if (pedido.LojaOrigem != null)
+                chicoDoColchaoEntities.Entry(pedido.LojaOrigem).State = EntityState.Detached;
+
+            if (pedido.LojaSaida != null)
+                chicoDoColchaoEntities.Entry(pedido.LojaSaida).State = EntityState.Detached;
+
+            if (pedido.UsuarioPedido != null)
+                chicoDoColchaoEntities.Entry(pedido.UsuarioPedido).State = EntityState.Detached;
+
+            if (pedido.UsuarioCancelamento != null)
+                chicoDoColchaoEntities.Entry(pedido.UsuarioCancelamento).State = EntityState.Detached;
 
             chicoDoColchaoEntities.SaveChanges();
 
@@ -57,61 +70,37 @@ namespace ChicoDoColchao.Repository
             IQueryable<Pedido> query = chicoDoColchaoEntities.Pedido;
 
             if (pedido.PedidoID > 0)
-            {
                 query = query.Where(x => x.PedidoID == pedido.PedidoID);
-            }
 
             if (pedido.ClienteID > 0)
-            {
                 query = query.Where(x => x.ClienteID == pedido.ClienteID);
-            }
 
             if (pedido.FuncionarioID > 0)
-            {
                 query = query.Where(x => x.FuncionarioID == pedido.FuncionarioID);
-            }
 
             if (pedido.DataPedido != DateTime.MinValue)
-            {
                 query = query.Where(x => x.DataPedido.Day == pedido.DataPedido.Day && x.DataPedido.Month == pedido.DataPedido.Month && x.DataPedido.Year == pedido.DataPedido.Year);
-            }
 
             if (pedido.LojaOrigem != null && pedido.LojaOrigem.LojaID > 0)
-            {
                 query = query.Where(x => x.LojaOrigem.LojaID == pedido.LojaOrigem.LojaID);
-            }
             else if (pedido.LojaID > 0)
-            {
                 query = query.Where(x => x.LojaOrigem.LojaID == pedido.LojaID);
-            }
 
             if (pedido.LojaSaida != null && pedido.LojaSaida.LojaID > 0)
-            {
                 query = query.Where(x => x.LojaSaida.LojaID == pedido.LojaSaida.LojaID);
-            }
             else if (pedido.LojaSaidaID > 0)
-            {
                 query = query.Where(x => x.LojaSaida.LojaID == pedido.LojaSaidaID);
-            }
 
             if (pedido.PedidoStatus != null && pedido.PedidoStatus.PedidoStatusID > 0)
-            {
                 query = query.Where(x => x.PedidoStatusID == pedido.PedidoStatus.PedidoStatusID);
-            }
             else if (pedido.PedidoStatusID > 0)
-            {
                 query = query.Where(x => x.PedidoStatusID == pedido.PedidoStatusID);
-            }
 
             if (dataPedidoInicio.GetValueOrDefault() != DateTime.MinValue && dataPedidoFim.GetValueOrDefault() != DateTime.MinValue)
-            {
                 query = query.Where(x => EntityFunctions.TruncateTime(x.DataPedido) >= EntityFunctions.TruncateTime(dataPedidoInicio) && EntityFunctions.TruncateTime(x.DataPedido) <= EntityFunctions.TruncateTime(dataPedidoFim));
-            }
 
             if (dataEntregaInicio.GetValueOrDefault() != DateTime.MinValue && dataEntregaFim.GetValueOrDefault() != DateTime.MinValue)
-            {
                 query = query.Where(x => x.PedidoProduto.Any(w => EntityFunctions.TruncateTime(w.DataEntrega) >= EntityFunctions.TruncateTime(dataEntregaInicio) && EntityFunctions.TruncateTime(w.DataEntrega) <= EntityFunctions.TruncateTime(dataEntregaFim)));
-            }
 
             if (top && take > 0)
             {
@@ -205,6 +194,7 @@ namespace ChicoDoColchao.Repository
             pedido.UsuarioPedidoID = pedidoDao.UsuarioPedidoDao.UsuarioID;
             pedido.NomeCarreto = pedidoDao.NomeCarreto;
             pedido.ValorFrete = pedidoDao.ValorFrete;
+            pedido.TipoPagamentoFreteID = pedidoDao.TipoPagamentoFreteID;
             pedido.Observacao = pedidoDao.Observacao;
             pedido.Desconto = pedidoDao.Desconto;
             pedido.PedidoStatusID = pedidoDao.PedidoStatusDao.FirstOrDefault().PedidoStatusID;
@@ -233,9 +223,7 @@ namespace ChicoDoColchao.Repository
                             var lp = chicoDoColchaoEntities.LojaProduto.FirstOrDefault(x => x.ProdutoID == pp.ProdutoID && x.LojaID == pedidoOriginal.LojaSaidaID);
 
                             if (lp != null)
-                            {
                                 lp.Quantidade = Convert.ToInt16(lp.Quantidade + pp.Quantidade);
-                            }
                         }
                     }
                 }
@@ -265,9 +253,7 @@ namespace ChicoDoColchao.Repository
                     var lojaProduto = chicoDoColchaoEntities.LojaProduto.FirstOrDefault(x => x.ProdutoID == pedidoProdutoDao.ProdutoID && x.LojaID == lojaSaidaId);
 
                     if (lojaProduto != null)
-                    {
                         lojaProduto.Quantidade = Convert.ToInt16(lojaProduto.Quantidade - pedidoProdutoDao.Quantidade);
-                    }
                 }
 
                 pedido.PedidoProduto.Add(pedidoProduto);
@@ -289,13 +275,26 @@ namespace ChicoDoColchao.Repository
 
             chicoDoColchaoEntities.Entry(pedido).State = EntityState.Added;
 
-            if (pedido.Cliente != null) { chicoDoColchaoEntities.Entry(pedido.Cliente).State = EntityState.Detached; }
-            if (pedido.Funcionario != null) { chicoDoColchaoEntities.Entry(pedido.Funcionario).State = EntityState.Detached; }
-            if (pedido.PedidoStatus != null) { chicoDoColchaoEntities.Entry(pedido.PedidoStatus).State = EntityState.Detached; }
-            if (pedido.LojaOrigem != null) { chicoDoColchaoEntities.Entry(pedido.LojaOrigem).State = EntityState.Detached; }
-            if (pedido.LojaSaida != null) { chicoDoColchaoEntities.Entry(pedido.LojaSaida).State = EntityState.Detached; }
-            if (pedido.UsuarioPedido != null) { chicoDoColchaoEntities.Entry(pedido.UsuarioPedido).State = EntityState.Detached; }
-            if (pedido.UsuarioCancelamento != null) { chicoDoColchaoEntities.Entry(pedido.UsuarioCancelamento).State = EntityState.Detached; }
+            if (pedido.Cliente != null)
+                chicoDoColchaoEntities.Entry(pedido.Cliente).State = EntityState.Detached;
+
+            if (pedido.Funcionario != null)
+                chicoDoColchaoEntities.Entry(pedido.Funcionario).State = EntityState.Detached;
+
+            if (pedido.PedidoStatus != null)
+                chicoDoColchaoEntities.Entry(pedido.PedidoStatus).State = EntityState.Detached;
+
+            if (pedido.LojaOrigem != null)
+                chicoDoColchaoEntities.Entry(pedido.LojaOrigem).State = EntityState.Detached;
+
+            if (pedido.LojaSaida != null)
+                chicoDoColchaoEntities.Entry(pedido.LojaSaida).State = EntityState.Detached;
+
+            if (pedido.UsuarioPedido != null)
+                chicoDoColchaoEntities.Entry(pedido.UsuarioPedido).State = EntityState.Detached;
+
+            if (pedido.UsuarioCancelamento != null)
+                chicoDoColchaoEntities.Entry(pedido.UsuarioCancelamento).State = EntityState.Detached;
 
             chicoDoColchaoEntities.SaveChanges();
 

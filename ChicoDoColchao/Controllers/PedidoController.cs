@@ -198,7 +198,9 @@ namespace ChicoDoColchao.Controllers
             if (pedidoDao == null)
                 return Content(string.Format("Pedido {0} não encontrado", pedidoId));
 
-            var bytes = pedidoBusiness.Comanda(pedidoDao);
+            var tipoUsuarioId = JsonConvert.DeserializeObject<UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value).TipoUsuarioDao.TipoUsuarioID;
+
+            var bytes = pedidoBusiness.Comanda(pedidoDao, tipoUsuarioId);
 
             return new FileContentResult(bytes, "application/pdf");
         }
@@ -209,8 +211,9 @@ namespace ChicoDoColchao.Controllers
             try
             {
                 pedidoDao.DataPedido = DateTime.Now;
+                var tipoUsuarioId = JsonConvert.DeserializeObject<UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value).TipoUsuarioDao.TipoUsuarioID;
 
-                int pedidoID = pedidoBusiness.Incluir(pedidoDao);
+                int pedidoID = pedidoBusiness.Incluir(pedidoDao, tipoUsuarioId);
 
                 return Json(new { Sucesso = true, Mensagem = string.Format("Pedido {0} cadastrado com sucesso!", pedidoID) }, JsonRequestBehavior.AllowGet);
             }
@@ -303,7 +306,8 @@ namespace ChicoDoColchao.Controllers
                 var email = string.Empty;
                 var erro = string.Empty;
 
-                var enviado = pedidoBusiness.EnviarComandaPorEmail(pedidoDao.PedidoID, out email, out erro);
+                var tipoUsuarioId = JsonConvert.DeserializeObject<UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value).TipoUsuarioDao.TipoUsuarioID;
+                var enviado = pedidoBusiness.EnviarComandaPorEmail(pedidoDao.PedidoID, out email, out erro, tipoUsuarioId);
 
                 if (!enviado)
                     return Json(new { Sucesso = false, Mensagem = erro }, JsonRequestBehavior.AllowGet);
@@ -354,7 +358,8 @@ namespace ChicoDoColchao.Controllers
         {
             try
             {
-                int pedidoID = pedidoBusiness.Trocar(pedidoDao);
+                var tipoUsuarioId = JsonConvert.DeserializeObject<UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value).TipoUsuarioDao.TipoUsuarioID;
+                int pedidoID = pedidoBusiness.Trocar(pedidoDao, tipoUsuarioId);
 
                 return Json(new { Sucesso = true, Mensagem = string.Format("Pedido {0} trocado com sucesso!", pedidoID) }, JsonRequestBehavior.AllowGet);
             }
