@@ -118,6 +118,9 @@ namespace ChicoDoColchao.Business
                 // verifica se o cv informado já existe
                 if (!string.IsNullOrEmpty(pedidoTipoPagamentoDao.CV))
                 {
+                    if (pedidoTipoPagamentoDao.CV.Length != 6 && pedidoTipoPagamentoDao.CV.Length != 12)
+                        throw new BusinessException("CV só pode ter 6 ou 12 dígitos");
+
                     var ptp = pedidoTipoPagamentoRepository.Listar(new PedidoTipoPagamento() { CV = pedidoTipoPagamentoDao.CV });
 
                     if (ptp != null && ptp.Count() > 0)
