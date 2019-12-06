@@ -118,13 +118,13 @@ namespace ChicoDoColchao.Business
                 // verifica se o cv informado já existe
                 if (!string.IsNullOrEmpty(pedidoTipoPagamentoDao.CV))
                 {
-                    if (pedidoTipoPagamentoDao.CV.Length != 6 && pedidoTipoPagamentoDao.CV.Length != 12)
-                        throw new BusinessException("CV só pode ter 6 ou 12 dígitos");
+                    if (pedidoTipoPagamentoDao.CV.Length != 6)
+                        throw new BusinessException("Autorização só pode ter 6 dígitos");
 
                     var ptp = pedidoTipoPagamentoRepository.Listar(new PedidoTipoPagamento() { CV = pedidoTipoPagamentoDao.CV });
 
                     if (ptp != null && ptp.Count() > 0)
-                        throw new BusinessException(string.Format("CV {0} já cadastrado", pedidoTipoPagamentoDao.CV));
+                        throw new BusinessException(string.Format("Autorização {0} já cadastrado", pedidoTipoPagamentoDao.CV));
                 }
             }
         }
@@ -356,10 +356,13 @@ namespace ChicoDoColchao.Business
                     // verifica se o cv informado já existe
                     if (!string.IsNullOrEmpty(pedidoTipoPagamentoDao.CV))
                     {
+                        if (pedidoTipoPagamentoDao.CV.Length != 6)
+                            throw new BusinessException("Autorização só pode ter 6 dígitos");
+
                         var ptp = pedidoTipoPagamentoRepository.Listar(new PedidoTipoPagamento() { CV = pedidoTipoPagamentoDao.CV });
 
                         if (ptp != null && ptp.Count() > 0)
-                            throw new BusinessException(string.Format("CV {0} já cadastrado", pedidoTipoPagamentoDao.CV));
+                            throw new BusinessException(string.Format("Autorização {0} já cadastrado", pedidoTipoPagamentoDao.CV));
                     }
                 }
             }
