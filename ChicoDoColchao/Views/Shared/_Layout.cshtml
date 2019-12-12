@@ -1,8 +1,4 @@
 ﻿@using ChicoDoColchao.Dao;
-@*@{
-    LojaDao LojaDao = new LojaDao();
-    if (Request.Cookies.Get("ChicoDoColchao_Loja") != null) { LojaDao = Newtonsoft.Json.JsonConvert.DeserializeObject<LojaDao>(Request.Cookies.Get("ChicoDoColchao_Loja").Value); }
-}*@
 <!DOCTYPE html>
 <html>
 <head>
@@ -482,7 +478,7 @@
             $(".altura").mask("0.00");
             $(".peso").mask("000");
             $(".fixo").mask("(99) 9999-9999");
-            $(".cv").mask("99999999999999999999");
+            $(".cv").mask("999999");
             $(".cep").mask("00000-000");
             $(".celular").mask("(99) 9999-99999").focusout(function (event) {
                 var target, phone, element;
@@ -497,48 +493,7 @@
                     element.mask("(99) 9999-99999");
                 }
             });
-
-            // modal loja
-            @*var tbLojas = $("#tbLojas").DataTable({
-                "ordering": false,
-                "pageLength": 10,
-                "dom": 't',
-                "language": {
-                    "lengthMenu": "_MENU_ registros por página",
-                    "zeroRecords": "Sem registros a serem exibidos",
-                    "info": "Página _PAGE_ de _PAGES_",
-                    "infoEmpty": "Sem registros a serem exibidos",
-                    "infoFiltered": "(filtrados de _MAX_ total de registros)",
-                    "sSearch": "Pesquisar",
-                    "oPaginate": { "sNext": "Próximo", "sPrevious": "Anterior", "sFirst": "Primeiro", "sLast": "Último" }
-                },
-                "columns":
-                [
-                    {
-                        "data": function (data, type, row) {
-                            var linha = "";
-                            if (data["LojaID"] == '@LojaDao.LojaID') {
-                                linha = '<a href="/Loja/Selecionar?LojaID=' + data["LojaID"] + "&NomeFantasia=" + encodeURIComponent(data.NomeFantasia) + "&Cnpj=" + data["Cnpj"] + "&Telefone=" + data["Telefone"] + '">' + data["NomeFantasia"] + '</a> <i class="glyphicon glyphicon-ok"></i>'
-                            }
-                            else {
-                                linha = '<a href="/Loja/Selecionar?LojaID=' + data["LojaID"] + "&NomeFantasia=" + encodeURIComponent(data.NomeFantasia) + "&Cnpj=" + data["Cnpj"] + "&Telefone=" + data["Telefone"] + '">' + data["NomeFantasia"] + '</a>'
-                            }
-                            return linha;
-                        },
-                        "className": "text-center"
-                    }
-                ]
-            });*@
-
-            //$("#aMudarLoja").click(function ()
-            //{
-            //    $.getJSON("/Loja/Listar", { Ativo: true }, function (data) {
-            //        $("#tbLojas").DataTable().clear();
-            //        $("#tbLojas").DataTable().rows.add(data).draw();
-            //        $('#modalLoja').modal('show');
-            //    });
-            //});
-
+            
             $(".cep").change(function () {
                 var cep = $(this).val().replace("-", "");
 

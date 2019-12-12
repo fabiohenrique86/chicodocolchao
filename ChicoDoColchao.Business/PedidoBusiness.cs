@@ -121,10 +121,21 @@ namespace ChicoDoColchao.Business
                     if (pedidoTipoPagamentoDao.CV.Length != 6)
                         throw new BusinessException("Autorização só pode ter 6 dígitos");
 
-                    var ptp = pedidoTipoPagamentoRepository.Listar(new PedidoTipoPagamento() { CV = pedidoTipoPagamentoDao.CV });
+                    var ptp = pedidoTipoPagamentoRepository.Listar(new PedidoTipoPagamento() { CV = pedidoTipoPagamentoDao.CV }).FirstOrDefault();
 
-                    if (ptp != null && ptp.Count() > 0)
-                        throw new BusinessException(string.Format("Autorização {0} já cadastrado", pedidoTipoPagamentoDao.CV));
+                    if (ptp != null)
+                    {
+                        var pedido = pedidoRepository.Listar(new Pedido() { PedidoID = ptp.PedidoID }, false, 0).FirstOrDefault();
+
+                        if (pedido == null)
+                            throw new BusinessException($"Pedido {ptp.PedidoID} não encontrado");
+
+                        // se algum pedido ativo já possui CV, deve bloquear
+                        if (pedido.PedidoStatusID == (int)PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega ||
+                            pedido.PedidoStatusID == (int)PedidoStatusDao.EPedidoStatus.RetiradoNaLoja ||
+                            pedido.PedidoStatusID == (int)PedidoStatusDao.EPedidoStatus.Entregue)
+                            throw new BusinessException(string.Format("Autorização {0} já cadastrado", pedidoTipoPagamentoDao.CV));
+                    }
                 }
             }
         }
@@ -359,10 +370,21 @@ namespace ChicoDoColchao.Business
                         if (pedidoTipoPagamentoDao.CV.Length != 6)
                             throw new BusinessException("Autorização só pode ter 6 dígitos");
 
-                        var ptp = pedidoTipoPagamentoRepository.Listar(new PedidoTipoPagamento() { CV = pedidoTipoPagamentoDao.CV });
+                        var ptp = pedidoTipoPagamentoRepository.Listar(new PedidoTipoPagamento() { CV = pedidoTipoPagamentoDao.CV }).FirstOrDefault();
 
-                        if (ptp != null && ptp.Count() > 0)
-                            throw new BusinessException(string.Format("Autorização {0} já cadastrado", pedidoTipoPagamentoDao.CV));
+                        if (ptp != null)
+                        {
+                            var pedido = pedidoRepository.Listar(new Pedido() { PedidoID = ptp.PedidoID }, false, 0).FirstOrDefault();
+
+                            if (pedido == null)
+                                throw new BusinessException($"Pedido {ptp.PedidoID} não encontrado");
+
+                            // se algum pedido ativo já possui CV, deve bloquear
+                            if (pedido.PedidoStatusID == (int)PedidoStatusDao.EPedidoStatus.PrevisaoDeEntrega ||
+                                pedido.PedidoStatusID == (int)PedidoStatusDao.EPedidoStatus.RetiradoNaLoja ||
+                                pedido.PedidoStatusID == (int)PedidoStatusDao.EPedidoStatus.Entregue)
+                                throw new BusinessException(string.Format("Autorização {0} já cadastrado", pedidoTipoPagamentoDao.CV));
+                        }
                     }
                 }
             }
