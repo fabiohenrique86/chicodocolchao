@@ -525,6 +525,7 @@
     <Content Include="ds_venda_produto.xss">
       <DependentUpon>ds_venda_produto.xsd</DependentUpon>
     </Content>
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <None Include="Properties\PublishProfiles\ChicoDoColchao-Release.pubxml" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.dataTables-1.10.12.min.js" />
