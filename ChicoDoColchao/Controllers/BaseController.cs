@@ -188,6 +188,11 @@ namespace ChicoDoColchao.Controllers
                             return false;
                         }
                     }
+                    else if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)TipoUsuarioDao.ETipoUsuario.Externo)
+                    {
+                        if (controller == "Relatorio" && action == "VendaLoja")
+                            return true;
+                    }
 
                     return false;
                 }

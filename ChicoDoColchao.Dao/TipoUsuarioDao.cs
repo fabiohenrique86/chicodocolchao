@@ -19,7 +19,8 @@ namespace ChicoDoColchao.Dao
         {
             Gerencial = 1,
             Vendedor = 2,
-            Deposito = 3
+            Deposito = 3,
+            Externo = 4
         }
     }
 }

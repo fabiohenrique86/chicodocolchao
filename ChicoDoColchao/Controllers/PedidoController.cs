@@ -336,7 +336,10 @@ namespace ChicoDoColchao.Controllers
                     var usuarioDao = JsonConvert.DeserializeObject<UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value);
 
                     if (usuarioDao != null && usuarioDao.TipoUsuarioDao?.TipoUsuarioID == TipoUsuarioDao.ETipoUsuario.Vendedor.GetHashCode())
+                    {
+                        pedidoDao.ConsultorDao.Clear();
                         pedidoDao.ConsultorDao.Add(new ConsultorDao() { FuncionarioID = usuarioDao.UsuarioID });
+                    }   
                 }
 
                 pedidos = pedidoBusiness.Listar(pedidoDao, top, take);

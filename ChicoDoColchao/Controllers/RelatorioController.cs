@@ -2,6 +2,7 @@
 using ChicoDoColchao.Business.Exceptions;
 using ChicoDoColchao.Dao;
 using Microsoft.Reporting.WebForms;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
@@ -84,7 +85,14 @@ namespace ChicoDoColchao.Controllers
                     return null;
                 }
 
-                lojasDao = lojaBusiness.Listar(new LojaDao() { Ativo = true });
+                var lojaDao = new LojaDao() { Ativo = true };
+                var usuarioDao = JsonConvert.DeserializeObject<UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value);
+                if (usuarioDao.TipoUsuarioDao != null && usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)TipoUsuarioDao.ETipoUsuario.Externo)
+                {
+                    lojaDao.Cnpj = "25313803000127";
+                }
+
+                lojasDao = lojaBusiness.Listar(lojaDao);
             }
             catch (Exception ex)
             {

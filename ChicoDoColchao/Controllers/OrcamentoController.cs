@@ -34,16 +34,7 @@ namespace ChicoDoColchao.Controllers
                     Response.Redirect(tela, true);
                     return null;
                 }
-
-                // filtra os consultores por loja logada, se existir
-                //var consultorDao = new ConsultorDao();
-                //if (Request.Cookies.Get("ChicoDoColchao_Loja") != null)
-                //{
-                //    var lojaDao = JsonConvert.DeserializeObject<LojaDao>(Request.Cookies.Get("ChicoDoColchao_Loja").Value);
-                //    consultorDao.LojaDao.Clear();
-                //    consultorDao.LojaDao.Add(new LojaDao() { LojaID = lojaDao.LojaID });
-                //}
-
+                
                 // filtra os consultores por consultado logado
                 var consultorDao = new ConsultorDao();
                 if (Request.Cookies.Get("ChicoDoColchao_Usuario") != null)
@@ -128,23 +119,13 @@ namespace ChicoDoColchao.Controllers
 
             try
             {
-                // filtra os pedidos por loja selecionada [Loja.LojaID]
-                //if (Request.Cookies.Get("ChicoDoColchao_Loja") != null)
-                //{
-                //    var loja = JsonConvert.DeserializeObject<LojaDao>(Request.Cookies.Get("ChicoDoColchao_Loja").Value);
-                //    if (loja != null)
-                //    {
-                //        orcamentoDao.LojaDao.Clear();
-                //        orcamentoDao.LojaDao.Add(new LojaDao() { LojaID = loja.LojaID });
-                //    }
-                //}
-
                 // filtra os consultores por consultado logado
                 if (Request.Cookies.Get("ChicoDoColchao_Usuario") != null)
                 {
                     var usuarioDao = JsonConvert.DeserializeObject<UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value);
                     if (usuarioDao != null && usuarioDao.TipoUsuarioDao?.TipoUsuarioID == TipoUsuarioDao.ETipoUsuario.Vendedor.GetHashCode())
                     {
+                        orcamentoDao.ConsultorDao.Clear();
                         orcamentoDao.ConsultorDao.Add(new ConsultorDao() { FuncionarioID = usuarioDao.UsuarioID });
                     }
                 }

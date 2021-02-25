@@ -392,9 +392,17 @@
         <div class="card">
             <div class="card-header" id="headingTwo">
                 <h5 class="mb-0">
-                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        <i class="glyphicon glyphicon-cog" style="color: #FFD700" title="Menu"></i> Menu
-                    </button>
+                    @{
+                        if (usuarioDao != null)
+                        {
+                            if (usuarioDao.TipoUsuarioDao.TipoUsuarioID != (int)TipoUsuarioDao.ETipoUsuario.Externo)
+                            {
+                                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    <i class="glyphicon glyphicon-cog" style="color: #FFD700" title="Menu"></i> Menu
+                                </button>
+                            }
+                        }
+                    }
                 </h5>
             </div>
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
@@ -428,12 +436,16 @@
                         </div>
                         <div class="col-lg-4">
                             <ul class="nav nav-pills nav-stacked">
-                                <li><a href="@Url.Action("Lista", "Cliente")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Clientes</a></li>
-                                <li><a href="@Url.Action("Lista", "Pedido")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Pedidos</a></li>
-                                <li><a href="@Url.Action("Lista", "Produto")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Produtos</a></li>
                                 @{
                                     if (usuarioDao != null)
                                     {
+                                        if (usuarioDao.TipoUsuarioDao.TipoUsuarioID != (int)TipoUsuarioDao.ETipoUsuario.Externo)
+                                        {
+                                            <li><a href="@Url.Action("Lista", "Cliente")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Clientes</a></li>
+                                            <li><a href="@Url.Action("Lista", "Pedido")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Pedidos</a></li>
+                                            <li><a href="@Url.Action("Lista", "Produto")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Produtos</a></li>
+                                        }
+
                                         if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)TipoUsuarioDao.ETipoUsuario.Gerencial)
                                         {
                                             <li><a href="@Url.Action("Lista", "Loja")" target="_self"><i class="glyphicon glyphicon-list" style="cursor: pointer"></i> Lista de Lojas</a></li>
@@ -498,16 +510,22 @@
                                             <li><a href="@Url.Action("VendaLoja", "Relatorio")" target="_self"><i class="glyphicon glyphicon-resize-full" style="cursor: pointer"></i> Relatório de Vendas por Loja</a></li>
                                             <li><a href="@Url.Action("VendaProduto", "Relatorio")" target="_self"><i class="glyphicon glyphicon-resize-full" style="cursor: pointer"></i> Relatório de Vendas por Produto</a></li>
                                             <li><a href="@Url.Action("Comissao", "Relatorio")" target="_self"><i class="glyphicon glyphicon-triangle-right" style="cursor: pointer"></i> Relatório de Comissão</a></li>
+                                            <li><a href="@Url.Action("Estoque", "Relatorio")" target="_self"><i class="glyphicon glyphicon-stats" style="cursor: pointer"></i> Relatório de Estoque</a></li>
                                         }
                                         else if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)TipoUsuarioDao.ETipoUsuario.Vendedor)
                                         {
                                             <li><a href="@Url.Action("Index", "MovimentoDeCaixa")" target="_self"><i class="glyphicon glyphicon-usd" style="cursor: pointer"></i> Movimento de Caixa</a></li>
+                                            <li><a href="@Url.Action("Estoque", "Relatorio")" target="_self"><i class="glyphicon glyphicon-stats" style="cursor: pointer"></i> Relatório de Estoque</a></li>
                                         }
                                         else if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)TipoUsuarioDao.ETipoUsuario.Deposito)
                                         {
-
+                                            <li><a href="@Url.Action("Estoque", "Relatorio")" target="_self"><i class="glyphicon glyphicon-stats" style="cursor: pointer"></i> Relatório de Estoque</a></li>
                                         }
-                                        <li><a href="@Url.Action("Estoque", "Relatorio")" target="_self"><i class="glyphicon glyphicon-stats" style="cursor: pointer"></i> Relatório de Estoque</a></li>
+                                        else if (usuarioDao.TipoUsuarioDao.TipoUsuarioID == (int)TipoUsuarioDao.ETipoUsuario.Externo)
+                                        {
+                                            <li><a href="@Url.Action("VendaLoja", "Relatorio")" target="_self"><i class="glyphicon glyphicon-resize-full" style="cursor: pointer"></i> Relatório de Vendas por Loja</a></li>
+                                        }
+
                                     }
                                 }
                             </ul>
