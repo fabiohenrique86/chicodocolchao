@@ -178,7 +178,6 @@ namespace ChicoDoColchao.Business
             }
             catch (Exception ex)
             {
-
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
 
                 throw ex;

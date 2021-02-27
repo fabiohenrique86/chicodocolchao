@@ -11,10 +11,11 @@ namespace ChicoDoColchao.Business.Tradutors
 
             notaFiscal.NotaFiscalID = notaFiscalDao.NotaFiscalID;
             notaFiscal.Numero = notaFiscalDao.Numero;
-            notaFiscal.DataNotaFiscal = notaFiscalDao.DataNotaFiscal;
-            notaFiscal.Loja = new Loja() { LojaID = notaFiscalDao.LojaDao.LojaID };
-            notaFiscal.PedidoMaeID = notaFiscalDao.PedidoMaeID;
-            notaFiscal.Ativo = notaFiscalDao.Ativo;
+            notaFiscal.DataCadastro = notaFiscalDao.DataCadastro;
+            notaFiscal.DataEmissao = notaFiscalDao.DataEmissao;
+
+            if (notaFiscalDao.LojaDao != null && notaFiscalDao.LojaDao.LojaID > 0)
+                notaFiscal.LojaID = notaFiscalDao.LojaDao.LojaID;
 
             return notaFiscal;
         }
@@ -25,10 +26,9 @@ namespace ChicoDoColchao.Business.Tradutors
 
             notaFiscalDao.NotaFiscalID = notaFiscal.NotaFiscalID;
             notaFiscalDao.Numero = notaFiscal.Numero;
-            notaFiscalDao.DataNotaFiscal = notaFiscal.DataNotaFiscal;
+            notaFiscalDao.DataCadastro = notaFiscal.DataCadastro;
+            notaFiscalDao.DataEmissao = notaFiscal.DataEmissao;
             notaFiscalDao.LojaDao = new LojaDao() { LojaID = notaFiscal.LojaID };
-            notaFiscalDao.PedidoMaeID = notaFiscal.PedidoMaeID;
-            notaFiscalDao.Ativo = notaFiscal.Ativo;
 
             return notaFiscalDao;
         }

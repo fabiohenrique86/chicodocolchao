@@ -22,13 +22,12 @@ namespace ChicoDoColchao.Repository
     
         public int NotaFiscalID { get; set; }
         public int Numero { get; set; }
-        public System.DateTime DataNotaFiscal { get; set; }
         public int LojaID { get; set; }
-        public Nullable<int> PedidoMaeID { get; set; }
-        public bool Ativo { get; set; }
+        public System.DateTime DataEmissao { get; set; }
+        public System.DateTime DataCadastro { get; set; }
     
+        public virtual Loja Loja { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<NotaFiscalProduto> NotaFiscalProduto { get; set; }
-        public virtual Loja Loja { get; set; }
     }
 }

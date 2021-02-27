@@ -20,23 +20,26 @@
         <div class="form-group">
             <button id="btnImportar" type="submit" class="btn btn-success">Importar</button>
         </div>
-        @if (!string.IsNullOrEmpty(Model.Mensagem))
+        @if (!string.IsNullOrEmpty(Model.MensagemErro))
         {
-            if (Model.Erro)
-            {
-                <ul style="color: red">
-                    @foreach (string item in ((string)Model.Mensagem).Split("*".ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
-                    {
-                        <li>@item</li>
-                    }
-                </ul>
-            }
-            else
-            {
-                <p style="color: #5cb85c">
-                    @Model.Mensagem
-                </p>
-            }
+            <ul style="color: red">
+                @foreach (string item in (Model.MensagemErro).Split("*".ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
+                {
+                    <li>@item</li>
+                }
+            </ul>
+            <hr />
+        }
+        <br />
+        @if (!string.IsNullOrEmpty(Model.MensagemSucesso))
+        {
+
+            <ul style="color: #5cb85c">
+                @foreach (string item in (Model.MensagemSucesso).Split("*".ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
+                {
+                    <li>@item</li>
+                }
+            </ul>
         }
     </form>
 </div>

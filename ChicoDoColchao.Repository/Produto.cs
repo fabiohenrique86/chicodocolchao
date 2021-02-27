@@ -18,10 +18,10 @@ namespace ChicoDoColchao.Repository
         public Produto()
         {
             this.LojaProduto = new HashSet<LojaProduto>();
-            this.NotaFiscalProduto = new HashSet<NotaFiscalProduto>();
             this.OrcamentoProduto = new HashSet<OrcamentoProduto>();
             this.PedidoProduto = new HashSet<PedidoProduto>();
             this.TransferenciaProduto = new HashSet<TransferenciaProduto>();
+            this.NotaFiscalProduto = new HashSet<NotaFiscalProduto>();
         }
     
         public int ProdutoID { get; set; }
@@ -39,12 +39,12 @@ namespace ChicoDoColchao.Repository
         public virtual ICollection<LojaProduto> LojaProduto { get; set; }
         public virtual Medida Medida { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<NotaFiscalProduto> NotaFiscalProduto { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrcamentoProduto> OrcamentoProduto { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PedidoProduto> PedidoProduto { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TransferenciaProduto> TransferenciaProduto { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<NotaFiscalProduto> NotaFiscalProduto { get; set; }
     }
 }

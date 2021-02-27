@@ -28,11 +28,8 @@ namespace ChicoDoColchao.Business.Tradutors
             orcamento.Observacao = orcamentoDao.Observacao;
             orcamento.Ativo = orcamentoDao.Ativo;
             orcamento.Desconto = orcamentoDao.Desconto;
-
-            if (orcamentoDao.ClienteDao != null)
-            {
-                orcamento.ClienteID = orcamentoDao.ClienteDao.ClienteID;
-            }
+            orcamento.NomeCliente = orcamentoDao.NomeCliente;
+            orcamento.TelefoneCliente = orcamentoDao.TelefoneCliente;
 
             if (orcamentoDao.PedidoDao != null)
             {
@@ -83,29 +80,32 @@ namespace ChicoDoColchao.Business.Tradutors
                 orcamentoDao.PedidoDao = new PedidoDao() { PedidoID = orcamento.Pedido.PedidoID };
             }
 
-            orcamentoDao.ClienteDao = new ClienteDao()
-            {
-                ClienteID = orcamento.Cliente.ClienteID,
-                Nome = orcamento.Cliente.Nome,
-                Email = orcamento.Cliente.Email,
-                DataNascimento = orcamento.Cliente.DataNascimento,
-                Cpf = string.IsNullOrEmpty(orcamento.Cliente.Cpf) ? string.Empty : Convert.ToUInt64(orcamento.Cliente.Cpf).ToString(@"000\.000\.000\-00"),
-                Cnpj = string.IsNullOrEmpty(orcamento.Cliente.Cnpj) ? string.Empty : Convert.ToUInt64(orcamento.Cliente.Cnpj).ToString(@"00\.000\.000\/0000\-00"),
-                NomeFantasia = orcamento.Cliente.NomeFantasia,
-                RazaoSocial = orcamento.Cliente.RazaoSocial,
-                TelefoneResidencial = string.IsNullOrEmpty(orcamento.Cliente.TelefoneResidencial) ? string.Empty : orcamento.Cliente.TelefoneResidencial.Length > 10 ? Convert.ToInt64(orcamento.Cliente.TelefoneResidencial).ToString("(##) #####-####") : Convert.ToInt64(orcamento.Cliente.TelefoneResidencial).ToString("(##) ####-####"),
-                TelefoneResidencial2 = string.IsNullOrEmpty(orcamento.Cliente.TelefoneResidencial2) ? string.Empty : orcamento.Cliente.TelefoneResidencial2.Length > 10 ? Convert.ToInt64(orcamento.Cliente.TelefoneResidencial2).ToString("(##) #####-####") : Convert.ToInt64(orcamento.Cliente.TelefoneResidencial2).ToString("(##) ####-####"),
-                TelefoneCelular = string.IsNullOrEmpty(orcamento.Cliente.TelefoneCelular) ? string.Empty : orcamento.Cliente.TelefoneCelular.Length > 10 ? Convert.ToInt64(orcamento.Cliente.TelefoneCelular).ToString("(##) #####-####") : Convert.ToInt64(orcamento.Cliente.TelefoneCelular).ToString("(##) ####-####"),
-                TelefoneCelular2 = string.IsNullOrEmpty(orcamento.Cliente.TelefoneCelular2) ? string.Empty : orcamento.Cliente.TelefoneCelular2.Length > 10 ? Convert.ToInt64(orcamento.Cliente.TelefoneCelular2).ToString("(##) #####-####") : Convert.ToInt64(orcamento.Cliente.TelefoneCelular2).ToString("(##) ####-####"),
-                EstadoDao = { new EstadoDao() { EstadoID = orcamento.Cliente.Estado.EstadoID, Nome = orcamento.Cliente.Estado.Nome, Sigla = orcamento.Cliente.Estado.Sigla } },
-                Cidade = orcamento.Cliente.Cidade,
-                Logradouro = orcamento.Cliente.Logradouro,
-                Numero = orcamento.Cliente.Numero,
-                PontoReferencia = orcamento.Cliente.PontoReferencia,
-                Complemento = orcamento.Cliente.Complemento,
-                Bairro = orcamento.Cliente.Bairro,
-                Cep = orcamento.Cliente.Cep
-            };
+            orcamentoDao.NomeCliente = orcamento.NomeCliente;
+            orcamentoDao.TelefoneCliente = orcamento.TelefoneCliente;
+
+            //orcamentoDao.ClienteDao = new ClienteDao()
+            //{
+            //    ClienteID = orcamento.Cliente.ClienteID,
+            //    Nome = orcamento.Cliente.Nome,
+            //    Email = orcamento.Cliente.Email,
+            //    DataNascimento = orcamento.Cliente.DataNascimento,
+            //    Cpf = string.IsNullOrEmpty(orcamento.Cliente.Cpf) ? string.Empty : Convert.ToUInt64(orcamento.Cliente.Cpf).ToString(@"000\.000\.000\-00"),
+            //    Cnpj = string.IsNullOrEmpty(orcamento.Cliente.Cnpj) ? string.Empty : Convert.ToUInt64(orcamento.Cliente.Cnpj).ToString(@"00\.000\.000\/0000\-00"),
+            //    NomeFantasia = orcamento.Cliente.NomeFantasia,
+            //    RazaoSocial = orcamento.Cliente.RazaoSocial,
+            //    TelefoneResidencial = string.IsNullOrEmpty(orcamento.Cliente.TelefoneResidencial) ? string.Empty : orcamento.Cliente.TelefoneResidencial.Length > 10 ? Convert.ToInt64(orcamento.Cliente.TelefoneResidencial).ToString("(##) #####-####") : Convert.ToInt64(orcamento.Cliente.TelefoneResidencial).ToString("(##) ####-####"),
+            //    TelefoneResidencial2 = string.IsNullOrEmpty(orcamento.Cliente.TelefoneResidencial2) ? string.Empty : orcamento.Cliente.TelefoneResidencial2.Length > 10 ? Convert.ToInt64(orcamento.Cliente.TelefoneResidencial2).ToString("(##) #####-####") : Convert.ToInt64(orcamento.Cliente.TelefoneResidencial2).ToString("(##) ####-####"),
+            //    TelefoneCelular = string.IsNullOrEmpty(orcamento.Cliente.TelefoneCelular) ? string.Empty : orcamento.Cliente.TelefoneCelular.Length > 10 ? Convert.ToInt64(orcamento.Cliente.TelefoneCelular).ToString("(##) #####-####") : Convert.ToInt64(orcamento.Cliente.TelefoneCelular).ToString("(##) ####-####"),
+            //    TelefoneCelular2 = string.IsNullOrEmpty(orcamento.Cliente.TelefoneCelular2) ? string.Empty : orcamento.Cliente.TelefoneCelular2.Length > 10 ? Convert.ToInt64(orcamento.Cliente.TelefoneCelular2).ToString("(##) #####-####") : Convert.ToInt64(orcamento.Cliente.TelefoneCelular2).ToString("(##) ####-####"),
+            //    EstadoDao = { new EstadoDao() { EstadoID = orcamento.Cliente.Estado.EstadoID, Nome = orcamento.Cliente.Estado.Nome, Sigla = orcamento.Cliente.Estado.Sigla } },
+            //    Cidade = orcamento.Cliente.Cidade,
+            //    Logradouro = orcamento.Cliente.Logradouro,
+            //    Numero = orcamento.Cliente.Numero,
+            //    PontoReferencia = orcamento.Cliente.PontoReferencia,
+            //    Complemento = orcamento.Cliente.Complemento,
+            //    Bairro = orcamento.Cliente.Bairro,
+            //    Cep = orcamento.Cliente.Cep
+            //};
 
             orcamentoDao.ConsultorDao.Add(new ConsultorDao()
             {

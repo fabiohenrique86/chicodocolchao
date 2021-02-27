@@ -18,9 +18,11 @@ namespace ChicoDoColchao.Dao
         public string Observacao { get; set; }
         public bool Ativo { get; set; }
         public double Desconto { get; set; }
+        public string NomeCliente { get; set; }
+        public string TelefoneCliente { get; set; }
 
         public virtual ICollection<ConsultorDao> ConsultorDao { get; set; }
-        public virtual ClienteDao ClienteDao { get; set; }        
+        //public virtual ClienteDao ClienteDao { get; set; }        
         public virtual ICollection<LojaDao> LojaDao { get; set; }
         public virtual ICollection<OrcamentoProdutoDao> OrcamentoProdutoDao { get; set; }
         public virtual ICollection<OrcamentoHistoricoDao> OrcamentoHistoricoDao { get; set; }

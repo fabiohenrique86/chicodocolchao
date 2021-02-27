@@ -14,7 +14,7 @@ namespace ChicoDoColchao.Repository
             chicoDoColchaoEntities = new ChicoDoColchaoEntities();
         }
 
-        public void Incluir(Produto produto)
+        public int Incluir(Produto produto)
         {
             produto.Ativo = true;
 
@@ -47,6 +47,8 @@ namespace ChicoDoColchao.Repository
             }
 
             chicoDoColchaoEntities.SaveChanges();
+
+            return produto.ProdutoID;
         }
 
         public void Atualizar(Produto produto)
@@ -233,6 +235,30 @@ namespace ChicoDoColchao.Repository
                 p.Ativo = true;
                 chicoDoColchaoEntities.SaveChanges();
             }
+        }
+
+        public Produto ListarEmLoja(int produtoId = 0, long numero = 0, int lojaOrigemId = 0, int lojaDestinoId = 0)
+        {
+            IQueryable<Produto> query = chicoDoColchaoEntities.Produto;
+
+            if (produtoId > 0)
+                query = query.Where(x => x.ProdutoID == produtoId);
+
+            if (numero > 0)
+                query = query.Where(x => x.Numero == numero);
+
+            if (lojaOrigemId > 0)
+                query = query.Where(x => x.LojaProduto.Any(w => w.LojaID == lojaOrigemId));
+
+            if (lojaDestinoId > 0)
+                query = query.Where(x => x.LojaProduto.Any(w => w.LojaID == lojaDestinoId));
+
+            var lista = query.Include(x => x.Categoria).Include(x => x.Medida).OrderBy(x => x.Descricao).ToList();
+
+            if (lista.Count() > 1)
+                lista.RemoveAll(x => !x.Ativo);
+
+            return lista.FirstOrDefault();
         }
     }
 }

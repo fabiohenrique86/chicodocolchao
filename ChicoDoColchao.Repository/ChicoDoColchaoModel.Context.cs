@@ -33,9 +33,6 @@ namespace ChicoDoColchao.Repository
         public virtual DbSet<Log> Log { get; set; }
         public virtual DbSet<LojaProduto> LojaProduto { get; set; }
         public virtual DbSet<Medida> Medida { get; set; }
-        public virtual DbSet<NotaFiscal> NotaFiscal { get; set; }
-        public virtual DbSet<NotaFiscalProduto> NotaFiscalProduto { get; set; }
-        public virtual DbSet<Orcamento> Orcamento { get; set; }
         public virtual DbSet<OrcamentoProduto> OrcamentoProduto { get; set; }
         public virtual DbSet<Parcela> Parcela { get; set; }
         public virtual DbSet<PedidoProduto> PedidoProduto { get; set; }
@@ -52,5 +49,8 @@ namespace ChicoDoColchao.Repository
         public virtual DbSet<Loja> Loja { get; set; }
         public virtual DbSet<MovimentoCaixaStatus> MovimentoCaixaStatus { get; set; }
         public virtual DbSet<MovimentoCaixa> MovimentoCaixa { get; set; }
+        public virtual DbSet<Orcamento> Orcamento { get; set; }
+        public virtual DbSet<NotaFiscal> NotaFiscal { get; set; }
+        public virtual DbSet<NotaFiscalProduto> NotaFiscalProduto { get; set; }
     }
 }

@@ -62,7 +62,7 @@ namespace ChicoDoColchao.Repository
                                            }).OrderBy(x => x.qtdTotal).Take(5).ToList();
 
             menuDao.NotaFiscalImportadaMes.quantidade = chicoDoColchaoEntities.NotaFiscal.
-                                                        Where(x => x.DataNotaFiscal.Month == DateTime.Now.Month && x.DataNotaFiscal.Year == DateTime.Now.Year).
+                                                        Where(x => x.DataCadastro.Month == DateTime.Now.Month && x.DataCadastro.Year == DateTime.Now.Year).
                                                         Count();
 
             var faturamentoConsultorMes = (from p in chicoDoColchaoEntities.Pedido

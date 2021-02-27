@@ -14,12 +14,13 @@ namespace ChicoDoColchao.Repository
             chicoDoColchaoEntities = new ChicoDoColchaoEntities();
         }
 
-        public void Incluir(NotaFiscal notaFiscal)
+        public int Incluir(NotaFiscal notaFiscal)
         {
-            notaFiscal.Ativo = true;
             chicoDoColchaoEntities.Entry(notaFiscal).State = EntityState.Added;
 
             chicoDoColchaoEntities.SaveChanges();
+
+            return notaFiscal.NotaFiscalID;
         }
 
         public List<NotaFiscal> Listar(NotaFiscal notaFiscal)
@@ -35,10 +36,8 @@ namespace ChicoDoColchao.Repository
             {
                 query = query.Where(x => x.Numero == notaFiscal.Numero);
             }
-
-            query = query.Where(x => x.Ativo);
-
-            return query.OrderByDescending(x => x.DataNotaFiscal).ToList();
+            
+            return query.OrderByDescending(x => x.DataCadastro).ToList();
         }
     }
 }

@@ -54,7 +54,25 @@
     <Compile Include="Categoria.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Cliente.cs">
+      <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Estado.cs">
+      <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Funcionario.cs">
+      <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Log.cs">
+      <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Loja.cs">
+      <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LojaProduto.cs">
+      <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Medida.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
     <Compile Include="MovimentoCaixa.cs">
@@ -77,26 +95,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ChicoDoColchaoModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Cliente.cs">
-      <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Estado.cs">
-      <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Funcionario.cs">
-      <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Log.cs">
-      <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="LogRepository.cs" />
-    <Compile Include="LojaProduto.cs">
-      <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="LojaProdutoRepository.cs" />
-    <Compile Include="Medida.cs">
-      <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="MovimentoCaixaStatus.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
@@ -106,6 +106,7 @@
     <Compile Include="NotaFiscalProduto.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="NotaFiscalProdutoRepository.cs" />
     <Compile Include="NotaFiscalRepository.cs" />
     <Compile Include="MedidaRepository.cs" />
     <Compile Include="CategoriaRepository.cs" />
@@ -115,31 +116,31 @@
     <Compile Include="OrcamentoHistorico.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="OrcamentoHistoricoRepository.cs" />
     <Compile Include="OrcamentoProduto.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="OrcamentoHistoricoRepository.cs" />
     <Compile Include="Parcela.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Pedido.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="RelatorioRepository.cs" />
     <Compile Include="PedidoProduto.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="OrcamentoRepository.cs" />
     <Compile Include="PedidoStatus.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
     <Compile Include="PedidoTipoPagamento.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="PedidoTipoPagamentoRepository.cs" />
     <Compile Include="Produto.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RelatorioRepository.cs" />
+    <Compile Include="OrcamentoRepository.cs" />
+    <Compile Include="PedidoTipoPagamentoRepository.cs" />
     <Compile Include="TipoPagamento.cs">
       <DependentUpon>ChicoDoColchaoModel.tt</DependentUpon>
     </Compile>

@@ -21,7 +21,7 @@ namespace ChicoDoColchao.Repository
         public string Medida { get; set; }
         public double Preco { get; set; }
     
-        public virtual Orcamento Orcamento { get; set; }
         public virtual Produto Produto { get; set; }
+        public virtual Orcamento Orcamento { get; set; }
     }
 }

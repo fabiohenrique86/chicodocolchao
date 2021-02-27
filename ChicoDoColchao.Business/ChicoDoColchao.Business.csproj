@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="AtendimentoDeliveryBusiness.cs" />
     <Compile Include="MovimentoCaixaBusiness.cs" />
+    <Compile Include="NotaFiscalProdutoBusiness.cs" />
     <Compile Include="RelatorioBusiness.cs" />
     <Compile Include="MenuBusiness.cs" />
     <Compile Include="ContatoBusiness.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="Tradutors\LogTradutor.cs" />
     <Compile Include="Tradutors\LojaProdutoTradutor.cs" />
     <Compile Include="Tradutors\MovimentoCaixaTradutor.cs" />
+    <Compile Include="Tradutors\NotaFiscalProdutoTradutor.cs" />
     <Compile Include="Tradutors\NotaFiscalTradutor.cs" />
     <Compile Include="Tradutors\MedidaTradutor.cs" />
     <Compile Include="Tradutors\CategoriaTradutor.cs" />

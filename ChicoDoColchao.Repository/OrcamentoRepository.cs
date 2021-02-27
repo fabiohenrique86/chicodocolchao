@@ -42,9 +42,9 @@ namespace ChicoDoColchao.Repository
                 query = query.Where(x => x.OrcamentoID == orcamento.OrcamentoID);
             }
 
-            if (orcamento.ClienteID > 0)
+            if (!string.IsNullOrEmpty(orcamento.NomeCliente))
             {
-                query = query.Where(x => x.ClienteID == orcamento.ClienteID);
+                query = query.Where(x => x.NomeCliente.Contains(orcamento.NomeCliente));
             }
 
             if (orcamento.DataOrcamento != DateTime.MinValue)
@@ -69,7 +69,7 @@ namespace ChicoDoColchao.Repository
             if (top)
             {
                 return query
-                    .Include(x => x.Cliente.Estado)
+                    //.Include(x => x.Cliente.Estado)
                     .Include(x => x.Loja)
                     .Include(x => x.Funcionario)
                     .Include(x => x.Pedido)
@@ -83,7 +83,7 @@ namespace ChicoDoColchao.Repository
             {
                 return query
                     .Include(x => x.OrcamentoHistorico)
-                    .Include(x => x.Cliente.Estado)
+                    //.Include(x => x.Cliente.Estado)
                     .Include(x => x.Loja)
                     .Include(x => x.Funcionario)
                     .Include(x => x.Pedido)

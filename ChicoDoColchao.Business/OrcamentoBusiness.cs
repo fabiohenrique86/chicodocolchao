@@ -39,9 +39,14 @@ namespace ChicoDoColchao.Business
                 throw new BusinessException("Consultor é obrigatório");
             }
 
-            if (orcamentoDao.ClienteDao == null || orcamentoDao.ClienteDao.ClienteID <= 0)
+            if (string.IsNullOrEmpty(orcamentoDao.NomeCliente))
             {
-                throw new BusinessException("Cliente é obrigatório");
+                throw new BusinessException("Nome Cliente é obrigatório");
+            }
+
+            if (string.IsNullOrEmpty(orcamentoDao.TelefoneCliente))
+            {
+                throw new BusinessException("Telefone Cliente é obrigatório");
             }
 
             if (orcamentoDao.DataOrcamento == DateTime.MinValue)
@@ -60,7 +65,7 @@ namespace ChicoDoColchao.Business
             if (orcamentoDao == null)
             {
                 throw new BusinessException("Orçamento é obrigatório");
-            }            
+            }
 
             if (orcamentoDao.OrcamentoID <= 0)
             {
@@ -86,7 +91,7 @@ namespace ChicoDoColchao.Business
             }
             catch (Exception ex)
             {
-                
+
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
 
                 throw ex;
@@ -118,7 +123,7 @@ namespace ChicoDoColchao.Business
             }
             catch (Exception ex)
             {
-                
+
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
 
                 throw ex;
@@ -147,7 +152,6 @@ namespace ChicoDoColchao.Business
             }
             catch (Exception ex)
             {
-                
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
 
                 throw ex;
@@ -182,7 +186,7 @@ namespace ChicoDoColchao.Business
             parametros.Add(new ReportParameter("Telefone", orcamentoDao.LojaDao.FirstOrDefault().Telefone));
             parametros.Add(new ReportParameter("Desconto", orcamentoDao.Desconto.ToString()));
             parametros.Add(new ReportParameter("Funcionario", orcamentoDao.ConsultorDao.FirstOrDefault().Nome));
-            parametros.Add(new ReportParameter("DataOrcamento", orcamentoDao.DataOrcamento.ToString("dd/MM/yyyy")));            
+            parametros.Add(new ReportParameter("DataOrcamento", orcamentoDao.DataOrcamento.ToString("dd/MM/yyyy")));
             parametros.Add(new ReportParameter("TotalOrcamento", Math.Round(orcamentoDao.OrcamentoProdutoDao.Sum(x => x.Preco * x.Quantidade) - orcamentoDao.Desconto, 2).ToString()));
 
             viewer.LocalReport.SetParameters(parametros);
@@ -192,28 +196,34 @@ namespace ChicoDoColchao.Business
 
             clientesDao.Add(new
             {
-                ClienteID = orcamentoDao.ClienteDao.ClienteID,
-                Cpf = orcamentoDao.ClienteDao.Cpf,
-                Cnpj = orcamentoDao.ClienteDao.Cnpj,
-                Nome = orcamentoDao.ClienteDao.Nome,
-                DataNascimento = orcamentoDao.ClienteDao.DataNascimento,
-                NomeFantasia = orcamentoDao.ClienteDao.NomeFantasia,
-                RazaoSocial = orcamentoDao.ClienteDao.RazaoSocial,
-                TelefoneResidencial = orcamentoDao.ClienteDao.TelefoneResidencial,
-                TelefoneCelular = orcamentoDao.ClienteDao.TelefoneCelular,
-                TelefoneResidencial2 = orcamentoDao.ClienteDao.TelefoneResidencial2,
-                TelefoneCelular2 = orcamentoDao.ClienteDao.TelefoneCelular2,
-                Estado = orcamentoDao.ClienteDao.EstadoDao.FirstOrDefault().Nome,
-                Cidade = orcamentoDao.ClienteDao.Cidade,
-                Logradouro = orcamentoDao.ClienteDao.Logradouro,
-                Numero = orcamentoDao.ClienteDao.Numero,
-                Bairro = orcamentoDao.ClienteDao.Bairro,
-                Complemento = orcamentoDao.ClienteDao.Complemento,
-                PontoReferencia = orcamentoDao.ClienteDao.PontoReferencia,
-                Email = orcamentoDao.ClienteDao.Email,
-                Ativo = orcamentoDao.ClienteDao.Ativo,
-                Cep = orcamentoDao.ClienteDao.Cep
+                NomeCliente = orcamentoDao.NomeCliente,
+                TelefoneCliente = orcamentoDao.TelefoneCliente
             });
+
+            //clientesDao.Add(new
+            //{
+            //    ClienteID = orcamentoDao.ClienteDao.ClienteID,
+            //    Cpf = orcamentoDao.ClienteDao.Cpf,
+            //    Cnpj = orcamentoDao.ClienteDao.Cnpj,
+            //    Nome = orcamentoDao.ClienteDao.Nome,
+            //    DataNascimento = orcamentoDao.ClienteDao.DataNascimento,
+            //    NomeFantasia = orcamentoDao.ClienteDao.NomeFantasia,
+            //    RazaoSocial = orcamentoDao.ClienteDao.RazaoSocial,
+            //    TelefoneResidencial = orcamentoDao.ClienteDao.TelefoneResidencial,
+            //    TelefoneCelular = orcamentoDao.ClienteDao.TelefoneCelular,
+            //    TelefoneResidencial2 = orcamentoDao.ClienteDao.TelefoneResidencial2,
+            //    TelefoneCelular2 = orcamentoDao.ClienteDao.TelefoneCelular2,
+            //    Estado = orcamentoDao.ClienteDao.EstadoDao.FirstOrDefault().Nome,
+            //    Cidade = orcamentoDao.ClienteDao.Cidade,
+            //    Logradouro = orcamentoDao.ClienteDao.Logradouro,
+            //    Numero = orcamentoDao.ClienteDao.Numero,
+            //    Bairro = orcamentoDao.ClienteDao.Bairro,
+            //    Complemento = orcamentoDao.ClienteDao.Complemento,
+            //    PontoReferencia = orcamentoDao.ClienteDao.PontoReferencia,
+            //    Email = orcamentoDao.ClienteDao.Email,
+            //    Ativo = orcamentoDao.ClienteDao.Ativo,
+            //    Cep = orcamentoDao.ClienteDao.Cep
+            //});
 
             viewer.LocalReport.DataSources.Add(new ReportDataSource("ds_cliente", clientesDao));
 
@@ -231,7 +241,7 @@ namespace ChicoDoColchao.Business
                 });
             }
             viewer.LocalReport.DataSources.Add(new ReportDataSource("ds_produto", pedidoProdutosDao));
-            
+
             viewer.LocalReport.Refresh();
 
             var bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out filenameExtension, out streamids, out warnings);

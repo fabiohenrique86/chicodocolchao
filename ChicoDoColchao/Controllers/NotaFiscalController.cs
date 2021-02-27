@@ -27,15 +27,16 @@ namespace ChicoDoColchao.Controllers
             }
 
             int qtdNFeImportada = 0;
-            var mensagem = new List<string>();
+            var mensagemErro = new List<string>();
+            var mensagemSucesso = new List<string>();
             var nfDao = new NotaFiscalDao();
 
             try
             {
                 if (arquivos == null)
                 {
-                    nfDao.Erro = false;
-                    nfDao.Mensagem = string.Empty;
+                    nfDao.MensagemErro = string.Empty;
+                    nfDao.MensagemSucesso = string.Empty;
                     return View("Cadastro", nfDao);
                 }
 
@@ -48,8 +49,8 @@ namespace ChicoDoColchao.Controllers
 
                 if (!ok)
                 {
-                    nfDao.Erro = true;
-                    nfDao.Mensagem = "É necessário selecionar os arquivos de NF-e para importar";
+                    nfDao.MensagemErro = "É necessário selecionar os arquivos de NF-e para importar";
+                    nfDao.MensagemSucesso = string.Empty;
                     return View("Cadastro", nfDao);
                 }
 
@@ -59,31 +60,27 @@ namespace ChicoDoColchao.Controllers
                     notaFiscalDao.Arquivo.Add(arquivo.InputStream);
 
                 if (notaFiscalDao.Arquivo != null && notaFiscalDao.Arquivo.Count > 0)
-                    notaFiscalBusiness.ImportarXML(notaFiscalDao, out mensagem, out qtdNFeImportada);
+                    notaFiscalBusiness.ImportarXML(notaFiscalDao, out mensagemErro, out mensagemSucesso, out qtdNFeImportada);
 
-                if (mensagem != null && mensagem.Count > 0)
-                {
-                    nfDao.Erro = true;
-                    nfDao.Mensagem = string.Join("*", mensagem);
-                    return View("Cadastro", nfDao);
-                }
+                if (mensagemErro != null && mensagemErro.Count > 0)
+                    nfDao.MensagemErro = string.Join("*", mensagemErro);
 
-                nfDao.Erro = false;
-                nfDao.Mensagem = string.Format("{0} XMLS importados com sucesso", qtdNFeImportada);
+                if (mensagemSucesso != null && mensagemSucesso.Count > 0)
+                    nfDao.MensagemSucesso = string.Join("*", mensagemSucesso);
 
                 return View("Cadastro", nfDao);
             }
             catch (BusinessException ex)
             {
-                nfDao.Erro = false;
-                nfDao.Mensagem = ex.Message;
+                nfDao.MensagemErro = ex.Message;
+                nfDao.MensagemSucesso = string.Empty;
 
                 return View("Cadastro", nfDao);
             }
             catch (Exception ex)
             {
-                nfDao.Erro = false;
-                nfDao.Mensagem = "Ocoreu um erro ao importar as NFes. Tente novamente";
+                nfDao.MensagemErro = "Ocoreu um erro ao importar as NFes. Tente novamente";
+                nfDao.MensagemSucesso = string.Empty;
 
                 return View("Cadastro", nfDao);
             }

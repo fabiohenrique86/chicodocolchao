@@ -17,8 +17,8 @@ namespace ChicoDoColchao.Repository
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Orcamento()
         {
-            this.OrcamentoProduto = new HashSet<OrcamentoProduto>();
             this.OrcamentoHistorico = new HashSet<OrcamentoHistorico>();
+            this.OrcamentoProduto = new HashSet<OrcamentoProduto>();
         }
     
         public int OrcamentoID { get; set; }
@@ -27,19 +27,17 @@ namespace ChicoDoColchao.Repository
         public System.DateTime DataOrcamento { get; set; }
         public string Observacao { get; set; }
         public bool Ativo { get; set; }
-        public int ClienteID { get; set; }
         public double Desconto { get; set; }
         public Nullable<int> PedidoID { get; set; }
+        public string NomeCliente { get; set; }
+        public string TelefoneCliente { get; set; }
     
         public virtual Funcionario Funcionario { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OrcamentoProduto> OrcamentoProduto { get; set; }
-        public virtual Orcamento Orcamento1 { get; set; }
-        public virtual Orcamento Orcamento2 { get; set; }
+        public virtual Loja Loja { get; set; }
+        public virtual Pedido Pedido { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrcamentoHistorico> OrcamentoHistorico { get; set; }
-        public virtual Cliente Cliente { get; set; }
-        public virtual Pedido Pedido { get; set; }
-        public virtual Loja Loja { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OrcamentoProduto> OrcamentoProduto { get; set; }
     }
 }
