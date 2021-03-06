@@ -15,26 +15,22 @@ namespace ChicoDoColchao.Business.Tradutors
             orcamento.OrcamentoID = orcamentoDao.OrcamentoID;
 
             if (orcamentoDao.LojaDao.FirstOrDefault() != null)
-            {
                 orcamento.LojaID = orcamentoDao.LojaDao.FirstOrDefault().LojaID;
-            }
 
             if (orcamentoDao.ConsultorDao.FirstOrDefault() != null)
-            {
                 orcamento.FuncionarioID = orcamentoDao.ConsultorDao.FirstOrDefault().FuncionarioID;
-            }
 
             orcamento.DataOrcamento = orcamentoDao.DataOrcamento;
             orcamento.Observacao = orcamentoDao.Observacao;
             orcamento.Ativo = orcamentoDao.Ativo;
             orcamento.Desconto = orcamentoDao.Desconto;
             orcamento.NomeCliente = orcamentoDao.NomeCliente;
-            orcamento.TelefoneCliente = orcamentoDao.TelefoneCliente;
+
+            if (!string.IsNullOrEmpty(orcamentoDao.TelefoneCliente))
+                orcamento.TelefoneCliente = orcamentoDao.TelefoneCliente.Trim().Replace(".", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace(" ", "");
 
             if (orcamentoDao.PedidoDao != null)
-            {
                 orcamento.PedidoID = orcamentoDao.PedidoDao.PedidoID;
-            }
 
             foreach (var orcamentoProdutoDao in orcamentoDao.OrcamentoProdutoDao)
             {

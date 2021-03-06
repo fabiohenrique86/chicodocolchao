@@ -96,7 +96,7 @@ namespace ChicoDoColchao.Controllers
         {
             try
             {
-                orcamentoDao.DataOrcamento = DateTime.Now;
+                orcamentoDao.DataOrcamento = DateTime.Now.ToUniversalTime();
                 orcamentoDao.Ativo = true;
 
                 int orcamentoID = orcamentoBusiness.Incluir(orcamentoDao);

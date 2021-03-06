@@ -626,8 +626,8 @@
             {
                 var orcamentoDao = @Html.Raw(Json.Encode(ViewBag.OrcamentoDao));
 
-                $("#txtCliente").val(orcamentoDao.ClienteDao.Nome);
-                $("#ClienteID").val(orcamentoDao.ClienteDao.ClienteID);
+                //$("#txtCliente").val(orcamentoDao.ClienteDao.Nome);
+                //$("#ClienteID").val(orcamentoDao.ClienteDao.ClienteID);
                 $("#FuncionarioID").val(orcamentoDao.ConsultorDao[0].FuncionarioID);
                 $("#LojaOrigemID").val(orcamentoDao.LojaDao[0].LojaID);
 
@@ -672,18 +672,21 @@
                             <input type="hidden" name="ClienteID" id="ClienteID" />
                         </div>
                         <div class="col-xs-2 col-lg-2">
-                            <a href="@Url.Action("Cadastro", "Cliente")" target="_blank"><i class="glyphicon glyphicon-plus" title="Cadastrar cliente" style="vertical-align: bottom"></i></a>
+                            <a href="@Url.Action("Cadastro", "Cliente", new { @nomeCliente = ViewBag.OrcamentoDao.NomeCliente, @telefoneCliente = ViewBag.OrcamentoDao.TelefoneCliente })" target="_blank"><i class="glyphicon glyphicon-plus" title="Cadastrar cliente" style="vertical-align: bottom"></i></a>
                         </div>
                     </div>
                 </div>
-                @*@{
-                    if (lojaDao.LojaID <= 0)
-                    {*@
+                @{
+                    if (ViewBag.OrcamentoDao != null)
+                    {
                         <div class="form-group">
-                            @Html.DropDownListFor(x => x.LojaDao.FirstOrDefault().LojaID, new SelectList(Model.LojaDao, "LojaID", "NomeFantasia"), "Loja de origem dos produtos", new { @class = "form-control", @id = "LojaOrigemID" })
+                            <span style="font-size: 11px; font-style: italic; color: goldenrod">Cliente @ViewBag.OrcamentoDao.NomeCliente vindo do Orçamento @ViewBag.OrcamentoDao.OrcamentoID. Cadastre-o para tirar o Pedido</span>
                         </div>
-                    @*}
-                }*@
+                    }
+                }
+                <div class="form-group">
+                    @Html.DropDownListFor(x => x.LojaDao.FirstOrDefault().LojaID, new SelectList(Model.LojaDao, "LojaID", "NomeFantasia"), "Loja de origem dos produtos", new { @class = "form-control", @id = "LojaOrigemID" })
+                </div>
                 <div class="form-group">
                     @Html.DropDownListFor(x => x.LojaSaidaDao.FirstOrDefault().LojaID, new SelectList(Model.LojaSaidaDao, "LojaID", "NomeFantasia"), "Loja de saída dos produtos", new { @class = "form-control" })
                 </div>
@@ -701,7 +704,7 @@
                 </div>
                 <div class="form-group">
                     @Html.TextBoxFor(x => x.ValorFrete, new { @class = "form-control valor text-right", @placeholder = "Taxa de Serviço" })
-                </div>                
+                </div>
             </div>
             <div class="col-lg-8">
                 <label style="font-size: 18px; margin-bottom: 10px; font-weight: normal">Produtos</label>

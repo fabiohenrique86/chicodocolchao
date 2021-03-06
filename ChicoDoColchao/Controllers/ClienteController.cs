@@ -19,7 +19,7 @@ namespace ChicoDoColchao.Controllers
             estadoBusiness = new EstadoBusiness();
         }
 
-        public ActionResult Cadastro()
+        public ActionResult Cadastro(string nomeCliente = null, string telefoneCliente = null)
         {
             string tela = "";
             if (!SessaoAtivaEPerfilValidado(out tela))
@@ -31,6 +31,12 @@ namespace ChicoDoColchao.Controllers
             var clienteDao = new ClienteDao();
 
             clienteDao.EstadoDao = estadoBusiness.Listar(new EstadoDao());
+
+            if (!string.IsNullOrEmpty(nomeCliente))
+                clienteDao.Nome = nomeCliente;
+
+            if (!string.IsNullOrEmpty(telefoneCliente))
+                clienteDao.TelefoneCelular = telefoneCliente;
 
             return View(clienteDao);
         }

@@ -199,32 +199,7 @@ namespace ChicoDoColchao.Business
                 NomeCliente = orcamentoDao.NomeCliente,
                 TelefoneCliente = orcamentoDao.TelefoneCliente
             });
-
-            //clientesDao.Add(new
-            //{
-            //    ClienteID = orcamentoDao.ClienteDao.ClienteID,
-            //    Cpf = orcamentoDao.ClienteDao.Cpf,
-            //    Cnpj = orcamentoDao.ClienteDao.Cnpj,
-            //    Nome = orcamentoDao.ClienteDao.Nome,
-            //    DataNascimento = orcamentoDao.ClienteDao.DataNascimento,
-            //    NomeFantasia = orcamentoDao.ClienteDao.NomeFantasia,
-            //    RazaoSocial = orcamentoDao.ClienteDao.RazaoSocial,
-            //    TelefoneResidencial = orcamentoDao.ClienteDao.TelefoneResidencial,
-            //    TelefoneCelular = orcamentoDao.ClienteDao.TelefoneCelular,
-            //    TelefoneResidencial2 = orcamentoDao.ClienteDao.TelefoneResidencial2,
-            //    TelefoneCelular2 = orcamentoDao.ClienteDao.TelefoneCelular2,
-            //    Estado = orcamentoDao.ClienteDao.EstadoDao.FirstOrDefault().Nome,
-            //    Cidade = orcamentoDao.ClienteDao.Cidade,
-            //    Logradouro = orcamentoDao.ClienteDao.Logradouro,
-            //    Numero = orcamentoDao.ClienteDao.Numero,
-            //    Bairro = orcamentoDao.ClienteDao.Bairro,
-            //    Complemento = orcamentoDao.ClienteDao.Complemento,
-            //    PontoReferencia = orcamentoDao.ClienteDao.PontoReferencia,
-            //    Email = orcamentoDao.ClienteDao.Email,
-            //    Ativo = orcamentoDao.ClienteDao.Ativo,
-            //    Cep = orcamentoDao.ClienteDao.Cep
-            //});
-
+            
             viewer.LocalReport.DataSources.Add(new ReportDataSource("ds_cliente", clientesDao));
 
             // produtos

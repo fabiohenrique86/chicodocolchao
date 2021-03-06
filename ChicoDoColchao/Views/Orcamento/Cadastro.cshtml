@@ -5,13 +5,8 @@
 
 @{
     ViewBag.Title = "Orçamento - Tirar";
-
-    //LojaDao lojaDao = new LojaDao();
-    //if (Request.Cookies.Get("ChicoDoColchao_Loja") != null)
-    //{
-    //    lojaDao = JsonConvert.DeserializeObject<LojaDao>(Request.Cookies.Get("ChicoDoColchao_Loja").Value);
-    //}
 }
+
 @section styles
 {
     <style type="text/css">
@@ -35,7 +30,7 @@
         function modalPreco(produtoId, produtoPreco) {
 
             $.getJSON("/Produto/Listar", { ProdutoID: produtoId }, function (data) {
-                
+
                 $("#lblNumeroProduto").text(data[0].Numero);
 
                 var tbLojaProduto = $("#tbLojaProduto").DataTable();
@@ -59,7 +54,7 @@
 
                 tbProdutoPreco.clear();
                 tbProdutoPreco.rows.add(produtoPrecos).draw();
-        
+
                 switch (produtoPreco) {
                     case (precoAtacado): // atacado
                         $(tbProdutoPreco.row(0).node()).addClass('selected');
@@ -111,10 +106,7 @@
                 return;
             }
 
-            //console.info(tbProdutos.data()[0]);
-
-            $(".quantidade").each(function (index, element) 
-            {
+            $(".quantidade").each(function (index, element) {
                 var quantidade = $(element).val();
                 var tr = $(element).parents("tr");
                 var preco = Globalize.parseFloat($(tr).children().eq(4).text().trim());
@@ -128,7 +120,6 @@
             });
 
             tbProdutos.draw();
-            //console.info(tbProdutos.data()[0]);
 
             var totalDesconto = Globalize.parseFloat($("#lblTotalDesconto").text());
 
@@ -172,46 +163,6 @@
             $.getJSON("/Parcela/Listar", function (data, status, xhr) {
                 parcelas = data;
             });
-            
-            $("#txtCliente").autocomplete({
-                minLength: 3,
-                source: function (request, response) {
-                    $.getJSON("/Cliente/ListarAutocomplete", { term: request.term }, function (data, status, xhr) {
-
-                        // se não houver cliente cadastrado, retorna mensagem ao usuário
-                        if (data == null || data.length <= 0) { data.push({ ClienteID: 0, Nome: "Cliente não cadastrado" }); }
-
-                        response($.map(data, function (cliente) {
-                            var nome = cliente.Nome;
-
-                            if (nome == null || nome == "") {
-                                nome = cliente.NomeFantasia;
-                            }
-
-                            return { label: nome, value: cliente.ClienteID }
-                        }));
-                    });
-                },
-                select: function (event, ui) {
-
-                    // apaga a pesquisa do cliente selecionado
-                    if (ui.item.label == "Cliente não cadastrado") {
-                        ui.item.label = "";
-                        ui.item.value = "";
-                        return;
-                    }
-
-                    $("#ClienteID").val(ui.item.value);
-
-                    ui.item.label = ui.item.label;
-                    ui.item.value = ui.item.label;
-                },
-                change: function (event, ui) {
-                    if (ui == null || ui.item == undefined || ui.item == null) {
-                        $("#ClienteID").val("");
-                    }
-                }
-            });
 
             $("#txtProduto").autocomplete({
                 minLength: 3,
@@ -246,7 +197,7 @@
                         alert('Produto ' + produto[0].trim() + ' já adicionado ao orçamento.');
                         return;
                     }
-        
+
                     // adiciona o produto ao orcamento
                     tbProduto.rows.add([
                     {
@@ -348,7 +299,7 @@
                     calcularTotalOrcamento();
                 }
             });
-            
+
             // altera o preço do produto
             $('#tbProdutoPreco tbody').on('click', 'tr', function () {
                 var dataProdutoPreco = tbProdutoPreco.row(this).data();
@@ -356,8 +307,7 @@
                 if (!row.hasClass('selected')) { row.addClass('selected').siblings().removeClass('selected'); }
                 tbProduto.rows().every(function (rowIdx, tableLoop, rowLoop) {
                     var dataProduto = this.data();
-                    if (dataProduto.ProdutoID == dataProdutoPreco.ProdutoID) 
-                    {
+                    if (dataProduto.ProdutoID == dataProdutoPreco.ProdutoID) {
                         dataProduto.Preco = "<span class='preco'>" + dataProdutoPreco.Preco + "</span>";
                         this.invalidate();
                     }
@@ -375,17 +325,11 @@
                 orcamentoDao.ConsultorDao = [];
                 orcamentoDao.ConsultorDao.push({ FuncionarioID: $("#FuncionarioID option:selected").val() });
 
-                orcamentoDao.ClienteDao = { ClienteID: $("#ClienteID").val() };
+                orcamentoDao.NomeCliente = $("#NomeCliente").val().trim();
+                orcamentoDao.TelefoneCliente = $("#TelefoneCliente").val().trim();
 
                 orcamentoDao.LojaDao = [];
-                @*if (@lojaDao.LojaID > 0)
-                {
-                    orcamentoDao.LojaDao.push({ LojaID: '@lojaDao.LojaID' });
-                }
-                else
-                {*@
-                    orcamentoDao.LojaDao.push({ LojaID: $("#LojaID option:selected").val() });
-                //}
+                orcamentoDao.LojaDao.push({ LojaID: $("#LojaID option:selected").val() });
 
                 orcamentoDao.Observacao = $("#Observacao").val();
                 orcamentoDao.Desconto = $("#lblTotalDesconto").text();
@@ -403,7 +347,7 @@
                 });
 
                 orcamentoDao.OrcamentoProdutoDao = orcamentoProdutoDao;
-                
+
                 $.ajax({
                     dataType: "json",
                     type: "POST",
@@ -421,11 +365,13 @@
                         $("#lblTotalOrcamento").html("0,00");
                         $("#lblTotalPago").html("0,00");
                         $("#lblTotalDesconto").html("0,00");
-                        $("#ClienteID").val("");
-                        
-                        alert(data.Mensagem);
+                        $("#NomeCliente").val("");
+                        $("#TelefoneCliente").val("");
 
-                        window.open('http://www.chicodocolchao.com.br/Orcamento/Comanda?orcamentoId=' + data.OrcamentoID, '_blank');
+                        //alert(data.Mensagem);
+
+                        //window.open('http://www.chicodocolchao.com.br/Orcamento/Comanda?orcamentoId=' + data.OrcamentoID, '_blank');
+                        window.open(window.location.origin + "/Orcamento/Comanda?orcamentoId=" + data.OrcamentoID, '_blank');
                     }
                 });
 
@@ -444,24 +390,14 @@
                     @Html.DropDownListFor(x => x.ConsultorDao.FirstOrDefault().FuncionarioID, new SelectList(Model.ConsultorDao, "FuncionarioID", "Nome"), "Consultor", new { @class = "form-control" })
                 </div>
                 <div class="form-group">
-                    <div class="row">
-                        <div class="col-lg-10">
-                            <input id="txtCliente" name="txtCliente" type="text" class="form-control" placeholder="CPF/CNPJ do cliente (Mínimo de 3 letras)" />
-                            <input type="hidden" name="ClienteID" id="ClienteID" />
-                        </div>
-                        <div class="col-lg-2">
-                            <a href="@Url.Action("Cadastro", "Cliente")" target="_blank"><i class="glyphicon glyphicon-plus" title="Cadastrar cliente" style="vertical-align: bottom"></i></a>
-                        </div>
-                    </div>
+                    @Html.TextBoxFor(x => x.NomeCliente, new { @class = "form-control", @placeholder = "Nome do Cliente", @maxlength = "200" })
                 </div>
-                @*@{
-                    if (lojaDao.LojaID <= 0)
-                    {*@
-                        <div class="form-group">
-                            @Html.DropDownListFor(x => x.LojaDao.FirstOrDefault().LojaID, new SelectList(Model.LojaDao, "LojaID", "NomeFantasia"), "Loja de origem dos produtos", new { @class = "form-control", @id = "LojaID" })
-                        </div>
-                    @*}
-                }*@                
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.TelefoneCliente, new { @class = "form-control celular", @placeholder = "Telefone Celular" })
+                </div>
+                <div class="form-group">
+                    @Html.DropDownListFor(x => x.LojaDao.FirstOrDefault().LojaID, new SelectList(Model.LojaDao, "LojaID", "NomeFantasia"), "Loja de origem dos produtos", new { @class = "form-control", @id = "LojaID" })
+                </div>
             </div>
             <div class="col-lg-8">
                 <label style="font-size: 18px; margin-bottom: 10px; font-weight: normal">Produtos</label>

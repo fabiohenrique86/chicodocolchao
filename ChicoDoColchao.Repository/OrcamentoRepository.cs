@@ -69,7 +69,6 @@ namespace ChicoDoColchao.Repository
             if (top)
             {
                 return query
-                    //.Include(x => x.Cliente.Estado)
                     .Include(x => x.Loja)
                     .Include(x => x.Funcionario)
                     .Include(x => x.Pedido)
@@ -83,7 +82,6 @@ namespace ChicoDoColchao.Repository
             {
                 return query
                     .Include(x => x.OrcamentoHistorico)
-                    //.Include(x => x.Cliente.Estado)
                     .Include(x => x.Loja)
                     .Include(x => x.Funcionario)
                     .Include(x => x.Pedido)
