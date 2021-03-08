@@ -672,7 +672,17 @@
                             <input type="hidden" name="ClienteID" id="ClienteID" />
                         </div>
                         <div class="col-xs-2 col-lg-2">
-                            <a href="@Url.Action("Cadastro", "Cliente", new { @nomeCliente = ViewBag.OrcamentoDao.NomeCliente, @telefoneCliente = ViewBag.OrcamentoDao.TelefoneCliente })" target="_blank"><i class="glyphicon glyphicon-plus" title="Cadastrar cliente" style="vertical-align: bottom"></i></a>
+                            @{
+                                if (ViewBag.OrcamentoDao != null)
+                                {
+                                    <a href="@Url.Action("Cadastro", "Cliente", new { @nomeCliente = ViewBag.OrcamentoDao.NomeCliente, @telefoneCliente = ViewBag.OrcamentoDao.TelefoneCliente })" target="_blank"><i class="glyphicon glyphicon-plus" title="Cadastrar cliente" style="vertical-align: bottom"></i></a>
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("Cadastro", "Cliente")" target="_blank"><i class="glyphicon glyphicon-plus" title="Cadastrar cliente" style="vertical-align: bottom"></i></a>
+                                }
+                            }
+                            
                         </div>
                     </div>
                 </div>
