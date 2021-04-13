@@ -170,7 +170,7 @@
 
         $(document).ready(function () {
 
-            $.getJSON("/Pedido/Listar", { top: true, take: 30 }, function (data)
+            $.getJSON("/Pedido/Listar", { top: true, take: 20 }, function (data)
             {
                 if (!data.Sucesso) {
                     console.info(data.Erro);

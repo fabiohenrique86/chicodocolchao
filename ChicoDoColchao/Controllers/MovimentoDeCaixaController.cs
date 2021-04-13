@@ -2,6 +2,7 @@
 using ChicoDoColchao.Business.Exceptions;
 using ChicoDoColchao.Dao;
 using Microsoft.Reporting.WebForms;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,12 +15,14 @@ namespace ChicoDoColchao.Controllers
         private LojaBusiness lojaBusiness;
         private PedidoBusiness pedidoBusiness;
         private MovimentoCaixaBusiness movimentoCaixaBusiness;
+        private ConsultorBusiness consultorBusiness;
 
         public MovimentoDeCaixaController()
         {
             lojaBusiness = new LojaBusiness();
             pedidoBusiness = new PedidoBusiness();
             movimentoCaixaBusiness = new MovimentoCaixaBusiness();
+            consultorBusiness = new ConsultorBusiness();
         }
 
         public ActionResult Index()
@@ -32,6 +35,20 @@ namespace ChicoDoColchao.Controllers
             }
 
             var lojasDao = lojaBusiness.Listar(new LojaDao() { Ativo = true });
+
+            // filtra as lojas por usuário
+            var consultorDao = new ConsultorDao();
+            if (Request.Cookies.Get("ChicoDoColchao_Usuario") != null)
+            {
+                var usuarioDao = JsonConvert.DeserializeObject<UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value);
+                if (usuarioDao != null && usuarioDao.TipoUsuarioDao?.TipoUsuarioID == TipoUsuarioDao.ETipoUsuario.Vendedor.GetHashCode())
+                {
+                    var consultor = consultorBusiness.Listar(new ConsultorDao() { FuncionarioID = usuarioDao.UsuarioID }).FirstOrDefault();
+
+                    if (consultor != null)
+                        lojasDao = lojasDao.Where(x => x.LojaID == consultor.LojaDao.FirstOrDefault().LojaID).ToList();
+                }
+            }
 
             return View(lojasDao);
         }
