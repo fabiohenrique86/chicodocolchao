@@ -75,26 +75,26 @@
             });
         }
 
-        function calcularTotalPago() {
+        //function calcularTotalPago() {
 
-            var totalPago = 0;
-            var tbPagamentos = $("#tbTipoPagamento").DataTable();
+        //    var totalPago = 0;
+        //    var tbPagamentos = $("#tbTipoPagamento").DataTable();
 
-            if (tbPagamentos.rows().count() <= 0) {
-                $("#lblTotalPago").html(Globalize.format(totalPago, "n2"));
-                return;
-            }
+        //    if (tbPagamentos.rows().count() <= 0) {
+        //        $("#lblTotalPago").html(Globalize.format(totalPago, "n2"));
+        //        return;
+        //    }
 
-            $(".valorPago").each(function (index, element) {
-                var valorPago = Globalize.parseFloat($(element).val());
-                if (isNaN(valorPago)) { valorPago = 0; }
-                totalPago += valorPago;
-            });
+        //    $(".valorPago").each(function (index, element) {
+        //        var valorPago = Globalize.parseFloat($(element).val());
+        //        if (isNaN(valorPago)) { valorPago = 0; }
+        //        totalPago += valorPago;
+        //    });
 
-            if (!isNaN(totalPago)) {
-                $("#lblTotalPago").html(Globalize.format(totalPago, "n2"));
-            }
-        }
+        //    if (!isNaN(totalPago)) {
+        //        $("#lblTotalPago").html(Globalize.format(totalPago, "n2"));
+        //    }
+        //}
 
         function calcularTotalOrcamento() {
 

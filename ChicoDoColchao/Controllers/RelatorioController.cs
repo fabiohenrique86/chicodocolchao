@@ -50,6 +50,7 @@ namespace ChicoDoColchao.Controllers
         public ActionResult VendaConsultor()
         {
             var consultoresDao = new List<ConsultorDao>();
+            var consultorDao = new ConsultorDao() { Ativo = true };
 
             try
             {
@@ -60,7 +61,15 @@ namespace ChicoDoColchao.Controllers
                     return null;
                 }
 
-                consultoresDao = consultorBusiness.Listar(new ConsultorDao() { Ativo = true });
+                // filtra os consultores por consultado logado
+                if (Request.Cookies.Get("ChicoDoColchao_Usuario") != null)
+                {
+                    var usuarioDao = JsonConvert.DeserializeObject<UsuarioDao>(Request.Cookies.Get("ChicoDoColchao_Usuario").Value);
+                    if (usuarioDao != null && usuarioDao.TipoUsuarioDao?.TipoUsuarioID == TipoUsuarioDao.ETipoUsuario.Vendedor.GetHashCode())
+                        consultorDao.FuncionarioID = usuarioDao.UsuarioID;
+                }
+
+                consultoresDao = consultorBusiness.Listar(consultorDao);
             }
             catch (Exception ex)
             {

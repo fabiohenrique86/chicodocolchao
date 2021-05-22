@@ -258,7 +258,7 @@
                     {
                         "TipoPagamentoID": tipoPagamentoID,
                         "Descricao": $(this).find(":selected").text(),
-                        "ParcelaID": tipoPagamentoID == '@TipoPagamentoDao.ETipoPagamento.Dinheiro.GetHashCode()' ? "" : parcelas,
+                        "ParcelaID": (tipoPagamentoID == '@TipoPagamentoDao.ETipoPagamento.Dinheiro.GetHashCode()' || tipoPagamentoID == '@TipoPagamentoDao.ETipoPagamento.Transferencia.GetHashCode()' || tipoPagamentoID == '@TipoPagamentoDao.ETipoPagamento.Pix.GetHashCode()') ? "" : parcelas,
                         "CV": cv == true ? "<input name='CV' type='text' class='form-control cv text-right' />" : "",
                         "ValorPago": "<input name='ValorPago' type='text' class='form-control valorPago valor text-right' onblur='calcularTotalPago()' />",
                         "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir Tipo Pagamento' style='cursor: pointer; vertical-align: bottom'></i>"
@@ -569,8 +569,8 @@
                     var valorPago = $($($(".valorPago")[rowIdx]).parents("tr").children().eq(3)).children().val();
                     var cv = null;
 
-                    // se não for dinheiro, obtém a parcela e cv
-                    if (data.TipoPagamentoID != '@TipoPagamentoDao.ETipoPagamento.Dinheiro.GetHashCode()') {
+                    // se não for dinheiro/tranferência/pix, obtém a parcela e cv
+                    if (data.TipoPagamentoID != '@TipoPagamentoDao.ETipoPagamento.Dinheiro.GetHashCode()' && data.TipoPagamentoID != '@TipoPagamentoDao.ETipoPagamento.Transferencia.GetHashCode()' && data.TipoPagamentoID != '@TipoPagamentoDao.ETipoPagamento.Pix.GetHashCode()') {
                         parcelaId = parseInt($($($(".valorPago")[rowIdx]).parents("tr").children().eq(1)).children().val());
                         cv = $($($(".valorPago")[rowIdx]).parents("tr").children().eq(2)).children().val();
                     }

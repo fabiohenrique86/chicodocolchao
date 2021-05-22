@@ -143,7 +143,7 @@ namespace ChicoDoColchao.Controllers
                         }
                         else if (controller == "Relatorio")
                         {
-                            if (action == "Estoque")
+                            if (action == "Estoque" || action == "VendaConsultor")
                                 return true;
                             else
                                 return false;

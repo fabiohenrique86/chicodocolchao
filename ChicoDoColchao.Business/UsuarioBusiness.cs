@@ -110,8 +110,7 @@ namespace ChicoDoColchao.Business
                 throw ex;
             }
             catch (Exception ex)
-            {
-                
+            {                
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
 
                 throw ex;
@@ -135,8 +134,7 @@ namespace ChicoDoColchao.Business
                 throw ex;
             }
             catch (Exception ex)
-            {
-                
+            {                
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
 
                 throw ex;
@@ -156,8 +154,7 @@ namespace ChicoDoColchao.Business
                 throw ex;
             }
             catch (Exception ex)
-            {
-                
+            {                
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
 
                 throw ex;
@@ -175,8 +172,7 @@ namespace ChicoDoColchao.Business
                 throw ex;
             }
             catch (Exception ex)
-            {
-                
+            {                
                 logRepository.Incluir(new Log() { Descricao = ex.ToString(), DataHora = DateTime.Now });
 
                 throw ex;

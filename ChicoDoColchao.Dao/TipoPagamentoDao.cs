@@ -45,7 +45,9 @@ namespace ChicoDoColchao.Dao
             CartaoItauAmericanExpress = 26,
             CartaoBradescoAmericanExpress = 27,
             CartaoSantanderAmericanExpress = 28,
-            CartaoOutros = 29
+            CartaoOutros = 29,
+            Transferencia = 30,
+            Pix = 31
         }
     }
 }
